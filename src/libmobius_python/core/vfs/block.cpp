@@ -21,48 +21,20 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "block.hpp"
-#include "core/io/reader.hpp"
-#include "core/pod/data.hpp"
-#include "core/pod/map.hpp"
 #include <mobius/core/exception.inc>
 #include <pylist.hpp>
 #include <pymobius.hpp>
 #include <stdexcept>
+#include "core/io/reader.hpp"
+#include "core/pod/data.hpp"
+#include "core/pod/map.hpp"
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Check if value is an instance of <i>block</i>
-// @param value Python value
-// @return true/false
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-bool
-pymobius_core_vfs_block_check (PyObject *value)
+namespace
 {
-    return mobius::py::isinstance (value, &core_vfs_block_t);
-}
+// @brief Global pointer to hold the heap-allocated type
+static PyTypeObject *core_vfs_block_type = nullptr;
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>block</i> Python object from C++ object
-// @param obj C++ object
-// @return New block object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-pymobius_core_vfs_block_to_pyobject (const mobius::core::vfs::block &obj)
-{
-    return mobius::py::to_pyobject_nullable<core_vfs_block_o> (
-        obj, &core_vfs_block_t);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>block</i> C++ object from Python object
-// @param value Python value
-// @return Block object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::core::vfs::block
-pymobius_core_vfs_block_from_pyobject (PyObject *value)
-{
-    return mobius::py::from_pyobject<core_vfs_block_o> (value,
-                                                        &core_vfs_block_t);
-}
+} // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>uid</i> Attribute getter
@@ -169,12 +141,9 @@ tp_getter_size (core_vfs_block_o *self, void *)
 // @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "uid", (getter) tp_getter_uid, (setter) tp_setter_uid,
-     (char *) "Block UID", nullptr},
-    {(char *) "type", (getter) tp_getter_type, (setter) 0, (char *) "Type",
-     nullptr},
-    {(char *) "size", (getter) tp_getter_size, (setter) 0,
-     (char *) "Size in bytes", nullptr},
+    {(char *) "uid", (getter) tp_getter_uid, (setter) tp_setter_uid, (char *) "Block UID", nullptr},
+    {(char *) "type", (getter) tp_getter_type, (setter) 0, (char *) "Type", nullptr},
+    {(char *) "size", (getter) tp_getter_size, (setter) 0, (char *) "Size in bytes", nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
 
@@ -216,8 +185,7 @@ tp_f_add_parent (core_vfs_block_o *self, PyObject *args)
 
     try
     {
-        arg_parent = mobius::py::get_arg_as_cpp (
-            args, 0, pymobius_core_vfs_block_from_pyobject);
+        arg_parent = mobius::py::get_arg_as_cpp (args, 0, pymobius_core_vfs_block_from_pyobject);
     }
     catch (const std::exception &e)
     {
@@ -252,8 +220,7 @@ tp_f_get_parents (core_vfs_block_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pylist_from_cpp_container (
-            self->obj->get_parents (), pymobius_core_vfs_block_to_pyobject);
+        ret = mobius::py::pylist_from_cpp_container (self->obj->get_parents (), pymobius_core_vfs_block_to_pyobject);
     }
     catch (const std::exception &e)
     {
@@ -276,8 +243,7 @@ tp_f_add_child (core_vfs_block_o *self, PyObject *args)
 
     try
     {
-        arg_parent = mobius::py::get_arg_as_cpp (
-            args, 0, pymobius_core_vfs_block_from_pyobject);
+        arg_parent = mobius::py::get_arg_as_cpp (args, 0, pymobius_core_vfs_block_from_pyobject);
     }
     catch (const std::exception &e)
     {
@@ -314,8 +280,7 @@ tp_f_get_children (core_vfs_block_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pylist_from_cpp_container (
-            self->obj->get_children (), pymobius_core_vfs_block_to_pyobject);
+        ret = mobius::py::pylist_from_cpp_container (self->obj->get_children (), pymobius_core_vfs_block_to_pyobject);
     }
     catch (const std::exception &e)
     {
@@ -353,8 +318,7 @@ tp_f_has_attribute (core_vfs_block_o *self, PyObject *args)
 
     try
     {
-        ret =
-            mobius::py::pybool_from_bool (self->obj->has_attribute (arg_name));
+        ret = mobius::py::pybool_from_bool (self->obj->has_attribute (arg_name));
     }
     catch (const std::exception &e)
     {
@@ -392,8 +356,7 @@ tp_f_get_attribute (core_vfs_block_o *self, PyObject *args)
 
     try
     {
-        ret =
-            pymobius_core_pod_data_to_pyobject (self->obj->get_attribute (arg_name));
+        ret = pymobius_core_pod_data_to_pyobject (self->obj->get_attribute (arg_name));
     }
     catch (const std::exception &e)
     {
@@ -419,8 +382,7 @@ tp_f_set_attribute (core_vfs_block_o *self, PyObject *args)
     try
     {
         arg_name = mobius::py::get_arg_as_std_string (args, 0);
-        arg_value = mobius::py::get_arg_as_cpp (
-            args, 1, pymobius_core_pod_data_from_pyobject);
+        arg_value = mobius::py::get_arg_as_cpp (args, 1, pymobius_core_pod_data_from_pyobject);
     }
     catch (const std::exception &e)
     {
@@ -707,8 +669,7 @@ tp_f_new_slice_block (core_vfs_block_o *self, PyObject *args)
 
     try
     {
-        ret = pymobius_core_vfs_block_to_pyobject (
-            self->obj->new_slice_block (arg_type, arg_start, arg_end));
+        ret = pymobius_core_vfs_block_to_pyobject (self->obj->new_slice_block (arg_type, arg_start, arg_end));
     }
     catch (const std::exception &e)
     {
@@ -723,40 +684,23 @@ tp_f_new_slice_block (core_vfs_block_o *self, PyObject *args)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "get_state", (PyCFunction) tp_f_get_state, METH_VARARGS,
-     "Get object state"},
-    {(char *) "add_parent", (PyCFunction) tp_f_add_parent, METH_VARARGS,
-     "Add parent"},
-    {(char *) "get_parents", (PyCFunction) tp_f_get_parents, METH_VARARGS,
-     "Get parents"},
-    {(char *) "add_child", (PyCFunction) tp_f_add_child, METH_VARARGS,
-     "Add child"},
-    {(char *) "get_children", (PyCFunction) tp_f_get_children, METH_VARARGS,
-     "Get children"},
-    {(char *) "has_attribute", (PyCFunction) tp_f_has_attribute, METH_VARARGS,
-     "Check if block has a given attribute"},
-    {(char *) "get_attribute", (PyCFunction) tp_f_get_attribute, METH_VARARGS,
-     "Get attribute"},
-    {(char *) "set_attribute", (PyCFunction) tp_f_set_attribute, METH_VARARGS,
-     "Set attribute"},
-    {(char *) "get_attributes", (PyCFunction) tp_f_get_attributes, METH_VARARGS,
-     "Get attributes"},
-    {(char *) "is_handled", (PyCFunction) tp_f_is_handled, METH_VARARGS,
-     "Is block handled"},
-    {(char *) "set_handled", (PyCFunction) tp_f_set_handled, METH_VARARGS,
-     "Set handled flag"},
-    {(char *) "is_complete", (PyCFunction) tp_f_is_complete, METH_VARARGS,
-     "Is block complete"},
-    {(char *) "set_complete", (PyCFunction) tp_f_set_complete, METH_VARARGS,
-     "Set complete flag"},
-    {(char *) "is_available", (PyCFunction) tp_f_is_available, METH_VARARGS,
-     "Is block available"},
-    {(char *) "set_available", (PyCFunction) tp_f_set_available, METH_VARARGS,
-     "Set available flag"},
-    {(char *) "new_reader", (PyCFunction) tp_f_new_reader, METH_VARARGS,
-     "Create new reader"},
-    {(char *) "new_slice_block", (PyCFunction) tp_f_new_slice_block,
-     METH_VARARGS, "Create new slice block"},
+    {(char *) "get_state", (PyCFunction) tp_f_get_state, METH_VARARGS, "Get object state"},
+    {(char *) "add_parent", (PyCFunction) tp_f_add_parent, METH_VARARGS, "Add parent"},
+    {(char *) "get_parents", (PyCFunction) tp_f_get_parents, METH_VARARGS, "Get parents"},
+    {(char *) "add_child", (PyCFunction) tp_f_add_child, METH_VARARGS, "Add child"},
+    {(char *) "get_children", (PyCFunction) tp_f_get_children, METH_VARARGS, "Get children"},
+    {(char *) "has_attribute", (PyCFunction) tp_f_has_attribute, METH_VARARGS, "Check if block has a given attribute"},
+    {(char *) "get_attribute", (PyCFunction) tp_f_get_attribute, METH_VARARGS, "Get attribute"},
+    {(char *) "set_attribute", (PyCFunction) tp_f_set_attribute, METH_VARARGS, "Set attribute"},
+    {(char *) "get_attributes", (PyCFunction) tp_f_get_attributes, METH_VARARGS, "Get attributes"},
+    {(char *) "is_handled", (PyCFunction) tp_f_is_handled, METH_VARARGS, "Is block handled"},
+    {(char *) "set_handled", (PyCFunction) tp_f_set_handled, METH_VARARGS, "Set handled flag"},
+    {(char *) "is_complete", (PyCFunction) tp_f_is_complete, METH_VARARGS, "Is block complete"},
+    {(char *) "set_complete", (PyCFunction) tp_f_set_complete, METH_VARARGS, "Set complete flag"},
+    {(char *) "is_available", (PyCFunction) tp_f_is_available, METH_VARARGS, "Is block available"},
+    {(char *) "set_available", (PyCFunction) tp_f_set_available, METH_VARARGS, "Set available flag"},
+    {(char *) "new_reader", (PyCFunction) tp_f_new_reader, METH_VARARGS, "Create new reader"},
+    {(char *) "new_slice_block", (PyCFunction) tp_f_new_slice_block, METH_VARARGS, "Create new slice block"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };
 
@@ -771,56 +715,86 @@ tp_dealloc (core_vfs_block_o *self)
     Py_TYPE (self)->tp_free ((PyObject *) self);
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Type structure
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyTypeObject core_vfs_block_t = {
-    PyVarObject_HEAD_INIT (nullptr, 0)        // header
-    "mobius.core.vfs.block",                  // tp_name
-    sizeof (core_vfs_block_o),                // tp_basicsize
-    0,                                        // tp_itemsize
-    (destructor) tp_dealloc,                  // tp_dealloc
-    0,                                        // tp_print
-    0,                                        // tp_getattr
-    0,                                        // tp_setattr
-    0,                                        // tp_compare
-    0,                                        // tp_repr
-    0,                                        // tp_as_number
-    0,                                        // tp_as_sequence
-    0,                                        // tp_as_mapping
-    0,                                        // tp_hash
-    0,                                        // tp_call
-    0,                                        // tp_str
-    0,                                        // tp_getattro
-    0,                                        // tp_setattro
-    0,                                        // tp_as_buffer
-    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, // tp_flags
-    "VFS data block class",                   // tp_doc
-    0,                                        // tp_traverse
-    0,                                        // tp_clear
-    0,                                        // tp_richcompare
-    0,                                        // tp_weaklistoffset
-    0,                                        // tp_iter
-    0,                                        // tp_iternext
-    tp_methods,                               // tp_methods
-    0,                                        // tp_members
-    tp_getset,                                // tp_getset
-    0,                                        // tp_base
-    0,                                        // tp_dict
-    0,                                        // tp_descr_get
-    0,                                        // tp_descr_set
-    0,                                        // tp_dictoffset
-    0,                                        // tp_init
-    0,                                        // tp_alloc
-    0,                                        // tp_new
-    0,                                        // tp_free
-    0,                                        // tp_is_gc
-    0,                                        // tp_bases
-    0,                                        // tp_mro
-    0,                                        // tp_cache
-    0,                                        // tp_subclasses
-    0,                                        // tp_weaklist
-    0,                                        // tp_del
-    0,                                        // tp_version_tag
-    0,                                        // tp_finalize
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type Slots
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Slot core_vfs_block_slots[] = {
+    {Py_tp_dealloc, reinterpret_cast<void *> (tp_dealloc)},
+    {Py_tp_doc, const_cast<char *> ("core.vfs.block class")},
+    {Py_tp_getset, reinterpret_cast<void *> (tp_getset)},
+    {Py_tp_methods, reinterpret_cast<void *> (tp_methods)},
+    {0, nullptr} // Sentinel
 };
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type specification
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Spec core_vfs_block_spec = {
+    .name = "mobius.core.vfs.block",
+    .basicsize = sizeof (core_vfs_block_o),
+    .itemsize = 0,
+    .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+    .slots = core_vfs_block_slots,
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>mobius.core.vfs.block</i> type
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject
+new_core_vfs_block_type ()
+{
+    // If type is already created, return it
+    if (core_vfs_block_type)
+        return mobius::py::pytypeobject (core_vfs_block_type);
+
+    // Allocate type from spec
+    core_vfs_block_type = reinterpret_cast<PyTypeObject *> (PyType_FromSpec (&core_vfs_block_spec));
+
+    // Create type
+    mobius::py::pytypeobject type (core_vfs_block_type);
+    type.create ();
+
+    return type;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if value is an instance of <i>core.vfs.block</i>
+// @param value Python value
+// @return true/false
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+pymobius_core_vfs_block_check (PyObject *value)
+{
+    if (!core_vfs_block_type)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("core.vfs.block type is not initialized"));
+
+    return mobius::py::isinstance (value, core_vfs_block_type);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>core.vfs.block</i> Python object from C++ object
+// @param obj C++ object
+// @return New core.vfs.block object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+pymobius_core_vfs_block_to_pyobject (const mobius::core::vfs::block &obj)
+{
+    if (!core_vfs_block_type)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("core.vfs.block type is not initialized"));
+
+    return mobius::py::to_pyobject_nullable<core_vfs_block_o> (obj, core_vfs_block_type);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>core.vfs.block</i> C++ object from Python object
+// @param value Python value
+// @return core.vfs.block object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::vfs::block
+pymobius_core_vfs_block_from_pyobject (PyObject *value)
+{
+    if (!core_vfs_block_type)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("core.vfs.block type is not initialized"));
+
+    return mobius::py::from_pyobject<core_vfs_block_o> (value, core_vfs_block_type);
+}

@@ -18,8 +18,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <Python.h>
 #include <mobius/core/vfs/block.hpp>
+#include <Python.h>
+#include <pytypeobject.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -29,14 +30,12 @@ typedef struct
     PyObject_HEAD mobius::core::vfs::block *obj;
 } core_vfs_block_o;
 
-extern PyTypeObject core_vfs_block_t;
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject new_core_vfs_block_type ();
 bool pymobius_core_vfs_block_check (PyObject *);
-PyObject *
-pymobius_core_vfs_block_to_pyobject (const mobius::core::vfs::block &);
+PyObject *pymobius_core_vfs_block_to_pyobject (const mobius::core::vfs::block &);
 mobius::core::vfs::block pymobius_core_vfs_block_from_pyobject (PyObject *);
 
 #endif
