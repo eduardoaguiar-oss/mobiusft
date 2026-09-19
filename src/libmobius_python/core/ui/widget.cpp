@@ -21,9 +21,8 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "widget.hpp"
-#include <gtk/gtk.h> // PyGtk only interface for now
 #include <mobius/core/exception.inc>
-#include <mutex>
+#include <gtk/gtk.h> // PyGtk only interface for now
 #include <pygobject.h>
 #include <pymobius.hpp>
 #include <pyobject.hpp>
@@ -31,20 +30,8 @@
 
 namespace
 {
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// Constants
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief If pygobject is initialized
-static std::once_flag is_initialized_;
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Initialize pygobject
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static void
-_initialize ()
-{
-    pygobject_init (3, 0, 0);
-}
+// @brief Global pointer to hold the heap-allocated type
+static PyTypeObject *core_ui_widget_type = nullptr;
 
 } // namespace
 
@@ -59,12 +46,10 @@ tp_f_get_ui_widget (core_ui_widget_o *self, PyObject *)
 {
     // Execute C++ function
     PyObject *ret = nullptr;
-    std::call_once (is_initialized_, _initialize);
 
     try
     {
-        ret =
-            pygobject_new (G_OBJECT (self->obj->get_ui_widget<GtkWidget *> ()));
+        ret = pygobject_new (G_OBJECT (self->obj->get_ui_widget<GtkWidget *> ()));
     }
     catch (const std::exception &e)
     {
@@ -197,12 +182,9 @@ tp_f_set_sensitive (core_ui_widget_o *self, PyObject *args)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {"get_ui_widget", (PyCFunction) tp_f_get_ui_widget, METH_VARARGS,
-     "Get low level implementation widget"},
-    {"set_sensitive", (PyCFunction) tp_f_set_sensitive, METH_VARARGS,
-     "Set widget sensitivity"},
-    {"set_visible", (PyCFunction) tp_f_set_visible, METH_VARARGS,
-     "Set widget visibility"},
+    {"get_ui_widget", (PyCFunction) tp_f_get_ui_widget, METH_VARARGS, "Get low level implementation widget"},
+    {"set_sensitive", (PyCFunction) tp_f_set_sensitive, METH_VARARGS, "Set widget sensitivity"},
+    {"set_visible", (PyCFunction) tp_f_set_visible, METH_VARARGS, "Set widget visibility"},
     {"show", (PyCFunction) tp_f_show, METH_VARARGS, "Show widget"},
     {"hide", (PyCFunction) tp_f_hide, METH_VARARGS, "Hide widget"},
     {nullptr, nullptr, 0, nullptr}, // sentinel
@@ -214,13 +196,11 @@ static PyMethodDef tp_methods[] = {
 // @param args Argument list
 // @param kwds Keywords dict
 // @return new <i>widget</i> object
-//! \todo think about widget ownership
+// @todo think about widget ownership
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 {
-    std::call_once (is_initialized_, _initialize);
-
     // Parse input args
     mobius::core::ui::widget arg_w;
     // bool arg_is_owner = false;
@@ -228,8 +208,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     try
     {
         if (mobius::py::get_arg_size (args) > 0)
-            arg_w = mobius::py::get_arg_as_cpp (
-                args, 0, pymobius_core_ui_widget_from_pyobject);
+            arg_w = mobius::py::get_arg_as_cpp (args, 0, pymobius_core_ui_widget_from_pyobject);
 
         // arg_is_owner = mobius::py::get_arg_as_bool (args, 1, false);
     }
@@ -240,8 +219,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     }
 
     // Create Python object
-    core_ui_widget_o *ret =
-        reinterpret_cast<core_ui_widget_o *> (type->tp_alloc (type, 0));
+    core_ui_widget_o *ret = reinterpret_cast<core_ui_widget_o *> (type->tp_alloc (type, 0));
 
     if (ret)
     {
@@ -271,68 +249,46 @@ tp_dealloc (core_ui_widget_o *self)
     Py_TYPE (self)->tp_free ((PyObject *) self);
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Type structure
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyTypeObject core_ui_widget_t = {
-    PyVarObject_HEAD_INIT (nullptr, 0)        // header
-    "mobius.core.ui.widget",                  // tp_name
-    sizeof (core_ui_widget_o),                // tp_basicsize
-    0,                                        // tp_itemsize
-    (destructor) tp_dealloc,                  // tp_dealloc
-    0,                                        // tp_print
-    0,                                        // tp_getattr
-    0,                                        // tp_setattr
-    0,                                        // tp_compare
-    0,                                        // tp_repr
-    0,                                        // tp_as_number
-    0,                                        // tp_as_sequence
-    0,                                        // tp_as_mapping
-    0,                                        // tp_hash
-    0,                                        // tp_call
-    0,                                        // tp_str
-    0,                                        // tp_getattro
-    0,                                        // tp_setattro
-    0,                                        // tp_as_buffer
-    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, // tp_flags
-    "Widget class",                           // tp_doc
-    0,                                        // tp_traverse
-    0,                                        // tp_clear
-    0,                                        // tp_richcompare
-    0,                                        // tp_weaklistoffset
-    0,                                        // tp_iter
-    0,                                        // tp_iternext
-    tp_methods,                               // tp_methods
-    0,                                        // tp_members
-    0,                                        // tp_getset
-    0,                                        // tp_base
-    0,                                        // tp_dict
-    0,                                        // tp_descr_get
-    0,                                        // tp_descr_set
-    0,                                        // tp_dictoffset
-    0,                                        // tp_init
-    0,                                        // tp_alloc
-    tp_new,                                   // tp_new
-    0,                                        // tp_free
-    0,                                        // tp_is_gc
-    0,                                        // tp_bases
-    0,                                        // tp_mro
-    0,                                        // tp_cache
-    0,                                        // tp_subclasses
-    0,                                        // tp_weaklist
-    0,                                        // tp_del
-    0,                                        // tp_version_tag
-    0,                                        // tp_finalize
-    nullptr,                                  // tp_vectorcall
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type Slots
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Slot core_ui_widget_slots[] = {
+    {Py_tp_new, reinterpret_cast<void *> (tp_new)},
+    {Py_tp_dealloc, reinterpret_cast<void *> (tp_dealloc)},
+    {Py_tp_doc, const_cast<char *> ("core.ui.widget class")},
+    {Py_tp_methods, reinterpret_cast<void *> (tp_methods)},
+    {0, nullptr} // Sentinel
 };
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create type
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type specification
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Spec core_ui_widget_spec = {
+    .name = "mobius.core.ui.widget",
+    .basicsize = sizeof (core_ui_widget_o),
+    .itemsize = 0,
+    .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+    .slots = core_ui_widget_slots,
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>mobius.core.ui.widget</i> type
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::py::pytypeobject
-new_ui_widget_type ()
+new_core_ui_widget_type ()
 {
-    mobius::py::pytypeobject type (&core_ui_widget_t);
+    // If type is already created, return it
+    if (core_ui_widget_type)
+        return mobius::py::pytypeobject (core_ui_widget_type);
+
+    // Initialize UI
+    pygobject_init (3, 0, 0);
+
+    // Allocate type from spec
+    core_ui_widget_type = reinterpret_cast<PyTypeObject *> (PyType_FromSpec (&core_ui_widget_spec));
+
+    // Create type
+    mobius::py::pytypeobject type (core_ui_widget_type);
     type.create ();
 
     return type;
@@ -342,32 +298,40 @@ new_ui_widget_type ()
 // @brief Get type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject *
-get_ui_widget_type ()
+get_core_ui_widget_type ()
 {
-    return &core_ui_widget_t;
+    if (!core_ui_widget_type)
+        new_core_ui_widget_type ();
+
+    return core_ui_widget_type;
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Check if value is an instance of <i>widget</i>
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if value is an instance of <i>core.ui.widget</i>
 // @param value Python value
 // @return true/false
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_core_ui_widget_check (PyObject *value)
 {
-    return mobius::py::isinstance (value, &core_ui_widget_t);
+    if (!core_ui_widget_type)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("core.ui.widget type is not initialized"));
+
+    return mobius::py::isinstance (value, core_ui_widget_type);
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>widget</i> Python object from C++ object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>core.ui.widget</i> Python object from C++ object
 // @param obj C++ object
-// @return New widget object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @return New core.ui.widget object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_core_ui_widget_to_pyobject (const mobius::core::ui::widget &obj)
 {
-    return mobius::py::to_pyobject_nullable<core_ui_widget_o> (
-        obj, &core_ui_widget_t);
+    if (!core_ui_widget_type)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("core.ui.widget type is not initialized"));
+
+    return mobius::py::to_pyobject<core_ui_widget_o> (obj, core_ui_widget_type);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -385,54 +349,45 @@ mobius::core::ui::widget
 pymobius_core_ui_widget_from_pyobject (PyObject *value)
 {
     mobius::core::ui::widget w;
-    std::call_once (is_initialized_, _initialize);
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Check if core.ui.widget type is initialized
+    if (!core_ui_widget_type)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("core.ui.widget type is not initialized"));
+
     // if value is null of None, return
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     if (!value || value == Py_None)
         return w;
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // type = mobius.core.ui.widget
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     if (pymobius_core_ui_widget_check (value))
-        w = mobius::py::from_pyobject<core_ui_widget_o> (value,
-                                                         &core_ui_widget_t);
+        w = mobius::py::from_pyobject<core_ui_widget_o> (value, core_ui_widget_type);
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // type = pygtk_widget
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     else if (mobius::py::isinstance (value, &PyGObject_Type))
     {
         GtkWidget *wp = reinterpret_cast<GtkWidget *> (pygobject_get (value));
 
         if (!wp)
-            throw std::invalid_argument (MOBIUS_EXCEPTION_MSG (
-                "could not convert argument to GtkWidget"));
+            throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("could not convert argument to GtkWidget"));
 
         w = mobius::core::ui::build_widget_from_low_level (wp);
     }
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // type = python object with get_widget method
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     else
     {
         auto pyobj = mobius::py::pyobject (value, true);
         auto func = pyobj.get_attribute ("get_widget");
 
         if (!func || !func.is_callable ())
-            throw std::invalid_argument (
-                MOBIUS_EXCEPTION_MSG ("object has no get_widget method"));
+            throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("object has no get_widget method"));
 
         auto rc = func.call ();
 
         if (!pymobius_core_ui_widget_check (rc))
-            throw std::invalid_argument (MOBIUS_EXCEPTION_MSG (
-                "invalid type returned by get_widget function"));
+            throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid type returned by get_widget function"));
 
-        w = mobius::py::from_pyobject<core_ui_widget_o> (rc, &core_ui_widget_t);
+        w = mobius::py::from_pyobject<core_ui_widget_o> (rc, core_ui_widget_type);
     }
 
     return w;

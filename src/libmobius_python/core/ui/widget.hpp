@@ -33,11 +33,10 @@ typedef struct
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::py::pytypeobject new_ui_widget_type ();
-PyTypeObject *get_ui_widget_type ();
+mobius::py::pytypeobject new_core_ui_widget_type ();
+PyTypeObject *get_core_ui_widget_type ();
 bool pymobius_core_ui_widget_check (PyObject *);
-PyObject *
-pymobius_core_ui_widget_to_pyobject (const mobius::core::ui::widget &);
+PyObject *pymobius_core_ui_widget_to_pyobject (const mobius::core::ui::widget &);
 mobius::core::ui::widget pymobius_core_ui_widget_from_pyobject (PyObject *);
 
 #endif
