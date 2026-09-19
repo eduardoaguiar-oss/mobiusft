@@ -25,7 +25,7 @@ project(libmobius-core-datasource LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(mobius_core_datasource STATIC
+add_library(mobius_core_datasource OBJECT
     datasource.cpp
     datasource_impl_vfs.cpp
     datasource_vfs.cpp
@@ -38,4 +38,6 @@ target_include_directories(mobius_core_datasource PRIVATE
     ${MOBIUS_INCLUDE_DIRS}
 )
 
-target_compile_options(mobius_core_datasource PRIVATE -fno-strict-aliasing -fPIC)
+set_target_properties(mobius_core_datasource PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
+target_compile_options(mobius_core_datasource PRIVATE -fno-strict-aliasing)

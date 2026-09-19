@@ -58,7 +58,7 @@ endif()
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(mobius_core_crypt STATIC
+add_library(mobius_core_crypt OBJECT
     cipher.cpp
     cipher_impl_block.cpp
     cipher_impl_ige.cpp
@@ -90,4 +90,6 @@ target_include_directories(mobius_core_crypt PRIVATE
 
 target_link_libraries(mobius_core_crypt PUBLIC ${LIBGCRYPT_LIBRARIES})
 
-target_compile_options(mobius_core_crypt PRIVATE -fno-strict-aliasing -fPIC)
+set_target_properties(mobius_core_crypt PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
+target_compile_options(mobius_core_crypt PRIVATE -fno-strict-aliasing)

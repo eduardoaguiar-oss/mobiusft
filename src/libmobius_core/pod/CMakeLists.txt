@@ -25,7 +25,7 @@ project(libmobius-core-pod LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(mobius_core_pod STATIC
+add_library(mobius_core_pod OBJECT
     data.cpp
     data_impl_list.cpp
     map.cpp
@@ -37,4 +37,6 @@ target_include_directories(mobius_core_pod PRIVATE
     ${MOBIUS_INCLUDE_DIRS}
 )
 
-target_compile_options(mobius_core_pod PRIVATE -fno-strict-aliasing -fPIC)
+set_target_properties(mobius_core_crypt PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
+target_compile_options(mobius_core_pod PRIVATE -fno-strict-aliasing)

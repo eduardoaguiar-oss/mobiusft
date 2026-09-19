@@ -36,7 +36,7 @@ endif()
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(mobius_core_decoder STATIC
+add_library(mobius_core_decoder OBJECT
     base64.cpp
     btencode.cpp
     data_decoder.cpp
@@ -66,4 +66,6 @@ target_link_libraries(mobius_core_decoder PUBLIC
     LibXml2::LibXml2
 )
 
-target_compile_options(mobius_core_decoder PRIVATE -fno-strict-aliasing -fPIC)
+set_target_properties(mobius_core_decoder PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
+target_compile_options(mobius_core_decoder PRIVATE -fno-strict-aliasing)

@@ -25,7 +25,7 @@ project(libmobius-core-os LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(mobius_core_os STATIC
+add_library(mobius_core_os OBJECT
     win/credential.cpp
     win/hash_ie_entropy.cpp
     win/hash_lm.cpp
@@ -79,4 +79,6 @@ target_include_directories(mobius_core_os PRIVATE
     ${MOBIUS_INCLUDE_DIRS}
 )
 
-target_compile_options(mobius_core_os PRIVATE -fno-strict-aliasing -fPIC)
+set_target_properties(mobius_core_os PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
+target_compile_options(mobius_core_os PRIVATE -fno-strict-aliasing)

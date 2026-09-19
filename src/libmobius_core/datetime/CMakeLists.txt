@@ -25,7 +25,7 @@ project(libmobius-core-datetime LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(mobius_core_datetime STATIC
+add_library(mobius_core_datetime OBJECT
     conv_fat_time.cpp
     conv_iso_string.cpp
     conv_julian.cpp
@@ -40,4 +40,6 @@ target_include_directories(mobius_core_datetime PRIVATE
     ${MOBIUS_INCLUDE_DIRS}
 )
 
-target_compile_options(mobius_core_datetime PRIVATE -fno-strict-aliasing -fPIC)
+set_target_properties(mobius_core_datetime PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
+target_compile_options(mobius_core_datetime PRIVATE -fno-strict-aliasing)

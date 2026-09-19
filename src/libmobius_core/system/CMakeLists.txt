@@ -40,7 +40,7 @@ endif()
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(mobius_core_system STATIC
+add_library(mobius_core_system OBJECT
     device.cpp
     device_list.cpp
     dynamic_lib.cpp
@@ -55,4 +55,6 @@ target_include_directories(mobius_core_system PRIVATE
 
 target_link_libraries(mobius_core_system PUBLIC PkgConfig::UDEV)
 
-target_compile_options(mobius_core_system PRIVATE -fno-strict-aliasing -fPIC)
+set_target_properties(mobius_core_system PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
+target_compile_options(mobius_core_system PRIVATE -fno-strict-aliasing)

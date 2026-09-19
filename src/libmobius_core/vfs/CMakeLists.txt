@@ -71,7 +71,7 @@ endif()
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(mobius_core_vfs STATIC
+add_library(mobius_core_vfs OBJECT
     block.cpp
     block_impl_disk.cpp
     block_impl_slice.cpp
@@ -102,4 +102,6 @@ target_link_libraries(mobius_core_vfs PUBLIC
     ${TSK_LIBRARIES}
 )
 
-target_compile_options(mobius_core_vfs PRIVATE -fno-strict-aliasing -fPIC)
+set_target_properties(mobius_core_vfs PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
+target_compile_options(mobius_core_vfs PRIVATE -fno-strict-aliasing)

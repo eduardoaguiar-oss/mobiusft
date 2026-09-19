@@ -25,7 +25,7 @@ project(libmobius-core-encoder LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(mobius_core_encoder STATIC
+add_library(mobius_core_encoder OBJECT
     base64.cpp
     data_encoder.cpp
     hexstring.cpp
@@ -35,4 +35,6 @@ target_include_directories(mobius_core_encoder PRIVATE
     ${MOBIUS_INCLUDE_DIRS}
 )
 
-target_compile_options(mobius_core_encoder PRIVATE -fno-strict-aliasing -fPIC)
+set_target_properties(mobius_core_encoder PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
+target_compile_options(mobius_core_encoder PRIVATE -fno-strict-aliasing)

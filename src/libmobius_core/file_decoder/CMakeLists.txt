@@ -25,7 +25,7 @@ project(libmobius-core-file-decoder LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(mobius_core_file_decoder STATIC
+add_library(mobius_core_file_decoder OBJECT
     decoder.cpp
     entry.cpp
     metadata.cpp
@@ -37,4 +37,6 @@ target_include_directories(mobius_core_file_decoder PRIVATE
     ${MOBIUS_INCLUDE_DIRS}
 )
 
-target_compile_options(mobius_core_file_decoder PRIVATE -fno-strict-aliasing -fPIC)
+set_target_properties(mobius_core_file_decoder PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
+target_compile_options(mobius_core_file_decoder PRIVATE -fno-strict-aliasing)

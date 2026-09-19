@@ -36,7 +36,7 @@ endif()
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(mobius_core_database STATIC
+add_library(mobius_core_database OBJECT
     connection.cpp
     connection_pool.cpp
     connection_set.cpp
@@ -50,10 +50,8 @@ target_include_directories(mobius_core_database PRIVATE
     ${MOBIUS_INCLUDE_DIRS}
 )
 
-target_link_libraries(mobius_core_database PUBLIC
-    SQLite::SQLite3
-)
+target_link_libraries(mobius_core_database PUBLIC SQLite::SQLite3)
 
-target_compile_options(mobius_core_database PRIVATE
-    -fno-strict-aliasing -fPIC
-)
+set_target_properties(mobius_core_database PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
+target_compile_options(mobius_core_database PRIVATE -fno-strict-aliasing)

@@ -25,7 +25,7 @@ project(libmobius-core-ui LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(mobius_core_ui STATIC
+add_library(mobius_core_ui OBJECT
     box.cpp
     button.cpp
     container.cpp
@@ -42,4 +42,6 @@ target_include_directories(mobius_core_ui PRIVATE
     ${MOBIUS_INCLUDE_DIRS}
 )
 
-target_compile_options(mobius_core_ui PRIVATE -fno-strict-aliasing -fPIC)
+set_target_properties(mobius_core_ui PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
+target_compile_options(mobius_core_ui PRIVATE -fno-strict-aliasing)

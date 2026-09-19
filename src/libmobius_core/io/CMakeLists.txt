@@ -55,7 +55,7 @@ endif()
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(mobius_core_io STATIC
+add_library(mobius_core_io OBJECT
     bytearray_io.cpp
     entry.cpp
     file.cpp
@@ -100,4 +100,6 @@ target_link_libraries(mobius_core_io PUBLIC
     ${SMBCLIENT_LIBRARIES}
 )
 
-target_compile_options(mobius_core_io PRIVATE -fno-strict-aliasing -fPIC)
+set_target_properties(mobius_core_io PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
+target_compile_options(mobius_core_io PRIVATE -fno-strict-aliasing)

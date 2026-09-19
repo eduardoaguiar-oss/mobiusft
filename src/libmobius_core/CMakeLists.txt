@@ -113,25 +113,22 @@ add_library(mobius_core SHARED
 
 target_include_directories(mobius_core PUBLIC ${MOBIUS_INCLUDE_DIRS})
 
-target_link_libraries(mobius_core PRIVATE
-    "$<LINK_LIBRARY:WHOLE_ARCHIVE,mobius_core_crypt>"
-    "$<LINK_LIBRARY:WHOLE_ARCHIVE,mobius_core_database>"
-    "$<LINK_LIBRARY:WHOLE_ARCHIVE,mobius_core_datasource>"
-    "$<LINK_LIBRARY:WHOLE_ARCHIVE,mobius_core_datetime>"
-    "$<LINK_LIBRARY:WHOLE_ARCHIVE,mobius_core_decoder>"
-    "$<LINK_LIBRARY:WHOLE_ARCHIVE,mobius_core_encoder>"
-    "$<LINK_LIBRARY:WHOLE_ARCHIVE,mobius_core_file_decoder>"
-    "$<LINK_LIBRARY:WHOLE_ARCHIVE,mobius_core_io>"
-    "$<LINK_LIBRARY:WHOLE_ARCHIVE,mobius_core_kff>"
-    "$<LINK_LIBRARY:WHOLE_ARCHIVE,mobius_core_os>"
-    "$<LINK_LIBRARY:WHOLE_ARCHIVE,mobius_core_pod>"
-    "$<LINK_LIBRARY:WHOLE_ARCHIVE,mobius_core_system>"
-    "$<LINK_LIBRARY:WHOLE_ARCHIVE,mobius_core_turing>"
-    "$<LINK_LIBRARY:WHOLE_ARCHIVE,mobius_core_ui>"
-    "$<LINK_LIBRARY:WHOLE_ARCHIVE,mobius_core_vfs>"
-)
-
 target_link_libraries(mobius_core PUBLIC
+    mobius_core_crypt
+    mobius_core_database
+    mobius_core_datasource
+    mobius_core_datetime
+    mobius_core_decoder
+    mobius_core_encoder
+    mobius_core_file_decoder
+    mobius_core_io
+    mobius_core_kff
+    mobius_core_os
+    mobius_core_pod
+    mobius_core_system
+    mobius_core_turing
+    mobius_core_ui
+    mobius_core_vfs
     ${DL_LIBRARY}
     ZLIB::ZLIB
     Iconv::Iconv

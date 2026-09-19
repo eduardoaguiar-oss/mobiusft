@@ -25,12 +25,14 @@ project(libmobius-core-turing LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(mobius_core_turing STATIC
+add_library(mobius_core_turing OBJECT
     turing.cpp
 )
 
 target_include_directories(mobius_core_turing PRIVATE
     ${MOBIUS_INCLUDE_DIRS}
 )
+
+set_target_properties(mobius_core_turing PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 target_compile_options(mobius_core_turing PRIVATE -fno-strict-aliasing -fPIC)
