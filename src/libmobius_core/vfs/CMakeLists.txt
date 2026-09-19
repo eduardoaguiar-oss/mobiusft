@@ -79,8 +79,10 @@ add_library(mobius_core_vfs STATIC
     disk_impl_device.cpp
     disk_impl_imagefile.cpp
     filesystem.cpp
-    imagefile.cpp
     segment_array.cpp
+    util.cpp
+    vfs.cpp
+    imagefile/imagefile.cpp
     tsk/adaptor.cpp
     tsk/exception.cpp
     tsk/file_impl.cpp
@@ -89,9 +91,17 @@ add_library(mobius_core_vfs STATIC
     tsk/reader_impl_file.cpp
     tsk/reader_impl_stream.cpp
     tsk/stream_impl.cpp
-    util.cpp
-    vfs.cpp
 )
+
+if(ZLIB_FOUND)
+    target_sources(mobius_core_vfs PRIVATE
+        imagefile/ewf/imagefile_impl.cpp
+        imagefile/ewf/reader_impl.cpp
+        imagefile/ewf/segment_decoder.cpp
+        imagefile/ewf/segment_writer.cpp
+        imagefile/ewf/writer_impl.cpp
+    )
+endif()
 
 target_include_directories(mobius_core_vfs PRIVATE
     ${MOBIUS_INCLUDE_DIRS}
@@ -103,5 +113,4 @@ target_link_libraries(mobius_core_vfs PUBLIC
 )
 
 set_target_properties(mobius_core_vfs PROPERTIES POSITION_INDEPENDENT_CODE ON)
-
 target_compile_options(mobius_core_vfs PRIVATE -fno-strict-aliasing)

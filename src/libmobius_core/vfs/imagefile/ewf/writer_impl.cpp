@@ -21,12 +21,16 @@
 #include <mobius/core/io/uri.hpp>
 #include <stdexcept>
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief number of sectors per chunk
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+namespace
+{
+// Constants
 static constexpr int SECTOR_SIZE = 512;
 static constexpr int CHUNK_SECTORS = 64;
 
+} // namespace
+
+namespace mobius::core::vfs::imagefile::ewf
+{
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Constructor
 // @param imagefile_impl imagefile implementation object
@@ -248,3 +252,5 @@ writer_impl::_get_next_extension (const std::string &extension) const
 
     return tmp_extension;
 }
+
+} // namespace mobius::core::vfs::imagefile::ewf

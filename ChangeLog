@@ -1,7 +1,8 @@
 Mobius Forensic Toolkit 2.30
-	* datasource-vfs: Use function vfs::get_imagefile_types
-	* libmobius_core: Change all intermediate static libraries to object libraries
-	* libmobius_core: Add new function vfs::get_imagefile_types
+	* datasource-vfs: Use function vfs::imagefile::get_imagefile_types
+	* libmobius_core: Add new function vfs::imagefile::get_imagefile_types
+	* libmobius_core: Imagefile classes moved to vfs::imagefile namespace
+	* libmobius_core: Add new module vfs::imagefile::ewf from C++ extension vfs-imagefile-ewf
 	* libmobius_python: Improve mobius.core.vfs.block class using the PyType_FromSpec API
 	* libmobius_python: Improve mobius.core.vfs.disk class using the PyType_FromSpec API
 	* libmobius_python: Improve mobius.core.vfs.filesystem class using the PyType_FromSpec API
@@ -18,7 +19,14 @@ Mobius Forensic Toolkit 2.30
 	* libmobius_python: Improve mobius.core.ui.stacked_container class using the PyType_FromSpec API
 	* libmobius_python: Improve mobius.core.ui.widget class using the PyType_FromSpec API
 	* libmobius_python: Improve mobius.core.ui.window class using the PyType_FromSpec API
-	* libmobius_python: Rename function vfs::get_imagefile_implementations to get_imagefile_types
+	* libmobius_python: Add new function vfs::get_imagefile_types
+	* libmobius_python: Remove legacy function vfs::get_imagefile_implementations
+	* tools: dirfs use function vfs::get_imagefile_types
+	* tools: filesystem_scan use function vfs::get_imagefile_types
+	* tools: imagefile_cat use function vfs::get_imagefile_types
+	* tools: imagefile_convert use function vfs::get_imagefile_types
+	* tools: imagefile_info use function vfs::get_imagefile_types
+	* tools: vfs_info use function vfs::get_imagefile_types
 
 Mobius Forensic Toolkit 2.29
 	* app-safari: Add new C++ extension for Safari browser support

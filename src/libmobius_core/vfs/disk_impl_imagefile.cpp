@@ -28,8 +28,7 @@ namespace mobius::core::vfs
 // @param url Image file URL
 // @param type Image type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-disk_impl_imagefile::disk_impl_imagefile (const std::string &url,
-                                          const std::string &type)
+disk_impl_imagefile::disk_impl_imagefile (const std::string &url, const std::string &type)
     : url_ (url),
       imagetype_ (type)
 {
@@ -78,8 +77,7 @@ disk_impl_imagefile::has_attribute (const std::string &id) const
 // @param value Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-disk_impl_imagefile::set_attribute (const std::string &id,
-                                    const mobius::core::pod::data &value)
+disk_impl_imagefile::set_attribute (const std::string &id, const mobius::core::pod::data &value)
 {
     attributes_.set (id, value);
 }
@@ -137,8 +135,7 @@ disk_impl_imagefile::get_path () const
     auto uri = mobius::core::io::uri (url_);
 
     if (uri.get_scheme () != "file")
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("cannot convert URL to path"));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("cannot convert URL to path"));
 
     return uri.get_path ("utf-8");
 }
@@ -174,8 +171,7 @@ disk_impl_imagefile::_load_imagefile () const
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Load imagefile
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    imagefile_ = new_imagefile_by_url (url_, imagetype_.empty () ? "autodetect"
-                                                                 : imagetype_);
+    imagefile_ = imagefile::new_imagefile_by_url (url_, imagetype_.empty () ? "autodetect" : imagetype_);
     imagefile_loaded_ = true;
 }
 

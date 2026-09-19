@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/vfs/disk_impl_base.hpp>
-#include <mobius/core/vfs/imagefile.hpp>
+#include <mobius/core/vfs/imagefile/imagefile.hpp>
 #include <mobius/core/thread_safe_flag.hpp>
 #include <string>
 
@@ -41,20 +41,20 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Function prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  bool is_available () const override;
-  bool has_attribute (const std::string&) const override;
-  void set_attribute (const std::string&, const mobius::core::pod::data&) override;
-  mobius::core::pod::data get_attribute (const std::string&) const override;
-  mobius::core::pod::map get_attributes () const override;
-  mobius::core::pod::map get_state () const override;
-  std::string get_path () const override;
-  mobius::core::io::reader new_reader () const override;
+  bool is_available () const final;
+  bool has_attribute (const std::string&) const final;
+  void set_attribute (const std::string&, const mobius::core::pod::data&) final;
+  mobius::core::pod::data get_attribute (const std::string&) const final;
+  mobius::core::pod::map get_attributes () const final;
+  mobius::core::pod::map get_state () const final;
+  std::string get_path () const final;
+  mobius::core::io::reader new_reader () const final;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // @brief Check if object is valid
   // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  explicit operator bool () const noexcept override
+  explicit operator bool () const noexcept final
   {
     return true;
   }
@@ -64,7 +64,7 @@ public:
   // @return Type
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
-  get_type () const override
+  get_type () const final
   {
     return "imagefile";
   }
@@ -74,7 +74,7 @@ public:
   // @return Size
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   size_type
-  get_size () const override
+  get_size () const final
   {
     _load_metadata ();
     return size_;
@@ -85,7 +85,7 @@ public:
   // @return Name
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
-  get_name () const override
+  get_name () const final
   {
     _load_metadata ();
     return name_;
@@ -96,7 +96,7 @@ private:
   std::string url_;
 
   // @brief Image file object
-  mutable imagefile imagefile_;
+  mutable imagefile::imagefile imagefile_;
 
   // @brief Image file type
   mutable std::string imagetype_;
