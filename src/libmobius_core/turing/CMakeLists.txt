@@ -20,12 +20,12 @@
 # Project
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cmake_minimum_required(VERSION 3.20)
-project(libmobius-core-turing LANGUAGES CXX)
+project(mobius_core_turing LANGUAGES CXX)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(mobius_core_turing OBJECT
+add_library(mobius_core_turing STATIC
     turing.cpp
 )
 
@@ -35,4 +35,4 @@ target_include_directories(mobius_core_turing PRIVATE
 
 set_target_properties(mobius_core_turing PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
-target_compile_options(mobius_core_turing PRIVATE -fno-strict-aliasing -fPIC)
+target_compile_options(mobius_core_turing PRIVATE -fno-strict-aliasing)
