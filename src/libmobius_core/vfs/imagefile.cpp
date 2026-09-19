@@ -98,16 +98,10 @@ build_imagefile_implementation (const mobius::core::io::file &f, const std::stri
     // is an instance of this imagefile type.
     if (id == "autodetect")
     {
-        for (const auto &resource : mobius::core::get_resources ("vfs.imagefile"))
+        for (const auto &type : get_imagefile_types ())  // @deprecated Change to IMAGEFILE_TYPES when possible
         {
-            auto img_resource = resource.get_value<imagefile_resource_type> ();
-
-            if (img_resource.is_instance (f))
-            {
-                // Use f_builder function to create imagefile implementation
-                // from file <i>f</i>
-                return img_resource.build (f);
-            }
+            if (type.is_instance (f))
+                return type.builder (f);
         }
 
         // fallback: raw imagefile
@@ -117,6 +111,12 @@ build_imagefile_implementation (const mobius::core::io::file &f, const std::stri
     // Otherwise, if type is given, create imagefile using type implementation
     else
     {
+        auto iter = IMAGEFILE_TYPES.find (id);
+
+        if (iter != IMAGEFILE_TYPES.end ())
+            return iter->second.builder (f);
+
+        // @deprecated Fallback to resource-based imagefile type if not found in IMAGEFILE_TYPES
         auto img_resource = mobius::core::get_resource_value<imagefile_resource_type> ("vfs.imagefile." + id);
         return img_resource.build (f);
     }
