@@ -21,9 +21,16 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "icon.hpp"
-#include "widget.hpp"
 #include <pymobius.hpp>
 #include <stdexcept>
+#include "widget.hpp"
+
+namespace
+{
+// @brief Global pointer to hold the heap-allocated type
+static PyTypeObject *core_ui_icon_type = nullptr;
+
+} // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>set_icon_by_name</i> method implementation
@@ -35,16 +42,14 @@ tp_f_set_icon_by_name (core_ui_icon_o *self, PyObject *args)
 {
     // Parse input args
     std::string arg_name;
-    mobius::core::ui::icon::size_type arg_size =
-        mobius::core::ui::icon::size_type::toolbar;
+    mobius::core::ui::icon::size_type arg_size = mobius::core::ui::icon::size_type::toolbar;
 
     try
     {
         arg_name = mobius::py::get_arg_as_std_string (args, 0);
 
         if (mobius::py::get_arg_size (args) > 1)
-            arg_size = static_cast<mobius::core::ui::icon::size_type> (
-                mobius::py::get_arg_as_int (args, 1));
+            arg_size = static_cast<mobius::core::ui::icon::size_type> (mobius::py::get_arg_as_int (args, 1));
     }
     catch (const std::exception &e)
     {
@@ -77,16 +82,14 @@ tp_f_set_icon_by_path (core_ui_icon_o *self, PyObject *args)
 {
     // Parse input args
     std::string arg_path;
-    mobius::core::ui::icon::size_type arg_size =
-        mobius::core::ui::icon::size_type::toolbar;
+    mobius::core::ui::icon::size_type arg_size = mobius::core::ui::icon::size_type::toolbar;
 
     try
     {
         arg_path = mobius::py::get_arg_as_std_string (args, 0);
 
         if (mobius::py::get_arg_size (args) > 1)
-            arg_size = static_cast<mobius::core::ui::icon::size_type> (
-                mobius::py::get_arg_as_int (args, 1));
+            arg_size = static_cast<mobius::core::ui::icon::size_type> (mobius::py::get_arg_as_int (args, 1));
     }
     catch (const std::exception &e)
     {
@@ -119,16 +122,14 @@ tp_f_set_icon_by_url (core_ui_icon_o *self, PyObject *args)
 {
     // Parse input args
     std::string arg_url;
-    mobius::core::ui::icon::size_type arg_size =
-        mobius::core::ui::icon::size_type::toolbar;
+    mobius::core::ui::icon::size_type arg_size = mobius::core::ui::icon::size_type::toolbar;
 
     try
     {
         arg_url = mobius::py::get_arg_as_std_string (args, 0);
 
         if (mobius::py::get_arg_size (args) > 1)
-            arg_size = static_cast<mobius::core::ui::icon::size_type> (
-                mobius::py::get_arg_as_int (args, 1));
+            arg_size = static_cast<mobius::core::ui::icon::size_type> (mobius::py::get_arg_as_int (args, 1));
     }
     catch (const std::exception &e)
     {
@@ -161,16 +162,14 @@ tp_f_set_icon_from_data (core_ui_icon_o *self, PyObject *args)
 {
     // Parse input args
     mobius::core::bytearray arg_data;
-    mobius::core::ui::icon::size_type arg_size =
-        mobius::core::ui::icon::size_type::toolbar;
+    mobius::core::ui::icon::size_type arg_size = mobius::core::ui::icon::size_type::toolbar;
 
     try
     {
         arg_data = mobius::py::get_arg_as_bytearray (args, 0);
 
         if (mobius::py::get_arg_size (args) > 1)
-            arg_size = static_cast<mobius::core::ui::icon::size_type> (
-                mobius::py::get_arg_as_int (args, 1));
+            arg_size = static_cast<mobius::core::ui::icon::size_type> (mobius::py::get_arg_as_int (args, 1));
     }
     catch (const std::exception &e)
     {
@@ -197,14 +196,10 @@ tp_f_set_icon_from_data (core_ui_icon_o *self, PyObject *args)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {"set_icon_by_name", (PyCFunction) tp_f_set_icon_by_name, METH_VARARGS,
-     "Set icon by name"},
-    {"set_icon_by_path", (PyCFunction) tp_f_set_icon_by_path, METH_VARARGS,
-     "Set icon by path"},
-    {"set_icon_by_url", (PyCFunction) tp_f_set_icon_by_url, METH_VARARGS,
-     "Set icon by URL"},
-    {"set_icon_from_data", (PyCFunction) tp_f_set_icon_from_data, METH_VARARGS,
-     "Set icon from data"},
+    {"set_icon_by_name", (PyCFunction) tp_f_set_icon_by_name, METH_VARARGS, "Set icon by name"},
+    {"set_icon_by_path", (PyCFunction) tp_f_set_icon_by_path, METH_VARARGS, "Set icon by path"},
+    {"set_icon_by_url", (PyCFunction) tp_f_set_icon_by_url, METH_VARARGS, "Set icon by URL"},
+    {"set_icon_from_data", (PyCFunction) tp_f_set_icon_from_data, METH_VARARGS, "Set icon from data"},
     {nullptr, nullptr, 0, nullptr}, // sentinel
 };
 
@@ -219,68 +214,43 @@ tp_dealloc (core_ui_icon_o *self)
     Py_TYPE (self)->tp_free ((PyObject *) self);
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Type structure
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyTypeObject core_ui_icon_t = {
-    PyVarObject_HEAD_INIT (nullptr, 0)        // header
-    "mobius.core.ui.icon",                    // tp_name
-    sizeof (core_ui_icon_o),                  // tp_basicsize
-    0,                                        // tp_itemsize
-    (destructor) tp_dealloc,                  // tp_dealloc
-    0,                                        // tp_print
-    0,                                        // tp_getattr
-    0,                                        // tp_setattr
-    0,                                        // tp_compare
-    0,                                        // tp_repr
-    0,                                        // tp_as_number
-    0,                                        // tp_as_sequence
-    0,                                        // tp_as_mapping
-    0,                                        // tp_hash
-    0,                                        // tp_call
-    0,                                        // tp_str
-    0,                                        // tp_getattro
-    0,                                        // tp_setattro
-    0,                                        // tp_as_buffer
-    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, // tp_flags
-    "Icon class",                             // tp_doc
-    0,                                        // tp_traverse
-    0,                                        // tp_clear
-    0,                                        // tp_richcompare
-    0,                                        // tp_weaklistoffset
-    0,                                        // tp_iter
-    0,                                        // tp_iternext
-    tp_methods,                               // tp_methods
-    0,                                        // tp_members
-    0,                                        // tp_getset
-    get_ui_widget_type (),                    // tp_base
-    0,                                        // tp_dict
-    0,                                        // tp_descr_get
-    0,                                        // tp_descr_set
-    0,                                        // tp_dictoffset
-    0,                                        // tp_init
-    0,                                        // tp_alloc
-    0,                                        // tp_new
-    0,                                        // tp_free
-    0,                                        // tp_is_gc
-    0,                                        // tp_bases
-    0,                                        // tp_mro
-    0,                                        // tp_cache
-    0,                                        // tp_subclasses
-    0,                                        // tp_weaklist
-    0,                                        // tp_del
-    0,                                        // tp_version_tag
-    0,                                        // tp_finalize
-    nullptr,                                  // tp_vectorcall
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type Slots
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Slot core_ui_icon_slots[] = {
+    {Py_tp_base, reinterpret_cast<void *> (get_core_ui_widget_type ())},
+    {Py_tp_dealloc, reinterpret_cast<void *> (tp_dealloc)},
+    {Py_tp_doc, const_cast<char *> ("core.ui.icon class")},
+    {Py_tp_methods, reinterpret_cast<void *> (tp_methods)},
+    {0, nullptr} // Sentinel
 };
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type specification
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Spec core_ui_icon_spec = {
+    .name = "mobius.core.ui.icon",
+    .basicsize = sizeof (core_ui_icon_o),
+    .itemsize = 0,
+    .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+    .slots = core_ui_icon_slots,
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create <i>mobius.core.ui.icon</i> type
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::py::pytypeobject
-new_ui_icon_type ()
+new_core_ui_icon_type ()
 {
-    mobius::py::pytypeobject type (&core_ui_icon_t);
+    // If type is already created, return it
+    if (core_ui_icon_type)
+        return mobius::py::pytypeobject (core_ui_icon_type);
+
+    // Allocate type from spec
+    core_ui_icon_type = reinterpret_cast<PyTypeObject *> (PyType_FromSpec (&core_ui_icon_spec));
+
+    // Create type
+    mobius::py::pytypeobject type (core_ui_icon_type);
     type.create ();
 
     type.add_constant ("size_menu", 16);
@@ -293,37 +263,46 @@ new_ui_icon_type ()
     return type;
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Check if value is an instance of <i>icon</i>
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if value is an instance of <i>core.ui.icon</i>
 // @param value Python value
 // @return true/false
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_core_ui_icon_check (PyObject *value)
 {
-    return mobius::py::isinstance (value, &core_ui_icon_t);
+    if (!core_ui_icon_type)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("core.ui.icon type is not initialized"));
+
+    return mobius::py::isinstance (value, core_ui_icon_type);
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>icon</i> Python object from C++ object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>core.ui.icon</i> Python object from C++ object
 // @param obj C++ object
-// @return New icon object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @return New core.ui.icon object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_core_ui_icon_to_pyobject (const mobius::core::ui::icon &obj)
 {
-    return mobius::py::to_pyobject<core_ui_icon_o> (obj, &core_ui_icon_t);
+    if (!core_ui_icon_type)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("core.ui.icon type is not initialized"));
+
+    return mobius::py::to_pyobject<core_ui_icon_o> (obj, core_ui_icon_type);
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>icon</i> C++ object from Python object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>core.ui.icon</i> C++ object from Python object
 // @param value Python value
-// @return Icon object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @return core.ui.icon object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::ui::icon
 pymobius_core_ui_icon_from_pyobject (PyObject *value)
 {
-    return mobius::py::from_pyobject<core_ui_icon_o> (value, &core_ui_icon_t);
+    if (!core_ui_icon_type)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("core.ui.icon type is not initialized"));
+
+    return mobius::py::from_pyobject<core_ui_icon_o> (value, core_ui_icon_type);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -374,16 +353,14 @@ func_ui_new_icon_by_name (PyObject *, PyObject *args)
 {
     // parse input args
     std::string arg_name;
-    mobius::core::ui::icon::size_type arg_size =
-        mobius::core::ui::icon::size_type::toolbar;
+    mobius::core::ui::icon::size_type arg_size = mobius::core::ui::icon::size_type::toolbar;
 
     try
     {
         arg_name = mobius::py::get_arg_as_std_string (args, 0);
 
         if (mobius::py::get_arg_size (args) > 1)
-            arg_size = static_cast<mobius::core::ui::icon::size_type> (
-                mobius::py::get_arg_as_int (args, 1));
+            arg_size = static_cast<mobius::core::ui::icon::size_type> (mobius::py::get_arg_as_int (args, 1));
     }
     catch (const std::exception &e)
     {
@@ -396,8 +373,7 @@ func_ui_new_icon_by_name (PyObject *, PyObject *args)
 
     try
     {
-        ret = pymobius_core_ui_icon_to_pyobject (
-            mobius::core::ui::new_icon_by_name (arg_name, arg_size));
+        ret = pymobius_core_ui_icon_to_pyobject (mobius::core::ui::new_icon_by_name (arg_name, arg_size));
     }
     catch (const std::exception &e)
     {
@@ -419,16 +395,14 @@ func_ui_new_icon_by_path (PyObject *, PyObject *args)
 {
     // parse input args
     std::string arg_path;
-    mobius::core::ui::icon::size_type arg_size =
-        mobius::core::ui::icon::size_type::toolbar;
+    mobius::core::ui::icon::size_type arg_size = mobius::core::ui::icon::size_type::toolbar;
 
     try
     {
         arg_path = mobius::py::get_arg_as_std_string (args, 0);
 
         if (mobius::py::get_arg_size (args) > 1)
-            arg_size = static_cast<mobius::core::ui::icon::size_type> (
-                mobius::py::get_arg_as_int (args, 1));
+            arg_size = static_cast<mobius::core::ui::icon::size_type> (mobius::py::get_arg_as_int (args, 1));
     }
     catch (const std::exception &e)
     {
@@ -441,8 +415,7 @@ func_ui_new_icon_by_path (PyObject *, PyObject *args)
 
     try
     {
-        ret = pymobius_core_ui_icon_to_pyobject (
-            mobius::core::ui::new_icon_by_path (arg_path, arg_size));
+        ret = pymobius_core_ui_icon_to_pyobject (mobius::core::ui::new_icon_by_path (arg_path, arg_size));
     }
     catch (const std::exception &e)
     {
@@ -464,16 +437,14 @@ func_ui_new_icon_by_url (PyObject *, PyObject *args)
 {
     // parse input args
     std::string arg_url;
-    mobius::core::ui::icon::size_type arg_size =
-        mobius::core::ui::icon::size_type::toolbar;
+    mobius::core::ui::icon::size_type arg_size = mobius::core::ui::icon::size_type::toolbar;
 
     try
     {
         arg_url = mobius::py::get_arg_as_std_string (args, 0);
 
         if (mobius::py::get_arg_size (args) > 1)
-            arg_size = static_cast<mobius::core::ui::icon::size_type> (
-                mobius::py::get_arg_as_int (args, 1));
+            arg_size = static_cast<mobius::core::ui::icon::size_type> (mobius::py::get_arg_as_int (args, 1));
     }
     catch (const std::exception &e)
     {
@@ -486,8 +457,7 @@ func_ui_new_icon_by_url (PyObject *, PyObject *args)
 
     try
     {
-        ret = pymobius_core_ui_icon_to_pyobject (
-            mobius::core::ui::new_icon_by_url (arg_url, arg_size));
+        ret = pymobius_core_ui_icon_to_pyobject (mobius::core::ui::new_icon_by_url (arg_url, arg_size));
     }
     catch (const std::exception &e)
     {
@@ -509,16 +479,14 @@ func_ui_new_icon_from_data (PyObject *, PyObject *args)
 {
     // parse input args
     mobius::core::bytearray arg_data;
-    mobius::core::ui::icon::size_type arg_size =
-        mobius::core::ui::icon::size_type::toolbar;
+    mobius::core::ui::icon::size_type arg_size = mobius::core::ui::icon::size_type::toolbar;
 
     try
     {
         arg_data = mobius::py::get_arg_as_bytearray (args, 0);
 
         if (mobius::py::get_arg_size (args) > 1)
-            arg_size = static_cast<mobius::core::ui::icon::size_type> (
-                mobius::py::get_arg_as_int (args, 1));
+            arg_size = static_cast<mobius::core::ui::icon::size_type> (mobius::py::get_arg_as_int (args, 1));
     }
     catch (const std::exception &e)
     {
@@ -531,8 +499,7 @@ func_ui_new_icon_from_data (PyObject *, PyObject *args)
 
     try
     {
-        ret = pymobius_core_ui_icon_to_pyobject (
-            mobius::core::ui::new_icon_from_data (arg_data, arg_size));
+        ret = pymobius_core_ui_icon_to_pyobject (mobius::core::ui::new_icon_from_data (arg_data, arg_size));
     }
     catch (const std::exception &e)
     {
