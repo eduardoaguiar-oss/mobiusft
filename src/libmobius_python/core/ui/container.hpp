@@ -31,13 +31,11 @@ typedef struct
 } core_ui_container_o;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// Functions
+// Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::py::pytypeobject new_ui_container_type ();
+mobius::py::pytypeobject new_core_ui_container_type ();
 bool pymobius_core_ui_container_check (PyObject *);
-PyObject *
-pymobius_core_ui_container_to_pyobject (const mobius::core::ui::container &);
-mobius::core::ui::container
-pymobius_core_ui_container_from_pyobject (PyObject *);
+PyObject *pymobius_core_ui_container_to_pyobject (const mobius::core::ui::container &);
+mobius::core::ui::container pymobius_core_ui_container_from_pyobject (PyObject *);
 
 #endif

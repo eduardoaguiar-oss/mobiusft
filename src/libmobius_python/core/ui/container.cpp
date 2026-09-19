@@ -25,6 +25,13 @@
 #include <pymobius.hpp>
 #include <stdexcept>
 
+namespace
+{
+// @brief Global pointer to hold the heap-allocated type
+static PyTypeObject *core_ui_container_type = nullptr;
+
+} // namespace
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>set_message</i> method implementation
 // @param self Object
@@ -286,7 +293,7 @@ static PyTypeObject core_ui_container_t = {
     tp_methods,                               // tp_methods
     0,                                        // tp_members
     0,                                        // tp_getset
-    get_ui_widget_type (),                    // tp_base
+    get_core_ui_widget_type (),                    // tp_base
     0,                                        // tp_dict
     0,                                        // tp_descr_get
     0,                                        // tp_descr_set
@@ -307,49 +314,99 @@ static PyTypeObject core_ui_container_t = {
     nullptr,                                  // tp_vectorcall
 };
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type Slots
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Slot core_ui_container_slots[] = {
+    {Py_tp_base, reinterpret_cast<void *> (get_core_ui_widget_type ())},
+    {Py_tp_new, reinterpret_cast<void *> (tp_new)},
+    {Py_tp_dealloc, reinterpret_cast<void *> (tp_dealloc)},
+    {Py_tp_doc, const_cast<char *> ("core.ui.container class")},
+    {Py_tp_methods, reinterpret_cast<void *> (tp_methods)},
+    {0, nullptr} // Sentinel
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type specification
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Spec core_ui_container_spec = {
+    .name = "mobius.core.ui.container",
+    .basicsize = sizeof (core_ui_container_o),
+    .itemsize = 0,
+    .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+    .slots = core_ui_container_slots,
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create <i>mobius.core.ui.container</i> type
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::py::pytypeobject
-new_ui_container_type ()
+new_core_ui_container_type ()
 {
-    mobius::py::pytypeobject type (&core_ui_container_t);
+    // If type is already created, return it
+    if (core_ui_container_type)
+        return mobius::py::pytypeobject (core_ui_container_type);
+
+    // Allocate type from spec
+    core_ui_container_type = reinterpret_cast<PyTypeObject *> (
+        PyType_FromSpec (&core_ui_container_spec)
+    );
+
+    // Create type
+    mobius::py::pytypeobject type (core_ui_container_type);
     type.create ();
 
     return type;
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Check if value is an instance of <i>container</i>
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if value is an instance of <i>core.ui.container</i>
 // @param value Python value
 // @return true/false
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_core_ui_container_check (PyObject *value)
 {
-    return mobius::py::isinstance (value, &core_ui_container_t);
+    if (!core_ui_container_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("core.ui.container type is not initialized")
+        );
+
+    return mobius::py::isinstance (value, core_ui_container_type);
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>container</i> Python object from C++ object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>core.ui.container</i> Python object from C++ object
 // @param obj C++ object
-// @return New container object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @return New core.ui.container object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_core_ui_container_to_pyobject (const mobius::core::ui::container &obj)
 {
-    return mobius::py::to_pyobject<core_ui_container_o> (obj,
-                                                         &core_ui_container_t);
+    if (!core_ui_container_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("core.ui.container type is not initialized")
+        );
+
+    return mobius::py::to_pyobject<core_ui_container_o> (
+        obj, core_ui_container_type
+    );
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>container</i> C++ object from Python object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>core.ui.container</i> C++ object from Python object
 // @param value Python value
-// @return Container object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @return core.ui.container object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::ui::container
 pymobius_core_ui_container_from_pyobject (PyObject *value)
 {
+    if (!core_ui_container_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("core.ui.container type is not initialized")
+        );
+
     return mobius::py::from_pyobject<core_ui_container_o> (
-        value, &core_ui_container_t);
+        value, core_ui_container_type
+    );
 }
