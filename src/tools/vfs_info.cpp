@@ -15,15 +15,16 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <iostream>
 #include <mobius/core/application.hpp>
 #include <mobius/core/log.hpp>
 #include <mobius/core/resource.hpp>
+#include <mobius/core/vfs/imagefile.hpp>
 #include <mobius/core/vfs/vfs.hpp>
 #include <unistd.h>
+#include <iostream>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Show usage text
+// @brief Show usage text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 usage ()
@@ -37,12 +38,10 @@ usage ()
     std::cerr << "  -t imagefile type\t\t" << std::endl;
     std::cerr << std::endl;
     std::cerr << "     Image file type can be:" << std::endl;
-    std::cerr << "       autodetect\tTry to autodetect imagefile type (default)"
-              << std::endl;
+    std::cerr << "       autodetect\tTry to autodetect imagefile type (default)" << std::endl;
 
-    for (const auto &r : mobius::core::get_resources ("vfs.imagefile"))
-        std::cerr << "       " << r.get_id () << "\t\t" << r.get_description ()
-                  << std::endl;
+    for (const auto &type : mobius::core::vfs::get_imagefile_types ())
+        std::cerr << "       " << type.id << "\t\t" << type.description << std::endl;
 
     std::cerr << std::endl;
 }
@@ -72,8 +71,7 @@ show_block (const mobius::core::vfs::block &block)
     std::cout << std::endl;
 
     for (const auto &c : block.get_children ())
-        std::cout << "    " << c.get_uid () << ' ' << c.get_type () << ' '
-                  << c.get_attributes () << std::endl;
+        std::cout << "    " << c.get_uid () << ' ' << c.get_type () << ' ' << c.get_attributes () << std::endl;
 
     std::cout << "  Attributes: " << std::endl;
 
@@ -156,26 +154,25 @@ main (int argc, char **argv)
     {
         switch (opt)
         {
-        case 'h':
-            usage ();
-            exit (EXIT_SUCCESS);
-            break;
+            case 'h':
+                usage ();
+                exit (EXIT_SUCCESS);
+                break;
 
-        case 't':
-            type = optarg;
-            break;
+            case 't':
+                type = optarg;
+                break;
 
-        default:
-            usage ();
-            exit (EXIT_FAILURE);
+            default:
+                usage ();
+                exit (EXIT_FAILURE);
         }
     }
 
     if (optind >= argc)
     {
         std::cerr << std::endl;
-        std::cerr << "Error: you must enter a valid URL to an imagefile"
-                  << std::endl;
+        std::cerr << "Error: you must enter a valid URL to an imagefile" << std::endl;
         usage ();
         exit (EXIT_FAILURE);
     }

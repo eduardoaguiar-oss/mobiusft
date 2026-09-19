@@ -25,7 +25,7 @@
 #include <unistd.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief show usage text
+// @brief show usage text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 usage ()
@@ -47,9 +47,8 @@ usage ()
     std::cerr << "       autodetect\tTry to autodetect imagefile type (default)"
               << std::endl;
 
-    for (const auto &r : mobius::core::get_resources ("vfs.imagefile"))
-        std::cerr << "       " << r.get_id () << "\t\t" << r.get_description ()
-                  << std::endl;
+    for (const auto &type : mobius::core::vfs::get_imagefile_types ())
+        std::cerr << "       " << type.id << "\t\t" << type.description << std::endl;
 
     std::cerr << std::endl;
     std::cerr << "  -t type\t\toutput imagefile type (default: autodetect)"
@@ -58,14 +57,10 @@ usage ()
     std::cerr << "       autodetect\tTry to autodetect imagefile type (default)"
               << std::endl;
 
-    for (const auto &r : mobius::core::get_resources ("vfs.imagefile"))
+    for (const auto &type : mobius::core::vfs::get_imagefile_types ())
     {
-        auto img_resource =
-            r.get_value<mobius::core::vfs::imagefile_resource_type> ();
-
-        if (img_resource.is_writeable)
-            std::cerr << "       " << r.get_id () << "\t\t"
-                      << r.get_description () << std::endl;
+        if (type.is_writeable)
+            std::cerr << "       " << type.id << "\t\t" << type.description << std::endl;
     }
 
     std::cerr << std::endl;

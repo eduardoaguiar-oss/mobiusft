@@ -1,5 +1,7 @@
 Mobius Forensic Toolkit 2.30
+	* datasource-vfs: Use function vfs::get_imagefile_types
 	* libmobius_core: Change all intermediate static libraries to object libraries
+	* libmobius_core: Add new function vfs::get_imagefile_types
 	* libmobius_python: Improve mobius.core.vfs.block class using the PyType_FromSpec API
 	* libmobius_python: Improve mobius.core.vfs.disk class using the PyType_FromSpec API
 	* libmobius_python: Improve mobius.core.vfs.filesystem class using the PyType_FromSpec API
@@ -16,6 +18,7 @@ Mobius Forensic Toolkit 2.30
 	* libmobius_python: Improve mobius.core.ui.stacked_container class using the PyType_FromSpec API
 	* libmobius_python: Improve mobius.core.ui.widget class using the PyType_FromSpec API
 	* libmobius_python: Improve mobius.core.ui.window class using the PyType_FromSpec API
+	* libmobius_python: Rename function vfs::get_imagefile_implementations to get_imagefile_types
 
 Mobius Forensic Toolkit 2.29
 	* app-safari: Add new C++ extension for Safari browser support

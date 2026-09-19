@@ -15,15 +15,16 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <iostream>
 #include <mobius/core/application.hpp>
 #include <mobius/core/io/entry.hpp>
 #include <mobius/core/io/file.hpp>
 #include <mobius/core/io/folder.hpp>
 #include <mobius/core/io/stream.hpp>
 #include <mobius/core/resource.hpp>
+#include <mobius/core/vfs/imagefile.hpp>
 #include <mobius/core/vfs/vfs.hpp>
 #include <unistd.h>
+#include <iostream>
 
 void show_entry (const mobius::core::io::entry &, const std::string &, bool);
 
@@ -39,8 +40,7 @@ show_streams (const std::vector<mobius::core::io::stream> &streams)
 
     for (const auto &stream : streams)
     {
-        std::cout << "              stream " << i << ": " << stream.get_type ()
-                  << ", size: " << stream.get_size ()
+        std::cout << "              stream " << i << ": " << stream.get_type () << ", size: " << stream.get_size ()
                   << ", name: " << stream.get_name () << '\n';
 
         try
@@ -70,8 +70,7 @@ show_streams (const std::vector<mobius::core::io::stream> &streams)
 // @param show_data Only listing flag
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-show_file (const mobius::core::io::file &f, const std::string &parent_path,
-           bool show_data)
+show_file (const mobius::core::io::file &f, const std::string &parent_path, bool show_data)
 {
     // metadata
     std::cout << '\n';
@@ -113,8 +112,7 @@ show_file (const mobius::core::io::file &f, const std::string &parent_path,
 // @param show_data Only listing flag
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-show_folder (const mobius::core::io::folder &f, const std::string &parent_path,
-             bool show_data)
+show_folder (const mobius::core::io::folder &f, const std::string &parent_path, bool show_data)
 {
     // metadata
     std::cout << '\n';
@@ -162,8 +160,7 @@ show_folder (const mobius::core::io::folder &f, const std::string &parent_path,
 // @param show_data Only listing flag
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-show_entry (const mobius::core::io::entry &entry,
-            const std::string &parent_path, bool show_data)
+show_entry (const mobius::core::io::entry &entry, const std::string &parent_path, bool show_data)
 {
     try
     {
@@ -180,7 +177,7 @@ show_entry (const mobius::core::io::entry &entry,
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Show usage text
+// @brief Show usage text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 usage ()
@@ -194,12 +191,10 @@ usage ()
     std::cerr << "  -t imagefile type\t\t" << '\n';
     std::cerr << '\n';
     std::cerr << "     Image file type can be:" << '\n';
-    std::cerr << "       autodetect\tTry to autodetect imagefile type (default)"
-              << '\n';
+    std::cerr << "       autodetect\tTry to autodetect imagefile type (default)" << '\n';
 
-    for (const auto &r : mobius::core::get_resources ("vfs.imagefile"))
-        std::cerr << "       " << r.get_id () << "\t\t" << r.get_description ()
-                  << '\n';
+    for (const auto &type : mobius::core::vfs::get_imagefile_types ())
+        std::cerr << "       " << type.id << "\t\t" << type.description << std::endl;
 
     std::cerr << std::endl;
 }
@@ -229,30 +224,29 @@ main (int argc, char **argv)
     {
         switch (opt)
         {
-        case 'h':
-            usage ();
-            exit (EXIT_SUCCESS);
-            break;
+            case 'h':
+                usage ();
+                exit (EXIT_SUCCESS);
+                break;
 
-        case 't':
-            type = optarg;
-            break;
+            case 't':
+                type = optarg;
+                break;
 
-        case 'd':
-            show_data = true;
-            break;
+            case 'd':
+                show_data = true;
+                break;
 
-        default:
-            usage ();
-            exit (EXIT_FAILURE);
+            default:
+                usage ();
+                exit (EXIT_FAILURE);
         }
     }
 
     if (optind >= argc)
     {
         std::cerr << '\n';
-        std::cerr << "Error: You must enter a valid URL to an imagefile"
-                  << '\n';
+        std::cerr << "Error: You must enter a valid URL to an imagefile" << '\n';
         usage ();
         exit (EXIT_FAILURE);
     }
