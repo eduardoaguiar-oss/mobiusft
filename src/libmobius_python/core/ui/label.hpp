@@ -31,9 +31,9 @@ typedef struct
 } core_ui_label_o;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// Functions
+// Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::py::pytypeobject new_ui_label_type ();
+mobius::py::pytypeobject new_core_ui_label_type ();
 bool pymobius_core_ui_label_check (PyObject *);
 PyObject *pymobius_core_ui_label_to_pyobject (const mobius::core::ui::label &);
 mobius::core::ui::label pymobius_core_ui_label_from_pyobject (PyObject *);
