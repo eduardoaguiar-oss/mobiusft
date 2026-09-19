@@ -31,12 +31,11 @@ typedef struct
 } core_ui_button_o;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// Functions
+// Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::py::pytypeobject new_ui_button_type ();
+mobius::py::pytypeobject new_core_ui_button_type ();
 bool pymobius_core_ui_button_check (PyObject *);
-PyObject *
-pymobius_core_ui_button_to_pyobject (const mobius::core::ui::button &);
+PyObject *pymobius_core_ui_button_to_pyobject (const mobius::core::ui::button &);
 mobius::core::ui::button pymobius_core_ui_button_from_pyobject (PyObject *);
 
 #endif
