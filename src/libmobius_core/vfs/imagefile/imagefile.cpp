@@ -19,11 +19,11 @@
 #include <mobius/core/io/file.hpp>
 #include <mobius/core/resource.hpp>
 #include <mobius/core/string_functions.hpp>
+#include <mobius/core/vfs/imagefile/ewf/imagefile_impl.hpp>
 #include <mobius/core/vfs/imagefile/imagefile.hpp>
 #include <mobius/core/vfs/imagefile/imagefile_impl_null.hpp>
 #include <stdexcept>
 #include <unordered_map>
-#include "ewf/imagefile_impl.hpp"
 
 namespace mobius::core::vfs::imagefile
 {

@@ -15,16 +15,16 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "imagefile_impl.hpp"
 #include <mobius/core/exception.inc>
 #include <mobius/core/io/file.hpp>
 #include <mobius/core/string_functions.hpp>
+#include <mobius/core/vfs/imagefile/ewf/imagefile_impl.hpp>
+#include <mobius/core/vfs/imagefile/ewf/reader_impl.hpp>
+#include <mobius/core/vfs/imagefile/ewf/segment_decoder.hpp>
+#include <mobius/core/vfs/imagefile/ewf/writer_impl.hpp>
 #include <mobius/core/vfs/imagefile/imagefile.hpp>
 #include <mobius/core/vfs/util.hpp>
 #include <stdexcept>
-#include "reader_impl.hpp"
-#include "segment_decoder.hpp"
-#include "writer_impl.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @see https://github.com/libyal/libewf/blob/master/documentation/Expert%20Witness%20Compression%20Format%20(EWF).asciidoc

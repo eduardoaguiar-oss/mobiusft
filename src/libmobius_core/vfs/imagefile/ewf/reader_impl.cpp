@@ -15,11 +15,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "reader_impl.hpp"
 #include <mobius/core/exception.inc>
+#include <mobius/core/vfs/imagefile/ewf/imagefile_impl.hpp>
+#include <mobius/core/vfs/imagefile/ewf/reader_impl.hpp>
 #include <mobius/core/zlib_functions.hpp>
 #include <stdexcept>
-#include "imagefile_impl.hpp"
 
 namespace mobius::core::vfs::imagefile::ewf
 {

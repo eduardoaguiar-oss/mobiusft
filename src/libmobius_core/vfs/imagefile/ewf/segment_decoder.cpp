@@ -15,13 +15,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "segment_decoder.hpp"
 #include <mobius/core/charset.hpp>
 #include <mobius/core/crypt/hash_functor.hpp>
 #include <mobius/core/datetime/datetime.hpp>
 #include <mobius/core/decoder/data_decoder.hpp>
 #include <mobius/core/io/reader_evaluator.hpp>
 #include <mobius/core/string_functions.hpp>
+#include <mobius/core/vfs/imagefile/ewf/segment_decoder.hpp>
 #include <mobius/core/zlib_functions.hpp>
 
 namespace
@@ -40,8 +40,8 @@ static constexpr int SECTION_HEADER_SIZE = 76;
 static std::uint32_t
 digest_to_uint32_t (const mobius::core::bytearray &digest)
 {
-    return std::uint32_t (digest[0]) << 24 | std::uint32_t (digest[1]) << 16 |
-           std::uint32_t (digest[2]) << 8 | std::uint32_t (digest[3]);
+    return std::uint32_t (digest[0]) << 24 | std::uint32_t (digest[1]) << 16 | std::uint32_t (digest[2]) << 8 |
+           std::uint32_t (digest[3]);
 }
 
 } // namespace
@@ -50,8 +50,7 @@ digest_to_uint32_t (const mobius::core::bytearray &digest)
 // @brief iterator constructor
 // @param reader reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-segment_decoder::const_iterator::const_iterator (const segment_decoder *decoder,
-                                                 offset_type offset)
+segment_decoder::const_iterator::const_iterator (const segment_decoder *decoder, offset_type offset)
     : decoder_ (decoder)
 {
     section_ = decoder_->decode_section (offset);
@@ -94,12 +93,10 @@ segment_decoder::const_iterator::operator++ ()
 segment_decoder::segment_decoder (mobius::core::io::reader reader)
     : reader_ (reader)
 {
-    const mobius::core::bytearray EWF_SIGNATURE = {'E',  'V',  'F',  0x09,
-                                                   0x0d, 0x0a, 0xff, 0x00};
+    const mobius::core::bytearray EWF_SIGNATURE = {'E', 'V', 'F', 0x09, 0x0d, 0x0a, 0xff, 0x00};
 
     mobius::core::decoder::data_decoder decoder (reader);
-    mobius::core::bytearray signature =
-        decoder.get_bytearray_by_size (EWF_SIGNATURE.size ());
+    mobius::core::bytearray signature = decoder.get_bytearray_by_size (EWF_SIGNATURE.size ());
 
     if (signature == EWF_SIGNATURE)
     {
@@ -149,8 +146,7 @@ segment_decoder::decode_section (offset_type offset) const
     sec.set_size (decoder.get_uint64_le ());
     decoder.get_bytearray_by_size (40); // padding
 
-    std::uint32_t calculated_adler32 =
-        digest_to_uint32_t (hash_functor.get_digest ());
+    std::uint32_t calculated_adler32 = digest_to_uint32_t (hash_functor.get_digest ());
     sec.set_calculated_adler32 (calculated_adler32);
 
     sec.set_adler32 (decoder.get_uint32_le ());
@@ -173,12 +169,11 @@ segment_decoder::decode_header_section (const section &arg_section) const
     header_section section (arg_section);
 
     // get data from header section
-    mobius::core::bytearray data = decoder.get_bytearray_by_size (
-        section.get_size () - SECTION_HEADER_SIZE);
+    mobius::core::bytearray data = decoder.get_bytearray_by_size (section.get_size () - SECTION_HEADER_SIZE);
     data = mobius::core::zlib_decompress (data);
 
-    const std::string text = mobius::core::conv_charset_to_utf8 (
-        data, section.get_name () == "header2" ? "UTF-16" : "ASCII");
+    const std::string text =
+        mobius::core::conv_charset_to_utf8 (data, section.get_name () == "header2" ? "UTF-16" : "ASCII");
 
     // format header metadata lines
     auto lines = mobius::core::string::split (text, "\n");
@@ -228,13 +223,19 @@ segment_decoder::decode_header_section (const section &arg_section) const
                     auto d = mobius::core::string::split (value);
                     section.set_acquisition_time (
                         mobius::core::datetime::datetime (
-                            stoi (d[0]), stoi (d[1]), stoi (d[2]), stoi (d[3]),
-                            stoi (d[4]), stoi (d[5])));
+                            stoi (d[0]),
+                            stoi (d[1]),
+                            stoi (d[2]),
+                            stoi (d[3]),
+                            stoi (d[4]),
+                            stoi (d[5])
+                        )
+                    );
                 }
                 else
                     section.set_acquisition_time (
-                        mobius::core::datetime::
-                            new_datetime_from_unix_timestamp (stol (value)));
+                        mobius::core::datetime::new_datetime_from_unix_timestamp (stol (value))
+                    );
             }
         }
         section.set_text (section_text);
@@ -317,10 +318,8 @@ segment_decoder::decode_table_section (const section &arg_section) const
 
     for (std::uint32_t i = 0; i < chunk_count * 4; i += 4)
     {
-        auto offset = std::uint32_t (data[i]) |
-                      (std::uint32_t (data[i + 1]) << 8) |
-                      (std::uint32_t (data[i + 2]) << 16) |
-                      (std::uint32_t (data[i + 3]) << 24);
+        auto offset = std::uint32_t (data[i]) | (std::uint32_t (data[i + 1]) << 8) |
+                      (std::uint32_t (data[i + 2]) << 16) | (std::uint32_t (data[i + 3]) << 24);
 
         section.add_offset (offset);
     }

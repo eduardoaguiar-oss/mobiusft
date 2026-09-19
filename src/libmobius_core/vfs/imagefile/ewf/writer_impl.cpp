@@ -15,10 +15,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "writer_impl.hpp"
 #include <mobius/core/exception.inc>
 #include <mobius/core/io/file.hpp>
 #include <mobius/core/io/uri.hpp>
+#include <mobius/core/vfs/imagefile/ewf/writer_impl.hpp>
 #include <stdexcept>
 
 namespace
@@ -36,12 +36,10 @@ namespace mobius::core::vfs::imagefile::ewf
 // @param imagefile_impl imagefile implementation object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 writer_impl::writer_impl (const imagefile_impl &imagefile_impl)
-    : segment_size_ (
-          std::int64_t (imagefile_impl.get_attribute ("segment_size"))),
+    : segment_size_ (std::int64_t (imagefile_impl.get_attribute ("segment_size"))),
       chunk_size_ (imagefile_impl.get_sector_size () * CHUNK_SECTORS),
       sector_size_ (imagefile_impl.get_sector_size ()),
-      compression_level_ (
-          std::int64_t (imagefile_impl.get_attribute ("compression_level"))),
+      compression_level_ (std::int64_t (imagefile_impl.get_attribute ("compression_level"))),
       segments_ (imagefile_impl.get_segment_array ()),
       hash_ ("md5")
 {
@@ -54,18 +52,16 @@ writer_impl::writer_impl (const imagefile_impl &imagefile_impl)
     constexpr size_type DONE_SECTION_SIZE = 76;
     constexpr size_type TABLE_SECTION_SIZE = 76 + 24 + 4 + 4;
 
-    const size_type min_segment_size =
-        HEADER_SECTION_SIZE * 3 +           // header2, header2 and header
-        VOLUME_SECTION_SIZE +               // volume section
-        SECTION_HEADER_SIZE + chunk_size_ + // sectors section
-        TABLE_SECTION_SIZE * 2 +            // table and table2 sections
-        VOLUME_SECTION_SIZE + // data section (equal to volume section)
-        HASH_SECTION_SIZE +   // hash section
-        DONE_SECTION_SIZE;    // done section
+    const size_type min_segment_size = HEADER_SECTION_SIZE * 3 +           // header2, header2 and header
+                                       VOLUME_SECTION_SIZE +               // volume section
+                                       SECTION_HEADER_SIZE + chunk_size_ + // sectors section
+                                       TABLE_SECTION_SIZE * 2 +            // table and table2 sections
+                                       VOLUME_SECTION_SIZE +               // data section (equal to volume section)
+                                       HASH_SECTION_SIZE +                 // hash section
+                                       DONE_SECTION_SIZE;                  // done section
 
     if (segment_size_ < min_segment_size)
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("segment size too small"));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("segment size too small"));
 
     // create imagefile GUID
     guid_ = mobius::core::bytearray (16);
@@ -74,12 +70,10 @@ writer_impl::writer_impl (const imagefile_impl &imagefile_impl)
     // create first segment
     auto &segment_writer = _new_segment_writer ();
 
-    auto acquisition_user =
-        imagefile_impl.get_attribute ("get_acquisition_user");
+    auto acquisition_user = imagefile_impl.get_attribute ("get_acquisition_user");
     auto drive_vendor = imagefile_impl.get_attribute ("drive_vendor");
     auto drive_model = imagefile_impl.get_attribute ("drive_model");
-    auto drive_serial_number =
-        imagefile_impl.get_attribute ("drive_serial_number");
+    auto drive_serial_number = imagefile_impl.get_attribute ("drive_serial_number");
 
     if (drive_vendor.is_string ())
         segment_writer.set_drive_vendor (std::string (drive_vendor));
@@ -88,8 +82,7 @@ writer_impl::writer_impl (const imagefile_impl &imagefile_impl)
         segment_writer.set_drive_model (std::string (drive_model));
 
     if (drive_serial_number.is_string ())
-        segment_writer.set_drive_serial_number (
-            std::string (drive_serial_number));
+        segment_writer.set_drive_serial_number (std::string (drive_serial_number));
 
     if (acquisition_user.is_string ())
         segment_writer.set_acquisition_user (std::string (acquisition_user));
@@ -188,8 +181,7 @@ writer_impl::_new_segment_writer ()
     auto writer = segments_.new_writer (segment_number - 1);
     segment_writer_list_.emplace_back (writer, segment_number);
 
-    auto &segment_writer =
-        segment_writer_list_[segment_writer_list_.size () - 1];
+    auto &segment_writer = segment_writer_list_[segment_writer_list_.size () - 1];
     segment_writer.set_segment_size (segment_size_);
     segment_writer.set_chunk_size (chunk_size_);
     segment_writer.set_compression_level (compression_level_);
@@ -206,8 +198,7 @@ segment_writer &
 writer_impl::_get_current_segment_writer ()
 {
     if (segment_writer_list_.size () == 0)
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("no segment writer found"));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("no segment writer found"));
 
     return segment_writer_list_[segment_writer_list_.size () - 1];
 }
