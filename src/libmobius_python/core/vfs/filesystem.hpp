@@ -20,6 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
 #include <mobius/core/vfs/filesystem.hpp>
+#include <pytypeobject.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -29,15 +30,12 @@ typedef struct
     PyObject_HEAD mobius::core::vfs::filesystem *obj;
 } core_vfs_filesystem_o;
 
-extern PyTypeObject core_vfs_filesystem_t;
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject new_core_vfs_filesystem_type ();
 bool pymobius_core_vfs_filesystem_check (PyObject *);
-PyObject *pymobius_core_vfs_filesystem_to_pyobject (
-    const mobius::core::vfs::filesystem &);
-mobius::core::vfs::filesystem
-pymobius_core_vfs_filesystem_from_pyobject (PyObject *);
+PyObject *pymobius_core_vfs_filesystem_to_pyobject (const mobius::core::vfs::filesystem &);
+mobius::core::vfs::filesystem pymobius_core_vfs_filesystem_from_pyobject (PyObject *);
 
 #endif
