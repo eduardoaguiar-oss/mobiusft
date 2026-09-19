@@ -38,4 +38,9 @@ bool pymobius_core_vfs_imagefile_check (PyObject *);
 PyObject *pymobius_core_vfs_imagefile_to_pyobject (const mobius::core::vfs::imagefile &);
 mobius::core::vfs::imagefile pymobius_core_vfs_imagefile_from_pyobject (PyObject *);
 
+PyObject *func_vfs_get_imagefile_implementations (PyObject *, PyObject *);
+PyObject *func_vfs_new_imagefile_by_path (PyObject *, PyObject *);
+PyObject *func_vfs_new_imagefile_by_url (PyObject *, PyObject *);
+PyObject *func_vfs_new_imagefile_from_file (PyObject *, PyObject *);
+
 #endif

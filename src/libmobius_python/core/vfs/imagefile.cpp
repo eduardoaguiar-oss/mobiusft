@@ -22,11 +22,14 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "imagefile.hpp"
 #include <pydict.hpp>
+#include <pygil.hpp>
+#include <pylist.hpp>
 #include <pymobius.hpp>
 #include "core/io/file.hpp"
 #include "core/io/reader.hpp"
 #include "core/io/writer.hpp"
 #include "core/pod/data.hpp"
+#include "core/resource.hpp"
 #include "module.hpp"
 
 namespace
@@ -522,4 +525,180 @@ pymobius_core_vfs_imagefile_from_pyobject (PyObject *value)
     return mobius::py::from_pyobject<core_vfs_imagefile_o> (
         value, core_vfs_imagefile_type
     );
+}
+
+namespace
+{
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create tuple from imagefile::info object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+PyTuple_from_imagefile_info (const mobius::core::resource &r)
+{
+    PyObject *ret = PyTuple_New (4);
+
+    if (ret)
+    {
+        auto img_resource =
+            r.get_value<mobius::core::vfs::imagefile_resource_type> ();
+
+        PyTuple_SetItem (ret, 0,
+                         mobius::py::pystring_from_std_string (r.get_id ()));
+        PyTuple_SetItem (
+            ret, 1,
+            mobius::py::pystring_from_std_string (r.get_description ()));
+        PyTuple_SetItem (ret, 2,
+                         mobius::py::pystring_from_std_string (
+                             img_resource.file_extensions));
+        PyTuple_SetItem (
+            ret, 3, mobius::py::pybool_from_bool (img_resource.is_writeable));
+    }
+
+    return ret;
+}
+
+} // namespace
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Function get_imagefile_implementations
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_vfs_get_imagefile_implementations (PyObject *, PyObject *)
+{
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = mobius::py::pylist_from_cpp_container (
+            mobius::core::get_resources ("vfs.imagefile"),
+            PyTuple_from_imagefile_info);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Function new_imagefile_by_path
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_vfs_new_imagefile_by_path (PyObject *, PyObject *args)
+{
+    // parse arguments
+    std::string arg_path;
+    std::string arg_type = "autodetect";
+
+    try
+    {
+        arg_path = mobius::py::get_arg_as_std_string (args, 0);
+
+        if (mobius::py::get_arg_size (args) > 1)
+            arg_type = mobius::py::get_arg_as_std_string (args, 1);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
+    }
+
+    // execute C++ code
+    PyObject *ret = nullptr;
+
+    try
+    {
+        auto imagefile = mobius::py::GIL () (
+            mobius::core::vfs::new_imagefile_by_path (arg_path, arg_type));
+        ret = pymobius_core_vfs_imagefile_to_pyobject (imagefile);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_io_error (e.what ());
+    }
+
+    // create Python imagefile according to its type
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Function new_imagefile_by_url
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_vfs_new_imagefile_by_url (PyObject *, PyObject *args)
+{
+    // parse arguments
+    std::string arg_url;
+    std::string arg_type = "autodetect";
+
+    try
+    {
+        arg_url = mobius::py::get_arg_as_std_string (args, 0);
+
+        if (mobius::py::get_arg_size (args) > 1)
+            arg_type = mobius::py::get_arg_as_std_string (args, 1);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
+    }
+
+    // execute C++ code
+    PyObject *ret = nullptr;
+
+    try
+    {
+        auto imagefile = mobius::py::GIL () (
+            mobius::core::vfs::new_imagefile_by_url (arg_url, arg_type));
+        ret = pymobius_core_vfs_imagefile_to_pyobject (imagefile);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_io_error (e.what ());
+    }
+
+    // create Python imagefile according to its type
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Function new_imagefile_from_file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_vfs_new_imagefile_from_file (PyObject *, PyObject *args)
+{
+    // parse input args
+    mobius::core::io::file arg_file;
+    std::string arg_type;
+
+    try
+    {
+        arg_file = mobius::py::get_arg_as_cpp (args, 0,
+                                               pymobius_core_io_file_from_pyobject);
+        arg_type = mobius::py::get_arg_as_std_string (args, 1, "autodetect");
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
+    }
+
+    // execute C++ code
+    PyObject *ret = nullptr;
+
+    try
+    {
+        auto imagefile = mobius::py::GIL () (
+            mobius::core::vfs::imagefile (arg_file, arg_type));
+        ret = pymobius_core_vfs_imagefile_to_pyobject (imagefile);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_io_error (e.what ());
+    }
+
+    // create Python imagefile according to its type
+    return ret;
 }

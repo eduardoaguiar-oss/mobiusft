@@ -21,14 +21,14 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "filesystem.hpp"
-#include "core/io/folder.hpp"
-#include "core/io/reader.hpp"
-#include "core/pod/data.hpp"
-#include "core/pod/map.hpp"
 #include <mobius/core/exception.inc>
 #include <pygil.hpp>
 #include <pymobius.hpp>
 #include <stdexcept>
+#include "core/io/folder.hpp"
+#include "core/io/reader.hpp"
+#include "core/pod/data.hpp"
+#include "core/pod/map.hpp"
 
 namespace
 {
@@ -173,18 +173,12 @@ tp_getter_metadata (core_vfs_filesystem_o *self, void *)
 // @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "reader", (getter) tp_getter_reader, (setter) 0,
-     (char *) "Volume reader object", nullptr},
-    {(char *) "offset", (getter) tp_getter_offset, (setter) 0,
-     (char *) "Offset from the beginning of volume", nullptr},
-    {(char *) "size", (getter) tp_getter_size, (setter) 0,
-     (char *) "Size in bytes", nullptr},
-    {(char *) "type", (getter) tp_getter_type, (setter) 0,
-     (char *) "Filesystem type", nullptr},
-    {(char *) "name", (getter) tp_getter_name, (setter) 0,
-     (char *) "Filesystem name", nullptr},
-    {(char *) "metadata", (getter) tp_getter_metadata, (setter) 0,
-     (char *) "Metadata", nullptr},
+    {(char *) "reader", (getter) tp_getter_reader, (setter) 0, (char *) "Volume reader object", nullptr},
+    {(char *) "offset", (getter) tp_getter_offset, (setter) 0, (char *) "Offset from the beginning of volume", nullptr},
+    {(char *) "size", (getter) tp_getter_size, (setter) 0, (char *) "Size in bytes", nullptr},
+    {(char *) "type", (getter) tp_getter_type, (setter) 0, (char *) "Filesystem type", nullptr},
+    {(char *) "name", (getter) tp_getter_name, (setter) 0, (char *) "Filesystem name", nullptr},
+    {(char *) "metadata", (getter) tp_getter_metadata, (setter) 0, (char *) "Metadata", nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
 
@@ -215,8 +209,7 @@ tp_f_get_metadata (core_vfs_filesystem_o *self, PyObject *args)
 
     try
     {
-        ret =
-            pymobius_core_pod_data_to_pyobject (self->obj->get_metadata (arg_name));
+        ret = pymobius_core_pod_data_to_pyobject (self->obj->get_metadata (arg_name));
     }
     catch (const std::exception &e)
     {
@@ -256,10 +249,8 @@ tp_f_get_root_folder (core_vfs_filesystem_o *self, PyObject *)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "get_metadata", (PyCFunction) tp_f_get_metadata, METH_VARARGS,
-     "Get metadata item"},
-    {(char *) "get_root_folder", (PyCFunction) tp_f_get_root_folder,
-     METH_VARARGS, "Get root folder"},
+    {(char *) "get_metadata", (PyCFunction) tp_f_get_metadata, METH_VARARGS, "Get metadata item"},
+    {(char *) "get_root_folder", (PyCFunction) tp_f_get_root_folder, METH_VARARGS, "Get root folder"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };
 
@@ -280,8 +271,7 @@ tp_new (PyTypeObject *, PyObject *args, PyObject *)
 
     try
     {
-        arg_reader = mobius::py::get_arg_as_cpp (
-            args, 0, pymobius_core_io_reader_from_pyobject);
+        arg_reader = mobius::py::get_arg_as_cpp (args, 0, pymobius_core_io_reader_from_pyobject);
         arg_offset = mobius::py::get_arg_as_uint64_t (args, 1);
         arg_type = mobius::py::get_arg_as_std_string (args, 2, "autodetect");
     }
@@ -300,8 +290,7 @@ tp_new (PyTypeObject *, PyObject *args, PyObject *)
 
         {
             mobius::py::GIL gil;
-            fs = mobius::core::vfs::filesystem (arg_reader, arg_offset,
-                                                arg_type);
+            fs = mobius::core::vfs::filesystem (arg_reader, arg_offset, arg_type);
         }
 
         ret = pymobius_core_vfs_filesystem_to_pyobject (fs);
@@ -359,9 +348,7 @@ new_core_vfs_filesystem_type ()
         return mobius::py::pytypeobject (core_vfs_filesystem_type);
 
     // Allocate type from spec
-    core_vfs_filesystem_type = reinterpret_cast<PyTypeObject *> (
-        PyType_FromSpec (&core_vfs_filesystem_spec)
-    );
+    core_vfs_filesystem_type = reinterpret_cast<PyTypeObject *> (PyType_FromSpec (&core_vfs_filesystem_spec));
 
     // Create type
     mobius::py::pytypeobject type (core_vfs_filesystem_type);
@@ -379,9 +366,7 @@ bool
 pymobius_core_vfs_filesystem_check (PyObject *value)
 {
     if (!core_vfs_filesystem_type)
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("core.vfs.filesystem type is not initialized")
-        );
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("core.vfs.filesystem type is not initialized"));
 
     return mobius::py::isinstance (value, core_vfs_filesystem_type);
 }
@@ -395,13 +380,9 @@ PyObject *
 pymobius_core_vfs_filesystem_to_pyobject (const mobius::core::vfs::filesystem &obj)
 {
     if (!core_vfs_filesystem_type)
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("core.vfs.filesystem type is not initialized")
-        );
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("core.vfs.filesystem type is not initialized"));
 
-    return mobius::py::to_pyobject_nullable<core_vfs_filesystem_o> (
-        obj, core_vfs_filesystem_type
-    );
+    return mobius::py::to_pyobject_nullable<core_vfs_filesystem_o> (obj, core_vfs_filesystem_type);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -413,11 +394,7 @@ mobius::core::vfs::filesystem
 pymobius_core_vfs_filesystem_from_pyobject (PyObject *value)
 {
     if (!core_vfs_filesystem_type)
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("core.vfs.filesystem type is not initialized")
-        );
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("core.vfs.filesystem type is not initialized"));
 
-    return mobius::py::from_pyobject<core_vfs_filesystem_o> (
-        value, core_vfs_filesystem_type
-    );
+    return mobius::py::from_pyobject<core_vfs_filesystem_o> (value, core_vfs_filesystem_type);
 }

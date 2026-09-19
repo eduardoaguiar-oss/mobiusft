@@ -52,9 +52,7 @@ tp_f_get_state (core_vfs_vfs_o *self, PyObject *)
 
     try
     {
-        ret = pymobius_core_pod_map_to_pyobject (
-            mobius::py::GIL () (self->obj->get_state ())
-        );
+        ret = pymobius_core_pod_map_to_pyobject (mobius::py::GIL () (self->obj->get_state ()));
     }
     catch (const std::exception &e)
     {
@@ -127,9 +125,7 @@ tp_f_is_available (core_vfs_vfs_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (
-            mobius::py::GIL () (self->obj->is_available ())
-        );
+        ret = mobius::py::pybool_from_bool (mobius::py::GIL () (self->obj->is_available ()));
     }
     catch (const std::exception &e)
     {
@@ -154,9 +150,7 @@ tp_f_add_disk (core_vfs_vfs_o *self, PyObject *args)
 
     try
     {
-        arg_d = mobius::py::get_arg_as_cpp (
-            args, 0, pymobius_core_vfs_disk_from_pyobject
-        );
+        arg_d = mobius::py::get_arg_as_cpp (args, 0, pymobius_core_vfs_disk_from_pyobject);
     }
     catch (const std::exception &e)
     {
@@ -169,9 +163,7 @@ tp_f_add_disk (core_vfs_vfs_o *self, PyObject *args)
 
     try
     {
-        ret = PyLong_FromSize_t (
-            mobius::py::GIL () (self->obj->add_disk (arg_d))
-        );
+        ret = PyLong_FromSize_t (mobius::py::GIL () (self->obj->add_disk (arg_d)));
     }
     catch (const std::exception &e)
     {
@@ -303,23 +295,15 @@ tp_f_get_root_entries (core_vfs_vfs_o *self, PyObject *)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "get_state", (PyCFunction) tp_f_get_state, METH_VARARGS,
-     "Get object state"},
+    {(char *) "get_state", (PyCFunction) tp_f_get_state, METH_VARARGS, "Get object state"},
     {(char *) "clear", (PyCFunction) tp_f_clear, METH_VARARGS, "Clear VFS"},
-    {(char *) "rescan", (PyCFunction) tp_f_rescan, METH_VARARGS,
-     "Rescan blocks and root entries"},
-    {(char *) "is_available", (PyCFunction) tp_f_is_available, METH_VARARGS,
-     "Check if VFS is available"},
-    {(char *) "add_disk", (PyCFunction) tp_f_add_disk, METH_VARARGS,
-     "Add disk"},
-    {(char *) "remove_disk", (PyCFunction) tp_f_remove_disk, METH_VARARGS,
-     "Remove disk"},
-    {(char *) "get_disks", (PyCFunction) tp_f_get_disks, METH_VARARGS,
-     "Get disks"},
-    {(char *) "get_blocks", (PyCFunction) tp_f_get_blocks, METH_VARARGS,
-     "Get blocks"},
-    {(char *) "get_root_entries", (PyCFunction) tp_f_get_root_entries,
-     METH_VARARGS, "Get root entries"},
+    {(char *) "rescan", (PyCFunction) tp_f_rescan, METH_VARARGS, "Rescan blocks and root entries"},
+    {(char *) "is_available", (PyCFunction) tp_f_is_available, METH_VARARGS, "Check if VFS is available"},
+    {(char *) "add_disk", (PyCFunction) tp_f_add_disk, METH_VARARGS, "Add disk"},
+    {(char *) "remove_disk", (PyCFunction) tp_f_remove_disk, METH_VARARGS, "Remove disk"},
+    {(char *) "get_disks", (PyCFunction) tp_f_get_disks, METH_VARARGS, "Get disks"},
+    {(char *) "get_blocks", (PyCFunction) tp_f_get_blocks, METH_VARARGS, "Get blocks"},
+    {(char *) "get_root_entries", (PyCFunction) tp_f_get_root_entries, METH_VARARGS, "Get root entries"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };
 
@@ -333,8 +317,7 @@ static PyMethodDef tp_methods[] = {
 static PyObject *
 tp_new (PyTypeObject *type, PyObject *, PyObject *)
 {
-    core_vfs_vfs_o *ret =
-        reinterpret_cast<core_vfs_vfs_o *> (type->tp_alloc (type, 0));
+    core_vfs_vfs_o *ret = reinterpret_cast<core_vfs_vfs_o *> (type->tp_alloc (type, 0));
 
     if (ret)
     {
@@ -397,9 +380,7 @@ new_core_vfs_vfs_type ()
         return mobius::py::pytypeobject (core_vfs_vfs_type);
 
     // Allocate type from spec
-    core_vfs_vfs_type = reinterpret_cast<PyTypeObject *> (
-        PyType_FromSpec (&core_vfs_vfs_spec)
-    );
+    core_vfs_vfs_type = reinterpret_cast<PyTypeObject *> (PyType_FromSpec (&core_vfs_vfs_spec));
 
     // Create type
     mobius::py::pytypeobject type (core_vfs_vfs_type);
@@ -417,9 +398,7 @@ bool
 pymobius_core_vfs_vfs_check (PyObject *value)
 {
     if (!core_vfs_vfs_type)
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("core.vfs.vfs type is not initialized")
-        );
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("core.vfs.vfs type is not initialized"));
 
     return mobius::py::isinstance (value, core_vfs_vfs_type);
 }
@@ -433,13 +412,9 @@ PyObject *
 pymobius_core_vfs_vfs_to_pyobject (const mobius::core::vfs::vfs &obj)
 {
     if (!core_vfs_vfs_type)
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("core.vfs.vfs type is not initialized")
-        );
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("core.vfs.vfs type is not initialized"));
 
-    return mobius::py::to_pyobject<core_vfs_vfs_o> (
-        obj, core_vfs_vfs_type
-    );
+    return mobius::py::to_pyobject<core_vfs_vfs_o> (obj, core_vfs_vfs_type);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -451,11 +426,7 @@ mobius::core::vfs::vfs
 pymobius_core_vfs_vfs_from_pyobject (PyObject *value)
 {
     if (!core_vfs_vfs_type)
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("core.vfs.vfs type is not initialized")
-        );
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("core.vfs.vfs type is not initialized"));
 
-    return mobius::py::from_pyobject<core_vfs_vfs_o> (
-        value, core_vfs_vfs_type
-    );
+    return mobius::py::from_pyobject<core_vfs_vfs_o> (value, core_vfs_vfs_type);
 }

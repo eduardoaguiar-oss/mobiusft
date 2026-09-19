@@ -21,23 +21,12 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "module.hpp"
+#include <pymobius.hpp>
 #include "block.hpp"
 #include "disk.hpp"
 #include "filesystem.hpp"
 #include "imagefile.hpp"
 #include "vfs.hpp"
-#include <pymobius.hpp>
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Function prototypes
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *func_vfs_get_imagefile_implementations (PyObject *, PyObject *);
-PyObject *func_vfs_new_disk_by_device_uid (PyObject *, PyObject *);
-PyObject *func_vfs_new_disk_by_path (PyObject *, PyObject *);
-PyObject *func_vfs_new_disk_by_url (PyObject *, PyObject *);
-PyObject *func_vfs_new_imagefile_by_path (PyObject *, PyObject *);
-PyObject *func_vfs_new_imagefile_by_url (PyObject *, PyObject *);
-PyObject *func_vfs_new_imagefile_from_file (PyObject *, PyObject *);
 
 namespace
 {
@@ -45,20 +34,16 @@ namespace
 // @brief Module methods
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef module_methods[] = {
-    {"get_imagefile_implementations", func_vfs_get_imagefile_implementations,
-     METH_VARARGS, "Get imagefile implementations available"},
-    {"new_disk_by_device_uid", func_vfs_new_disk_by_device_uid, METH_VARARGS,
-     "Create new disk by device UID"},
-    {"new_disk_by_path", func_vfs_new_disk_by_path, METH_VARARGS,
-     "Create new disk by file path"},
-    {"new_disk_by_url", func_vfs_new_disk_by_url, METH_VARARGS,
-     "Create new disk by file URL"},
-    {"new_imagefile_by_path", func_vfs_new_imagefile_by_path, METH_VARARGS,
-     "Create new imagefile by file path"},
-    {"new_imagefile_by_url", func_vfs_new_imagefile_by_url, METH_VARARGS,
-     "Create new imagefile by file URL"},
-    {"new_imagefile_from_file", func_vfs_new_imagefile_from_file, METH_VARARGS,
-     "Create new imagefile from file"},
+    {"get_imagefile_implementations",
+     func_vfs_get_imagefile_implementations,
+     METH_VARARGS,
+     "Get imagefile implementations available"},
+    {"new_disk_by_device_uid", func_vfs_new_disk_by_device_uid, METH_VARARGS, "Create new disk by device UID"},
+    {"new_disk_by_path", func_vfs_new_disk_by_path, METH_VARARGS, "Create new disk by file path"},
+    {"new_disk_by_url", func_vfs_new_disk_by_url, METH_VARARGS, "Create new disk by file URL"},
+    {"new_imagefile_by_path", func_vfs_new_imagefile_by_path, METH_VARARGS, "Create new imagefile by file path"},
+    {"new_imagefile_by_url", func_vfs_new_imagefile_by_url, METH_VARARGS, "Create new imagefile by file URL"},
+    {"new_imagefile_from_file", func_vfs_new_imagefile_from_file, METH_VARARGS, "Create new imagefile from file"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };
 
@@ -74,7 +59,8 @@ static PyModuleDef module_def = {
     nullptr,
     nullptr,
     nullptr,
-    nullptr};
+    nullptr
+};
 
 } // namespace
 

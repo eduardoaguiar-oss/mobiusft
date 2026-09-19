@@ -30,11 +30,6 @@ add_library(libmobius_python_core_vfs STATIC
     block.cpp
     disk.cpp
     filesystem.cpp
-    func_disk.cpp
-    func_get_imagefile_implementations.cpp
-    func_new_imagefile_by_path.cpp
-    func_new_imagefile_by_url.cpp
-    func_new_imagefile_from_file.cpp
     imagefile.cpp
     vfs.cpp
 )
