@@ -1,5 +1,6 @@
 Mobius Forensic Toolkit 2.30
 	* libmobius_core: Change all intermediate static libraries to object libraries
+	* libmobius_framework: Change all intermediate static libraries to object libraries
 	* libmobius_python: Improve mobius.core.vfs.block class using the PyType_FromSpec API
 	* libmobius_python: Improve mobius.core.vfs.disk class using the PyType_FromSpec API
 	* libmobius_python: Improve mobius.core.vfs.filesystem class using the PyType_FromSpec API

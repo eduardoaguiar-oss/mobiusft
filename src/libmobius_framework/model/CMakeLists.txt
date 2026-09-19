@@ -25,7 +25,7 @@ project(libmobius-framework-model LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(mobius_framework_model STATIC
+add_library(mobius_framework_model OBJECT
     ant.cpp
     case.cpp
     case_schema.cpp
@@ -39,4 +39,6 @@ target_include_directories(mobius_framework_model PRIVATE
     ${MOBIUS_INCLUDE_DIRS}
 )
 
-target_compile_options(mobius_framework_model PRIVATE -fno-strict-aliasing -fPIC)
+set_target_properties(mobius_framework_model PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
+target_compile_options(mobius_framework_model PRIVATE -fno-strict-aliasing)
