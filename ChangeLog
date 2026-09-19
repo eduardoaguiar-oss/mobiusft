@@ -1,3 +1,10 @@
+Mobius Forensic Toolkit 2.30
+	* libmobius_python: Improve mobius.core.vfs.block class using the PyType_FromSpec API
+	* libmobius_python: Improve mobius.core.vfs.disk class using the PyType_FromSpec API
+	* libmobius_python: Improve mobius.core.vfs.filesystem class using the PyType_FromSpec API
+	* libmobius_python: Improve mobius.core.vfs.imagefile class using the PyType_FromSpec API
+	* libmobius_python: Improve mobius.core.vfs.vfs class using the PyType_FromSpec API
+
 Mobius Forensic Toolkit 2.29
 	* app-safari: Add new C++ extension for Safari browser support
 	* app-internet-explorer: Add new C++ extension for Internet Explorer browser support

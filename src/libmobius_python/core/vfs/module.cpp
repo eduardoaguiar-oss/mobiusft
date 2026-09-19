@@ -88,11 +88,11 @@ new_core_vfs_module ()
     mobius::py::pymodule module (&module_def);
 
     // Add types
-    module.add_type ("block", &core_vfs_block_t);
-    module.add_type ("disk", &core_vfs_disk_t);
-    module.add_type ("filesystem", &core_vfs_filesystem_t);
-    module.add_type ("imagefile", &core_vfs_imagefile_t);
-    module.add_type ("vfs", &core_vfs_vfs_t);
+    module.add_type ("block", new_core_vfs_block_type ());
+    module.add_type ("disk", new_core_vfs_disk_type ());
+    module.add_type ("filesystem", new_core_vfs_filesystem_type ());
+    module.add_type ("imagefile", new_core_vfs_imagefile_type ());
+    module.add_type ("vfs", new_core_vfs_vfs_type ());
 
     // Add constants
     module.add_constant ("STATUS_UNKNOWN", 1);
