@@ -18,8 +18,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <Python.h>
 #include <mobius/core/ui/window.hpp>
+#include <Python.h>
 #include <pytypeobject.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -31,12 +31,11 @@ typedef struct
 } core_ui_window_o;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// Functions
+// Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::py::pytypeobject new_ui_window_type ();
+mobius::py::pytypeobject new_core_ui_window_type ();
 bool pymobius_core_ui_window_check (PyObject *);
-PyObject *
-pymobius_core_ui_window_to_pyobject (const mobius::core::ui::window &);
+PyObject *pymobius_core_ui_window_to_pyobject (const mobius::core::ui::window &);
 mobius::core::ui::window pymobius_core_ui_window_from_pyobject (PyObject *);
 
 #endif
