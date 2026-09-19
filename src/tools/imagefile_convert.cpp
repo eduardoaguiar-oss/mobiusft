@@ -18,10 +18,10 @@
 #include <cstdint>
 #include <iostream>
 #include <mobius/core/application.hpp>
-#include <mobius/core/io/uri.hpp>
+#include <mobius/core/io/path.hpp>
 #include <mobius/core/resource.hpp>
 #include <mobius/core/string_functions.hpp>
-#include <mobius/core/vfs/imagefile.hpp>
+#include <mobius/core/vfs/imagefile/imagefile.hpp>
 #include <unistd.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -31,14 +31,14 @@ void
 usage ()
 {
     std::cerr << std::endl;
-    std::cerr << "Use: imagefile_convert [OPTIONS] <INPUT-URL> [OUTPUT-URL]"
+    std::cerr << "Use: imagefile_convert [OPTIONS] <INPUT-PATH> [OUTPUT-PATH]"
               << std::endl;
     std::cerr << std::endl;
-    std::cerr << "e.g: imagefile_convert -s 2GB file://disk.raw file://disk.001"
+    std::cerr << "e.g: imagefile_convert -s 2GB disk.raw disk.001"
               << std::endl;
-    std::cerr << "     imagefile_convert -f ewf -t raw file://disk.raw"
+    std::cerr << "     imagefile_convert -f ewf -t raw disk.raw"
               << std::endl;
-    std::cerr << "     imagefile_convert -t raw file://disk.ewf" << std::endl;
+    std::cerr << "     imagefile_convert -t raw disk.ewf" << std::endl;
     std::cerr << std::endl;
     std::cerr << "Options are:" << std::endl;
     std::cerr << "  -f type\t\tInput imagefile type (default: autodetect)"
@@ -47,7 +47,7 @@ usage ()
     std::cerr << "       autodetect\tTry to autodetect imagefile type (default)"
               << std::endl;
 
-    for (const auto &type : mobius::core::vfs::get_imagefile_types ())
+    for (const auto &type : mobius::core::vfs::imagefile::get_imagefile_types ())
         std::cerr << "       " << type.id << "\t\t" << type.description << std::endl;
 
     std::cerr << std::endl;
@@ -57,7 +57,7 @@ usage ()
     std::cerr << "       autodetect\tTry to autodetect imagefile type (default)"
               << std::endl;
 
-    for (const auto &type : mobius::core::vfs::get_imagefile_types ())
+    for (const auto &type : mobius::core::vfs::imagefile::get_imagefile_types ())
     {
         if (type.is_writeable)
             std::cerr << "       " << type.id << "\t\t" << type.description << std::endl;
@@ -70,7 +70,7 @@ usage ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get size from size string
+// @brief Get size from size string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint64_t
 get_size (const std::string &text)
@@ -93,15 +93,15 @@ get_size (const std::string &text)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get type from URL
+// @brief Get type from path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-get_type_from_url (const std::string &url)
+get_type_from_path (const std::string &path)
 {
     std::string type;
 
-    mobius::core::io::uri uri (url);
-    std::string extension = uri.get_extension ();
+    mobius::core::io::path p (path);
+    std::string extension = p.get_extension ();
 
     if (extension == "001")
         type = "split";
@@ -116,26 +116,28 @@ get_type_from_url (const std::string &url)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get output URL from input URL and type
+// @brief Get output path from input path and type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-get_url_from_type (const std::string &input_url, const std::string &type)
+get_path_from_type (const std::string &input_path, const std::string &type)
 {
-    mobius::core::io::uri uri (input_url);
-    std::string url = input_url.substr (0, input_url.length () -
-                                               uri.get_extension ().length ());
+    mobius::core::io::path p (input_path);
+    std::string path = p.get_prefix ();
 
     if (type == "raw")
-        url += "raw";
+        path += ".raw";
 
     else if (type == "split")
-        url += "001";
+        path += ".001";
 
-    return url;
+    else if (type == "ewf")
+        path += ".ewf";
+
+    return path;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief main function
+// @brief Main function
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 int
 main (int argc, char **argv)
@@ -155,8 +157,8 @@ main (int argc, char **argv)
     std::string input_type_arg = "autodetect";
     std::string output_type_arg = "autodetect";
     std::string segment_size_arg = "4GB";
-    std::string input_url;
-    std::string output_url;
+    std::string input_path;
+    std::string output_path;
 
     while ((opt = getopt (argc, argv, "hf:s:t:")) != EOF)
     {
@@ -192,11 +194,11 @@ main (int argc, char **argv)
     // two URL's given
     if (optind < argc - 1)
     {
-        input_url = argv[optind];
-        output_url = argv[optind + 1];
+        input_path = argv[optind];
+        output_path = argv[optind + 1];
 
         if (output_type_arg == "autodetect")
-            output_type_arg = get_type_from_url (output_url);
+            output_type_arg = get_type_from_path (output_path);
     }
 
     // one URL. output_type must be given
@@ -210,11 +212,11 @@ main (int argc, char **argv)
             exit (EXIT_FAILURE);
         }
 
-        input_url = argv[optind];
-        output_url = get_url_from_type (input_url, output_type_arg);
+        input_path = argv[optind];
+        output_path = get_path_from_type (input_path, output_type_arg);
     }
 
-    // either no URL or more than two URL's
+    // either no path or more than two paths
     else
     {
         std::cerr << std::endl;
@@ -227,7 +229,7 @@ main (int argc, char **argv)
     // check if input imagefile is available
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     auto image_in =
-        mobius::core::vfs::new_imagefile_by_url (input_url, input_type_arg);
+        mobius::core::vfs::imagefile::new_imagefile_by_path (input_path, input_type_arg);
 
     if (!image_in.is_available ())
     {
@@ -241,7 +243,7 @@ main (int argc, char **argv)
     // create output imagefile
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     auto image_out =
-        mobius::core::vfs::new_imagefile_by_url (output_url, output_type_arg);
+        mobius::core::vfs::imagefile::new_imagefile_by_path (output_path, output_type_arg);
 
     if (image_out.get_type () == "ewf")
     {
@@ -264,8 +266,8 @@ main (int argc, char **argv)
     std::cout << std::endl;
     std::cout << "About to copy " << reader.get_size () << " bytes"
               << std::endl;
-    std::cout << "  from " << input_url << std::endl;
-    std::cout << "  to " << output_url << std::endl;
+    std::cout << "  from " << input_path << std::endl;
+    std::cout << "  to " << output_path << std::endl;
 
     auto data = reader.read (block_size);
     auto size = reader.get_size ();

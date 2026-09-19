@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/application.hpp>
 #include <mobius/core/resource.hpp>
-#include <mobius/core/vfs/imagefile.hpp>
+#include <mobius/core/vfs/imagefile/imagefile.hpp>
 #include <unistd.h>
 #include <iostream>
 
@@ -28,9 +28,9 @@ void
 usage ()
 {
     std::cerr << std::endl;
-    std::cerr << "Use: imagefile_cat [OPTIONS] <URL>" << std::endl;
+    std::cerr << "Use: imagefile_cat [OPTIONS] <PATH>" << std::endl;
     std::cerr << "e.g: imagefile_cat -t raw file://disk.raw" << std::endl;
-    std::cerr << "     imagefile_cat file://disk.ewf" << std::endl;
+    std::cerr << "     imagefile_cat disk.ewf" << std::endl;
     std::cerr << std::endl;
     std::cerr << "Options are:" << std::endl;
     std::cerr << "  -t imagefile type\t\t" << std::endl;
@@ -38,7 +38,7 @@ usage ()
     std::cerr << "     Image file type can be:" << std::endl;
     std::cerr << "       autodetect\tTry to autodetect imagefile type (default)" << std::endl;
 
-    for (const auto &type : mobius::core::vfs::get_imagefile_types ())
+    for (const auto &type : mobius::core::vfs::imagefile::get_imagefile_types ())
         std::cerr << "       " << type.id << "\t\t" << type.description << std::endl;
 
     std::cerr << std::endl;
@@ -94,7 +94,7 @@ main (int argc, char **argv)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // check if imagefile is available
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    auto image = mobius::core::vfs::new_imagefile_by_url (argv[optind], type);
+    auto image = mobius::core::vfs::imagefile::new_imagefile_by_path (argv[optind], type);
 
     if (!image.is_available ())
     {

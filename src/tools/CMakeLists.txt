@@ -45,6 +45,13 @@ set_target_properties(tools_dirtree PROPERTIES OUTPUT_NAME "dirtree")
 target_link_libraries(tools_dirtree PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Tools: ewf_decoder
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+add_executable(tools_ewf_decoder ewf_decoder.cpp)
+set_target_properties(tools_ewf_decoder PROPERTIES OUTPUT_NAME "ewf_decoder")
+target_link_libraries(tools_ewf_decoder PRIVATE Mobius::Core)
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tool: filesystem_scan - Scans filesystem metadata
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_executable(tools_filesystem_scan filesystem_scan.cpp)
@@ -144,6 +151,7 @@ install(TARGETS
     tools_dirfs
     tools_dirtree
     tools_disk_list
+    tools_ewf_decoder
     tools_filesystem_scan
     tools_hashfs
     tools_hive_info

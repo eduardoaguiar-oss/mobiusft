@@ -495,7 +495,7 @@ pymobius_core_vfs_imagefile_check (PyObject *value)
 // @return New core.vfs.imagefile object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_core_vfs_imagefile_to_pyobject (const mobius::core::vfs::imagefile &obj)
+pymobius_core_vfs_imagefile_to_pyobject (const mobius::core::vfs::imagefile::imagefile &obj)
 {
     if (!core_vfs_imagefile_type)
         throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("core.vfs.imagefile type is not initialized"));
@@ -508,7 +508,7 @@ pymobius_core_vfs_imagefile_to_pyobject (const mobius::core::vfs::imagefile &obj
 // @param value Python value
 // @return core.vfs.imagefile object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::core::vfs::imagefile
+mobius::core::vfs::imagefile::imagefile
 pymobius_core_vfs_imagefile_from_pyobject (PyObject *value)
 {
     if (!core_vfs_imagefile_type)
@@ -523,7 +523,7 @@ namespace
 // @brief Create tuple from vfs::imagefile_type object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-PyTuple_from_imagefile_info (const mobius::core::vfs::imagefile_type &type)
+PyTuple_from_imagefile_info (const mobius::core::vfs::imagefile::imagefile_type &type)
 {
     PyObject *ret = PyTuple_New (5);
 
@@ -556,7 +556,7 @@ func_vfs_get_imagefile_types (PyObject *, PyObject *)
     try
     {
         ret = mobius::py::pylist_from_cpp_container (
-            mobius::core::vfs::get_imagefile_types (),
+            mobius::core::vfs::imagefile::get_imagefile_types (),
             PyTuple_from_imagefile_info
         );
     }
@@ -596,7 +596,7 @@ func_vfs_new_imagefile_by_path (PyObject *, PyObject *args)
 
     try
     {
-        auto imagefile = mobius::py::GIL () (mobius::core::vfs::new_imagefile_by_path (arg_path, arg_type));
+        auto imagefile = mobius::py::GIL () (mobius::core::vfs::imagefile::new_imagefile_by_path (arg_path, arg_type));
         ret = pymobius_core_vfs_imagefile_to_pyobject (imagefile);
     }
     catch (const std::exception &e)
@@ -636,7 +636,7 @@ func_vfs_new_imagefile_by_url (PyObject *, PyObject *args)
 
     try
     {
-        auto imagefile = mobius::py::GIL () (mobius::core::vfs::new_imagefile_by_url (arg_url, arg_type));
+        auto imagefile = mobius::py::GIL () (mobius::core::vfs::imagefile::new_imagefile_by_url (arg_url, arg_type));
         ret = pymobius_core_vfs_imagefile_to_pyobject (imagefile);
     }
     catch (const std::exception &e)
@@ -674,7 +674,8 @@ func_vfs_new_imagefile_from_file (PyObject *, PyObject *args)
 
     try
     {
-        auto imagefile = mobius::py::GIL () (mobius::core::vfs::imagefile (arg_file, arg_type));
+        auto imagefile =
+            mobius::py::GIL () (mobius::core::vfs::imagefile::new_imagefile_from_file (arg_file, arg_type));
         ret = pymobius_core_vfs_imagefile_to_pyobject (imagefile);
     }
     catch (const std::exception &e)

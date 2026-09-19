@@ -20,7 +20,7 @@
 #include <mobius/core/datetime/timedelta.hpp>
 #include <mobius/core/exception.inc>
 #include <mobius/core/string_functions.hpp>
-#include <mobius/core/vfs/imagefile.hpp>
+#include <mobius/core/vfs/imagefile/imagefile.hpp>
 #include <mobius/core/vfs/util.hpp>
 #include <regex>
 #include <stdexcept>
@@ -58,7 +58,7 @@ imagefile_impl::is_instance (const mobius::core::io::file &f)
 imagefile_impl::imagefile_impl (const mobius::core::io::file &f)
     : file_ (f),
       split_imagefile_impl_ (
-          mobius::core::vfs::build_imagefile_implementation (
+          mobius::core::vfs::imagefile::build_imagefile_implementation (
               f.new_sibling_by_extension ("001"), "split"
           )
       )

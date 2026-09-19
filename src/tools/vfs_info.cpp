@@ -18,7 +18,7 @@
 #include <mobius/core/application.hpp>
 #include <mobius/core/log.hpp>
 #include <mobius/core/resource.hpp>
-#include <mobius/core/vfs/imagefile.hpp>
+#include <mobius/core/vfs/imagefile/imagefile.hpp>
 #include <mobius/core/vfs/vfs.hpp>
 #include <unistd.h>
 #include <iostream>
@@ -40,7 +40,7 @@ usage ()
     std::cerr << "     Image file type can be:" << std::endl;
     std::cerr << "       autodetect\tTry to autodetect imagefile type (default)" << std::endl;
 
-    for (const auto &type : mobius::core::vfs::get_imagefile_types ())
+    for (const auto &type : mobius::core::vfs::imagefile::get_imagefile_types ())
         std::cerr << "       " << type.id << "\t\t" << type.description << std::endl;
 
     std::cerr << std::endl;
