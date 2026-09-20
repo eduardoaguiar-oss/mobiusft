@@ -204,37 +204,11 @@ struct imagefile_type
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// Imagefile resource
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-struct imagefile_resource_type
-{
-    std::string file_extensions;
-    bool is_writeable;
-    std::function<bool (const mobius::core::io::file &)> is_instance;
-    std::function<std::shared_ptr<imagefile_impl_base> (const mobius::core::io::file &)> build;
-};
-
-template <typename T>
-constexpr imagefile_resource_type
-make_imagefile_resource ()
-{
-    return imagefile_resource_type {
-        T::get_file_extensions (),
-        T::is_writeable (),
-        T::is_instance,
-        [] (const mobius::core::io::file &f) { return std::make_shared<T> (f); }
-    };
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Imagefile builder functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 imagefile new_imagefile_by_url (const std::string &, const std::string & = "autodetect");
 imagefile new_imagefile_by_path (const std::string &, const std::string & = "autodetect");
 imagefile new_imagefile_from_file (const mobius::core::io::file &, const std::string & = "autodetect");
-
-std::shared_ptr<imagefile_impl_base>
-build_imagefile_implementation (const mobius::core::io::file &, const std::string &);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Imagefile type functions

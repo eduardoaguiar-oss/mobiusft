@@ -31,8 +31,44 @@ namespace
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Image file types supported
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static std::unordered_map<std::string, imagefile_type> IMAGEFILE_TYPES = {
-};
+static std::unordered_map<std::string, imagefile_type> IMAGEFILE_TYPES;
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Build implementation, according to ID
+// @param f File object
+// @param id Implementation ID
+// @return shared_ptr to implementation object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::shared_ptr<imagefile_impl_base>
+_build_imagefile_implementation (const mobius::core::io::file &f, const std::string &id)
+{
+    // If type == "autodetect", try to detect the imagefile type automatically.
+    if (id == "autodetect")
+    {
+        for (const auto &[_, type] : IMAGEFILE_TYPES)
+        {
+            if (type.is_instance (f))
+                return type.builder (f);
+        }
+    }
+
+    // Otherwise, if type is given, create imagefile using type implementation
+    else
+    {
+        auto iter = IMAGEFILE_TYPES.find (id);
+
+        if (iter != IMAGEFILE_TYPES.end ())
+            return iter->second.builder (f);
+    }
+
+    // Fallback: raw imagefile
+    auto iter = IMAGEFILE_TYPES.find ("raw");
+
+    if (iter != IMAGEFILE_TYPES.end ())
+        return iter->second.builder (f);
+
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("Unsupported imagefile type: " + id));
+}
 
 } // namespace
 
@@ -59,7 +95,7 @@ imagefile::imagefile (const std::shared_ptr<imagefile_impl_base> &impl)
 // @param type Imagefile type (default = "autodetect")
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 imagefile::imagefile (const mobius::core::io::file &f, const std::string &type)
-    : impl_ (build_imagefile_implementation (f, type))
+    : impl_ (_build_imagefile_implementation (f, type))
 {
 }
 
@@ -86,43 +122,6 @@ imagefile::get_metadata () const
     }
 
     return metadata;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Build implementation, according to ID
-// @param f File object
-// @param id Implementation ID
-// @return shared_ptr to implementation object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::shared_ptr<imagefile_impl_base>
-build_imagefile_implementation (const mobius::core::io::file &f, const std::string &id)
-{
-    // If type == "autodetect", use f_is_instance function to check if file
-    // is an instance of this imagefile type.
-    if (id == "autodetect")
-    {
-        for (const auto &type : get_imagefile_types ()) // @deprecated Change to IMAGEFILE_TYPES when possible
-        {
-            if (type.is_instance (f))
-                return type.builder (f);
-        }
-
-        // fallback: raw imagefile
-        return build_imagefile_implementation (f, "raw");
-    }
-
-    // Otherwise, if type is given, create imagefile using type implementation
-    else
-    {
-        auto iter = IMAGEFILE_TYPES.find (id);
-
-        if (iter != IMAGEFILE_TYPES.end ())
-            return iter->second.builder (f);
-
-        // @deprecated Fallback to resource-based imagefile type if not found in IMAGEFILE_TYPES
-        auto img_resource = mobius::core::get_resource_value<imagefile_resource_type> ("vfs.imagefile." + id);
-        return img_resource.build (f);
-    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -199,23 +198,6 @@ get_imagefile_types ()
         types.begin (),
         [] (const auto &pair) { return pair.second; }
     );
-
-    // @deprecated Add old imagefile types from resources
-    for (const auto &resource : mobius::core::get_resources ("vfs.imagefile"))
-    {
-        auto img_resource = resource.get_value<imagefile_resource_type> ();
-
-        imagefile_type img_type;
-
-        img_type.id = resource.get_id ();
-        img_type.description = resource.get_description ();
-        img_type.is_instance = img_resource.is_instance;
-        img_type.builder = img_resource.build;
-        img_type.is_writeable = img_resource.is_writeable;
-        img_type.file_extensions = {img_resource.file_extensions};
-
-        types.push_back (img_type);
-    }
 
     // Sort the imagefile types by their ID
     std::sort (
