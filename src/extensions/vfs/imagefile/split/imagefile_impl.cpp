@@ -16,14 +16,14 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "imagefile_impl.hpp"
-#include "reader_impl.hpp"
-#include "writer_impl.hpp"
 #include <mobius/core/exception.inc>
 #include <mobius/core/io/reader.hpp>
 #include <mobius/core/io/uri.hpp>
 #include <mobius/core/io/writer.hpp>
 #include <mobius/core/string_functions.hpp>
 #include <stdexcept>
+#include "reader_impl.hpp"
+#include "writer_impl.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Check if file is an instance of imagefile split
@@ -42,8 +42,10 @@ imagefile_impl::is_instance (const mobius::core::io::file &f)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 imagefile_impl::imagefile_impl (const mobius::core::io::file &f)
     : file_ (f),
-      segments_ (f, [] (mobius::core::vfs::segment_array::idx_type idx)
-                 { return mobius::core::string::to_string (idx + 1, 3); })
+      segments_ (
+          f,
+          [] (mobius::core::vfs::segment_array::idx_type idx) { return mobius::core::string::to_string (idx + 1, 3); }
+      )
 {
 }
 
@@ -65,8 +67,7 @@ imagefile_impl::get_attribute (const std::string &name) const
 // @param value Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-imagefile_impl::set_attribute (const std::string &name,
-                               const mobius::core::pod::data &value)
+imagefile_impl::set_attribute (const std::string &name, const mobius::core::pod::data &value)
 {
     attributes_.set (name, value);
     metadata_loaded_ = true;
@@ -114,8 +115,7 @@ imagefile_impl::_load_metadata () const
 
     // Check if first segment exists
     if (!file_ || !file_.exists ())
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("Image file not found"));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("Image file not found"));
 
     // Scan segments
     segments_.scan ();
