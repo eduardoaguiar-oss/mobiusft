@@ -201,33 +201,7 @@ struct imagefile_type
 
     // @brief Function to build an instance of the imagefile implementation for a given file
     std::function<std::shared_ptr<imagefile_impl_base> (const mobius::core::io::file &)> builder;
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Default constructor
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    imagefile_type () = default;
 };
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create new imagefile type from type traits
-// @param T Type traits object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-template <typename T>
-imagefile_type
-new_imagefile_type ()
-{
-    imagefile_type result;
-
-    result.id = T::get_id ();
-    result.description = T::get_description ();
-    result.is_writeable = T::is_writeable ();
-    result.is_virtual_disk = T::is_virtual_disk ();
-    result.file_extensions = T::get_file_extensions ();
-    result.is_instance = T::is_instance;
-    result.builder = [] (const mobius::core::io::file &f) { return std::make_shared<T> (f); };
-
-    return result;
-}
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Imagefile resource
@@ -253,16 +227,21 @@ make_imagefile_resource ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// Functions
+// Imagefile builder functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector<imagefile_type> get_imagefile_types ();
+imagefile new_imagefile_by_url (const std::string &, const std::string & = "autodetect");
+imagefile new_imagefile_by_path (const std::string &, const std::string & = "autodetect");
+imagefile new_imagefile_from_file (const mobius::core::io::file &, const std::string & = "autodetect");
 
 std::shared_ptr<imagefile_impl_base>
 build_imagefile_implementation (const mobius::core::io::file &, const std::string &);
 
-imagefile new_imagefile_by_url (const std::string &, const std::string & = "autodetect");
-imagefile new_imagefile_by_path (const std::string &, const std::string & = "autodetect");
-imagefile new_imagefile_from_file (const mobius::core::io::file &, const std::string & = "autodetect");
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// Imagefile type functions
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::vector<imagefile_type> get_imagefile_types ();
+void register_imagefile_type (const imagefile_type &);
+void unregister_imagefile_type (const std::string &);
 
 } // namespace mobius::core::vfs
 

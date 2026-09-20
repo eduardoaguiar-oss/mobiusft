@@ -1,9 +1,8 @@
 Mobius Forensic Toolkit 2.30
-	* datasource-vfs: Use function vfs::imagefile::get_imagefile_types
-	* libmobius_core: Add new function vfs::imagefile::get_imagefile_types
-	* libmobius_core: Imagefile classes moved to vfs::imagefile namespace
-	* libmobius_core: Add new module vfs::imagefile::ewf from C++ extension vfs-imagefile-ewf
-	* libmobius_core: Add new module vfs::imagefile::msr from C++ extension vfs-imagefile-msr
+	* datasource-vfs: Use function vfs.get_imagefile_types
+	* libmobius_core: Add new function vfs::register_imagefile_type
+	* libmobius_core: Add new function vfs::unregister_imagefile_type
+	* libmobius_core: Add new function vfs::get_imagefile_types
 	* libmobius_python: Improve mobius.core.vfs.block class using the PyType_FromSpec API
 	* libmobius_python: Improve mobius.core.vfs.disk class using the PyType_FromSpec API
 	* libmobius_python: Improve mobius.core.vfs.filesystem class using the PyType_FromSpec API
