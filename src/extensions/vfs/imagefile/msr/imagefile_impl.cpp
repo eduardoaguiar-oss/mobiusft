@@ -16,9 +16,6 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "imagefile_impl.hpp"
-#include "reader_impl_aes.hpp"
-#include "reader_impl_blowfish.hpp"
-#include "reader_impl_plaintext.hpp"
 #include <mobius/core/bytearray.hpp>
 #include <mobius/core/crypt/cipher.hpp>
 #include <mobius/core/decoder/data_decoder.hpp>
@@ -26,6 +23,9 @@
 #include <mobius/core/io/reader.hpp>
 #include <mobius/core/string_functions.hpp>
 #include <stdexcept>
+#include "reader_impl_aes.hpp"
+#include "reader_impl_blowfish.hpp"
+#include "reader_impl_plaintext.hpp"
 
 namespace
 {
@@ -43,8 +43,8 @@ const mobius::core::bytearray HEADER_SIGNATURE_V2 = {0xa7, 0xb2, 0x62, 0x5a};
 
 // @brief header encryption key
 const mobius::core::bytearray HEADER_ENCRYPTION_KEY = {
-    0x06, 0x42, 0x21, 0x98, 0x03, 0x69, 0x5e, 0xb1,
-    0x5f, 0x40, 0x60, 0x8c, 0x2e, 0x36, 0x00, 0x06};
+    0x06, 0x42, 0x21, 0x98, 0x03, 0x69, 0x5e, 0xb1, 0x5f, 0x40, 0x60, 0x8c, 0x2e, 0x36, 0x00, 0x06
+};
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Read and decrypt file header
@@ -54,8 +54,7 @@ mobius::core::bytearray
 read_header_data (mobius::core::io::reader reader)
 {
     const mobius::core::bytearray encrypted_data = reader.read (HEADER_SIZE);
-    auto aes =
-        mobius::core::crypt::new_cipher_cbc ("aes", HEADER_ENCRYPTION_KEY);
+    auto aes = mobius::core::crypt::new_cipher_cbc ("aes", HEADER_ENCRYPTION_KEY);
 
     return aes.decrypt (encrypted_data);
 }
@@ -81,10 +80,9 @@ imagefile_impl::is_instance (const mobius::core::io::file &f)
         {
             const mobius::core::bytearray data = read_header_data (reader);
 
-            is_instance =
-                data && (data.slice (8192, 8195) == HEADER_SIGNATURE_V0 ||
-                         data.slice (8192, 8195) == HEADER_SIGNATURE_V1 ||
-                         data.slice (8192, 8195) == HEADER_SIGNATURE_V2);
+            is_instance = data && (data.slice (8192, 8195) == HEADER_SIGNATURE_V0 ||
+                                   data.slice (8192, 8195) == HEADER_SIGNATURE_V1 ||
+                                   data.slice (8192, 8195) == HEADER_SIGNATURE_V2);
         }
     }
 
@@ -118,11 +116,9 @@ imagefile_impl::get_attribute (const std::string &name) const
 // @param value Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-imagefile_impl::set_attribute (const std::string &,
-                               const mobius::core::pod::data &)
+imagefile_impl::set_attribute (const std::string &, const mobius::core::pod::data &)
 {
-    throw std::runtime_error (
-        MOBIUS_EXCEPTION_MSG ("set_attribute not implemented"));
+    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("set_attribute not implemented"));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -146,22 +142,18 @@ imagefile_impl::new_reader () const
     _load_metadata ();
 
     if (encryption_algorithm_ == 0)
-        return mobius::core::io::reader (
-            std::make_shared<reader_impl_plaintext> (*this));
+        return mobius::core::io::reader (std::make_shared<reader_impl_plaintext> (*this));
 
     else if (encryption_algorithm_ == 1 || encryption_algorithm_ == 2)
-        return mobius::core::io::reader (
-            std::make_shared<reader_impl_aes> (*this));
+        return mobius::core::io::reader (std::make_shared<reader_impl_aes> (*this));
 
     else if (encryption_algorithm_ == 3)
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("Blowfish-448 encryption not supported"));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("Blowfish-448 encryption not supported"));
     // return mobius::core::io::reader (std::make_shared <reader_impl_blowfish>
     // (*this));
 
     else
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("unknown/invalid encryption algorithm"));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("unknown/invalid encryption algorithm"));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -192,12 +184,9 @@ imagefile_impl::_load_metadata () const
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // file metadata
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    mobius::core::datetime::datetime last_metadata_time =
-        file_.get_metadata_time ();
-    mobius::core::datetime::datetime last_modification_time =
-        file_.get_modification_time ();
-    mobius::core::datetime::datetime last_access_time =
-        file_.get_access_time ();
+    mobius::core::datetime::datetime last_metadata_time = file_.get_metadata_time ();
+    mobius::core::datetime::datetime last_modification_time = file_.get_modification_time ();
+    mobius::core::datetime::datetime last_access_time = file_.get_access_time ();
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // header metadata
@@ -271,8 +260,7 @@ imagefile_impl::_load_metadata () const
             encryption_key_ = decoder.get_bytearray_by_size (16);
 
         else if (encryption_algorithm_)
-            throw std::runtime_error (
-                MOBIUS_EXCEPTION_MSG ("unknown/invalid encryption algorithm"));
+            throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("unknown/invalid encryption algorithm"));
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

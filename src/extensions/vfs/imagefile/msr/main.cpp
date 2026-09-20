@@ -15,10 +15,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "imagefile_impl.hpp"
-#include <cstdint>
-#include <mobius/core/resource.hpp>
 #include <mobius/core/vfs/imagefile.hpp>
+#include "imagefile_impl.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Extension data
@@ -29,8 +27,7 @@ extern "C"
     const char *EXTENSION_NAME = "Samsung Secret Zone image file";
     const char *EXTENSION_VERSION = "1.1";
     const char *EXTENSION_AUTHORS = "Eduardo Aguiar";
-    const char *EXTENSION_DESCRIPTION =
-        "Samsung Secret Zone image file support";
+    const char *EXTENSION_DESCRIPTION = "Samsung Secret Zone image file support";
 } // extern "C"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -39,9 +36,15 @@ extern "C"
 extern "C" void
 start ()
 {
-    mobius::core::add_resource (
-        "vfs.imagefile.msr", "Samsung Secret Zone image file",
-        mobius::core::vfs::make_imagefile_resource<imagefile_impl> ());
+    mobius::core::vfs::register_imagefile_type ({
+        .id = "msr",
+        .description = "Samsung Secret Zone image file",
+        .is_writeable = false,
+        .is_virtual_disk = false,
+        .file_extensions = {"MSR", "msr"},
+        .is_instance = imagefile_impl::is_instance,
+        .builder = [] (const mobius::core::io::file &f) { return std::make_shared<imagefile_impl> (f); },
+    });
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -50,5 +53,5 @@ start ()
 extern "C" void
 stop ()
 {
-    mobius::core::remove_resource ("vfs.imagefile.msr");
+    mobius::core::vfs::unregister_imagefile_type ("msr");
 }
