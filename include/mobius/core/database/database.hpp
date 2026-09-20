@@ -56,7 +56,6 @@ class database
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void execute (const std::string &);
     statement new_statement (const std::string &);
-    statement new_statement (const std::string &, std::int64_t);
     statement new_statement_with_pattern (const std::string &);
     transaction new_transaction ();
     void end_transaction ();

@@ -1,4 +1,6 @@
 Mobius Forensic Toolkit 2.30
+	* app-chromium: Use db.new_statement_with_pattern in file_cookies::_load_cookies
+	* app-chromium: Use db.new_statement_with_pattern in file_web_data::_get_unmasked_credit_cards
 	* datasource-vfs: Use function vfs.get_imagefile_types
 	* vfs-imagefile-dossier: Use register/unregister_imagefile_type
 	* vfs-imagefile-dossier: Use split imagefile internally
@@ -18,6 +20,7 @@ Mobius Forensic Toolkit 2.30
 	* libmobius_core: Remove vfs::imagefile_resource_type structure
 	* libmobius_core: Remove vfs::make_imagefile_resource function
 	* libmobius_core: Remove vfs::build_imagefile_implementation function
+	* libmobius_core: Remove database::new_statement (pattern, schema_version) function
 	* libmobius_python: Improve mobius.core.vfs.block class using the PyType_FromSpec API
 	* libmobius_python: Improve mobius.core.vfs.disk class using the PyType_FromSpec API
 	* libmobius_python: Improve mobius.core.vfs.filesystem class using the PyType_FromSpec API
