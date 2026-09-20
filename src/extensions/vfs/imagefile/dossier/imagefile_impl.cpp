@@ -42,8 +42,7 @@ imagefile_impl::is_instance (const mobius::core::io::file &f)
         if (reader)
         {
             mobius::core::bytearray data = reader.read (128);
-            const std::string text =
-                mobius::core::conv_charset_to_utf8 (data, "ASCII");
+            const std::string text = mobius::core::conv_charset_to_utf8 (data, "ASCII");
             instance = text.find ("Forensic Dossier") != std::string::npos;
         }
     }
@@ -57,11 +56,7 @@ imagefile_impl::is_instance (const mobius::core::io::file &f)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 imagefile_impl::imagefile_impl (const mobius::core::io::file &f)
     : file_ (f),
-      split_imagefile_impl_ (
-          mobius::core::vfs::build_imagefile_implementation (
-              f.new_sibling_by_extension ("001"), "split"
-          )
-      )
+      split_imagefile_ (f.new_sibling_by_extension ("001"), "split")
 {
 }
 
@@ -83,13 +78,9 @@ imagefile_impl::get_attribute (const std::string &name) const
 // @param value Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-imagefile_impl::set_attribute (
-    const std::string &, const mobius::core::pod::data &
-)
+imagefile_impl::set_attribute (const std::string &, const mobius::core::pod::data &)
 {
-    throw std::runtime_error (
-        MOBIUS_EXCEPTION_MSG ("set_attribute not implemented")
-    );
+    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("set_attribute not implemented"));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -110,7 +101,7 @@ imagefile_impl::get_attributes () const
 mobius::core::io::reader
 imagefile_impl::new_reader () const
 {
-    return split_imagefile_impl_->new_reader ();
+    return split_imagefile_.new_reader ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -136,14 +127,10 @@ imagefile_impl::_load_metadata () const
     constexpr mobius::core::io::file::size_type LOG_MAX_SIZE = 65536;
 
     if (!file_ || !file_.exists ())
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("image file not found")
-        );
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("image file not found"));
 
     if (file_.get_size () > LOG_MAX_SIZE)
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("image file control file too large")
-        );
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("image file control file too large"));
 
     // Load metadata
     std::regex REGEX_DOSSIER_SERIAL ("Serial No.:([0-9]+)");
@@ -176,8 +163,7 @@ imagefile_impl::_load_metadata () const
         timezone = stoi (match[1].str ());
 
     if (std::regex_search (text, match, REGEX_DOSSIER_SERIAL))
-        acquisition_platform =
-            "Logicube Forensic Dossier (s/n: " + match[1].str () + ')';
+        acquisition_platform = "Logicube Forensic Dossier (s/n: " + match[1].str () + ')';
 
     if (std::regex_search (text, match, REGEX_DOSSIER_SOFTWARE))
         acquisition_tool = "Dossier software " + match[1].str ();
@@ -197,9 +183,12 @@ imagefile_impl::_load_metadata () const
     if (std::regex_search (text, match, REGEX_COMPLETION_TIME))
     {
         mobius::core::datetime::datetime d (
-            stoi (match[3].str ()), stoi (match[1].str ()),
-            stoi (match[2].str ()), stoi (match[4].str ()),
-            stoi (match[5].str ()), stoi (match[6].str ())
+            stoi (match[3].str ()),
+            stoi (match[1].str ()),
+            stoi (match[2].str ()),
+            stoi (match[4].str ()),
+            stoi (match[5].str ()),
+            stoi (match[6].str ())
         );
 
         if (timezone)
@@ -211,15 +200,11 @@ imagefile_impl::_load_metadata () const
         acquisition_time = d;
     }
 
-    size_type segments =
-        std::int64_t (split_imagefile_impl_->get_attribute ("segments"));
-    size_type segment_size =
-        std::int64_t (split_imagefile_impl_->get_attribute ("segment_size"));
+    size_type segments = std::int64_t (split_imagefile_.get_attribute ("segments"));
+    size_type segment_size = std::int64_t (split_imagefile_.get_attribute ("segment_size"));
     acquisition_user = file_.get_user_name ();
 
-    mobius::core::vfs::normalize_drive_info (
-        drive_vendor, drive_model, drive_serial_number
-    );
+    mobius::core::vfs::normalize_drive_info (drive_vendor, drive_model, drive_serial_number);
 
     // fill attributes
     attributes_.set ("drive_vendor", drive_vendor);
