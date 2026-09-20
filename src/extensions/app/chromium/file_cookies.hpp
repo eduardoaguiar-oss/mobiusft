@@ -46,6 +46,9 @@ class file_cookies
         // @brief Schema version
         std::uint64_t schema_version = 0;
 
+       // @brief Browser provenance
+        std::int64_t browser_provenance = 0;
+
         // @brief Creation UTC
         mobius::core::datetime::datetime creation_utc;
 
@@ -55,6 +58,9 @@ class file_cookies
         // @brief Expires UTC
         mobius::core::datetime::datetime expires_utc;
 
+        // @brief Firstpartyonly
+        bool first_party_only = false;
+
         // @brief Has cross site ancestor
         bool has_cross_site_ancestor = false;
 
@@ -63,6 +69,9 @@ class file_cookies
 
         // @brief Host key
         std::string host_key;
+
+        // @brief Is edgelegacycookie
+        bool is_edge_legacy_cookie = false;
 
         // @brief Is HTTP only
         bool is_httponly = false;

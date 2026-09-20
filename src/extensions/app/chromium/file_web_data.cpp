@@ -443,25 +443,24 @@ _get_unmasked_credit_cards (mobius::core::database::database &db, std::int64_t s
     {
         if (schema_version >= 60 && db.has_table ("unmasked_credit_cards"))
         {
-            mobius::core::database::statement stmt = db.new_statement (
-                "SELECT id, "
-                "card_number_encrypted, "
-                "${use_count:64-84}, "
-                "${use_date:64-84}, "
-                "${unmask_date:64-*} "
-                "FROM unmasked_credit_cards",
-                schema_version
+            auto stmt = db.new_statement_with_pattern (
+                "SELECT card_number_encrypted, "
+                "id, "
+                "{unmasked_credit_cards.unmask_date}, "
+                "{unmasked_credit_cards.use_count}, "
+                "{unmasked_credit_cards.use_date} "
+                "FROM unmasked_credit_cards"
             );
 
             while (stmt.fetch_row ())
             {
                 unmasked_credit_card card;
 
-                card.id = stmt.get_column_string (0);
-                card.card_number_encrypted = stmt.get_column_bytearray (1);
-                card.use_count = stmt.get_column_int64 (2);
-                card.use_date = get_datetime (stmt.get_column_int64 (3));
-                card.unmask_date = get_datetime (stmt.get_column_int64 (4));
+                card.card_number_encrypted = stmt.get_column_bytearray (0);
+                card.id = stmt.get_column_string (1);
+                card.unmask_date = get_datetime (stmt.get_column_int64 (2));
+                card.use_count = stmt.get_column_int64 (3);
+                card.use_date = get_datetime (stmt.get_column_int64 (4));
 
                 // Add card to the list
                 unmasked_credit_cards[card.id] = card;

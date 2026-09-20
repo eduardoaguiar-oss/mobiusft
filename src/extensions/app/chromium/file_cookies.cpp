@@ -68,7 +68,11 @@ namespace
 // of the web data schema in Chromium-based applications.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::unordered_set<std::int64_t> UNKNOWN_SCHEMA_VERSIONS = {
-    1, 2, 3, 20, 22,
+    1,
+    2,
+    3,
+    20,
+    22,
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -112,14 +116,8 @@ file_cookies::file_cookies (const mobius::core::io::reader &reader)
             return;
 
         if (schema_version_ > LAST_KNOWN_SCHEMA_VERSION ||
-            UNKNOWN_SCHEMA_VERSIONS.find (schema_version_) !=
-                UNKNOWN_SCHEMA_VERSIONS.end ())
-        {
-            log.development (
-                __LINE__,
-                "Unhandled schema version: " + std::to_string (schema_version_)
-            );
-        }
+            UNKNOWN_SCHEMA_VERSIONS.find (schema_version_) != UNKNOWN_SCHEMA_VERSIONS.end ())
+            log.development (__LINE__, "Unhandled schema version: " + std::to_string (schema_version_));
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Load data
@@ -148,36 +146,36 @@ file_cookies::_load_cookies (mobius::core::database::database &db)
 
     try
     {
-        // Prepare statement
-        mobius::core::database::statement stmt;
-
-        stmt = db.new_statement (
-            "SELECT creation_utc, "
-            "${encrypted_value:7-*}, "
-            "expires_utc, "
-            "${has_cross_site_ancestor:23-*}, "
-            "${has_expires:5-*}, "
-            "host_key, "
-            "${httponly:4-9}, "
-            "${is_httponly:10-*}, "
-            "${is_persistent:10-*}, "
-            "${is_same_party:13-19}, "
-            "${is_secure:10-*}, "
-            "last_access_utc, "
-            "${last_update_utc:18-*}, "
-            "name, "
-            "path, "
-            "${persistent:5-9}, "
-            "${priority:6-*}, "
-            "${samesite:11-*}, "
-            "${secure:4-9}, "
-            "${source_port:13-*}, "
-            "${source_scheme:12-*}, "
-            "${source_type:23-*}, "
-            "${top_frame_site_key:15-*}, "
-            "${value:4-*} "
-            "FROM cookies ",
-            schema_version_
+        // Prepare SQL statement for table cookies
+        auto stmt = db.new_statement_with_pattern (
+           "SELECT {cookies.browser_provenance}, "
+                  "creation_utc, "
+                  "{cookies.encrypted_value}, "
+                  "expires_utc, "
+                  "{cookies.firstpartyonly}, "
+                  "{cookies.has_cross_site_ancestor}, "
+                  "{cookies.has_expires}, "
+                  "host_key, "
+                  "{cookies.httponly}, "
+                  "{cookies.is_edgelegacycookie}, "
+                  "{cookies.is_httponly}, "
+                  "{cookies.is_persistent}, "
+                  "{cookies.is_same_party}, "
+                  "{cookies.is_secure}, "
+                  "last_access_utc, "
+                  "{cookies.last_update_utc}, "
+                  "name, "
+                  "path, "
+                  "{cookies.persistent}, "
+                  "{cookies.priority}, "
+                  "{cookies.samesite}, "
+                  "{cookies.secure}, "
+                  "{cookies.source_port}, "
+                  "{cookies.source_scheme}, "
+                  "{cookies.source_type}, "
+                  "{cookies.top_frame_site_key}, "
+                  "value "
+             "FROM cookies"
         );
 
         // Retrieve rows from query
@@ -190,27 +188,29 @@ file_cookies::_load_cookies (mobius::core::database::database &db)
             // Set attributes
             c.idx = idx++;
             c.schema_version = schema_version_;
-            c.creation_utc = get_datetime (stmt.get_column_int64 (0));
-            c.encrypted_value = stmt.get_column_bytearray (1);
-            c.expires_utc = get_datetime (stmt.get_column_int64 (2));
-            c.has_cross_site_ancestor = stmt.get_column_bool (3);
-            c.has_expires = stmt.get_column_bool (4);
-            c.host_key =
-                mobius::core::string::lstrip (stmt.get_column_string (5), ".");
-            c.is_httponly = stmt.get_column_bool (6) || stmt.get_column_bool (7);
-            c.is_persistent = stmt.get_column_bool (8) || stmt.get_column_bool (15);
-            c.is_same_party = stmt.get_column_bool (9) || stmt.get_column_bool (17);
-            c.is_secure = stmt.get_column_bool (10) || stmt.get_column_bool (18);
-            c.last_access_utc = get_datetime (stmt.get_column_int64 (11));
-            c.last_update_utc = get_datetime (stmt.get_column_int64 (12));
-            c.name = stmt.get_column_string (13);
-            c.path = stmt.get_column_string (14);
-            c.priority = stmt.get_column_int (16);
-            c.source_port = stmt.get_column_int (19);
-            c.source_scheme = stmt.get_column_string (20);
-            c.source_type = stmt.get_column_int (21);
-            c.top_frame_site_key = stmt.get_column_string (22);
-            c.value = stmt.get_column_bytearray (23);
+            c.browser_provenance = stmt.get_column_int64 (0);
+            c.creation_utc = get_datetime (stmt.get_column_int64 (1));
+            c.encrypted_value = stmt.get_column_bytearray (2);
+            c.expires_utc = get_datetime (stmt.get_column_int64 (3));
+            c.first_party_only = stmt.get_column_bool (4);
+            c.has_cross_site_ancestor = stmt.get_column_bool (5);
+            c.has_expires = stmt.get_column_bool (6);
+            c.host_key = mobius::core::string::lstrip (stmt.get_column_string (7), ".");
+            c.is_edge_legacy_cookie = stmt.get_column_bool (9);
+            c.is_httponly = stmt.get_column_bool (8) || stmt.get_column_bool (10);
+            c.is_persistent = stmt.get_column_bool (11) || stmt.get_column_bool (18);
+            c.is_same_party = stmt.get_column_bool (12) || stmt.get_column_bool (20);
+            c.is_secure = stmt.get_column_bool (13) || stmt.get_column_bool (21);
+            c.last_access_utc = get_datetime (stmt.get_column_int64 (14));
+            c.last_update_utc = get_datetime (stmt.get_column_int64 (15));
+            c.name = stmt.get_column_string (16);
+            c.path = stmt.get_column_string (17);
+            c.priority = stmt.get_column_int (19);
+            c.source_port = stmt.get_column_int (22);
+            c.source_scheme = stmt.get_column_string (23);
+            c.source_type = stmt.get_column_int (24);
+            c.top_frame_site_key = stmt.get_column_string (25);
+            c.value = stmt.get_column_bytearray (26);
 
             // Set last_update_utc if not set
             if (!c.last_update_utc && c.creation_utc == c.last_access_utc)

@@ -43,8 +43,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // - Chromium folder structure:
 //
-// @see
-// https://chromium.googlesource.com/chromium/src/+/HEAD/docs/user_data_dir.md
+// @see https://chromium.googlesource.com/chromium/src/+/HEAD/docs/user_data_dir.md
 //
 //  - Local State: File containing global settings and state, including v10 and
 //  v20 encrypted keys
@@ -98,13 +97,12 @@ static const mobius::core::bytearray V20_PROTECTION_LEVEL_2_KEY =
 // @brief Attribute names that can be encrypted, for each evidence type
 // Every attribute that has encrypted value is stored as three attributes:
 // <name>, <name>_encrypted, and <name>_is_encrypted.
-static const std::unordered_map<std::string, std::vector<std::string>>
-    ATTRIBUTES = {
-        {"autofill", {"value"}},
-        {"cookie", {"value"}},
-        {"credit-card", {"number", "name"}},
-        {"password", {"value"}},
-        {"user-account", {"password"}},
+static const std::unordered_map<std::string, std::vector<std::string>> ATTRIBUTES = {
+    {"autofill", {"value"}},
+    {"cookie", {"value"}},
+    {"credit-card", {"number", "name"}},
+    {"password", {"value"}},
+    {"user-account", {"password"}},
 };
 
 } // namespace
@@ -132,9 +130,7 @@ evidence_processor_impl::evidence_processor_impl (
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_processor_impl::on_folder_entered (
-    const mobius::core::io::folder &folder
-)
+evidence_processor_impl::on_folder_entered (const mobius::core::io::folder &folder)
 {
     _scan_local_state (folder);
     _scan_profile (folder);
@@ -145,9 +141,7 @@ evidence_processor_impl::on_folder_entered (
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_processor_impl::_scan_local_state (
-    const mobius::core::io::folder &folder
-)
+evidence_processor_impl::_scan_local_state (const mobius::core::io::folder &folder)
 {
     auto w = mobius::core::io::walker (folder);
 
@@ -160,9 +154,7 @@ evidence_processor_impl::_scan_local_state (
 // @param f Local State file to decode
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_processor_impl::_decode_local_state_file (
-    const mobius::core::io::file &f
-)
+evidence_processor_impl::_decode_local_state_file (const mobius::core::io::file &f)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -179,9 +171,7 @@ evidence_processor_impl::_decode_local_state_file (
             return;
         }
 
-        log.info (
-            __LINE__, "File " + f.get_path () + " is a valid 'Local State' file"
-        );
+        log.info (__LINE__, "File " + f.get_path () + " is a valid 'Local State' file");
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Add encryption keys
@@ -197,16 +187,11 @@ evidence_processor_impl::_decode_local_state_file (
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Emit sampling_file event
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        mobius::core::emit (
-            "sampling_file", std::string ("app.chromium.local_state"),
-            f.new_reader ()
-        );
+        mobius::core::emit ("sampling_file", std::string ("app.chromium.local_state"), f.new_reader ());
     }
     catch (const std::exception &e)
     {
-        log.warning (
-            __LINE__, std::string (e.what ()) + " (file: " + f.get_path () + ")"
-        );
+        log.warning (__LINE__, std::string (e.what ()) + " (file: " + f.get_path () + ")");
     }
 }
 
@@ -258,10 +243,7 @@ evidence_processor_impl::_scan_profile (const mobius::core::io::folder &folder)
         }
         catch (const std::exception &e)
         {
-            log.warning (
-                __LINE__,
-                std::string (e.what ()) + " (file: " + f.get_path () + ")"
-            );
+            log.warning (__LINE__, std::string (e.what ()) + " (file: " + f.get_path () + ")");
         }
     }
 
@@ -447,8 +429,11 @@ evidence_processor_impl::_save_cookies ()
             auto metadata = mobius::core::pod::map ();
             metadata.set ("record_idx", c.idx);
             metadata.set ("schema_version", c.schema_version);
+            metadata.set ("browser_provenance", c.browser_provenance);
+            metadata.set ("first_party_only", c.first_party_only);
             metadata.set ("has_cross_site_ancestor", c.has_cross_site_ancestor);
             metadata.set ("has_expires", c.has_expires);
+            metadata.set ("is_edge_legacy_cookie", c.is_edge_legacy_cookie);
             metadata.set ("is_httponly", c.is_httponly);
             metadata.set ("is_persistent", c.is_persistent);
             metadata.set ("is_same_party", c.is_same_party);
@@ -493,18 +478,14 @@ evidence_processor_impl::_save_credit_cards ()
 
             if (cc.expiration_month && cc.expiration_year)
                 e.set_attribute (
-                    "expiration_date", std::to_string (cc.expiration_year) +
-                                           '-' +
-                                           std::to_string (cc.expiration_month)
+                    "expiration_date",
+                    std::to_string (cc.expiration_year) + '-' + std::to_string (cc.expiration_month)
                 );
 
             auto metadata = mobius::core::pod::map ();
             metadata.set ("bank_name", cc.bank_name);
             metadata.set ("card_art_url", cc.card_art_url);
-            metadata.set (
-                "card_info_retrieval_enrollment_state",
-                cc.card_info_retrieval_enrollment_state
-            );
+            metadata.set ("card_info_retrieval_enrollment_state", cc.card_info_retrieval_enrollment_state);
             metadata.set ("card_issuer", cc.card_issuer);
             metadata.set ("cvc", cc.cvc);
             metadata.set ("date_modified", to_string (cc.date_modified));
@@ -543,8 +524,7 @@ evidence_processor_impl::_save_encryption_keys ()
     for (const auto &ek : encryption_keys_)
     {
         const auto [app_id, app_name] = get_app_from_path (ek.f.get_path ());
-        const auto username =
-            mobius::framework::get_username_from_path (ek.f.get_path ());
+        const auto username = mobius::framework::get_username_from_path (ek.f.get_path ());
 
         // create evidence
         auto e = item_.new_evidence ("encryption-key");
@@ -592,9 +572,7 @@ evidence_processor_impl::_save_passwords ()
             e.set_attribute ("password_type", "net.http/" + domain);
             e.set_attribute ("value", mobius::core::bytearray {});
             e.set_attribute ("encrypted_value", login.password_value);
-            e.set_attribute (
-                "description", "Web password. URL: " + login.origin_url
-            );
+            e.set_attribute ("description", "Web password. URL: " + login.origin_url);
             e.set_attribute ("app_family", APP_FAMILY);
 
             // Set metadata
@@ -609,16 +587,12 @@ evidence_processor_impl::_save_passwords ()
             metadata.set ("date_created", login.date_created);
             metadata.set ("date_last_filled", login.date_last_filled);
             metadata.set ("date_last_used", login.date_last_used);
-            metadata.set (
-                "date_password_modified", login.date_password_modified
-            );
+            metadata.set ("date_password_modified", login.date_password_modified);
             metadata.set ("date_received", login.date_received);
             metadata.set ("date_synced", login.date_synced);
             metadata.set ("display_name", login.display_name);
             metadata.set ("federation_url", login.federation_url);
-            metadata.set (
-                "generation_upload_status", login.generation_upload_status
-            );
+            metadata.set ("generation_upload_status", login.generation_upload_status);
             metadata.set ("icon_url", login.icon_url);
             metadata.set ("is_zero_click", login.is_zero_click);
             metadata.set ("keychain_identifier", login.keychain_identifier);
@@ -629,13 +603,8 @@ evidence_processor_impl::_save_passwords ()
             metadata.set ("scheme", login.scheme);
             metadata.set ("sender_email", login.sender_email);
             metadata.set ("sender_name", login.sender_name);
-            metadata.set (
-                "sender_profile_image_url", login.sender_profile_image_url
-            );
-            metadata.set (
-                "sharing_notification_displayed",
-                login.sharing_notification_displayed
-            );
+            metadata.set ("sender_profile_image_url", login.sender_profile_image_url);
+            metadata.set ("sharing_notification_displayed", login.sharing_notification_displayed);
             metadata.set ("signon_realm", login.signon_realm);
             metadata.set ("skip_zero_click", login.skip_zero_click);
             metadata.set ("ssl_valid", login.ssl_valid);
@@ -907,16 +876,12 @@ evidence_processor_impl::_save_user_accounts ()
             metadata.set ("blacklisted_by_user", login.blacklisted_by_user);
             metadata.set ("date_created", login.date_created);
             metadata.set ("date_last_used", login.date_last_used);
-            metadata.set (
-                "date_password_modified", login.date_password_modified
-            );
+            metadata.set ("date_password_modified", login.date_password_modified);
             metadata.set ("date_received", login.date_received);
             metadata.set ("date_synced", login.date_synced);
             metadata.set ("display_name", login.display_name);
             metadata.set ("federation_url", login.federation_url);
-            metadata.set (
-                "generation_upload_status", login.generation_upload_status
-            );
+            metadata.set ("generation_upload_status", login.generation_upload_status);
             metadata.set ("icon_url", login.icon_url);
             metadata.set ("is_zero_click", login.is_zero_click);
             metadata.set ("keychain_identifier", login.keychain_identifier);
@@ -927,13 +892,8 @@ evidence_processor_impl::_save_user_accounts ()
             metadata.set ("scheme", login.scheme);
             metadata.set ("sender_email", login.sender_email);
             metadata.set ("sender_name", login.sender_name);
-            metadata.set (
-                "sender_profile_image_url", login.sender_profile_image_url
-            );
-            metadata.set (
-                "sharing_notification_displayed",
-                login.sharing_notification_displayed
-            );
+            metadata.set ("sender_profile_image_url", login.sender_profile_image_url);
+            metadata.set ("sharing_notification_displayed", login.sharing_notification_displayed);
             metadata.set ("signon_realm", login.signon_realm);
             metadata.set ("skip_zero_click", login.skip_zero_click);
             metadata.set ("ssl_valid", login.ssl_valid);
@@ -988,9 +948,7 @@ evidence_processor_impl::_save_visited_urls ()
 // @param e Evidence created
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_processor_impl::on_evidence_created (
-    mobius::framework::model::evidence e
-)
+evidence_processor_impl::on_evidence_created (mobius::framework::model::evidence e)
 {
     _process_evidence (e);
 }
@@ -1000,9 +958,7 @@ evidence_processor_impl::on_evidence_created (
 // @param e Evidence loaded
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_processor_impl::on_evidence_loaded (
-    mobius::framework::model::evidence e
-)
+evidence_processor_impl::on_evidence_loaded (mobius::framework::model::evidence e)
 {
     _process_evidence (e);
 }
@@ -1012,9 +968,7 @@ evidence_processor_impl::on_evidence_loaded (
 // @param e Evidence to process
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_processor_impl::_process_evidence (
-    mobius::framework::model::evidence e
-)
+evidence_processor_impl::_process_evidence (mobius::framework::model::evidence e)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -1051,8 +1005,7 @@ evidence_processor_impl::_process_cookie (mobius::framework::model::evidence e)
     // Get cookie attributes. If cookie is not encrypted, do nothing
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     auto value = e.get_attribute<mobius::core::bytearray> ("value");
-    auto encrypted_value =
-        e.get_attribute<mobius::core::bytearray> ("encrypted_value");
+    auto encrypted_value = e.get_attribute<mobius::core::bytearray> ("encrypted_value");
 
     if (!encrypted_value)
         return;
@@ -1087,9 +1040,7 @@ evidence_processor_impl::_process_cookie (mobius::framework::model::evidence e)
 // @param evidence Evidence to process
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_processor_impl::_process_encryption_key (
-    mobius::framework::model::evidence evidence
-)
+evidence_processor_impl::_process_encryption_key (mobius::framework::model::evidence evidence)
 {
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Get key attributes
@@ -1097,8 +1048,7 @@ evidence_processor_impl::_process_encryption_key (
     auto key_type = evidence.get_attribute<std::string> ("key_type");
     auto id = evidence.get_attribute<std::string> ("id");
     auto value = evidence.get_attribute<mobius::core::bytearray> ("value", {});
-    auto encrypted_value =
-        evidence.get_attribute<mobius::core::bytearray> ("encrypted_value", {});
+    auto encrypted_value = evidence.get_attribute<mobius::core::bytearray> ("encrypted_value", {});
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // If key value is available, store it
@@ -1117,16 +1067,14 @@ evidence_processor_impl::_process_encryption_key (
         if (encrypted_value)
         {
             if (DEBUG)
-                std::cout << "Attempting to decrypt v10 key: " << std::endl
-                          << encrypted_value.dump () << std::endl;
+                std::cout << "Attempting to decrypt v10 key: " << std::endl << encrypted_value.dump () << std::endl;
 
             auto [rc, decrypted_value] = _decrypt_dpapi_value (encrypted_value);
 
             if (rc)
             {
                 if (DEBUG)
-                    std::cout << "v10 key decrypted: " << std::endl
-                              << decrypted_value.dump () << std::endl;
+                    std::cout << "v10 key decrypted: " << std::endl << decrypted_value.dump () << std::endl;
 
                 evidence.set_attribute ("value", decrypted_value);
                 evidence.remove_attribute ("encrypted_value");
@@ -1151,16 +1099,14 @@ evidence_processor_impl::_process_encryption_key (
         if (encrypted_value)
         {
             if (DEBUG)
-                std::cout << "Attempting to decrypt v20 key: " << std::endl
-                          << encrypted_value.dump () << std::endl;
+                std::cout << "Attempting to decrypt v20 key: " << std::endl << encrypted_value.dump () << std::endl;
 
             auto decrypted_value = _decrypt_v20_encrypted_key (encrypted_value);
 
             if (decrypted_value)
             {
                 if (DEBUG)
-                    std::cout << "v20 key decrypted: " << std::endl
-                              << decrypted_value.dump () << std::endl;
+                    std::cout << "v20 key decrypted: " << std::endl << decrypted_value.dump () << std::endl;
 
                 evidence.set_attribute ("value", decrypted_value);
                 evidence.remove_attribute ("encrypted_value");
@@ -1180,9 +1126,7 @@ evidence_processor_impl::_process_encryption_key (
 // @param evidence Evidence to process
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_processor_impl::_process_generic_evidence (
-    mobius::framework::model::evidence evidence
-)
+evidence_processor_impl::_process_generic_evidence (mobius::framework::model::evidence evidence)
 {
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Check APP_FAMILY for Chromium artifacts
@@ -1206,8 +1150,7 @@ evidence_processor_impl::_process_generic_evidence (
     for (const auto &name : iter->second)
     {
         auto encrypted_name = "encrypted_" + name;
-        auto encrypted_value =
-            evidence.get_attribute<mobius::core::bytearray> (encrypted_name);
+        auto encrypted_value = evidence.get_attribute<mobius::core::bytearray> (encrypted_name);
 
         if (encrypted_value)
         {
@@ -1236,16 +1179,13 @@ evidence_processor_impl::_process_generic_evidence (
 // @param evidence Evidence to process
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_processor_impl::_process_password (
-    mobius::framework::model::evidence evidence
-)
+evidence_processor_impl::_process_password (mobius::framework::model::evidence evidence)
 {
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Get password attributes. If password is not encrypted, do nothing
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     auto value = evidence.get_attribute<std::string> ("value");
-    auto encrypted_value =
-        evidence.get_attribute<mobius::core::bytearray> ("encrypted_value");
+    auto encrypted_value = evidence.get_attribute<mobius::core::bytearray> ("encrypted_value");
 
     if (!encrypted_value || !value.empty ())
         return;
@@ -1277,9 +1217,7 @@ evidence_processor_impl::_process_password (
 // Chromium v10 or Chromium v20 encryption and decrypts it accordingly.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::pair<bool, mobius::core::bytearray>
-evidence_processor_impl::_decrypt_data (
-    const mobius::core::bytearray &data
-) const
+evidence_processor_impl::_decrypt_data (const mobius::core::bytearray &data) const
 {
     try
     {
@@ -1292,10 +1230,7 @@ evidence_processor_impl::_decrypt_data (
     catch (const std::exception &e)
     {
         mobius::core::log log (__FILE__, __func__);
-        log.warning (
-            __LINE__,
-            "Error occurred while decrypting data: " + std::string (e.what ())
-        );
+        log.warning (__LINE__, "Error occurred while decrypting data: " + std::string (e.what ()));
     }
 
     return {false, {}};
@@ -1307,9 +1242,7 @@ evidence_processor_impl::_decrypt_data (
 // @return Decrypted value as bytearray
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::pair<bool, mobius::core::bytearray>
-evidence_processor_impl::_decrypt_dpapi_value (
-    const mobius::core::bytearray &encrypted_value
-) const
+evidence_processor_impl::_decrypt_dpapi_value (const mobius::core::bytearray &encrypted_value) const
 {
     if (!encrypted_value)
         return {false, {}};
@@ -1342,9 +1275,7 @@ evidence_processor_impl::_decrypt_dpapi_value (
 // @return Decrypted data as bytearray
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::pair<bool, mobius::core::bytearray>
-evidence_processor_impl::_decrypt_v_value (
-    const mobius::core::bytearray &data
-) const
+evidence_processor_impl::_decrypt_v_value (const mobius::core::bytearray &data) const
 {
     if (data.size () < 31)
         return {false, {}};
@@ -1356,16 +1287,13 @@ evidence_processor_impl::_decrypt_v_value (
 
     for (const auto &key_value : chromium_keys_)
     {
-        auto cipher =
-            mobius::core::crypt::new_cipher_gcm ("aes", key_value, iv);
+        auto cipher = mobius::core::crypt::new_cipher_gcm ("aes", key_value, iv);
         auto plaintext = cipher.decrypt (ciphertext);
 
         if (cipher.check_tag (tag))
         {
             if (DEBUG)
-                std::cout << version.to_string ()
-                          << " data decrypted with key: " << key_value.dump ()
-                          << std::endl
+                std::cout << version.to_string () << " data decrypted with key: " << key_value.dump () << std::endl
                           << "Plaintext: " << std::endl
                           << plaintext.dump () << std::endl;
 
@@ -1376,8 +1304,7 @@ evidence_processor_impl::_decrypt_v_value (
     if (DEBUG)
     {
         std::cout << "Failed to decrypt " << version.to_string () << " data. "
-                  << "IV len: " << iv.size ()
-                  << ". Ciphertext size: " << ciphertext.size ()
+                  << "IV len: " << iv.size () << ". Ciphertext size: " << ciphertext.size ()
                   << ". TAG size: " << tag.size () << ". Data:" << std::endl
                   << data.dump () << std::endl;
 
@@ -1405,15 +1332,12 @@ evidence_processor_impl::_decrypt_v_value (
 // protection level handling
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::bytearray
-evidence_processor_impl::_decrypt_v20_encrypted_key (
-    const mobius::core::bytearray &encrypted_value
-) const
+evidence_processor_impl::_decrypt_v20_encrypted_key (const mobius::core::bytearray &encrypted_value) const
 {
     mobius::core::log log (__FILE__, __func__);
 
     if (DEBUG)
-        std::cout << "V20 encrypted value: " << std::endl
-                  << encrypted_value.dump () << std::endl;
+        std::cout << "V20 encrypted value: " << std::endl << encrypted_value.dump () << std::endl;
 
     if (!encrypted_value)
         return {};
@@ -1429,8 +1353,7 @@ evidence_processor_impl::_decrypt_v20_encrypted_key (
             return {};
 
         if (DEBUG)
-            std::cout << "Decrypted V20 value (1st attempt): " << std::endl
-                      << decrypted_value_1.dump () << std::endl;
+            std::cout << "Decrypted V20 value (1st attempt): " << std::endl << decrypted_value_1.dump () << std::endl;
 
         if (decrypted_value_1.size () == 32) // Edge v20 key
             return decrypted_value_1;
@@ -1444,8 +1367,7 @@ evidence_processor_impl::_decrypt_v20_encrypted_key (
             return {};
 
         if (DEBUG)
-            std::cout << "Decrypted V20 value (2nd attempt): " << std::endl
-                      << decrypted_value.dump () << std::endl;
+            std::cout << "Decrypted V20 value (2nd attempt): " << std::endl << decrypted_value.dump () << std::endl;
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Decode the decrypted value
@@ -1480,22 +1402,17 @@ evidence_processor_impl::_decrypt_v20_encrypted_key (
 
             if (protection_level == 1)
             {
-                cipher = mobius::core::crypt::new_cipher_gcm (
-                    "aes", V20_PROTECTION_LEVEL_1_KEY, iv
-                );
+                cipher = mobius::core::crypt::new_cipher_gcm ("aes", V20_PROTECTION_LEVEL_1_KEY, iv);
             }
             else if (protection_level == 2)
             {
-                cipher = mobius::core::crypt::new_cipher_poly1305 (
-                    "chacha20", V20_PROTECTION_LEVEL_2_KEY, iv
-                );
+                cipher = mobius::core::crypt::new_cipher_poly1305 ("chacha20", V20_PROTECTION_LEVEL_2_KEY, iv);
             }
             else
             {
                 log.development (
                     __LINE__,
-                    "Unhandled protection level in v20 decrypted key: " +
-                        std::to_string (protection_level)
+                    "Unhandled protection level in v20 decrypted key: " + std::to_string (protection_level)
                 );
                 return {};
             }
@@ -1510,15 +1427,11 @@ evidence_processor_impl::_decrypt_v20_encrypted_key (
         {
             auto key_data = decoder.get_bytearray_by_size (key_size);
 
-            log.development (
-                __LINE__, "Unhandled key size in v20 decrypted value: " +
-                              std::to_string (key_size)
-            );
+            log.development (__LINE__, "Unhandled key size in v20 decrypted value: " + std::to_string (key_size));
             log.development (__LINE__, "Key data:\n" + key_data.dump ());
 
             if (DEBUG)
-                std::cout << "Unexpected key size in v20 decrypted value: "
-                          << key_size << std::endl
+                std::cout << "Unexpected key size in v20 decrypted value: " << key_size << std::endl
                           << ". Key data: " << std::endl
                           << key_data.dump ();
         }
@@ -1527,10 +1440,7 @@ evidence_processor_impl::_decrypt_v20_encrypted_key (
     {
         mobius::core::log log (__FILE__, __func__);
 
-        log.warning (
-            __LINE__, "Error occurred while processing v20 decrypted value: " +
-                          std::string (e.what ())
-        );
+        log.warning (__LINE__, "Error occurred while processing v20 decrypted value: " + std::string (e.what ()));
     }
 
     return {};
@@ -1547,9 +1457,7 @@ evidence_processor_impl::_decrypt_v20_encrypted_key (
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_processor_impl::_process_new_encryption_key (
-    const std::string &type,
-    const std::string &id,
-    const mobius::core::bytearray &value
+    const std::string &type, const std::string &id, const mobius::core::bytearray &value
 )
 {
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1565,8 +1473,7 @@ evidence_processor_impl::_process_new_encryption_key (
         return;
 
     if (DEBUG)
-        std::cout << "Encryption key stored. Type: " << type << ", ID: " << id
-                  << ", Value: " << std::endl
+        std::cout << "Encryption key stored. Type: " << type << ", ID: " << id << ", Value: " << std::endl
                   << value.dump () << std::endl;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1575,10 +1482,7 @@ evidence_processor_impl::_process_new_encryption_key (
     std::vector<mobius::framework::model::evidence> pending;
     std::swap (pending, pending_evidences_);
 
-    std::for_each (
-        pending.begin (), pending.end (),
-        [this] (auto &evidence) { _process_evidence (evidence); }
-    );
+    std::for_each (pending.begin (), pending.end (), [this] (auto &evidence) { _process_evidence (evidence); });
 }
 
 } // namespace mobius::extension::app::chromium
