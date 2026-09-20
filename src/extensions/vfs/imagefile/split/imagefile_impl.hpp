@@ -20,7 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/datetime/datetime.hpp>
 #include <mobius/core/io/file.hpp>
-#include <mobius/core/vfs/imagefile/imagefile_impl_base.hpp>
+#include <mobius/core/vfs/imagefile_impl_base.hpp>
 #include <mobius/core/vfs/segment_array.hpp>
 #include <string>
 
@@ -28,7 +28,7 @@
 // @brief Split image file implementation
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class imagefile_impl : public mobius::core::vfs::imagefile::imagefile_impl_base
+class imagefile_impl : public mobius::core::vfs::imagefile_impl_base
 {
   public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

@@ -1,5 +1,5 @@
-#ifndef MOBIUS_CORE_VFS_IMAGEFILE_IMAGEFILE_IMPL_NULL_HPP
-#define MOBIUS_CORE_VFS_IMAGEFILE_IMAGEFILE_IMPL_NULL_HPP
+#ifndef MOBIUS_CORE_VFS_IMAGEFILE_IMPL_NULL_HPP
+#define MOBIUS_CORE_VFS_IMAGEFILE_IMPL_NULL_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -19,10 +19,10 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/exception.inc>
-#include <mobius/core/vfs/imagefile/imagefile_impl_base.hpp>
+#include <mobius/core/vfs/imagefile_impl_base.hpp>
 #include <stdexcept>
 
-namespace mobius::core::vfs::imagefile
+namespace mobius::core::vfs
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief imagefile null implementation class
@@ -143,6 +143,6 @@ class imagefile_impl_null : public imagefile_impl_base
     }
 };
 
-} // namespace mobius::core::vfs::imagefile
+} // namespace mobius::core::vfs
 
 #endif

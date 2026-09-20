@@ -1,5 +1,5 @@
-#ifndef MOBIUS_CORE_VFS_IMAGEFILE_EWF_IMAGEFILE_IMPL_HPP
-#define MOBIUS_CORE_VFS_IMAGEFILE_EWF_IMAGEFILE_IMPL_HPP
+#ifndef MOBIUS_EXTENSION_IMAGEFILE_IMPL_HPP
+#define MOBIUS_EXTENSION_IMAGEFILE_IMPL_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -18,75 +18,33 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#include <cstdint>
 #include <mobius/core/datetime/datetime.hpp>
 #include <mobius/core/io/file.hpp>
-#include <mobius/core/vfs/imagefile/imagefile_impl_base.hpp>
+#include <mobius/core/vfs/imagefile_impl_base.hpp>
 #include <mobius/core/vfs/segment_array.hpp>
-#include <cstdint>
 #include <vector>
 
-namespace mobius::core::vfs::imagefile::ewf
-{
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief EWF imagefile implementation class
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class imagefile_impl : public mobius::core::vfs::imagefile::imagefile_impl_base
+class imagefile_impl : public mobius::core::vfs::imagefile_impl_base
 {
   public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Class metadata functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     static bool is_instance (const mobius::core::io::file &);
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get imagefile type ID
-    // @return type ID as string
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     static std::string
-    get_id ()
-    {
-        return "ewf";
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get imagefile description
-    // @return description as string
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    static std::string
-    get_description ()
-    {
-        return "EWF (Expert Witness Format) image file";
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get imagefile file extensions
-    // @return file extensions as string
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    static std::set<std::string>
     get_file_extensions ()
     {
-        return {"E01", "ewf"};
+        return "E01|ewf";
     }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Check if imagefile is writeable
-    // @return true/false
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    static constexpr bool
+    static bool
     is_writeable ()
     {
         return true;
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Check if imagefile is a virtual disk
-    // @return true/false
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    static constexpr bool
-    is_virtual_disk ()
-    {
-        return false;
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -94,7 +52,8 @@ class imagefile_impl : public mobius::core::vfs::imagefile::imagefile_impl_base
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     explicit imagefile_impl (const mobius::core::io::file &);
     mobius::core::pod::data get_attribute (const std::string &) const override;
-    void set_attribute (const std::string &, const mobius::core::pod::data &) override;
+    void set_attribute (const std::string &,
+                        const mobius::core::pod::data &) override;
     mobius::core::pod::map get_attributes () const override;
     mobius::core::io::reader new_reader () const override;
     mobius::core::io::writer new_writer () const override;
@@ -123,10 +82,7 @@ class imagefile_impl : public mobius::core::vfs::imagefile::imagefile_impl_base
     // @brief Check if object is valid
     // @return true/false
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    operator bool () const noexcept override
-    {
-        return true;
-    }
+    operator bool () const noexcept override { return true; }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Check if imagefile is available
@@ -265,7 +221,5 @@ class imagefile_impl : public mobius::core::vfs::imagefile::imagefile_impl_base
     void _load_metadata () const;
     void _load_chunk_offset_table () const;
 };
-
-} // namespace mobius::core::vfs::imagefile::ewf
 
 #endif

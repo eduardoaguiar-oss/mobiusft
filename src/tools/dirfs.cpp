@@ -21,7 +21,7 @@
 #include <mobius/core/io/folder.hpp>
 #include <mobius/core/io/stream.hpp>
 #include <mobius/core/resource.hpp>
-#include <mobius/core/vfs/imagefile/imagefile.hpp>
+#include <mobius/core/vfs/imagefile.hpp>
 #include <mobius/core/vfs/vfs.hpp>
 #include <unistd.h>
 #include <iostream>
@@ -193,14 +193,14 @@ usage ()
     std::cerr << "     Image file type can be:" << '\n';
     std::cerr << "       autodetect\tTry to autodetect imagefile type (default)" << '\n';
 
-    for (const auto &type : mobius::core::vfs::imagefile::get_imagefile_types ())
+    for (const auto &type : mobius::core::vfs::get_imagefile_types ())
         std::cerr << "       " << type.id << "\t\t" << type.description << std::endl;
 
     std::cerr << std::endl;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Main function
+// @brief Main function
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 int
 main (int argc, char **argv)

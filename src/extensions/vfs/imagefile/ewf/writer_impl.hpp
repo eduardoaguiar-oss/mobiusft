@@ -1,5 +1,5 @@
-#ifndef MOBIUS_CORE_VFS_IMAGEFILE_EWF_WRITER_IMPL_HPP
-#define MOBIUS_CORE_VFS_IMAGEFILE_EWF_WRITER_IMPL_HPP
+#ifndef MOBIUS_EXTENSION_WRITER_IMPL_HPP
+#define MOBIUS_EXTENSION_WRITER_IMPL_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -25,8 +25,6 @@
 #include <mobius/core/vfs/segment_array.hpp>
 #include <vector>
 
-namespace mobius::core::vfs::imagefile::ewf
-{
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief EWF imagefile writer implementation class
 // @author Eduardo Aguiar
@@ -97,7 +95,5 @@ class writer_impl : public mobius::core::io::writer_impl_base
     segment_writer &_new_segment_writer ();
     segment_writer &_get_current_segment_writer ();
 };
-
-} // namespace mobius::core::vfs::imagefile::ewf
 
 #endif

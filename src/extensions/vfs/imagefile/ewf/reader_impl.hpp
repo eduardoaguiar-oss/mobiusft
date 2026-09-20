@@ -23,8 +23,6 @@
 #include <mobius/core/vfs/segment_array.hpp>
 #include <vector>
 
-namespace mobius::core::vfs::imagefile::ewf
-{
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief ewf imagefile reader implementation class
 // @author Eduardo Aguiar
@@ -116,7 +114,5 @@ class reader_impl : public mobius::core::io::reader_impl_base
 
     void _retrieve_current_chunk ();
 };
-
-} // namespace mobius::core::vfs::imagefile::ewf
 
 #endif

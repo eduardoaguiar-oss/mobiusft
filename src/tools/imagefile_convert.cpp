@@ -21,7 +21,7 @@
 #include <mobius/core/io/path.hpp>
 #include <mobius/core/resource.hpp>
 #include <mobius/core/string_functions.hpp>
-#include <mobius/core/vfs/imagefile/imagefile.hpp>
+#include <mobius/core/vfs/imagefile.hpp>
 #include <unistd.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -47,7 +47,7 @@ usage ()
     std::cerr << "       autodetect\tTry to autodetect imagefile type (default)"
               << std::endl;
 
-    for (const auto &type : mobius::core::vfs::imagefile::get_imagefile_types ())
+    for (const auto &type : mobius::core::vfs::get_imagefile_types ())
         std::cerr << "       " << type.id << "\t\t" << type.description << std::endl;
 
     std::cerr << std::endl;
@@ -57,7 +57,7 @@ usage ()
     std::cerr << "       autodetect\tTry to autodetect imagefile type (default)"
               << std::endl;
 
-    for (const auto &type : mobius::core::vfs::imagefile::get_imagefile_types ())
+    for (const auto &type : mobius::core::vfs::get_imagefile_types ())
     {
         if (type.is_writeable)
             std::cerr << "       " << type.id << "\t\t" << type.description << std::endl;
@@ -228,8 +228,7 @@ main (int argc, char **argv)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // check if input imagefile is available
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    auto image_in =
-        mobius::core::vfs::imagefile::new_imagefile_by_path (input_path, input_type_arg);
+    auto image_in = mobius::core::vfs::new_imagefile_by_path (input_path, input_type_arg);
 
     if (!image_in.is_available ())
     {
@@ -242,8 +241,7 @@ main (int argc, char **argv)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // create output imagefile
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    auto image_out =
-        mobius::core::vfs::imagefile::new_imagefile_by_path (output_path, output_type_arg);
+    auto image_out = mobius::core::vfs::new_imagefile_by_path (output_path, output_type_arg);
 
     if (image_out.get_type () == "ewf")
     {

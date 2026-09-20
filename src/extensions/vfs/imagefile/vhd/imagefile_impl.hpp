@@ -22,7 +22,7 @@
 #include <mobius/core/bytearray.hpp>
 #include <mobius/core/datetime/datetime.hpp>
 #include <mobius/core/io/file.hpp>
-#include <mobius/core/vfs/imagefile/imagefile_impl_base.hpp>
+#include <mobius/core/vfs/imagefile_impl_base.hpp>
 #include <string>
 #include <vector>
 
@@ -31,7 +31,7 @@
 // @author Eduardo Aguiar
 // @see http://download.microsoft.com/download/f/f/e/ffef50a5-07dd-4cf8-aaa3-442c0673a029/Virtual%20Hard%20Disk%20Format%20Spec_10_18_06.doc
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class imagefile_impl : public mobius::core::vfs::imagefile::imagefile_impl_base
+class imagefile_impl : public mobius::core::vfs::imagefile_impl_base
 {
   public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

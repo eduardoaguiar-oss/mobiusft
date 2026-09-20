@@ -18,7 +18,7 @@
 #include "imagefile_impl.hpp"
 #include <cstdint>
 #include <mobius/core/resource.hpp>
-#include <mobius/core/vfs/imagefile/imagefile.hpp>
+#include <mobius/core/vfs/imagefile.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Extension data
@@ -29,7 +29,8 @@ extern "C"
     const char *EXTENSION_NAME = "Samsung Secret Zone image file";
     const char *EXTENSION_VERSION = "1.1";
     const char *EXTENSION_AUTHORS = "Eduardo Aguiar";
-    const char *EXTENSION_DESCRIPTION = "Samsung Secret Zone image file support";
+    const char *EXTENSION_DESCRIPTION =
+        "Samsung Secret Zone image file support";
 } // extern "C"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -40,7 +41,7 @@ start ()
 {
     mobius::core::add_resource (
         "vfs.imagefile.msr", "Samsung Secret Zone image file",
-        mobius::core::vfs::imagefile::make_imagefile_resource<imagefile_impl> ());
+        mobius::core::vfs::make_imagefile_resource<imagefile_impl> ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

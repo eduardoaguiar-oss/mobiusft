@@ -111,3 +111,7 @@ add_subdirectory(vfs/imagefile/split)
 add_subdirectory(vfs/imagefile/talon)
 add_subdirectory(vfs/imagefile/vhd)
 add_subdirectory(vfs/imagefile/vhdx)
+
+if(ZLIB_FOUND)
+  add_subdirectory(vfs/imagefile/ewf)
+endif()

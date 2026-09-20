@@ -20,14 +20,14 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/io/file.hpp>
 #include <mobius/core/metadata.hpp>
-#include <mobius/core/vfs/imagefile/imagefile_impl_base.hpp>
+#include <mobius/core/vfs/imagefile_impl_base.hpp>
 #include <functional>
 #include <memory>
 #include <set>
 #include <string>
 #include <vector>
 
-namespace mobius::core::vfs::imagefile
+namespace mobius::core::vfs
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief imagefile handle class
@@ -264,6 +264,6 @@ imagefile new_imagefile_by_url (const std::string &, const std::string & = "auto
 imagefile new_imagefile_by_path (const std::string &, const std::string & = "autodetect");
 imagefile new_imagefile_from_file (const mobius::core::io::file &, const std::string & = "autodetect");
 
-} // namespace mobius::core::vfs::imagefile
+} // namespace mobius::core::vfs
 
 #endif

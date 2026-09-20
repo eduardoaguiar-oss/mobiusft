@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/vfs/disk_impl_base.hpp>
-#include <mobius/core/vfs/imagefile/imagefile.hpp>
+#include <mobius/core/vfs/imagefile.hpp>
 #include <mobius/core/thread_safe_flag.hpp>
 #include <string>
 
@@ -96,7 +96,7 @@ private:
   std::string url_;
 
   // @brief Image file object
-  mutable imagefile::imagefile imagefile_;
+  mutable imagefile imagefile_;
 
   // @brief Image file type
   mutable std::string imagetype_;

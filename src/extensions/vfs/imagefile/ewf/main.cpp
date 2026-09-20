@@ -1,6 +1,3 @@
-#ifndef LIBMOBIUS_PYTHON_CORE_VFS_IMAGEFILE_HPP
-#define LIBMOBIUS_PYTHON_CORE_VFS_IMAGEFILE_HPP
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
 // Copyright (C) 2008-2026 Eduardo Aguiar
@@ -18,29 +15,39 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#include "imagefile_impl.hpp"
+#include <cstdint>
+#include <mobius/core/resource.hpp>
 #include <mobius/core/vfs/imagefile.hpp>
-#include <Python.h>
-#include <pytypeobject.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Data structure
+// Extension data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-typedef struct
+extern "C"
 {
-    PyObject_HEAD mobius::core::vfs::imagefile *obj;
-} core_vfs_imagefile_o;
+    const char *EXTENSION_ID = "imagefile-ewf";
+    const char *EXTENSION_NAME = "EWF image file";
+    const char *EXTENSION_VERSION = "1.1";
+    const char *EXTENSION_AUTHORS = "Eduardo Aguiar";
+    const char *EXTENSION_DESCRIPTION = "EWF image file support";
+} // extern "C"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// Helper functions
+// @brief Start extension
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::py::pytypeobject new_core_vfs_imagefile_type ();
-bool pymobius_core_vfs_imagefile_check (PyObject *);
-PyObject *pymobius_core_vfs_imagefile_to_pyobject (const mobius::core::vfs::imagefile &);
-mobius::core::vfs::imagefile pymobius_core_vfs_imagefile_from_pyobject (PyObject *);
+extern "C" void
+start ()
+{
+    mobius::core::add_resource (
+        "vfs.imagefile.ewf", "EWF image file",
+        mobius::core::vfs::make_imagefile_resource<imagefile_impl> ());
+}
 
-PyObject *func_vfs_get_imagefile_types (PyObject *, PyObject *);
-PyObject *func_vfs_new_imagefile_by_path (PyObject *, PyObject *);
-PyObject *func_vfs_new_imagefile_by_url (PyObject *, PyObject *);
-PyObject *func_vfs_new_imagefile_from_file (PyObject *, PyObject *);
-
-#endif
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Stop extension
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+extern "C" void
+stop ()
+{
+    mobius::core::remove_resource ("vfs.imagefile.ewf");
+}

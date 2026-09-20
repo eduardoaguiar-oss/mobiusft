@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#include "segment_writer.hpp"
 #include <mobius/core/application.hpp>
 #include <mobius/core/charset.hpp>
 #include <mobius/core/crypt/hash_functor.hpp>
@@ -24,7 +25,6 @@
 #include <mobius/core/exception.inc>
 #include <mobius/core/io/writer_evaluator.hpp>
 #include <mobius/core/string_functions.hpp>
-#include <mobius/core/vfs/imagefile/ewf/segment_writer.hpp>
 #include <mobius/core/zlib_functions.hpp>
 #include <stdexcept>
 
@@ -71,8 +71,8 @@ static constexpr int SECTOR_SIZE = 512;
 static std::uint32_t
 digest_to_uint32_t (const mobius::core::bytearray &digest)
 {
-    return std::uint32_t (digest[0]) << 24 | std::uint32_t (digest[1]) << 16 | std::uint32_t (digest[2]) << 8 |
-           std::uint32_t (digest[3]);
+    return std::uint32_t (digest[0]) << 24 | std::uint32_t (digest[1]) << 16 |
+           std::uint32_t (digest[2]) << 8 | std::uint32_t (digest[3]);
 }
 
 } // namespace
@@ -82,7 +82,8 @@ digest_to_uint32_t (const mobius::core::bytearray &digest)
 // @param writer generic mobius::core::io::writer object
 // @param segment_idx segment index, starting from 1
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-segment_writer::segment_writer (mobius::core::io::writer writer, std::uint16_t segment_number)
+segment_writer::segment_writer (mobius::core::io::writer writer,
+                                std::uint16_t segment_number)
     : writer_ (writer),
       segment_number_ (segment_number),
       chunk_sectors_ (CHUNK_SECTORS),
@@ -149,7 +150,8 @@ segment_writer::write (const mobius::core::bytearray &arg_data)
 
     // otherwise, error
     else if (chunk_data_.size () > 0)
-        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("error writing chunk data"));
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("error writing chunk data"));
 
     return bytes;
 }
@@ -213,7 +215,8 @@ segment_writer::close ()
 void
 segment_writer::_write_file_header (std::uint16_t segment_idx)
 {
-    const mobius::core::bytearray EWF_SIGNATURE = {'E', 'V', 'F', 0x09, 0x0d, 0x0a, 0xff, 0x00};
+    const mobius::core::bytearray EWF_SIGNATURE = {'E',  'V',  'F',  0x09,
+                                                   0x0d, 0x0a, 0xff, 0x00};
 
     mobius::core::encoder::data_encoder encoder (writer_);
     encoder.encode_bytearray (EWF_SIGNATURE);
@@ -277,49 +280,58 @@ segment_writer::_write_header_section ()
     std::string acquisition_platform = app.get_os_name ();
     std::string drive_model = drive_vendor_ + ' ' + drive_model_;
 
-    std::string acquisition_datetime = mobius::core::datetime::datetime_to_iso_string (dt_now);
-    acquisition_datetime = mobius::core::string::replace (acquisition_datetime, "-", " ");
-    acquisition_datetime = mobius::core::string::replace (acquisition_datetime, ":", " ");
-    acquisition_datetime = mobius::core::string::replace (acquisition_datetime, "T", " ");
-    acquisition_datetime = mobius::core::string::replace (acquisition_datetime, "Z", "");
+    std::string acquisition_datetime =
+        mobius::core::datetime::datetime_to_iso_string (dt_now);
+    acquisition_datetime =
+        mobius::core::string::replace (acquisition_datetime, "-", " ");
+    acquisition_datetime =
+        mobius::core::string::replace (acquisition_datetime, ":", " ");
+    acquisition_datetime =
+        mobius::core::string::replace (acquisition_datetime, "T", " ");
+    acquisition_datetime =
+        mobius::core::string::replace (acquisition_datetime, "Z", "");
 
-    std::string header_utf8 = "1\n"
-                              "main\n"
-                              "a\tc\tn\te\tt\tmd\tsn\tl\tav\tov\tm\tu\tp\tpid\tdc\text\tr\n"
-                              "a"
-                              "\tc"
-                              "\tn"
-                              "\t" +
-                              acquisition_user_ + // e
-                              "\tt"
-                              "\t" +
-                              drive_model +                 // md
-                              "\t" + drive_serial_number_ + // sn
-                              "\tl"
-                              "\t" +
-                              acquisition_tool +            // av
-                              "\t" + acquisition_platform + // ov
-                              "\t" + acquisition_datetime + // m
-                              "\t" + acquisition_datetime + // u
-                              "\t0"                         // p
-                              "\tpid"
-                              "\tdc"
-                              "\text"
-                              "\t" +
-                              std::to_string (compression_level_) + // r
-                              "\n\n";
+    std::string header_utf8 =
+        "1\n"
+        "main\n"
+        "a\tc\tn\te\tt\tmd\tsn\tl\tav\tov\tm\tu\tp\tpid\tdc\text\tr\n"
+        "a"
+        "\tc"
+        "\tn"
+        "\t" +
+        acquisition_user_ + // e
+        "\tt"
+        "\t" +
+        drive_model +                 // md
+        "\t" + drive_serial_number_ + // sn
+        "\tl"
+        "\t" +
+        acquisition_tool +            // av
+        "\t" + acquisition_platform + // ov
+        "\t" + acquisition_datetime + // m
+        "\t" + acquisition_datetime + // u
+        "\t0"                         // p
+        "\tpid"
+        "\tdc"
+        "\text"
+        "\t" +
+        std::to_string (compression_level_) + // r
+        "\n\n";
 
     // write two "header2" sections
-    mobius::core::bytearray header_utf16 = mobius::core::conv_charset (header_utf8, "utf-8", "utf-16");
+    mobius::core::bytearray header_utf16 =
+        mobius::core::conv_charset (header_utf8, "utf-8", "utf-16");
 
-    const mobius::core::bytearray data_header2 = mobius::core::zlib_compress (header_utf16);
+    const mobius::core::bytearray data_header2 =
+        mobius::core::zlib_compress (header_utf16);
     _write_section_header ("header2", data_header2.size ());
     _write_section_data (data_header2);
     _write_section_header ("header2", data_header2.size ());
     _write_section_data (data_header2);
 
     // write "header" section
-    const mobius::core::bytearray data_header = mobius::core::zlib_compress (header_utf8);
+    const mobius::core::bytearray data_header =
+        mobius::core::zlib_compress (header_utf8);
     _write_section_header ("header", data_header.size ());
     _write_section_data (data_header);
 }
@@ -331,7 +343,8 @@ segment_writer::_write_header_section ()
 void
 segment_writer::_write_volume_stub (const std::string &section_name)
 {
-    volume_info_list_.push_back (std::pair<std::string, offset_type> (section_name, writer_.tell ()));
+    volume_info_list_.push_back (
+        std::pair<std::string, offset_type> (section_name, writer_.tell ()));
 
     _write_volume_section (section_name);
 }
@@ -393,7 +406,8 @@ segment_writer::_write_hash_section ()
     encoder.fill (16, 0); // padding
 
     // encode ADLER-32 hash
-    std::uint32_t adler32_value = digest_to_uint32_t (hash_functor.get_digest ());
+    std::uint32_t adler32_value =
+        digest_to_uint32_t (hash_functor.get_digest ());
     encoder.encode_uint32_le (adler32_value); // Adler-32 CRC
 }
 
@@ -421,7 +435,8 @@ segment_writer::_write_table_section (const std::string &name)
     encoder.encode_uint64_le (sector_offset_);
     encoder.fill (4, 0);
 
-    std::uint32_t adler32_value = digest_to_uint32_t (hash_functor.get_digest ());
+    std::uint32_t adler32_value =
+        digest_to_uint32_t (hash_functor.get_digest ());
     encoder.encode_uint32_le (adler32_value); // Adler-32 CRC
 
     // write offsets
@@ -447,10 +462,11 @@ segment_writer::_can_write_chunk_data ()
     constexpr size_type VOLUME_SECTION_SIZE = 1128;
     constexpr size_type HASH_SECTION_SIZE = 112;
     constexpr size_type DONE_SECTION_SIZE = 76;
-    constexpr size_type FOOTER_SIZE = TABLE_SECTION_SIZE * 2 + // table and table2 sections
-                                      VOLUME_SECTION_SIZE +    // data section (equal to volume section)
-                                      HASH_SECTION_SIZE +      // hash section
-                                      DONE_SECTION_SIZE;       // done section
+    constexpr size_type FOOTER_SIZE =
+        TABLE_SECTION_SIZE * 2 + // table and table2 sections
+        VOLUME_SECTION_SIZE +    // data section (equal to volume section)
+        HASH_SECTION_SIZE +      // hash section
+        DONE_SECTION_SIZE;       // done section
 
     return writer_.tell () + chunk_size_ * 2 + FOOTER_SIZE <= segment_size_;
 }
@@ -477,7 +493,8 @@ segment_writer::_write_chunk_data (mobius::core::bytearray data)
     if (compression_level_ > 0)
     {
         int level = (compression_level_ == 2) ? 9 : 1;
-        mobius::core::bytearray compressed_data = mobius::core::zlib_compress (data, level);
+        mobius::core::bytearray compressed_data =
+            mobius::core::zlib_compress (data, level);
 
         if (compressed_data.size () < data.size ())
         {

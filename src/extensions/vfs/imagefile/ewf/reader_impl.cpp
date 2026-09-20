@@ -15,14 +15,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#include "reader_impl.hpp"
+#include "imagefile_impl.hpp"
 #include <mobius/core/exception.inc>
-#include <mobius/core/vfs/imagefile/ewf/imagefile_impl.hpp>
-#include <mobius/core/vfs/imagefile/ewf/reader_impl.hpp>
 #include <mobius/core/zlib_functions.hpp>
 #include <stdexcept>
 
-namespace mobius::core::vfs::imagefile::ewf
-{
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Constructor
 // @param impl imagefile implementation
@@ -60,7 +58,8 @@ reader_impl::seek (offset_type offset, whence_type w)
         abs_offset = size_ - 1 + offset;
 
     else
-        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid whence_type"));
+        throw std::invalid_argument (
+            MOBIUS_EXCEPTION_MSG ("invalid whence_type"));
 
     // update current pos, if possible
     if (abs_offset < 0)
@@ -86,12 +85,14 @@ reader_impl::read (size_type size)
         _retrieve_current_chunk ();
 
         size_type slice_start = pos_ % chunk_size_;
-        size_type slice_end = std::min (slice_start + size - 1, chunk_data_.size () - 1);
+        size_type slice_end =
+            std::min (slice_start + size - 1, chunk_data_.size () - 1);
 
         if (slice_end < slice_start)
             return data;
 
-        mobius::core::bytearray tmp = chunk_data_.slice (slice_start, slice_end);
+        mobius::core::bytearray tmp =
+            chunk_data_.slice (slice_start, slice_end);
         data += tmp;
         pos_ += tmp.size ();
         size -= tmp.size ();
@@ -158,7 +159,8 @@ reader_impl::_retrieve_current_chunk ()
     stream_.seek (offset);
 
     if (compressed)
-        chunk_data_ = mobius::core::zlib_decompress (stream_.read (chunk_size_ + 4));
+        chunk_data_ =
+            mobius::core::zlib_decompress (stream_.read (chunk_size_ + 4));
 
     else
         chunk_data_ = stream_.read (chunk_size_);
@@ -169,5 +171,3 @@ reader_impl::_retrieve_current_chunk ()
     // set new current chunk index
     chunk_idx_ = chunk_idx;
 }
-
-} // namespace mobius::core::vfs::imagefile::ewf

@@ -1,5 +1,5 @@
-#ifndef MOBIUS_CORE_VFS_IMAGEFILE_IMAGEFILE_IMPL_BASE_HPP
-#define MOBIUS_CORE_VFS_IMAGEFILE_IMAGEFILE_IMPL_BASE_HPP
+#ifndef MOBIUS_CORE_VFS_IMAGEFILE_IMPL_BASE_HPP
+#define MOBIUS_CORE_VFS_IMAGEFILE_IMPL_BASE_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -25,7 +25,7 @@
 #include <set>
 #include <string>
 
-namespace mobius::core::vfs::imagefile
+namespace mobius::core::vfs
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief imagefile implementation base class
@@ -71,6 +71,6 @@ class imagefile_impl_base
     virtual mobius::core::io::writer new_writer () const = 0;
 };
 
-} // namespace mobius::core::vfs::imagefile
+} // namespace mobius::core::vfs
 
 #endif

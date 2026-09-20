@@ -19,21 +19,19 @@
 #include <mobius/core/io/file.hpp>
 #include <mobius/core/resource.hpp>
 #include <mobius/core/string_functions.hpp>
-#include <mobius/core/vfs/imagefile/ewf/imagefile_impl.hpp>
-#include <mobius/core/vfs/imagefile/imagefile.hpp>
-#include <mobius/core/vfs/imagefile/imagefile_impl_null.hpp>
+#include <mobius/core/vfs/imagefile.hpp>
+#include <mobius/core/vfs/imagefile_impl_null.hpp>
 #include <stdexcept>
 #include <unordered_map>
 
-namespace mobius::core::vfs::imagefile
+namespace mobius::core::vfs
 {
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Image file types supported
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static const std::unordered_map<std::string, imagefile_type> IMAGEFILE_TYPES = {
-    {"ewf", new_imagefile_type<ewf::imagefile_impl> ()}
+static std::unordered_map<std::string, imagefile_type> IMAGEFILE_TYPES = {
 };
 
 } // namespace
@@ -209,4 +207,4 @@ get_imagefile_types ()
     return types;
 }
 
-} // namespace mobius::core::vfs::imagefile
+} // namespace mobius::core::vfs

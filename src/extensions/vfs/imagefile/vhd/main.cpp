@@ -18,7 +18,7 @@
 #include "imagefile_impl.hpp"
 #include <cstdint>
 #include <mobius/core/resource.hpp>
-#include <mobius/core/vfs/imagefile/imagefile.hpp>
+#include <mobius/core/vfs/imagefile.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Extension data
@@ -40,7 +40,7 @@ start ()
 {
     mobius::core::add_resource (
         "vfs.imagefile.vhd", "VHD image file",
-        mobius::core::vfs::imagefile::make_imagefile_resource<imagefile_impl> ());
+        mobius::core::vfs::make_imagefile_resource<imagefile_impl> ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

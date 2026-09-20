@@ -171,7 +171,7 @@ disk_impl_imagefile::_load_imagefile () const
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Load imagefile
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    imagefile_ = imagefile::new_imagefile_by_url (url_, imagetype_.empty () ? "autodetect" : imagetype_);
+    imagefile_ = new_imagefile_by_url (url_, imagetype_.empty () ? "autodetect" : imagetype_);
     imagefile_loaded_ = true;
 }
 
