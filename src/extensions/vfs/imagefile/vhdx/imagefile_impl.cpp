@@ -16,12 +16,12 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "imagefile_impl.hpp"
-#include "reader_impl.hpp"
 #include <mobius/core/decoder/data_decoder.hpp>
 #include <mobius/core/exception.inc>
 #include <mobius/core/io/file.hpp>
 #include <mobius/core/io/reader.hpp>
 #include <stdexcept>
+#include "reader_impl.hpp"
 
 namespace
 {
@@ -92,11 +92,9 @@ imagefile_impl::get_attribute (const std::string &name) const
 // @param value Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-imagefile_impl::set_attribute (const std::string &,
-                               const mobius::core::pod::data &)
+imagefile_impl::set_attribute (const std::string &, const mobius::core::pod::data &)
 {
-    throw std::runtime_error (
-        MOBIUS_EXCEPTION_MSG ("set_attribute not implemented"));
+    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("set_attribute not implemented"));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -123,8 +121,7 @@ imagefile_impl::new_reader () const
         return mobius::core::io::reader (std::make_shared<reader_impl> (*this));
 
     else
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("unsupported disk type"));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("unsupported disk type"));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -147,8 +144,7 @@ imagefile_impl::get_block_allocation_table () const
     _load_metadata ();
 
     if (disk_type_ != DISK_TYPE_DYNAMIC)
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("disk type has no Block Allocation Table"));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("disk type has no Block Allocation Table"));
 
     _load_block_allocation_table ();
     return block_allocation_table_;
@@ -164,8 +160,7 @@ imagefile_impl::_load_metadata () const
         return;
 
     if (!file_ || !file_.exists ())
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("image file not found"));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("image file not found"));
 
     // decode metadata
     auto reader = file_.new_reader ();
@@ -175,8 +170,7 @@ imagefile_impl::_load_metadata () const
     _load_region_table (reader);
 
     // other data
-    mobius::core::datetime::datetime acquisition_time =
-        file_.get_modification_time ();
+    mobius::core::datetime::datetime acquisition_time = file_.get_modification_time ();
     sectors_ = size_ / sector_size_;
 
     // fill attributes
@@ -197,8 +191,7 @@ imagefile_impl::_load_metadata () const
 // @see MS-VHDX - section 2.2.1
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-imagefile_impl::_load_file_type_identifier (
-    mobius::core::io::reader reader) const
+imagefile_impl::_load_file_type_identifier (mobius::core::io::reader reader) const
 {
     mobius::core::decoder::data_decoder decoder (reader);
 
@@ -206,8 +199,7 @@ imagefile_impl::_load_file_type_identifier (
     auto signature = decoder.get_string_by_size (8);
 
     if (signature != "vhdxfile")
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("invalid VHDX signature"));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid VHDX signature"));
 
     // creator
     acquisition_tool_ = decoder.get_string_by_size (512, "utf-16le");
@@ -285,8 +277,7 @@ imagefile_impl::_load_region_table (mobius::core::io::reader reader) const
     auto signature = decoder.get_string_by_size (4);
 
     if (signature != "regi")
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("invalid VHDX Region Table signature"));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid VHDX Region Table signature"));
 
     // read Region Table metadata
     decoder.skip (4); // checksum
@@ -308,8 +299,7 @@ imagefile_impl::_load_region_table (mobius::core::io::reader reader) const
             bat_offset_ = file_offset;
 
         else if (is_required)
-            throw std::runtime_error (MOBIUS_EXCEPTION_MSG (
-                "unknown and required Region Table entry"));
+            throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("unknown and required Region Table entry"));
     }
 }
 
@@ -320,8 +310,7 @@ imagefile_impl::_load_region_table (mobius::core::io::reader reader) const
 // @see MS-VHDX - section 2.6
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-imagefile_impl::_load_metadata_region (mobius::core::io::reader reader,
-                                       std::uint64_t file_offset) const
+imagefile_impl::_load_metadata_region (mobius::core::io::reader reader, std::uint64_t file_offset) const
 {
     mobius::core::decoder::data_decoder decoder (reader);
     decoder.seek (file_offset);
@@ -330,8 +319,7 @@ imagefile_impl::_load_metadata_region (mobius::core::io::reader reader,
     auto signature = decoder.get_string_by_size (8);
 
     if (signature != "metadata")
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("invalid VHDX Metadata Region signature"));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid VHDX Metadata Region signature"));
 
     // read Metadata Table header (section 2.6.1.1)
     decoder.skip (2); // Reserved
@@ -358,8 +346,7 @@ imagefile_impl::_load_metadata_region (mobius::core::io::reader reader,
                 disk_type_ = DISK_TYPE_FIXED;
 
             else if (flags & 0x40000000) // differencing
-                throw std::runtime_error (
-                    MOBIUS_EXCEPTION_MSG ("unsupported disk type"));
+                throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("unsupported disk type"));
 
             else
                 disk_type_ = DISK_TYPE_DYNAMIC;
@@ -398,8 +385,7 @@ imagefile_impl::_load_block_allocation_table () const
     _load_metadata ();
 
     if (block_size_ == 0)
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("block size must be greater than 0"));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("block size must be greater than 0"));
 
     // decode BAT
     auto reader = file_.new_reader ();

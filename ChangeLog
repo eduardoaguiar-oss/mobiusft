@@ -11,6 +11,7 @@ Mobius Forensic Toolkit 2.30
 	* vfs-imagefile-talon: Use register/unregister_imagefile_type
 	* vfs-imagefile-talon: Use split imagefile internally
 	* vfs-imagefile-vhd: Use register/unregister_imagefile_type
+	* vfs-imagefile-vhdx: Use register/unregister_imagefile_type
 	* libmobius_core: Add new function vfs::register_imagefile_type
 	* libmobius_core: Add new function vfs::unregister_imagefile_type
 	* libmobius_core: Add new function vfs::get_imagefile_types
