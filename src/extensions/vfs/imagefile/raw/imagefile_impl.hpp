@@ -38,34 +38,23 @@ class imagefile_impl : public mobius::core::vfs::imagefile_impl_base
     {
         return false;
     }
-    static std::string
-    get_file_extensions ()
-    {
-        return "raw|dd|img|*";
-    }
-    static bool
-    is_writeable ()
-    {
-        return true;
-    }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     explicit imagefile_impl (const mobius::core::io::file &);
-    mobius::core::pod::data get_attribute (const std::string &) const override;
-    void set_attribute (const std::string &,
-                        const mobius::core::pod::data &) override;
-    mobius::core::pod::map get_attributes () const override;
-    mobius::core::io::reader new_reader () const override;
-    mobius::core::io::writer new_writer () const override;
+    mobius::core::pod::data get_attribute (const std::string &) const final;
+    void set_attribute (const std::string &, const mobius::core::pod::data &) final;
+    mobius::core::pod::map get_attributes () const final;
+    mobius::core::io::reader new_reader () const final;
+    mobius::core::io::writer new_writer () const final;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Get type
     // @return type as string
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     std::string
-    get_type () const override
+    get_type () const final
     {
         return "raw";
     }
@@ -74,14 +63,17 @@ class imagefile_impl : public mobius::core::vfs::imagefile_impl_base
     // @brief Check if object is valid
     // @return true/false
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    operator bool () const noexcept override { return true; }
+    operator bool () const noexcept final
+    {
+        return true;
+    }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Check if imagefile is available
     // @return true/false
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     bool
-    is_available () const override
+    is_available () const final
     {
         return file_ && file_.exists ();
     }
@@ -91,7 +83,7 @@ class imagefile_impl : public mobius::core::vfs::imagefile_impl_base
     // @return imagefile size
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     size_type
-    get_size () const override
+    get_size () const final
     {
         _load_metadata ();
         return size_;
@@ -102,7 +94,7 @@ class imagefile_impl : public mobius::core::vfs::imagefile_impl_base
     // @return number of sectors
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     size_type
-    get_sectors () const override
+    get_sectors () const final
     {
         _load_metadata ();
         return sectors_;
@@ -113,7 +105,7 @@ class imagefile_impl : public mobius::core::vfs::imagefile_impl_base
     // @return sector size
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     size_type
-    get_sector_size () const override
+    get_sector_size () const final
     {
         _load_metadata ();
         return sector_size_;

@@ -45,8 +45,7 @@ imagefile_impl::get_attribute (const std::string &name) const
 // @param value Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-imagefile_impl::set_attribute (const std::string &name,
-                               const mobius::core::pod::data &value)
+imagefile_impl::set_attribute (const std::string &name, const mobius::core::pod::data &value)
 {
     attributes_.set (name, value);
     metadata_loaded_ = true;
@@ -99,8 +98,7 @@ imagefile_impl::_load_metadata () const
 
         // fill attributes
         attributes_.set ("last_metadata_time", file_.get_metadata_time ());
-        attributes_.set ("last_modification_time",
-                         file_.get_modification_time ());
+        attributes_.set ("last_modification_time", file_.get_modification_time ());
         attributes_.set ("last_access_time", file_.get_access_time ());
         attributes_.set ("user_name", file_.get_user_name ());
         attributes_.set ("group_name", file_.get_group_name ());
