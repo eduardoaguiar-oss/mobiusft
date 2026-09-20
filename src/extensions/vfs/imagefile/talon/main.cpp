@@ -15,10 +15,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "imagefile_impl.hpp"
-#include <cstdint>
-#include <mobius/core/resource.hpp>
 #include <mobius/core/vfs/imagefile.hpp>
+#include "imagefile_impl.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Extension data
@@ -26,10 +24,10 @@
 extern "C"
 {
     const char *EXTENSION_ID = "imagefile-talon";
-    const char *EXTENSION_NAME = "Logicube Dossier image file";
-    const char *EXTENSION_VERSION = "1.2";
+    const char *EXTENSION_NAME = "Logicube Talon image file";
+    const char *EXTENSION_VERSION = "1.3";
     const char *EXTENSION_AUTHORS = "Eduardo Aguiar";
-    const char *EXTENSION_DESCRIPTION = "Logicube Dossier image file support";
+    const char *EXTENSION_DESCRIPTION = "Logicube Talon image file support";
 } // extern "C"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -38,9 +36,15 @@ extern "C"
 extern "C" void
 start ()
 {
-    mobius::core::add_resource (
-        "vfs.imagefile.talon", "Logicube Talon image file",
-        mobius::core::vfs::make_imagefile_resource<imagefile_impl> ());
+    mobius::core::vfs::register_imagefile_type ({
+        .id = "talon",
+        .description = "Logicube Talon image file",
+        .is_writeable = false,
+        .is_virtual_disk = false,
+        .file_extensions = {"LOG"},
+        .is_instance = imagefile_impl::is_instance,
+        .builder = [] (const mobius::core::io::file &f) { return std::make_shared<imagefile_impl> (f); },
+    });
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -49,5 +53,5 @@ start ()
 extern "C" void
 stop ()
 {
-    mobius::core::remove_resource ("vfs.imagefile.talon");
+    mobius::core::vfs::unregister_imagefile_type ("talon");
 }

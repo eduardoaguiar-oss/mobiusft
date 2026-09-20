@@ -41,11 +41,10 @@ imagefile_impl::is_instance (const mobius::core::io::file &f)
         if (reader)
         {
             mobius::core::bytearray data = reader.read (128);
-            const std::string text =
-                mobius::core::conv_charset_to_utf8 (data, "ASCII");
+            const std::string text = mobius::core::conv_charset_to_utf8 (data, "ASCII");
 
-            instance = text.find ("FORENSIC TALON") != std::string::npos ||
-                       text.find ("LOGICUBE TALON") != std::string::npos;
+            instance =
+                text.find ("FORENSIC TALON") != std::string::npos || text.find ("LOGICUBE TALON") != std::string::npos;
         }
     }
 
@@ -58,8 +57,7 @@ imagefile_impl::is_instance (const mobius::core::io::file &f)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 imagefile_impl::imagefile_impl (const mobius::core::io::file &f)
     : file_ (f),
-      split_imagefile_impl_ (mobius::core::vfs::build_imagefile_implementation (
-          f.new_sibling_by_extension ("001"), "split"))
+      split_imagefile_ (f.new_sibling_by_extension ("001"), "split")
 {
 }
 
@@ -81,11 +79,9 @@ imagefile_impl::get_attribute (const std::string &name) const
 // @param value Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-imagefile_impl::set_attribute (const std::string &,
-                               const mobius::core::pod::data &)
+imagefile_impl::set_attribute (const std::string &, const mobius::core::pod::data &)
 {
-    throw std::runtime_error (
-        MOBIUS_EXCEPTION_MSG ("set_attribute not implemented"));
+    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("set_attribute not implemented"));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -106,7 +102,7 @@ imagefile_impl::get_attributes () const
 mobius::core::io::reader
 imagefile_impl::new_reader () const
 {
-    return split_imagefile_impl_->new_reader ();
+    return split_imagefile_.new_reader ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -132,20 +128,17 @@ imagefile_impl::_load_metadata () const
     constexpr mobius::core::io::file::size_type LOG_MAX_SIZE = 65536;
 
     if (!file_ || !file_.exists ())
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("Image file not found"));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("Image file not found"));
 
     if (file_.get_size () > LOG_MAX_SIZE)
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("Image file control file too large"));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("Image file control file too large"));
 
     // Load metadata
     std::regex REGEX_TALON_SERIAL ("Serial No.: ?([0-9]+)");
     std::regex REGEX_TALON_SOFTWARE ("Software: ([A-Z0-9.]+)");
     std::regex REGEX_DRIVE_MODEL ("Drive Model: ([^*]+?) *\\*");
     std::regex REGEX_DRIVE_SERIAL ("Serial: ([0-9A-Z-]+) *\\*");
-    std::regex REGEX_TOTAL_SECTORS (
-        "Drive Size *\\*\r\n\\* *[0-9]+ *[0-9]+ *[0-9]+ *([0-9]+)");
+    std::regex REGEX_TOTAL_SECTORS ("Drive Size *\\*\r\n\\* *[0-9]+ *[0-9]+ *[0-9]+ *([0-9]+)");
 
     // parse .log file
     auto reader = file_.new_reader ();
@@ -177,16 +170,12 @@ imagefile_impl::_load_metadata () const
         size_ = sectors_ * sector_size_;
     }
 
-    size_type segments =
-        std::int64_t (split_imagefile_impl_->get_attribute ("segments"));
-    size_type segment_size =
-        std::int64_t (split_imagefile_impl_->get_attribute ("segment_size"));
+    size_type segments = std::int64_t (split_imagefile_.get_attribute ("segments"));
+    size_type segment_size = std::int64_t (split_imagefile_.get_attribute ("segment_size"));
     std::string acquisition_user = file_.get_user_name ();
-    mobius::core::datetime::datetime acquisition_time =
-        file_.get_modification_time ();
+    mobius::core::datetime::datetime acquisition_time = file_.get_modification_time ();
 
-    mobius::core::vfs::normalize_drive_info (drive_vendor, drive_model,
-                                             drive_serial_number);
+    mobius::core::vfs::normalize_drive_info (drive_vendor, drive_model, drive_serial_number);
 
     // fill attributes
     attributes_.set ("drive_vendor", drive_vendor);

@@ -18,8 +18,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <memory>
 #include <mobius/core/io/file.hpp>
+#include <mobius/core/vfs/imagefile.hpp>
 #include <mobius/core/vfs/imagefile_impl_base.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -33,34 +33,23 @@ class imagefile_impl : public mobius::core::vfs::imagefile_impl_base
     // Class metadata functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     static bool is_instance (const mobius::core::io::file &);
-    static std::string
-    get_file_extensions ()
-    {
-        return "LOG";
-    }
-    static bool
-    is_writeable ()
-    {
-        return false;
-    }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     explicit imagefile_impl (const mobius::core::io::file &);
-    mobius::core::pod::data get_attribute (const std::string &) const override;
-    void set_attribute (const std::string &,
-                        const mobius::core::pod::data &) override;
-    mobius::core::pod::map get_attributes () const override;
-    mobius::core::io::reader new_reader () const override;
-    mobius::core::io::writer new_writer () const override;
+    mobius::core::pod::data get_attribute (const std::string &) const final;
+    void set_attribute (const std::string &, const mobius::core::pod::data &) final;
+    mobius::core::pod::map get_attributes () const final;
+    mobius::core::io::reader new_reader () const final;
+    mobius::core::io::writer new_writer () const final;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Get type
     // @return type as string
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     std::string
-    get_type () const override
+    get_type () const final
     {
         return "talon";
     }
@@ -69,14 +58,17 @@ class imagefile_impl : public mobius::core::vfs::imagefile_impl_base
     // @brief Check if object is valid
     // @return true/false
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    operator bool () const noexcept override { return true; }
+    operator bool () const noexcept final
+    {
+        return true;
+    }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Check if imagefile is available
     // @return true/false
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     bool
-    is_available () const override
+    is_available () const final
     {
         return file_ && file_.exists ();
     }
@@ -86,7 +78,7 @@ class imagefile_impl : public mobius::core::vfs::imagefile_impl_base
     // @return imagefile size
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     size_type
-    get_size () const override
+    get_size () const final
     {
         _load_metadata ();
         return size_;
@@ -97,7 +89,7 @@ class imagefile_impl : public mobius::core::vfs::imagefile_impl_base
     // @return number of sectors
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     size_type
-    get_sectors () const override
+    get_sectors () const final
     {
         _load_metadata ();
         return sectors_;
@@ -108,7 +100,7 @@ class imagefile_impl : public mobius::core::vfs::imagefile_impl_base
     // @return sector size
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     size_type
-    get_sector_size () const override
+    get_sector_size () const final
     {
         _load_metadata ();
         return sector_size_;
@@ -134,7 +126,7 @@ class imagefile_impl : public mobius::core::vfs::imagefile_impl_base
     mutable bool metadata_loaded_ = false;
 
     // @brief Underlying split imagefile
-    std::shared_ptr<imagefile_impl_base> split_imagefile_impl_;
+    mobius::core::vfs::imagefile split_imagefile_;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // helper functions
