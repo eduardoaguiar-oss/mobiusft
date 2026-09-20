@@ -16,19 +16,18 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "imagefile_impl.hpp"
-#include "reader_impl.hpp"
-#include "segment_decoder.hpp"
-#include "writer_impl.hpp"
 #include <mobius/core/exception.inc>
 #include <mobius/core/io/file.hpp>
 #include <mobius/core/string_functions.hpp>
 #include <mobius/core/vfs/imagefile.hpp>
 #include <mobius/core/vfs/util.hpp>
 #include <stdexcept>
+#include "reader_impl.hpp"
+#include "segment_decoder.hpp"
+#include "writer_impl.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @see
-// https://github.com/libyal/libewf/blob/master/documentation/Expert%20Witness%20Compression%20Format%20(EWF).asciidoc
+// @see https://github.com/libyal/libewf/blob/master/documentation/Expert%20Witness%20Compression%20Format%20(EWF).asciidoc
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 namespace
 {
@@ -47,13 +46,11 @@ get_segment_extension (mobius::core::vfs::segment_array::idx_type idx)
     {
         auto value = idx - 99;
 
-        return std::string (1, char ('E' + value / 676)) +
-               char ('A' + (value % 676) / 26) + char ('A' + (value % 26));
+        return std::string (1, char ('E' + value / 676)) + char ('A' + (value % 676) / 26) + char ('A' + (value % 26));
     }
 
     else
-        throw std::out_of_range (
-            MOBIUS_EXCEPTION_MSG ("Segment index out of range"));
+        throw std::out_of_range (MOBIUS_EXCEPTION_MSG ("Segment index out of range"));
 }
 
 } // namespace
@@ -112,8 +109,7 @@ imagefile_impl::get_attribute (const std::string &name) const
 // @param value Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-imagefile_impl::set_attribute (const std::string &name,
-                               const mobius::core::pod::data &value)
+imagefile_impl::set_attribute (const std::string &name, const mobius::core::pod::data &value)
 {
     attributes_.set (name, value);
     metadata_loaded_ = true;
@@ -173,16 +169,14 @@ imagefile_impl::_load_metadata () const
     std::string drive_model;
     std::string drive_serial_number;
     std::string hash_md5;
-    mobius::core::datetime::datetime acquisition_time =
-        file_.get_modification_time ();
+    mobius::core::datetime::datetime acquisition_time = file_.get_modification_time ();
     size_type segment_size = 4 * 1024 * 1024 * 1024L; // 4 GiB
     std::uint32_t compression_level = 0;
 
     // walk through segment files
     bool header_loaded = false;
 
-    for (mobius::core::vfs::segment_array::idx_type i = 0;
-         i < segments_.get_size (); i++)
+    for (mobius::core::vfs::segment_array::idx_type i = 0; i < segments_.get_size (); i++)
     {
         segment_decoder decoder (segments_.new_reader (i));
 
@@ -195,22 +189,18 @@ imagefile_impl::_load_metadata () const
                 hash_md5 = hash_section.get_md5_hash ();
             }
 
-            else if (section.get_name () == "volume" ||
-                     section.get_name () == "disk" ||
-                     section.get_name () == "data")
+            else if (section.get_name () == "volume" || section.get_name () == "disk" || section.get_name () == "data")
             {
                 auto volume_section = decoder.decode_volume_section (section);
                 sectors_ = volume_section.get_sectors ();
                 sector_size_ = volume_section.get_sector_size ();
                 size_ = sectors_ * sector_size_;
-                chunk_size_ =
-                    volume_section.get_chunk_sectors () * sector_size_;
+                chunk_size_ = volume_section.get_chunk_sectors () * sector_size_;
                 chunk_count_ = (size_ + chunk_size_ - 1) / chunk_size_;
                 compression_level = volume_section.get_compression_level ();
             }
 
-            else if (!header_loaded && (section.get_name () == "header2" ||
-                                        section.get_name () == "header"))
+            else if (!header_loaded && (section.get_name () == "header2" || section.get_name () == "header"))
             {
                 auto header_section = decoder.decode_header_section (section);
                 drive_model = header_section.get_drive_model ();
@@ -218,15 +208,13 @@ imagefile_impl::_load_metadata () const
                 acquisition_user = header_section.get_acquisition_user ();
                 acquisition_time = header_section.get_acquisition_time ();
                 acquisition_tool = header_section.get_acquisition_tool ();
-                acquisition_platform =
-                    header_section.get_acquisition_platform ();
+                acquisition_platform = header_section.get_acquisition_platform ();
                 header_loaded = true;
             }
         }
     }
 
-    mobius::core::vfs::normalize_drive_info (drive_vendor, drive_model,
-                                             drive_serial_number);
+    mobius::core::vfs::normalize_drive_info (drive_vendor, drive_model, drive_serial_number);
 
     // if there is only one segment, segment_size equals to size
     if (segments_.get_size () == 1)
@@ -267,8 +255,7 @@ imagefile_impl::_load_chunk_offset_table () const
     // walk through segment files
     size_type next_offset = 0;
 
-    for (mobius::core::vfs::segment_array::idx_type i = 0;
-         i < segments_.get_size (); i++)
+    for (mobius::core::vfs::segment_array::idx_type i = 0; i < segments_.get_size (); i++)
     {
         segment_decoder decoder (segments_.new_reader (i));
 
@@ -282,9 +269,7 @@ imagefile_impl::_load_chunk_offset_table () const
             if (section.get_name () == "table")
             {
                 auto table_section = decoder.decode_table_section (section);
-                size_type size =
-                    chunk_size_ *
-                    static_cast<size_type> (table_section.get_chunk_count ());
+                size_type size = chunk_size_ * static_cast<size_type> (table_section.get_chunk_count ());
 
                 if (offset_table.end)
                     offset_table.end += size;
@@ -296,7 +281,8 @@ imagefile_impl::_load_chunk_offset_table () const
                 offset_table.offsets.insert (
                     offset_table.offsets.end (),
                     std::make_move_iterator (table_offset_list.begin ()),
-                    std::make_move_iterator (table_offset_list.end ()));
+                    std::make_move_iterator (table_offset_list.end ())
+                );
 
                 next_offset += size;
             }
