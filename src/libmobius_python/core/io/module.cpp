@@ -44,8 +44,6 @@ PyObject *func_io_new_slice_reader (PyObject *, PyObject *);
 PyObject *func_join_path (PyObject *, PyObject *);
 PyObject *func_new_entry_by_path (PyObject *, PyObject *);
 PyObject *func_new_entry_by_url (PyObject *, PyObject *);
-PyObject *func_new_folder_by_path (PyObject *, PyObject *);
-PyObject *func_new_folder_by_url (PyObject *, PyObject *);
 PyObject *func_new_path_from_win (PyObject *, PyObject *);
 PyObject *func_new_uri_from_path (PyObject *, PyObject *);
 PyObject *func_set_tempdir_path (PyObject *, PyObject *);
@@ -101,7 +99,7 @@ new_core_io_module ()
 
     // Add types
     module.add_type ("file", new_core_io_file_type ());
-    module.add_type ("folder", &core_io_folder_t);
+    module.add_type ("folder", new_core_io_folder_type ());
     module.add_type ("line_reader", &core_io_line_reader_t);
     module.add_type ("path", &core_io_path_t);
     module.add_type ("reader", &core_io_reader_t);

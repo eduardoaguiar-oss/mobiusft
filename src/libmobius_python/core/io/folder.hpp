@@ -18,24 +18,27 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <Python.h>
 #include <mobius/core/io/folder.hpp>
+#include <Python.h>
+#include <pytypeobject.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
     PyObject_HEAD mobius::core::io::folder *obj;
 } core_io_folder_o;
 
-extern PyTypeObject core_io_folder_t;
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject new_core_io_folder_type ();
 bool pymobius_core_io_folder_check (PyObject *);
-PyObject *pymobius_core_io_folder_to_pyobject (mobius::core::io::folder);
+PyObject *pymobius_core_io_folder_to_pyobject (const mobius::core::io::folder &);
 mobius::core::io::folder pymobius_core_io_folder_from_pyobject (PyObject *);
+
+PyObject *func_new_folder_by_path (PyObject *, PyObject *);
+PyObject *func_new_folder_by_url (PyObject *, PyObject *);
 
 #endif

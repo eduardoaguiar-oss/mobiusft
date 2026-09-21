@@ -1150,7 +1150,7 @@ pymobius_core_io_file_to_pyobject (const mobius::core::io::file &obj)
     if (!core_io_file_type)
         throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("core.io.file type is not initialized"));
 
-    return mobius::py::to_pyobject<core_io_file_o> (obj, core_io_file_type);
+    return mobius::py::to_pyobject_nullable<core_io_file_o> (obj, core_io_file_type);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1191,8 +1191,7 @@ func_new_file_by_path (PyObject *, PyObject *args)
 
     try
     {
-        ret = pymobius_core_io_file_to_pyobject (
-            mobius::core::io::new_file_by_path (arg_path));
+        ret = pymobius_core_io_file_to_pyobject (mobius::core::io::new_file_by_path (arg_path));
     }
     catch (const std::exception &e)
     {
@@ -1226,8 +1225,7 @@ func_new_file_by_url (PyObject *, PyObject *args)
 
     try
     {
-        ret = pymobius_core_io_file_to_pyobject (
-            mobius::core::io::new_file_by_url (arg_url));
+        ret = pymobius_core_io_file_to_pyobject (mobius::core::io::new_file_by_url (arg_url));
     }
     catch (const std::exception &e)
     {
