@@ -18,24 +18,26 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <Python.h>
 #include <mobius/core/io/reader.hpp>
+#include <Python.h>
+#include <pytypeobject.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
     PyObject_HEAD mobius::core::io::reader *obj;
 } core_io_reader_o;
 
-extern PyTypeObject core_io_reader_t;
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject new_core_io_reader_type ();
 bool pymobius_core_io_reader_check (PyObject *);
-PyObject *pymobius_core_io_reader_to_pyobject (mobius::core::io::reader);
+PyObject *pymobius_core_io_reader_to_pyobject (const mobius::core::io::reader &);
 mobius::core::io::reader pymobius_core_io_reader_from_pyobject (PyObject *);
+
+PyObject *func_io_new_slice_reader (PyObject *, PyObject *);
 
 #endif

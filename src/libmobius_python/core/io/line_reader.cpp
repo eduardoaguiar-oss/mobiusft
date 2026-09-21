@@ -69,15 +69,14 @@ tp_f_read (core_io_line_reader_o *self, PyObject *)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "read", (PyCFunction) tp_f_read, METH_VARARGS, "Read line"},
-    {nullptr, nullptr, 0, nullptr} // sentinel
+    {(char *) "read", (PyCFunction) tp_f_read, METH_VARARGS, "Read line"}, {nullptr, nullptr, 0, nullptr} // sentinel
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief tp_alloc
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-core_io_line_reader_o *
-io_line_reader_tp_alloc ()
+static core_io_line_reader_o *
+tp_alloc ()
 {
     return (core_io_line_reader_o *) core_io_line_reader_type->tp_alloc (core_io_line_reader_type, 0);
 }
@@ -196,6 +195,7 @@ tp_iternext (PyObject *self)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyType_Slot core_io_line_reader_slots[] = {
     {Py_tp_new, reinterpret_cast<void *> (tp_new)},
+    {Py_tp_alloc, reinterpret_cast<void *> (tp_alloc)},
     {Py_tp_dealloc, reinterpret_cast<void *> (tp_dealloc)},
     {Py_tp_doc, const_cast<char *> ("core.io.line_reader class")},
     {Py_tp_methods, reinterpret_cast<void *> (tp_methods)},

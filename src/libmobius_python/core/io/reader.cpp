@@ -27,75 +27,12 @@
 #include <pymobius.hpp>
 #include <stdexcept>
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Check if object type is <i>reader</i>
-// @param pyobj Python object
-// @return true/false
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-bool
-pymobius_core_io_reader_check (PyObject *pyobj)
+namespace
 {
-    return PyObject_IsInstance (pyobj, (PyObject *) &core_io_reader_t);
-}
+// @brief Global pointer to hold the heap-allocated type
+static PyTypeObject *core_io_reader_type = nullptr;
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief create new object from C++ object
-// @param obj C++ object
-// @return new object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-pymobius_core_io_reader_to_pyobject (mobius::core::io::reader obj)
-{
-    PyObject *ret = nullptr;
-
-    if (obj)
-    {
-        ret = _PyObject_New (&core_io_reader_t);
-
-        if (ret)
-            ((core_io_reader_o *) ret)->obj =
-                new mobius::core::io::reader (obj);
-    }
-    else
-    {
-        ret = mobius::py::pynone ();
-    }
-
-    return ret;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>reader</i> C++ object from Python object
-// @param pyobj Python object
-// @return reader object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::core::io::reader
-pymobius_core_io_reader_from_pyobject (PyObject *pyobj)
-{
-    mobius::core::io::reader reader;
-
-    if (pymobius_core_io_reader_check (pyobj))
-        reader = *(reinterpret_cast<core_io_reader_o *> (pyobj)->obj);
-
-    else if (mobius::py::pybytes_check (pyobj))
-    {
-        auto bytearray = mobius::py::pybytes_as_bytearray (pyobj);
-        reader = mobius::core::io::new_bytearray_reader (bytearray);
-    }
-
-    else if (mobius::py::pystring_check (pyobj))
-    {
-        mobius::core::bytearray data (
-            mobius::py::pystring_as_std_string (pyobj));
-        reader = mobius::core::io::new_bytearray_reader (data);
-    }
-
-    else
-        throw std::invalid_argument (
-            MOBIUS_EXCEPTION_MSG ("argument must be either reader or bytes"));
-
-    return reader;
-}
+} // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief is_seekable getter
@@ -161,12 +98,17 @@ tp_getter_size (core_io_reader_o *self, void *)
 // @brief getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "is_seekable", (getter) tp_getter_is_seekable, (setter) 0,
-     (char *) "check if reader is seekable", nullptr},
-    {(char *) "is_rewindable", (getter) tp_getter_is_rewindable, (setter) 0,
-     (char *) "check if reader is rewindable", nullptr},
-    {(char *) "size", (getter) tp_getter_size, (setter) 0,
-     (char *) "data size in bytes", nullptr},
+    {(char *) "is_seekable",
+     (getter) tp_getter_is_seekable,
+     (setter) 0,
+     (char *) "check if reader is seekable",
+     nullptr},
+    {(char *) "is_rewindable",
+     (getter) tp_getter_is_rewindable,
+     (setter) 0,
+     (char *) "check if reader is rewindable",
+     nullptr},
+    {(char *) "size", (getter) tp_getter_size, (setter) 0, (char *) "data size in bytes", nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
 
@@ -181,8 +123,7 @@ tp_f_read (core_io_reader_o *self, PyObject *args)
     // parse input args
     try
     {
-        arg_size = mobius::py::get_arg_as_uint64_t (
-            args, 0, self->obj->get_size () - self->obj->tell ());
+        arg_size = mobius::py::get_arg_as_uint64_t (args, 0, self->obj->get_size () - self->obj->tell ());
     }
     catch (const std::exception &e)
     {
@@ -195,8 +136,7 @@ tp_f_read (core_io_reader_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pybytes_from_bytearray (
-            mobius::py::GIL () (self->obj->read (arg_size)));
+        ret = mobius::py::pybytes_from_bytearray (mobius::py::GIL () (self->obj->read (arg_size)));
     }
     catch (const std::exception &e)
     {
@@ -361,29 +301,22 @@ tp_f_get_block_size (core_io_reader_o *self, PyObject *)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "read", (PyCFunction) tp_f_read, METH_VARARGS,
-     "Read bytes from reader"},
-    {(char *) "tell", (PyCFunction) tp_f_tell, METH_VARARGS,
-     "Get current read position"},
-    {(char *) "seek", (PyCFunction) tp_f_seek, METH_VARARGS,
-     "Set current read position"},
-    {(char *) "rewind", (PyCFunction) tp_f_rewind, METH_VARARGS,
-     "Set current read position to the beginning of data"},
-    {(char *) "skip", (PyCFunction) tp_f_skip, METH_VARARGS,
-     "Set read position n bytes ahead"},
-    {(char *) "get_block_size", (PyCFunction) tp_f_get_block_size, METH_VARARGS,
-     "Get optimum block size"},
+    {(char *) "read", (PyCFunction) tp_f_read, METH_VARARGS, "Read bytes from reader"},
+    {(char *) "tell", (PyCFunction) tp_f_tell, METH_VARARGS, "Get current read position"},
+    {(char *) "seek", (PyCFunction) tp_f_seek, METH_VARARGS, "Set current read position"},
+    {(char *) "rewind", (PyCFunction) tp_f_rewind, METH_VARARGS, "Set current read position to the beginning of data"},
+    {(char *) "skip", (PyCFunction) tp_f_skip, METH_VARARGS, "Set read position n bytes ahead"},
+    {(char *) "get_block_size", (PyCFunction) tp_f_get_block_size, METH_VARARGS, "Get optimum block size"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief tp_alloc
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-core_io_reader_o *
-io_reader_tp_alloc ()
+static core_io_reader_o *
+tp_alloc ()
 {
-    return (core_io_reader_o *) core_io_reader_t.tp_alloc (&core_io_reader_t,
-                                                           0);
+    return (core_io_reader_o *) core_io_reader_type->tp_alloc (core_io_reader_type, 0);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -396,56 +329,148 @@ tp_dealloc (core_io_reader_o *self)
     Py_TYPE (self)->tp_free ((PyObject *) self);
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief type structure
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyTypeObject core_io_reader_t = {
-    PyVarObject_HEAD_INIT (nullptr, 0)        // header
-    "mobius.core.io.reader",                  // tp_name
-    sizeof (core_io_reader_o),                // tp_basicsize
-    0,                                        // tp_itemsize
-    (destructor) tp_dealloc,                  // tp_dealloc
-    0,                                        // tp_print
-    0,                                        // tp_getattr
-    0,                                        // tp_setattr
-    0,                                        // tp_compare
-    0,                                        // tp_repr
-    0,                                        // tp_as_number
-    0,                                        // tp_as_sequence
-    0,                                        // tp_as_mapping
-    0,                                        // tp_hash
-    0,                                        // tp_call
-    0,                                        // tp_str
-    0,                                        // tp_getattro
-    0,                                        // tp_setattro
-    0,                                        // tp_as_buffer
-    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, // tp_flags
-    "reader for mobius.core.io.file",         // tp_doc
-    0,                                        // tp_traverse
-    0,                                        // tp_clear
-    0,                                        // tp_richcompare
-    0,                                        // tp_weaklistoffset
-    0,                                        // tp_iter
-    0,                                        // tp_iternext
-    tp_methods,                               // tp_methods
-    0,                                        // tp_members
-    tp_getset,                                // tp_getset
-    0,                                        // tp_base
-    0,                                        // tp_dict
-    0,                                        // tp_descr_get
-    0,                                        // tp_descr_set
-    0,                                        // tp_dictoffset
-    0,                                        // tp_init
-    0,                                        // tp_alloc
-    0,                                        // tp_new
-    0,                                        // tp_free
-    0,                                        // tp_is_gc
-    0,                                        // tp_bases
-    0,                                        // tp_mro
-    0,                                        // tp_cache
-    0,                                        // tp_subclasses
-    0,                                        // tp_weaklist
-    0,                                        // tp_del
-    0,                                        // tp_version_tag
-    0,                                        // tp_finalize
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type Slots
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Slot core_io_reader_slots[] = {
+    {Py_tp_alloc, reinterpret_cast<void *> (tp_alloc)},
+    {Py_tp_dealloc, reinterpret_cast<void *> (tp_dealloc)},
+    {Py_tp_doc, const_cast<char *> ("core.io.reader class")},
+    {Py_tp_getset, reinterpret_cast<void *> (tp_getset)},
+    {Py_tp_methods, reinterpret_cast<void *> (tp_methods)},
+    {0, nullptr} // Sentinel
 };
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type specification
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Spec core_io_reader_spec = {
+    .name = "mobius.core.io.reader",
+    .basicsize = sizeof (core_io_reader_o),
+    .itemsize = 0,
+    .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+    .slots = core_io_reader_slots,
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>mobius.core.io.reader</i> type
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject
+new_core_io_reader_type ()
+{
+    // If type is already created, return it
+    if (core_io_reader_type)
+        return mobius::py::pytypeobject (core_io_reader_type);
+
+    // Allocate type from spec
+    core_io_reader_type = reinterpret_cast<PyTypeObject *> (PyType_FromSpec (&core_io_reader_spec));
+
+    // Create type
+    mobius::py::pytypeobject type (core_io_reader_type);
+    type.create ();
+
+    return type;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if value is an instance of <i>core.io.reader</i>
+// @param value Python value
+// @return true/false
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+pymobius_core_io_reader_check (PyObject *value)
+{
+    if (!core_io_reader_type)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("core.io.reader type is not initialized"));
+
+    return mobius::py::isinstance (value, core_io_reader_type);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>core.io.reader</i> Python object from C++ object
+// @param obj C++ object
+// @return New core.io.reader object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+pymobius_core_io_reader_to_pyobject (const mobius::core::io::reader &obj)
+{
+    if (!core_io_reader_type)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("core.io.reader type is not initialized"));
+
+    return mobius::py::to_pyobject_nullable<core_io_reader_o> (obj, core_io_reader_type);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>core.io.reader</i> C++ object from Python object
+// @param value Python value
+// @return core.io.reader object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::io::reader
+pymobius_core_io_reader_from_pyobject (PyObject *value)
+{
+    if (!core_io_reader_type)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("core.io.reader type is not initialized"));
+
+    mobius::core::io::reader reader;
+
+    if (pymobius_core_io_reader_check (value))
+        reader = *(reinterpret_cast<core_io_reader_o *> (value)->obj);
+
+    else if (mobius::py::pybytes_check (value))
+    {
+        auto bytearray = mobius::py::pybytes_as_bytearray (value);
+        reader = mobius::core::io::new_bytearray_reader (bytearray);
+    }
+
+    else if (mobius::py::pystring_check (value))
+    {
+        mobius::core::bytearray data (mobius::py::pystring_as_std_string (value));
+        reader = mobius::core::io::new_bytearray_reader (data);
+    }
+
+    else
+        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("argument must be either reader or bytes"));
+
+    return reader;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <b>mobius.core.io.new_slice_reader</b> function
+// @param self function object
+// @param args argument list
+// @return Python object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_io_new_slice_reader (PyObject *, PyObject *args)
+{
+    // parse arguments
+    mobius::core::io::reader arg_reader;
+    std::int64_t arg_pos;
+    std::int64_t arg_end = -1;
+
+    try
+    {
+        arg_reader = mobius::py::get_arg_as_cpp (args, 0, pymobius_core_io_reader_from_pyobject);
+        arg_pos = mobius::py::get_arg_as_int64_t (args, 1);
+        arg_end = mobius::py::get_arg_as_int64_t (args, 2, -1);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
+    }
+
+    // execute C++ code
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = pymobius_core_io_reader_to_pyobject (mobius::core::io::new_slice_reader (arg_reader, arg_pos, arg_end));
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    return ret;
+}

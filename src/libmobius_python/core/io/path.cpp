@@ -21,10 +21,10 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "path.hpp"
-#include "module.hpp"
 #include <mobius/core/exception.inc>
 #include <pymobius.hpp>
 #include <stdexcept>
+#include "module.hpp"
 
 namespace
 {
@@ -147,8 +147,7 @@ tp_f_get_extension (core_io_path_o *self, PyObject *)
 
     try
     {
-        ret =
-            mobius::py::pystring_from_std_string (self->obj->get_extension ());
+        ret = mobius::py::pystring_from_std_string (self->obj->get_extension ());
     }
     catch (const std::exception &e)
     {
@@ -211,8 +210,7 @@ tp_f_get_sibling_by_name (core_io_path_o *self, PyObject *args)
 
     try
     {
-        ret = pymobius_core_io_path_to_pyobject (
-            self->obj->get_sibling_by_name (arg_filename));
+        ret = pymobius_core_io_path_to_pyobject (self->obj->get_sibling_by_name (arg_filename));
     }
     catch (const std::exception &e)
     {
@@ -250,8 +248,7 @@ tp_f_get_sibling_by_extension (core_io_path_o *self, PyObject *args)
 
     try
     {
-        ret = pymobius_core_io_path_to_pyobject (
-            self->obj->get_sibling_by_extension (arg_ext));
+        ret = pymobius_core_io_path_to_pyobject (self->obj->get_sibling_by_extension (arg_ext));
     }
     catch (const std::exception &e)
     {
@@ -289,8 +286,7 @@ tp_f_get_child_by_name (core_io_path_o *self, PyObject *args)
 
     try
     {
-        ret = pymobius_core_io_path_to_pyobject (
-            self->obj->get_child_by_name (arg_name));
+        ret = pymobius_core_io_path_to_pyobject (self->obj->get_child_by_name (arg_name));
     }
     catch (const std::exception &e)
     {
@@ -328,8 +324,7 @@ tp_f_get_child_by_path (core_io_path_o *self, PyObject *args)
 
     try
     {
-        ret = pymobius_core_io_path_to_pyobject (
-            self->obj->get_child_by_path (arg_path));
+        ret = pymobius_core_io_path_to_pyobject (self->obj->get_child_by_path (arg_path));
     }
     catch (const std::exception &e)
     {
@@ -392,8 +387,7 @@ tp_f_filename_match (core_io_path_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (
-            self->obj->filename_match (arg_pattern));
+        ret = mobius::py::pybool_from_bool (self->obj->filename_match (arg_pattern));
     }
     catch (const std::exception &e)
     {
@@ -408,31 +402,24 @@ tp_f_filename_match (core_io_path_o *self, PyObject *args)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "get_value", (PyCFunction) tp_f_get_value, METH_VARARGS,
-     "Get path"},
-    {(char *) "get_dirname", (PyCFunction) tp_f_get_dirname, METH_VARARGS,
-     "Get directory name"},
-    {(char *) "get_filename", (PyCFunction) tp_f_get_filename, METH_VARARGS,
-     "Get filename"},
-    {(char *) "get_prefix", (PyCFunction) tp_f_get_prefix, METH_VARARGS,
-     "Get prefix"},
-    {(char *) "get_extension", (PyCFunction) tp_f_get_extension, METH_VARARGS,
-     "Get extension"},
-    {(char *) "get_parent", (PyCFunction) tp_f_get_parent, METH_VARARGS,
-     "Get parent path"},
-    {(char *) "get_sibling_by_name", (PyCFunction) tp_f_get_sibling_by_name,
-     METH_VARARGS, "Get sibling path by file name"},
+    {(char *) "get_value", (PyCFunction) tp_f_get_value, METH_VARARGS, "Get path"},
+    {(char *) "get_dirname", (PyCFunction) tp_f_get_dirname, METH_VARARGS, "Get directory name"},
+    {(char *) "get_filename", (PyCFunction) tp_f_get_filename, METH_VARARGS, "Get filename"},
+    {(char *) "get_prefix", (PyCFunction) tp_f_get_prefix, METH_VARARGS, "Get prefix"},
+    {(char *) "get_extension", (PyCFunction) tp_f_get_extension, METH_VARARGS, "Get extension"},
+    {(char *) "get_parent", (PyCFunction) tp_f_get_parent, METH_VARARGS, "Get parent path"},
+    {(char *) "get_sibling_by_name",
+     (PyCFunction) tp_f_get_sibling_by_name,
+     METH_VARARGS,
+     "Get sibling path by file name"},
     {(char *) "get_sibling_by_extension",
-     (PyCFunction) tp_f_get_sibling_by_extension, METH_VARARGS,
+     (PyCFunction) tp_f_get_sibling_by_extension,
+     METH_VARARGS,
      "Get sibling path by extension"},
-    {(char *) "get_child_by_name", (PyCFunction) tp_f_get_child_by_name,
-     METH_VARARGS, "Get child path by name"},
-    {(char *) "get_child_by_path", (PyCFunction) tp_f_get_child_by_path,
-     METH_VARARGS, "Get child path by sub path"},
-    {(char *) "is_absolute", (PyCFunction) tp_f_is_absolute, METH_VARARGS,
-     "Check if path is absolute"},
-    {(char *) "filename_match", (PyCFunction) tp_f_filename_match, METH_VARARGS,
-     "Check if filename matches pattern"},
+    {(char *) "get_child_by_name", (PyCFunction) tp_f_get_child_by_name, METH_VARARGS, "Get child path by name"},
+    {(char *) "get_child_by_path", (PyCFunction) tp_f_get_child_by_path, METH_VARARGS, "Get child path by sub path"},
+    {(char *) "is_absolute", (PyCFunction) tp_f_is_absolute, METH_VARARGS, "Check if path is absolute"},
+    {(char *) "filename_match", (PyCFunction) tp_f_filename_match, METH_VARARGS, "Check if filename matches pattern"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };
 
@@ -459,8 +446,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     }
 
     // Create Python object
-    core_io_path_o *ret =
-        reinterpret_cast<core_io_path_o *> (type->tp_alloc (type, 0));
+    core_io_path_o *ret = reinterpret_cast<core_io_path_o *> (type->tp_alloc (type, 0));
 
     if (ret)
     {
@@ -523,9 +509,7 @@ new_core_io_path_type ()
         return mobius::py::pytypeobject (core_io_path_type);
 
     // Allocate type from spec
-    core_io_path_type = reinterpret_cast<PyTypeObject *> (
-        PyType_FromSpec (&core_io_path_spec)
-    );
+    core_io_path_type = reinterpret_cast<PyTypeObject *> (PyType_FromSpec (&core_io_path_spec));
 
     // Create type
     mobius::py::pytypeobject type (core_io_path_type);
@@ -543,9 +527,7 @@ bool
 pymobius_core_io_path_check (PyObject *value)
 {
     if (!core_io_path_type)
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("core.io.path type is not initialized")
-        );
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("core.io.path type is not initialized"));
 
     return mobius::py::isinstance (value, core_io_path_type);
 }
@@ -559,13 +541,9 @@ PyObject *
 pymobius_core_io_path_to_pyobject (const mobius::core::io::path &obj)
 {
     if (!core_io_path_type)
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("core.io.path type is not initialized")
-        );
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("core.io.path type is not initialized"));
 
-    return mobius::py::to_pyobject<core_io_path_o> (
-        obj, core_io_path_type
-    );
+    return mobius::py::to_pyobject<core_io_path_o> (obj, core_io_path_type);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -577,13 +555,9 @@ mobius::core::io::path
 pymobius_core_io_path_from_pyobject (PyObject *value)
 {
     if (!core_io_path_type)
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("core.io.path type is not initialized")
-        );
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("core.io.path type is not initialized"));
 
-    return mobius::py::from_pyobject<core_io_path_o> (
-        value, core_io_path_type
-    );
+    return mobius::py::from_pyobject<core_io_path_o> (value, core_io_path_type);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -597,8 +571,7 @@ func_join_path (PyObject *, PyObject *args)
 
     if (size < 1)
     {
-        mobius::py::set_value_error (
-            "join_path must have at least one argument");
+        mobius::py::set_value_error ("join_path must have at least one argument");
         return nullptr;
     }
 
@@ -614,8 +587,7 @@ func_join_path (PyObject *, PyObject *args)
             segment = pymobius_core_io_path_from_pyobject (item);
 
         else if (mobius::py::pystring_check (item))
-            segment = mobius::core::io::path (
-                mobius::py::pystring_as_std_string (item));
+            segment = mobius::core::io::path (mobius::py::pystring_as_std_string (item));
 
         else
         {
@@ -690,8 +662,7 @@ func_to_win_path (PyObject *, PyObject *args)
     mobius::core::io::path path;
 
     if (mobius::py::pystring_check (arg))
-        path =
-            mobius::core::io::path (mobius::py::pystring_as_std_string (arg));
+        path = mobius::core::io::path (mobius::py::pystring_as_std_string (arg));
 
     else if (pymobius_core_io_path_check (arg))
         path = pymobius_core_io_path_from_pyobject (arg);
