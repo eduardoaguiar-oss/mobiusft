@@ -98,7 +98,7 @@ new_core_io_module ()
     module.add_type ("path", new_core_io_path_type ());
     module.add_type ("reader", new_core_io_reader_type ());
     module.add_type ("sequential_reader_adaptor", new_core_io_sequential_reader_adaptor_type ());
-    module.add_type ("stream", &core_io_stream_t);
+    module.add_type ("stream", new_core_io_stream_type ());
     module.add_type ("tempfile", new_io_tempfile_type ());
     module.add_type ("text_reader", &core_io_text_reader_t);
     module.add_type ("text_writer", &core_io_text_writer_t);

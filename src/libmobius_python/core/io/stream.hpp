@@ -18,8 +18,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <Python.h>
 #include <mobius/core/io/stream.hpp>
+#include <Python.h>
+#include <pytypeobject.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -29,14 +30,12 @@ typedef struct
     PyObject_HEAD mobius::core::io::stream *obj;
 } core_io_stream_o;
 
-extern PyTypeObject core_io_stream_t;
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject new_core_io_stream_type ();
 bool pymobius_core_io_stream_check (PyObject *);
-PyObject *
-pymobius_core_io_stream_to_pyobject (const mobius::core::io::stream &);
+PyObject *pymobius_core_io_stream_to_pyobject (const mobius::core::io::stream &);
 mobius::core::io::stream pymobius_core_io_stream_from_pyobject (PyObject *);
 
 #endif
