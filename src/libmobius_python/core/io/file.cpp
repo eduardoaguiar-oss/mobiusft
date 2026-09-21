@@ -21,67 +21,23 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "file.hpp"
+#include <mobius/core/exception.inc>
+#include <pylist.hpp>
+#include <pymobius.hpp>
+#include <stdexcept>
 #include "core/pod/data.hpp"
 #include "core/pod/map.hpp"
 #include "folder.hpp"
 #include "reader.hpp"
 #include "stream.hpp"
 #include "writer.hpp"
-#include <mobius/core/exception.inc>
-#include <pylist.hpp>
-#include <pymobius.hpp>
-#include <stdexcept>
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Check if object type is <i>file</i>
-// @param pyobj Python object
-// @return true/false
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-bool
-pymobius_core_io_file_check (PyObject *pyobj)
+namespace
 {
-    return PyObject_IsInstance (pyobj, (PyObject *) &core_io_file_t);
-}
+// @brief Global pointer to hold the heap-allocated type
+static PyTypeObject *core_io_file_type = nullptr;
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create new object from C++ object
-// @param obj C++ object
-// @return new object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-pymobius_core_io_file_to_pyobject (mobius::core::io::file obj)
-{
-    PyObject *ret = nullptr;
-
-    if (obj)
-    {
-        ret = _PyObject_New (&core_io_file_t);
-
-        if (ret)
-            ((core_io_file_o *) ret)->obj = new mobius::core::io::file (obj);
-    }
-    else
-    {
-        ret = mobius::py::pynone ();
-    }
-
-    return ret;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>file</i> C++ object from Python object
-// @param pyobj Python object
-// @return file object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::core::io::file
-pymobius_core_io_file_from_pyobject (PyObject *pyobj)
-{
-    if (!PyObject_IsInstance (pyobj, (PyObject *) &core_io_file_t))
-        throw std::invalid_argument (
-            MOBIUS_EXCEPTION_MSG ("object type must be mobius.core.io.file"));
-
-    return *(reinterpret_cast<core_io_file_o *> (pyobj)->obj);
-}
+} // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief name getter
@@ -113,8 +69,7 @@ tp_getter_short_name (core_io_file_o *self, void *)
 
     try
     {
-        ret =
-            mobius::py::pystring_from_std_string (self->obj->get_short_name ());
+        ret = mobius::py::pystring_from_std_string (self->obj->get_short_name ());
     }
     catch (const std::exception &e)
     {
@@ -158,8 +113,7 @@ tp_setter_path (core_io_file_o *self, PyObject *value, void *)
 
     if (!mobius::py::pystring_check (value))
     {
-        mobius::py::set_invalid_type_error (
-            "invalid type for 'path' attribute");
+        mobius::py::set_invalid_type_error ("invalid type for 'path' attribute");
         return -1;
     }
 
@@ -227,8 +181,7 @@ tp_getter_type (core_io_file_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_int (
-            static_cast<int> (self->obj->get_type ()));
+        ret = mobius::py::pylong_from_int (static_cast<int> (self->obj->get_type ()));
     }
     catch (const std::exception &e)
     {
@@ -248,8 +201,7 @@ tp_getter_user_id (core_io_file_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_int (
-            static_cast<int> (self->obj->get_user_id ()));
+        ret = mobius::py::pylong_from_int (static_cast<int> (self->obj->get_user_id ()));
     }
     catch (const std::exception &e)
     {
@@ -269,8 +221,7 @@ tp_getter_user_name (core_io_file_o *self, void *)
 
     try
     {
-        ret =
-            mobius::py::pystring_from_std_string (self->obj->get_user_name ());
+        ret = mobius::py::pystring_from_std_string (self->obj->get_user_name ());
     }
     catch (const std::exception &e)
     {
@@ -290,8 +241,7 @@ tp_getter_group_id (core_io_file_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_int (
-            static_cast<int> (self->obj->get_group_id ()));
+        ret = mobius::py::pylong_from_int (static_cast<int> (self->obj->get_group_id ()));
     }
     catch (const std::exception &e)
     {
@@ -311,8 +261,7 @@ tp_getter_group_name (core_io_file_o *self, void *)
 
     try
     {
-        ret =
-            mobius::py::pystring_from_std_string (self->obj->get_group_name ());
+        ret = mobius::py::pystring_from_std_string (self->obj->get_group_name ());
     }
     catch (const std::exception &e)
     {
@@ -332,8 +281,7 @@ tp_getter_permissions (core_io_file_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_int (
-            static_cast<int> (self->obj->get_permissions ()));
+        ret = mobius::py::pylong_from_int (static_cast<int> (self->obj->get_permissions ()));
     }
     catch (const std::exception &e)
     {
@@ -353,8 +301,7 @@ tp_getter_access_time (core_io_file_o *self, void *)
 
     try
     {
-        ret = mobius::py::pydatetime_from_datetime (
-            self->obj->get_access_time ());
+        ret = mobius::py::pydatetime_from_datetime (self->obj->get_access_time ());
     }
     catch (const std::exception &e)
     {
@@ -374,8 +321,7 @@ tp_getter_modification_time (core_io_file_o *self, void *)
 
     try
     {
-        ret = mobius::py::pydatetime_from_datetime (
-            self->obj->get_modification_time ());
+        ret = mobius::py::pydatetime_from_datetime (self->obj->get_modification_time ());
     }
     catch (const std::exception &e)
     {
@@ -395,8 +341,7 @@ tp_getter_metadata_time (core_io_file_o *self, void *)
 
     try
     {
-        ret = mobius::py::pydatetime_from_datetime (
-            self->obj->get_metadata_time ());
+        ret = mobius::py::pydatetime_from_datetime (self->obj->get_metadata_time ());
     }
     catch (const std::exception &e)
     {
@@ -416,8 +361,7 @@ tp_getter_creation_time (core_io_file_o *self, void *)
 
     try
     {
-        ret = mobius::py::pydatetime_from_datetime (
-            self->obj->get_creation_time ());
+        ret = mobius::py::pydatetime_from_datetime (self->obj->get_creation_time ());
     }
     catch (const std::exception &e)
     {
@@ -437,8 +381,7 @@ tp_getter_deletion_time (core_io_file_o *self, void *)
 
     try
     {
-        ret = mobius::py::pydatetime_from_datetime (
-            self->obj->get_deletion_time ());
+        ret = mobius::py::pydatetime_from_datetime (self->obj->get_deletion_time ());
     }
     catch (const std::exception &e)
     {
@@ -458,8 +401,7 @@ tp_getter_backup_time (core_io_file_o *self, void *)
 
     try
     {
-        ret = mobius::py::pydatetime_from_datetime (
-            self->obj->get_backup_time ());
+        ret = mobius::py::pydatetime_from_datetime (self->obj->get_backup_time ());
     }
     catch (const std::exception &e)
     {
@@ -473,40 +415,31 @@ tp_getter_backup_time (core_io_file_o *self, void *)
 // @brief getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "name", (getter) tp_getter_name, (setter) 0, (char *) "file name",
+    {(char *) "name", (getter) tp_getter_name, (setter) 0, (char *) "file name", nullptr},
+    {(char *) "short_name", (getter) tp_getter_short_name, (setter) 0, (char *) "short file name", nullptr},
+    {(char *) "path", (getter) tp_getter_path, (setter) tp_setter_path, (char *) "path", nullptr},
+    {(char *) "inode", (getter) tp_getter_inode, (setter) 0, (char *) "inode", nullptr},
+    {(char *) "size", (getter) tp_getter_size, (setter) 0, (char *) "file size in bytes", nullptr},
+    {(char *) "type", (getter) tp_getter_type, (setter) 0, (char *) "file type", nullptr},
+    {(char *) "user_id", (getter) tp_getter_user_id, (setter) 0, (char *) "owner's user ID", nullptr},
+    {(char *) "user_name", (getter) tp_getter_user_name, (setter) 0, (char *) "owner's user name", nullptr},
+    {(char *) "group_id", (getter) tp_getter_group_id, (setter) 0, (char *) "group ID", nullptr},
+    {(char *) "group_name", (getter) tp_getter_group_name, (setter) 0, (char *) "group name", nullptr},
+    {(char *) "permissions", (getter) tp_getter_permissions, (setter) 0, (char *) "access permission mask", nullptr},
+    {(char *) "access_time", (getter) tp_getter_access_time, (setter) 0, (char *) "last access date/time", nullptr},
+    {(char *) "modification_time",
+     (getter) tp_getter_modification_time,
+     (setter) 0,
+     (char *) "last data modification date/time",
      nullptr},
-    {(char *) "short_name", (getter) tp_getter_short_name, (setter) 0,
-     (char *) "short file name", nullptr},
-    {(char *) "path", (getter) tp_getter_path, (setter) tp_setter_path,
-     (char *) "path", nullptr},
-    {(char *) "inode", (getter) tp_getter_inode, (setter) 0, (char *) "inode",
+    {(char *) "metadata_time",
+     (getter) tp_getter_metadata_time,
+     (setter) 0,
+     (char *) "last metadata modification date/time",
      nullptr},
-    {(char *) "size", (getter) tp_getter_size, (setter) 0,
-     (char *) "file size in bytes", nullptr},
-    {(char *) "type", (getter) tp_getter_type, (setter) 0, (char *) "file type",
-     nullptr},
-    {(char *) "user_id", (getter) tp_getter_user_id, (setter) 0,
-     (char *) "owner's user ID", nullptr},
-    {(char *) "user_name", (getter) tp_getter_user_name, (setter) 0,
-     (char *) "owner's user name", nullptr},
-    {(char *) "group_id", (getter) tp_getter_group_id, (setter) 0,
-     (char *) "group ID", nullptr},
-    {(char *) "group_name", (getter) tp_getter_group_name, (setter) 0,
-     (char *) "group name", nullptr},
-    {(char *) "permissions", (getter) tp_getter_permissions, (setter) 0,
-     (char *) "access permission mask", nullptr},
-    {(char *) "access_time", (getter) tp_getter_access_time, (setter) 0,
-     (char *) "last access date/time", nullptr},
-    {(char *) "modification_time", (getter) tp_getter_modification_time,
-     (setter) 0, (char *) "last data modification date/time", nullptr},
-    {(char *) "metadata_time", (getter) tp_getter_metadata_time, (setter) 0,
-     (char *) "last metadata modification date/time", nullptr},
-    {(char *) "creation_time", (getter) tp_getter_creation_time, (setter) 0,
-     (char *) "creation date/time", nullptr},
-    {(char *) "deletion_time", (getter) tp_getter_deletion_time, (setter) 0,
-     (char *) "deletion date/time", nullptr},
-    {(char *) "backup_time", (getter) tp_getter_backup_time, (setter) 0,
-     (char *) "backup date/time", nullptr},
+    {(char *) "creation_time", (getter) tp_getter_creation_time, (setter) 0, (char *) "creation date/time", nullptr},
+    {(char *) "deletion_time", (getter) tp_getter_deletion_time, (setter) 0, (char *) "deletion date/time", nullptr},
+    {(char *) "backup_time", (getter) tp_getter_backup_time, (setter) 0, (char *) "backup date/time", nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
 
@@ -760,8 +693,7 @@ tp_f_get_extension (core_io_file_o *self, PyObject *)
 
     try
     {
-        ret =
-            mobius::py::pystring_from_std_string (self->obj->get_extension ());
+        ret = mobius::py::pystring_from_std_string (self->obj->get_extension ());
     }
     catch (const std::exception &e)
     {
@@ -815,8 +747,7 @@ tp_f_new_sibling_by_name (core_io_file_o *self, PyObject *args)
 
     try
     {
-        ret = pymobius_core_io_file_to_pyobject (
-            self->obj->new_sibling_by_name (arg_name));
+        ret = pymobius_core_io_file_to_pyobject (self->obj->new_sibling_by_name (arg_name));
     }
     catch (const std::exception &e)
     {
@@ -850,8 +781,7 @@ tp_f_new_sibling_by_extension (core_io_file_o *self, PyObject *args)
 
     try
     {
-        ret = pymobius_core_io_file_to_pyobject (
-            self->obj->new_sibling_by_extension (arg_ext));
+        ret = pymobius_core_io_file_to_pyobject (self->obj->new_sibling_by_extension (arg_ext));
     }
     catch (const std::exception &e)
     {
@@ -901,8 +831,7 @@ tp_f_copy (core_io_file_o *self, PyObject *args)
         return nullptr;
     }
 
-    if (!pymobius_core_io_file_check (arg_to) &&
-        !pymobius_core_io_folder_check (arg_to))
+    if (!pymobius_core_io_file_check (arg_to) && !pymobius_core_io_folder_check (arg_to))
     {
         mobius::py::set_invalid_type_error ("invalid destination type");
         return nullptr;
@@ -948,8 +877,7 @@ tp_f_move (core_io_file_o *self, PyObject *args)
         return nullptr;
     }
 
-    if (!pymobius_core_io_file_check (arg_to) &&
-        !pymobius_core_io_folder_check (arg_to))
+    if (!pymobius_core_io_file_check (arg_to) && !pymobius_core_io_folder_check (arg_to))
     {
         mobius::py::set_invalid_type_error ("invalid destination type");
         return nullptr;
@@ -1076,8 +1004,7 @@ tp_f_new_writer (core_io_file_o *self, PyObject *args)
 
     try
     {
-        ret = pymobius_core_io_writer_to_pyobject (
-            self->obj->new_writer (arg_overwrite));
+        ret = pymobius_core_io_writer_to_pyobject (self->obj->new_writer (arg_overwrite));
     }
     catch (const std::exception &e)
     {
@@ -1101,8 +1028,7 @@ tp_f_get_streams (core_io_file_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pylist_from_cpp_container (
-            self->obj->get_streams (), pymobius_core_io_stream_to_pyobject);
+        ret = mobius::py::pylist_from_cpp_container (self->obj->get_streams (), pymobius_core_io_stream_to_pyobject);
     }
     catch (const std::exception &e)
     {
@@ -1117,53 +1043,33 @@ tp_f_get_streams (core_io_file_o *self, PyObject *)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "exists", (PyCFunction) tp_f_exists, METH_VARARGS,
-     "Check if file exists"},
-    {(char *) "is_deleted", (PyCFunction) tp_f_is_deleted, METH_VARARGS,
-     "Check if file is deleted"},
-    {(char *) "is_reallocated", (PyCFunction) tp_f_is_reallocated, METH_VARARGS,
-     "Check if file is reallocated"},
-    {(char *) "is_hidden", (PyCFunction) tp_f_is_hidden, METH_VARARGS,
-     "Check if file is hidden"},
-    {(char *) "is_block_device", (PyCFunction) tp_f_is_block_device,
-     METH_VARARGS, "Check if file is block device"},
-    {(char *) "is_char_device", (PyCFunction) tp_f_is_char_device, METH_VARARGS,
-     "Check if file is char device"},
-    {(char *) "is_fifo", (PyCFunction) tp_f_is_fifo, METH_VARARGS,
-     "Check if file is FIFO"},
-    {(char *) "is_symlink", (PyCFunction) tp_f_is_symlink, METH_VARARGS,
-     "Check if file is symbolic link"},
-    {(char *) "is_regular_file", (PyCFunction) tp_f_is_regular_file,
-     METH_VARARGS, "Check if file is regular"},
-    {(char *) "is_socket", (PyCFunction) tp_f_is_socket, METH_VARARGS,
-     "Check if file is socket"},
-    {(char *) "is_folder", (PyCFunction) tp_f_is_folder, METH_VARARGS,
-     "Check if entry is a folder"},
-    {(char *) "is_file", (PyCFunction) tp_f_is_file, METH_VARARGS,
-     "Check if entry is a file"},
-    {(char *) "get_extension", (PyCFunction) tp_f_get_extension, METH_VARARGS,
-     "Get file extension"},
-    {(char *) "get_parent", (PyCFunction) tp_f_get_parent, METH_VARARGS,
-     "Get parent folder"},
-    {(char *) "new_sibling_by_name", (PyCFunction) tp_f_new_sibling_by_name,
-     METH_VARARGS, "Get sibling file by name"},
+    {(char *) "exists", (PyCFunction) tp_f_exists, METH_VARARGS, "Check if file exists"},
+    {(char *) "is_deleted", (PyCFunction) tp_f_is_deleted, METH_VARARGS, "Check if file is deleted"},
+    {(char *) "is_reallocated", (PyCFunction) tp_f_is_reallocated, METH_VARARGS, "Check if file is reallocated"},
+    {(char *) "is_hidden", (PyCFunction) tp_f_is_hidden, METH_VARARGS, "Check if file is hidden"},
+    {(char *) "is_block_device", (PyCFunction) tp_f_is_block_device, METH_VARARGS, "Check if file is block device"},
+    {(char *) "is_char_device", (PyCFunction) tp_f_is_char_device, METH_VARARGS, "Check if file is char device"},
+    {(char *) "is_fifo", (PyCFunction) tp_f_is_fifo, METH_VARARGS, "Check if file is FIFO"},
+    {(char *) "is_symlink", (PyCFunction) tp_f_is_symlink, METH_VARARGS, "Check if file is symbolic link"},
+    {(char *) "is_regular_file", (PyCFunction) tp_f_is_regular_file, METH_VARARGS, "Check if file is regular"},
+    {(char *) "is_socket", (PyCFunction) tp_f_is_socket, METH_VARARGS, "Check if file is socket"},
+    {(char *) "is_folder", (PyCFunction) tp_f_is_folder, METH_VARARGS, "Check if entry is a folder"},
+    {(char *) "is_file", (PyCFunction) tp_f_is_file, METH_VARARGS, "Check if entry is a file"},
+    {(char *) "get_extension", (PyCFunction) tp_f_get_extension, METH_VARARGS, "Get file extension"},
+    {(char *) "get_parent", (PyCFunction) tp_f_get_parent, METH_VARARGS, "Get parent folder"},
+    {(char *) "new_sibling_by_name", (PyCFunction) tp_f_new_sibling_by_name, METH_VARARGS, "Get sibling file by name"},
     {(char *) "new_sibling_by_extension",
-     (PyCFunction) tp_f_new_sibling_by_extension, METH_VARARGS,
+     (PyCFunction) tp_f_new_sibling_by_extension,
+     METH_VARARGS,
      "Get sibling file by extension"},
-    {(char *) "reload", (PyCFunction) tp_f_reload, METH_VARARGS,
-     "Reload file info"},
-    {(char *) "copy", (PyCFunction) tp_f_copy, METH_VARARGS,
-     "Copy file to file or folder"},
-    {(char *) "move", (PyCFunction) tp_f_move, METH_VARARGS,
-     "Move file to file or folder"},
+    {(char *) "reload", (PyCFunction) tp_f_reload, METH_VARARGS, "Reload file info"},
+    {(char *) "copy", (PyCFunction) tp_f_copy, METH_VARARGS, "Copy file to file or folder"},
+    {(char *) "move", (PyCFunction) tp_f_move, METH_VARARGS, "Move file to file or folder"},
     {(char *) "remove", (PyCFunction) tp_f_remove, METH_VARARGS, "Remove file"},
     {(char *) "rename", (PyCFunction) tp_f_rename, METH_VARARGS, "Rename file"},
-    {(char *) "new_reader", (PyCFunction) tp_f_new_reader, METH_VARARGS,
-     "Create new reader"},
-    {(char *) "new_writer", (PyCFunction) tp_f_new_writer, METH_VARARGS,
-     "Create new writer"},
-    {(char *) "get_streams", (PyCFunction) tp_f_get_streams, METH_VARARGS,
-     "Get streams"},
+    {(char *) "new_reader", (PyCFunction) tp_f_new_reader, METH_VARARGS, "Create new reader"},
+    {(char *) "new_writer", (PyCFunction) tp_f_new_writer, METH_VARARGS, "Create new writer"},
+    {(char *) "get_streams", (PyCFunction) tp_f_get_streams, METH_VARARGS, "Get streams"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };
 
@@ -1177,56 +1083,156 @@ tp_dealloc (core_io_file_o *self)
     Py_TYPE (self)->tp_free ((PyObject *) self);
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief type structure
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyTypeObject core_io_file_t = {
-    PyVarObject_HEAD_INIT (nullptr, 0)        // header
-    "mobius.core.io.file",                    // tp_name
-    sizeof (core_io_file_o),                  // tp_basicsize
-    0,                                        // tp_itemsize
-    (destructor) tp_dealloc,                  // tp_dealloc
-    0,                                        // tp_print
-    0,                                        // tp_getattr
-    0,                                        // tp_setattr
-    0,                                        // tp_compare
-    0,                                        // tp_repr
-    0,                                        // tp_as_number
-    0,                                        // tp_as_sequence
-    0,                                        // tp_as_mapping
-    0,                                        // tp_hash
-    0,                                        // tp_call
-    0,                                        // tp_str
-    0,                                        // tp_getattro
-    0,                                        // tp_setattro
-    0,                                        // tp_as_buffer
-    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, // tp_flags
-    "file class with support for URL's",      // tp_doc
-    0,                                        // tp_traverse
-    0,                                        // tp_clear
-    0,                                        // tp_richcompare
-    0,                                        // tp_weaklistoffset
-    0,                                        // tp_iter
-    0,                                        // tp_iternext
-    tp_methods,                               // tp_methods
-    0,                                        // tp_members
-    tp_getset,                                // tp_getset
-    0,                                        // tp_base
-    0,                                        // tp_dict
-    0,                                        // tp_descr_get
-    0,                                        // tp_descr_set
-    0,                                        // tp_dictoffset
-    0,                                        // tp_init
-    0,                                        // tp_alloc
-    0,                                        // tp_new
-    0,                                        // tp_free
-    0,                                        // tp_is_gc
-    0,                                        // tp_bases
-    0,                                        // tp_mro
-    0,                                        // tp_cache
-    0,                                        // tp_subclasses
-    0,                                        // tp_weaklist
-    0,                                        // tp_del
-    0,                                        // tp_version_tag
-    0,                                        // tp_finalize
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type Slots
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Slot core_io_file_slots[] = {
+    {Py_tp_dealloc, reinterpret_cast<void *> (tp_dealloc)},
+    {Py_tp_doc, const_cast<char *> ("core.io.file class")},
+    {Py_tp_getset, reinterpret_cast<void *> (tp_getset)},
+    {Py_tp_methods, reinterpret_cast<void *> (tp_methods)},
+    {0, nullptr} // Sentinel
 };
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type specification
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Spec core_io_file_spec = {
+    .name = "mobius.core.io.file",
+    .basicsize = sizeof (core_io_file_o),
+    .itemsize = 0,
+    .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+    .slots = core_io_file_slots,
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>mobius.core.io.file</i> type
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject
+new_core_io_file_type ()
+{
+    // If type is already created, return it
+    if (core_io_file_type)
+        return mobius::py::pytypeobject (core_io_file_type);
+
+    // Allocate type from spec
+    core_io_file_type = reinterpret_cast<PyTypeObject *> (PyType_FromSpec (&core_io_file_spec));
+
+    // Create type
+    mobius::py::pytypeobject type (core_io_file_type);
+    type.create ();
+
+    return type;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if value is an instance of <i>core.io.file</i>
+// @param value Python value
+// @return true/false
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+pymobius_core_io_file_check (PyObject *value)
+{
+    if (!core_io_file_type)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("core.io.file type is not initialized"));
+
+    return mobius::py::isinstance (value, core_io_file_type);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>core.io.file</i> Python object from C++ object
+// @param obj C++ object
+// @return New core.io.file object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+pymobius_core_io_file_to_pyobject (const mobius::core::io::file &obj)
+{
+    if (!core_io_file_type)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("core.io.file type is not initialized"));
+
+    return mobius::py::to_pyobject<core_io_file_o> (obj, core_io_file_type);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>core.io.file</i> C++ object from Python object
+// @param value Python value
+// @return core.io.file object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::io::file
+pymobius_core_io_file_from_pyobject (PyObject *value)
+{
+    if (!core_io_file_type)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("core.io.file type is not initialized"));
+
+    return mobius::py::from_pyobject<core_io_file_o> (value, core_io_file_type);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Function new_file_by_path
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_new_file_by_path (PyObject *, PyObject *args)
+{
+    // parse arguments
+    std::string arg_path;
+
+    try
+    {
+        arg_path = mobius::py::get_arg_as_std_string (args, 0);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
+    }
+
+    // execute C++ code
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = pymobius_core_io_file_to_pyobject (
+            mobius::core::io::new_file_by_path (arg_path));
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Function new_file_by_url
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_new_file_by_url (PyObject *, PyObject *args)
+{
+    // parse arguments
+    std::string arg_url;
+
+    try
+    {
+        arg_url = mobius::py::get_arg_as_std_string (args, 0);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
+    }
+
+    // execute C++ code
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = pymobius_core_io_file_to_pyobject (
+            mobius::core::io::new_file_by_url (arg_url));
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    return ret;
+}

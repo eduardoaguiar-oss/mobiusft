@@ -18,24 +18,27 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <Python.h>
 #include <mobius/core/io/file.hpp>
+#include <Python.h>
+#include <pytypeobject.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
     PyObject_HEAD mobius::core::io::file *obj;
 } core_io_file_o;
 
-extern PyTypeObject core_io_file_t;
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject new_core_io_file_type ();
 bool pymobius_core_io_file_check (PyObject *);
-PyObject *pymobius_core_io_file_to_pyobject (mobius::core::io::file);
+PyObject *pymobius_core_io_file_to_pyobject (const mobius::core::io::file &);
 mobius::core::io::file pymobius_core_io_file_from_pyobject (PyObject *);
+
+PyObject *func_new_file_by_path (PyObject *, PyObject *);
+PyObject *func_new_file_by_url (PyObject *, PyObject *);
 
 #endif
