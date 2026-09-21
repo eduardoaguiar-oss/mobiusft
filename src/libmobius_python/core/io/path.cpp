@@ -26,47 +26,12 @@
 #include <pymobius.hpp>
 #include <stdexcept>
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Check if object type is <i>path</i>
-// @param pyobj Python object
-// @return true/false
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-bool
-pymobius_core_io_path_check (PyObject *pyobj)
+namespace
 {
-    return PyObject_IsInstance (pyobj, (PyObject *) &core_io_path_t);
-}
+// @brief Global pointer to hold the heap-allocated type
+static PyTypeObject *core_io_path_type = nullptr;
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>path</i> Python object from C++ object
-// @param obj C++ object
-// @return new path object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-pymobius_core_io_path_to_pyobject (mobius::core::io::path obj)
-{
-    PyObject *ret = _PyObject_New (&core_io_path_t);
-
-    if (ret)
-        ((core_io_path_o *) ret)->obj = new mobius::core::io::path (obj);
-
-    return ret;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>path</i> C++ object from Python object
-// @param pyobj Python object
-// @return path object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::core::io::path
-pymobius_core_io_path_from_pyobject (PyObject *pyobj)
-{
-    if (!PyObject_IsInstance (pyobj, (PyObject *) &core_io_path_t))
-        throw std::invalid_argument (
-            MOBIUS_EXCEPTION_MSG ("object type must be mobius.core.io.path"));
-
-    return *(reinterpret_cast<core_io_path_o *> (pyobj)->obj);
-}
+} // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>get_value</i> method implementation
@@ -525,56 +490,229 @@ tp_dealloc (core_io_path_o *self)
     Py_TYPE (self)->tp_free ((PyObject *) self);
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Type structure
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyTypeObject core_io_path_t = {
-    PyVarObject_HEAD_INIT (nullptr, 0)        // header
-    "mobius.core.io.path",                    // tp_name
-    sizeof (core_io_path_o),                  // tp_basicsize
-    0,                                        // tp_itemsize
-    (destructor) tp_dealloc,                  // tp_dealloc
-    0,                                        // tp_print
-    0,                                        // tp_getattr
-    0,                                        // tp_setattr
-    0,                                        // tp_compare
-    0,                                        // tp_repr
-    0,                                        // tp_as_number
-    0,                                        // tp_as_sequence
-    0,                                        // tp_as_mapping
-    0,                                        // tp_hash
-    0,                                        // tp_call
-    0,                                        // tp_str
-    0,                                        // tp_getattro
-    0,                                        // tp_setattro
-    0,                                        // tp_as_buffer
-    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, // tp_flags
-    "path class",                             // tp_doc
-    0,                                        // tp_traverse
-    0,                                        // tp_clear
-    0,                                        // tp_richcompare
-    0,                                        // tp_weaklistoffset
-    0,                                        // tp_iter
-    0,                                        // tp_iternext
-    tp_methods,                               // tp_methods
-    0,                                        // tp_members
-    0,                                        // tp_getset
-    0,                                        // tp_base
-    0,                                        // tp_dict
-    0,                                        // tp_descr_get
-    0,                                        // tp_descr_set
-    0,                                        // tp_dictoffset
-    0,                                        // tp_init
-    0,                                        // tp_alloc
-    tp_new,                                   // tp_new
-    0,                                        // tp_free
-    0,                                        // tp_is_gc
-    0,                                        // tp_bases
-    0,                                        // tp_mro
-    0,                                        // tp_cache
-    0,                                        // tp_subclasses
-    0,                                        // tp_weaklist
-    0,                                        // tp_del
-    0,                                        // tp_version_tag
-    0,                                        // tp_finalize
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type Slots
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Slot core_io_path_slots[] = {
+    {Py_tp_new, reinterpret_cast<void *> (tp_new)},
+    {Py_tp_dealloc, reinterpret_cast<void *> (tp_dealloc)},
+    {Py_tp_doc, const_cast<char *> ("core.io.path class")},
+    {Py_tp_methods, reinterpret_cast<void *> (tp_methods)},
+    {0, nullptr} // Sentinel
 };
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type specification
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Spec core_io_path_spec = {
+    .name = "mobius.core.io.path",
+    .basicsize = sizeof (core_io_path_o),
+    .itemsize = 0,
+    .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+    .slots = core_io_path_slots,
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>mobius.core.io.path</i> type
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject
+new_core_io_path_type ()
+{
+    // If type is already created, return it
+    if (core_io_path_type)
+        return mobius::py::pytypeobject (core_io_path_type);
+
+    // Allocate type from spec
+    core_io_path_type = reinterpret_cast<PyTypeObject *> (
+        PyType_FromSpec (&core_io_path_spec)
+    );
+
+    // Create type
+    mobius::py::pytypeobject type (core_io_path_type);
+    type.create ();
+
+    return type;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if value is an instance of <i>core.io.path</i>
+// @param value Python value
+// @return true/false
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+pymobius_core_io_path_check (PyObject *value)
+{
+    if (!core_io_path_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("core.io.path type is not initialized")
+        );
+
+    return mobius::py::isinstance (value, core_io_path_type);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>core.io.path</i> Python object from C++ object
+// @param obj C++ object
+// @return New core.io.path object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+pymobius_core_io_path_to_pyobject (const mobius::core::io::path &obj)
+{
+    if (!core_io_path_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("core.io.path type is not initialized")
+        );
+
+    return mobius::py::to_pyobject<core_io_path_o> (
+        obj, core_io_path_type
+    );
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>core.io.path</i> C++ object from Python object
+// @param value Python value
+// @return core.io.path object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::io::path
+pymobius_core_io_path_from_pyobject (PyObject *value)
+{
+    if (!core_io_path_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("core.io.path type is not initialized")
+        );
+
+    return mobius::py::from_pyobject<core_io_path_o> (
+        value, core_io_path_type
+    );
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Function join_path
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_join_path (PyObject *, PyObject *args)
+{
+    // check arguments
+    auto size = mobius::py::get_arg_size (args);
+
+    if (size < 1)
+    {
+        mobius::py::set_value_error (
+            "join_path must have at least one argument");
+        return nullptr;
+    }
+
+    // parse arguments
+    mobius::core::io::path path;
+
+    for (std::uint32_t i = 0; i < size; i++)
+    {
+        PyObject *item = mobius::py::get_arg (args, i);
+        mobius::core::io::path segment;
+
+        if (pymobius_core_io_path_check (item))
+            segment = pymobius_core_io_path_from_pyobject (item);
+
+        else if (mobius::py::pystring_check (item))
+            segment = mobius::core::io::path (
+                mobius::py::pystring_as_std_string (item));
+
+        else
+        {
+            mobius::py::set_value_error ("Invalid path segment");
+            return nullptr;
+        }
+
+        if (i == 0)
+            path = segment;
+        else
+            path = join (path, segment);
+    }
+
+    // return path
+    return pymobius_core_io_path_to_pyobject (path);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Function new_path_from_win
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_new_path_from_win (PyObject *, PyObject *args)
+{
+    // parse input args
+    std::string arg_value;
+
+    try
+    {
+        arg_value = mobius::py::get_arg_as_std_string (args, 0);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
+    }
+
+    // execute C++ code
+    PyObject *ret = nullptr;
+
+    try
+    {
+        auto p = mobius::core::io::new_path_from_win (arg_value);
+        ret = pymobius_core_io_path_to_pyobject (p);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Function to_win_path
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_to_win_path (PyObject *, PyObject *args)
+{
+    // Get function argument (string or path object)
+    PyObject *arg = nullptr;
+
+    try
+    {
+        arg = mobius::py::get_arg (args, 0);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_value_error (e.what ());
+        return nullptr;
+    }
+
+    mobius::core::io::path path;
+
+    if (mobius::py::pystring_check (arg))
+        path =
+            mobius::core::io::path (mobius::py::pystring_as_std_string (arg));
+
+    else if (pymobius_core_io_path_check (arg))
+        path = pymobius_core_io_path_from_pyobject (arg);
+
+    else
+    {
+        mobius::py::set_invalid_type_error ("invalid argument");
+        return nullptr;
+    }
+
+    // execute C++ code
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = mobius::py::pystring_from_std_string (to_win_path (path));
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_value_error (e.what ());
+    }
+
+    return ret;
+}

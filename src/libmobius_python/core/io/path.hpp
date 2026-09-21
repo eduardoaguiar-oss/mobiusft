@@ -20,6 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
 #include <mobius/core/io/path.hpp>
+#include <pytypeobject.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -29,13 +30,16 @@ typedef struct
     PyObject_HEAD mobius::core::io::path *obj;
 } core_io_path_o;
 
-extern PyTypeObject core_io_path_t;
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject new_core_io_path_type ();
 bool pymobius_core_io_path_check (PyObject *);
-PyObject *pymobius_core_io_path_to_pyobject (mobius::core::io::path);
+PyObject *pymobius_core_io_path_to_pyobject (const mobius::core::io::path &);
 mobius::core::io::path pymobius_core_io_path_from_pyobject (PyObject *);
+
+PyObject *func_join_path (PyObject *, PyObject *);
+PyObject *func_new_path_from_win (PyObject *, PyObject *);
+PyObject *func_to_win_path (PyObject *, PyObject *);
 
 #endif
