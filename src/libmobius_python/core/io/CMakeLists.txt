@@ -30,7 +30,6 @@ add_library(libmobius_python_core_io STATIC
     entry.cpp
     file.cpp
     folder.cpp
-    func_get_current_folder.cpp
     func_join_path.cpp
     func_new_path_from_win.cpp
     func_new_uri_from_path.cpp

@@ -26,6 +26,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *pymobius_core_io_entry_to_pyobject (const mobius::core::io::entry &);
 
+PyObject *func_get_current_folder (PyObject *, PyObject *);
 PyObject *func_new_entry_by_path (PyObject *, PyObject *);
 PyObject *func_new_entry_by_url (PyObject *, PyObject *);
 

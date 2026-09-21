@@ -40,7 +40,6 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Function prototypes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *func_get_current_folder (PyObject *, PyObject *);
 PyObject *func_io_new_slice_reader (PyObject *, PyObject *);
 PyObject *func_join_path (PyObject *, PyObject *);
 PyObject *func_new_path_from_win (PyObject *, PyObject *);
@@ -99,7 +98,7 @@ new_core_io_module ()
     // Add types
     module.add_type ("file", new_core_io_file_type ());
     module.add_type ("folder", new_core_io_folder_type ());
-    module.add_type ("line_reader", &core_io_line_reader_t);
+    module.add_type ("line_reader", new_core_io_line_reader_type ());
     module.add_type ("path", &core_io_path_t);
     module.add_type ("reader", &core_io_reader_t);
     module.add_type ("sequential_reader_adaptor", &core_io_sequential_reader_adaptor_t);

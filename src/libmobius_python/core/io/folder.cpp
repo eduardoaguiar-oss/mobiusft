@@ -1343,3 +1343,24 @@ func_new_folder_by_url (PyObject *, PyObject *args)
     return ret;
 }
 
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Function get_current_folder
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_get_current_folder (PyObject *, PyObject *)
+{
+    // execute C++ code
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = pymobius_core_io_folder_to_pyobject (
+            mobius::core::io::get_current_folder ());
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    return ret;
+}
