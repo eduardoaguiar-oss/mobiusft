@@ -18,8 +18,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <Python.h>
 #include <mobius/core/io/tempfile.hpp>
+#include <Python.h>
 #include <pytypeobject.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -31,12 +31,13 @@ typedef struct
 } core_io_tempfile_o;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// Functions
+// Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::py::pytypeobject new_io_tempfile_type ();
+mobius::py::pytypeobject new_core_io_tempfile_type ();
 bool pymobius_core_io_tempfile_check (PyObject *);
-PyObject *
-pymobius_core_io_tempfile_to_pyobject (const mobius::core::io::tempfile &);
+PyObject *pymobius_core_io_tempfile_to_pyobject (const mobius::core::io::tempfile &);
 mobius::core::io::tempfile pymobius_core_io_tempfile_from_pyobject (PyObject *);
+
+PyObject *func_set_tempdir_path (PyObject *, PyObject *);
 
 #endif

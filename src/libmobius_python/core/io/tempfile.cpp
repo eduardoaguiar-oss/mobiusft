@@ -21,11 +21,18 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "tempfile.hpp"
-#include "core/io/reader.hpp"
-#include "core/io/writer.hpp"
 #include <mobius/core/exception.inc>
 #include <pymobius.hpp>
 #include <stdexcept>
+#include "core/io/reader.hpp"
+#include "core/io/writer.hpp"
+
+namespace
+{
+// @brief Global pointer to hold the heap-allocated type
+static PyTypeObject *core_io_tempfile_type = nullptr;
+
+} // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>path</i> Attribute getter
@@ -75,10 +82,8 @@ tp_getter_size (core_io_tempfile_o *self, void *)
 // @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "path", (getter) tp_getter_path, nullptr,
-     (char *) "Tempfile path", nullptr},
-    {(char *) "size", (getter) tp_getter_size, nullptr,
-     (char *) "Tempfile size", nullptr},
+    {(char *) "path", (getter) tp_getter_path, nullptr, (char *) "Tempfile path", nullptr},
+    {(char *) "size", (getter) tp_getter_size, nullptr, (char *) "Tempfile size", nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr}, // sentinel
 };
 
@@ -145,8 +150,7 @@ tp_f_copy_from (core_io_tempfile_o *self, PyObject *args)
 
     try
     {
-        arg_reader = mobius::py::get_arg_as_cpp (
-            args, 0, pymobius_core_io_reader_from_pyobject);
+        arg_reader = mobius::py::get_arg_as_cpp (args, 0, pymobius_core_io_reader_from_pyobject);
     }
     catch (const std::exception &e)
     {
@@ -182,8 +186,7 @@ tp_f_copy_to (core_io_tempfile_o *self, PyObject *args)
 
     try
     {
-        arg_writer = mobius::py::get_arg_as_cpp (
-            args, 0, pymobius_core_io_writer_from_pyobject);
+        arg_writer = mobius::py::get_arg_as_cpp (args, 0, pymobius_core_io_writer_from_pyobject);
     }
     catch (const std::exception &e)
     {
@@ -210,14 +213,10 @@ tp_f_copy_to (core_io_tempfile_o *self, PyObject *args)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {"new_reader", (PyCFunction) tp_f_new_reader, METH_VARARGS,
-     "Create new reader"},
-    {"new_writer", (PyCFunction) tp_f_new_writer, METH_VARARGS,
-     "Create new writer"},
-    {"copy_from", (PyCFunction) tp_f_copy_from, METH_VARARGS,
-     "Copy content from reader"},
-    {"copy_to", (PyCFunction) tp_f_copy_to, METH_VARARGS,
-     "Copy content to writer"},
+    {"new_reader", (PyCFunction) tp_f_new_reader, METH_VARARGS, "Create new reader"},
+    {"new_writer", (PyCFunction) tp_f_new_writer, METH_VARARGS, "Create new writer"},
+    {"copy_from", (PyCFunction) tp_f_copy_from, METH_VARARGS, "Copy content from reader"},
+    {"copy_to", (PyCFunction) tp_f_copy_to, METH_VARARGS, "Copy content to writer"},
     {nullptr, nullptr, 0, nullptr}, // sentinel
 };
 
@@ -231,8 +230,7 @@ static PyMethodDef tp_methods[] = {
 static PyObject *
 tp_new (PyTypeObject *type, PyObject *, PyObject *)
 {
-    core_io_tempfile_o *ret =
-        reinterpret_cast<core_io_tempfile_o *> (type->tp_alloc (type, 0));
+    core_io_tempfile_o *ret = reinterpret_cast<core_io_tempfile_o *> (type->tp_alloc (type, 0));
 
     if (ret)
     {
@@ -262,105 +260,89 @@ tp_dealloc (core_io_tempfile_o *self)
     Py_TYPE (self)->tp_free ((PyObject *) self);
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Type structure
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyTypeObject core_io_tempfile_t = {
-    PyVarObject_HEAD_INIT (nullptr, 0)        // header
-    "mobius.core.io.tempfile",                // tp_name
-    sizeof (core_io_tempfile_o),              // tp_basicsize
-    0,                                        // tp_itemsize
-    (destructor) tp_dealloc,                  // tp_dealloc
-    0,                                        // tp_print
-    0,                                        // tp_getattr
-    0,                                        // tp_setattr
-    0,                                        // tp_compare
-    0,                                        // tp_repr
-    0,                                        // tp_as_number
-    0,                                        // tp_as_sequence
-    0,                                        // tp_as_mapping
-    0,                                        // tp_hash
-    0,                                        // tp_call
-    0,                                        // tp_str
-    0,                                        // tp_getattro
-    0,                                        // tp_setattro
-    0,                                        // tp_as_buffer
-    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, // tp_flags
-    "tempfile class",                         // tp_doc
-    0,                                        // tp_traverse
-    0,                                        // tp_clear
-    0,                                        // tp_richcompare
-    0,                                        // tp_weaklistoffset
-    0,                                        // tp_iter
-    0,                                        // tp_iternext
-    tp_methods,                               // tp_methods
-    0,                                        // tp_members
-    tp_getset,                                // tp_getset
-    0,                                        // tp_base
-    0,                                        // tp_dict
-    0,                                        // tp_descr_get
-    0,                                        // tp_descr_set
-    0,                                        // tp_dictoffset
-    0,                                        // tp_init
-    0,                                        // tp_alloc
-    tp_new,                                   // tp_new
-    0,                                        // tp_free
-    0,                                        // tp_is_gc
-    0,                                        // tp_bases
-    0,                                        // tp_mro
-    0,                                        // tp_cache
-    0,                                        // tp_subclasses
-    0,                                        // tp_weaklist
-    0,                                        // tp_del
-    0,                                        // tp_version_tag
-    0,                                        // tp_finalize
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type Slots
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Slot core_io_tempfile_slots[] = {
+    {Py_tp_new, reinterpret_cast<void *> (tp_new)},
+    {Py_tp_dealloc, reinterpret_cast<void *> (tp_dealloc)},
+    {Py_tp_doc, const_cast<char *> ("core.io.tempfile class")},
+    {Py_tp_getset, reinterpret_cast<void *> (tp_getset)},
+    {Py_tp_methods, reinterpret_cast<void *> (tp_methods)},
+    {0, nullptr} // Sentinel
 };
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type specification
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Spec core_io_tempfile_spec = {
+    .name = "mobius.core.io.tempfile",
+    .basicsize = sizeof (core_io_tempfile_o),
+    .itemsize = 0,
+    .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+    .slots = core_io_tempfile_slots,
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create <i>mobius.core.io.tempfile</i> type
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::py::pytypeobject
-new_io_tempfile_type ()
+new_core_io_tempfile_type ()
 {
-    mobius::py::pytypeobject type (&core_io_tempfile_t);
+    // If type is already created, return it
+    if (core_io_tempfile_type)
+        return mobius::py::pytypeobject (core_io_tempfile_type);
+
+    // Allocate type from spec
+    core_io_tempfile_type = reinterpret_cast<PyTypeObject *> (PyType_FromSpec (&core_io_tempfile_spec));
+
+    // Create type
+    mobius::py::pytypeobject type (core_io_tempfile_type);
     type.create ();
 
     return type;
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Check if value is an instance of <i>tempfile</i>
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if value is an instance of <i>core.io.tempfile</i>
 // @param value Python value
 // @return true/false
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_core_io_tempfile_check (PyObject *value)
 {
-    return mobius::py::isinstance (value, &core_io_tempfile_t);
+    if (!core_io_tempfile_type)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("core.io.tempfile type is not initialized"));
+
+    return mobius::py::isinstance (value, core_io_tempfile_type);
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>tempfile</i> Python object from C++ object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>core.io.tempfile</i> Python object from C++ object
 // @param obj C++ object
-// @return New tempfile object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @return New core.io.tempfile object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_core_io_tempfile_to_pyobject (const mobius::core::io::tempfile &obj)
 {
-    return mobius::py::to_pyobject<core_io_tempfile_o> (obj,
-                                                        &core_io_tempfile_t);
+    if (!core_io_tempfile_type)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("core.io.tempfile type is not initialized"));
+
+    return mobius::py::to_pyobject<core_io_tempfile_o> (obj, core_io_tempfile_type);
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>tempfile</i> C++ object from Python object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>core.io.tempfile</i> C++ object from Python object
 // @param value Python value
-// @return Tempfile object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @return core.io.tempfile object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::io::tempfile
 pymobius_core_io_tempfile_from_pyobject (PyObject *value)
 {
-    return mobius::py::from_pyobject<core_io_tempfile_o> (value,
-                                                          &core_io_tempfile_t);
+    if (!core_io_tempfile_type)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("core.io.tempfile type is not initialized"));
+
+    return mobius::py::from_pyobject<core_io_tempfile_o> (value, core_io_tempfile_type);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

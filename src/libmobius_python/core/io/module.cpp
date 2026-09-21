@@ -41,7 +41,6 @@
 // @brief Function prototypes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *func_new_uri_from_path (PyObject *, PyObject *);
-PyObject *func_set_tempdir_path (PyObject *, PyObject *);
 
 namespace
 {
@@ -99,8 +98,8 @@ new_core_io_module ()
     module.add_type ("reader", new_core_io_reader_type ());
     module.add_type ("sequential_reader_adaptor", new_core_io_sequential_reader_adaptor_type ());
     module.add_type ("stream", new_core_io_stream_type ());
-    module.add_type ("tempfile", new_io_tempfile_type ());
-    module.add_type ("text_reader", &core_io_text_reader_t);
+    module.add_type ("tempfile", new_core_io_tempfile_type ());
+    module.add_type ("text_reader", new_core_io_text_reader_type ());
     module.add_type ("text_writer", &core_io_text_writer_t);
     module.add_type ("uri", &core_io_uri_t);
     module.add_type ("walker", new_io_walker_type ());
