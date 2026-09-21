@@ -22,58 +22,17 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "sequential_reader_adaptor.hpp"
-#include "reader.hpp"
 #include <mobius/core/exception.inc>
 #include <pymobius.hpp>
 #include <stdexcept>
+#include "reader.hpp"
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Check if value is an instance of <i>sequential_reader_adaptor</i>
-// @param value Python value
-// @return true/false
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-bool
-pymobius_core_io_sequential_reader_adaptor_check (PyObject *value)
+namespace
 {
-    return PyObject_IsInstance (
-        value,
-        reinterpret_cast<PyObject *> (&core_io_sequential_reader_adaptor_t));
-}
+// @brief Global pointer to hold the heap-allocated type
+static PyTypeObject *core_io_sequential_reader_adaptor_type = nullptr;
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>sequential_reader_adaptor</i> Python object from C++ object
-// @param obj C++ object
-// @return New sequential_reader_adaptor object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-pymobius_core_io_sequential_reader_adaptor_to_pyobject (
-    const mobius::core::io::sequential_reader_adaptor &obj)
-{
-    PyObject *ret = _PyObject_New (&core_io_sequential_reader_adaptor_t);
-
-    if (ret)
-        ((core_io_sequential_reader_adaptor_o *) ret)->obj =
-            new mobius::core::io::sequential_reader_adaptor (obj);
-
-    return ret;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>sequential_reader_adaptor</i> C++ object from Python object
-// @param value Python value
-// @return Sequential_reader_adaptor object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::core::io::sequential_reader_adaptor
-pymobius_core_io_sequential_reader_adaptor_from_pyobject (PyObject *value)
-{
-    if (!pymobius_core_io_sequential_reader_adaptor_check (value))
-        throw std::invalid_argument (
-            MOBIUS_EXCEPTION_MSG ("object must be an instance of "
-                                  "mobius.core.io.sequential_reader_adaptor"));
-
-    return *(
-        reinterpret_cast<core_io_sequential_reader_adaptor_o *> (value)->obj);
-}
+} // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>block_size</i> Attribute getter
@@ -87,8 +46,7 @@ tp_getter_block_size (core_io_sequential_reader_adaptor_o *self, void *)
 
     try
     {
-        ret =
-            mobius::py::pylong_from_std_uint64_t (self->obj->get_block_size ());
+        ret = mobius::py::pylong_from_std_uint64_t (self->obj->get_block_size ());
     }
     catch (const std::exception &e)
     {
@@ -102,8 +60,11 @@ tp_getter_block_size (core_io_sequential_reader_adaptor_o *self, void *)
 // @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "block_size", (getter) tp_getter_block_size, (setter) 0,
-     (char *) "Read ahead block size in bytes", nullptr},
+    {(char *) "block_size",
+     (getter) tp_getter_block_size,
+     (setter) 0,
+     (char *) "Read ahead block size in bytes",
+     nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
 
@@ -138,8 +99,7 @@ tp_f_peek (core_io_sequential_reader_adaptor_o *self, PyObject *args)
             ret = mobius::py::pylong_from_std_uint8_t (self->obj->peek ());
 
         else
-            ret =
-                mobius::py::pybytes_from_bytearray (self->obj->peek (arg_size));
+            ret = mobius::py::pybytes_from_bytearray (self->obj->peek (arg_size));
     }
     catch (const std::exception &e)
     {
@@ -181,8 +141,7 @@ tp_f_get (core_io_sequential_reader_adaptor_o *self, PyObject *args)
             ret = mobius::py::pylong_from_std_uint8_t (self->obj->get ());
 
         else
-            ret =
-                mobius::py::pybytes_from_bytearray (self->obj->get (arg_size));
+            ret = mobius::py::pybytes_from_bytearray (self->obj->get (arg_size));
     }
     catch (const std::exception &e)
     {
@@ -283,16 +242,14 @@ tp_f_eof (core_io_sequential_reader_adaptor_o *self, PyObject *)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "peek", (PyCFunction) tp_f_peek, METH_VARARGS,
+    {(char *) "peek",
+     (PyCFunction) tp_f_peek,
+     METH_VARARGS,
      "Peek one or more bytes, without moving the reading position"},
-    {(char *) "get", (PyCFunction) tp_f_get, METH_VARARGS,
-     "Get one or more bytes"},
-    {(char *) "skip", (PyCFunction) tp_f_skip, METH_VARARGS,
-     "Skip size bytes forward"},
-    {(char *) "tell", (PyCFunction) tp_f_tell, METH_VARARGS,
-     "Get current reading position"},
-    {(char *) "eof", (PyCFunction) tp_f_eof, METH_VARARGS,
-     "Check if end-of-file (EOF) is reached"},
+    {(char *) "get", (PyCFunction) tp_f_get, METH_VARARGS, "Get one or more bytes"},
+    {(char *) "skip", (PyCFunction) tp_f_skip, METH_VARARGS, "Skip size bytes forward"},
+    {(char *) "tell", (PyCFunction) tp_f_tell, METH_VARARGS, "Get current reading position"},
+    {(char *) "eof", (PyCFunction) tp_f_eof, METH_VARARGS, "Check if end-of-file (EOF) is reached"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };
 
@@ -312,8 +269,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 
     try
     {
-        arg_reader = mobius::py::get_arg_as_cpp (
-            args, 0, pymobius_core_io_reader_from_pyobject);
+        arg_reader = mobius::py::get_arg_as_cpp (args, 0, pymobius_core_io_reader_from_pyobject);
         arg_block_size = mobius::py::get_arg_as_uint64_t (args, 1, 65536);
     }
     catch (const std::exception &e)
@@ -324,15 +280,13 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 
     // Create Python object
     core_io_sequential_reader_adaptor_o *ret =
-        reinterpret_cast<core_io_sequential_reader_adaptor_o *> (
-            type->tp_alloc (type, 0));
+        reinterpret_cast<core_io_sequential_reader_adaptor_o *> (type->tp_alloc (type, 0));
 
     if (ret)
     {
         try
         {
-            ret->obj = new mobius::core::io::sequential_reader_adaptor (
-                arg_reader, arg_block_size);
+            ret->obj = new mobius::core::io::sequential_reader_adaptor (arg_reader, arg_block_size);
         }
         catch (const std::exception &e)
         {
@@ -356,56 +310,91 @@ tp_dealloc (core_io_sequential_reader_adaptor_o *self)
     Py_TYPE (self)->tp_free ((PyObject *) self);
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Type structure
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyTypeObject core_io_sequential_reader_adaptor_t = {
-    PyVarObject_HEAD_INIT (nullptr, 0)            // header
-    "mobius.core.io.sequential_reader_adaptor",   // tp_name
-    sizeof (core_io_sequential_reader_adaptor_o), // tp_basicsize
-    0,                                            // tp_itemsize
-    (destructor) tp_dealloc,                      // tp_dealloc
-    0,                                            // tp_print
-    0,                                            // tp_getattr
-    0,                                            // tp_setattr
-    0,                                            // tp_compare
-    0,                                            // tp_repr
-    0,                                            // tp_as_number
-    0,                                            // tp_as_sequence
-    0,                                            // tp_as_mapping
-    0,                                            // tp_hash
-    0,                                            // tp_call
-    0,                                            // tp_str
-    0,                                            // tp_getattro
-    0,                                            // tp_setattro
-    0,                                            // tp_as_buffer
-    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,     // tp_flags
-    "sequential_reader_adaptor class",            // tp_doc
-    0,                                            // tp_traverse
-    0,                                            // tp_clear
-    0,                                            // tp_richcompare
-    0,                                            // tp_weaklistoffset
-    0,                                            // tp_iter
-    0,                                            // tp_iternext
-    tp_methods,                                   // tp_methods
-    0,                                            // tp_members
-    tp_getset,                                    // tp_getset
-    0,                                            // tp_base
-    0,                                            // tp_dict
-    0,                                            // tp_descr_get
-    0,                                            // tp_descr_set
-    0,                                            // tp_dictoffset
-    0,                                            // tp_init
-    0,                                            // tp_alloc
-    tp_new,                                       // tp_new
-    0,                                            // tp_free
-    0,                                            // tp_is_gc
-    0,                                            // tp_bases
-    0,                                            // tp_mro
-    0,                                            // tp_cache
-    0,                                            // tp_subclasses
-    0,                                            // tp_weaklist
-    0,                                            // tp_del
-    0,                                            // tp_version_tag
-    0,                                            // tp_finalize
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type Slots
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Slot core_io_sequential_reader_adaptor_slots[] = {
+    {Py_tp_new, reinterpret_cast<void *> (tp_new)},
+    {Py_tp_dealloc, reinterpret_cast<void *> (tp_dealloc)},
+    {Py_tp_doc, const_cast<char *> ("core.io.sequential_reader_adaptor class")},
+    {Py_tp_getset, reinterpret_cast<void *> (tp_getset)},
+    {Py_tp_methods, reinterpret_cast<void *> (tp_methods)},
+    {0, nullptr} // Sentinel
 };
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type specification
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Spec core_io_sequential_reader_adaptor_spec = {
+    .name = "mobius.core.io.sequential_reader_adaptor",
+    .basicsize = sizeof (core_io_sequential_reader_adaptor_o),
+    .itemsize = 0,
+    .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+    .slots = core_io_sequential_reader_adaptor_slots,
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>mobius.core.io.sequential_reader_adaptor</i> type
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject
+new_core_io_sequential_reader_adaptor_type ()
+{
+    // If type is already created, return it
+    if (core_io_sequential_reader_adaptor_type)
+        return mobius::py::pytypeobject (core_io_sequential_reader_adaptor_type);
+
+    // Allocate type from spec
+    core_io_sequential_reader_adaptor_type =
+        reinterpret_cast<PyTypeObject *> (PyType_FromSpec (&core_io_sequential_reader_adaptor_spec));
+
+    // Create type
+    mobius::py::pytypeobject type (core_io_sequential_reader_adaptor_type);
+    type.create ();
+
+    return type;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if value is an instance of <i>core.io.sequential_reader_adaptor</i>
+// @param value Python value
+// @return true/false
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+pymobius_core_io_sequential_reader_adaptor_check (PyObject *value)
+{
+    if (!core_io_sequential_reader_adaptor_type)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("core.io.sequential_reader_adaptor type is not initialized"));
+
+    return mobius::py::isinstance (value, core_io_sequential_reader_adaptor_type);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>core.io.sequential_reader_adaptor</i> Python object from C++ object
+// @param obj C++ object
+// @return New core.io.sequential_reader_adaptor object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+pymobius_core_io_sequential_reader_adaptor_to_pyobject (const mobius::core::io::sequential_reader_adaptor &obj)
+{
+    if (!core_io_sequential_reader_adaptor_type)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("core.io.sequential_reader_adaptor type is not initialized"));
+
+    return mobius::py::to_pyobject<core_io_sequential_reader_adaptor_o> (obj, core_io_sequential_reader_adaptor_type);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>core.io.sequential_reader_adaptor</i> C++ object from Python object
+// @param value Python value
+// @return core.io.sequential_reader_adaptor object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::io::sequential_reader_adaptor
+pymobius_core_io_sequential_reader_adaptor_from_pyobject (PyObject *value)
+{
+    if (!core_io_sequential_reader_adaptor_type)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("core.io.sequential_reader_adaptor type is not initialized"));
+
+    return mobius::py::from_pyobject<core_io_sequential_reader_adaptor_o> (
+        value,
+        core_io_sequential_reader_adaptor_type
+    );
+}

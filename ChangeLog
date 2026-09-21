@@ -42,6 +42,7 @@ Mobius Forensic Toolkit 2.30
 	* libmobius_python: Improve mobius.core.io.line_reader class using the PyType_FromSpec API
 	* libmobius_python: Improve mobius.core.io.path class using the PyType_FromSpec API
 	* libmobius_python: Improve mobius.core.io.reader class using the PyType_FromSpec API
+	* libmobius_python: Improve mobius.core.io.sequential_reader_adaptor class using the PyType_FromSpec API
 	* libmobius_python: Add new function vfs::get_imagefile_types
 	* libmobius_python: Remove legacy function vfs::get_imagefile_implementations
 	* tools: dirfs use function vfs::get_imagefile_types
