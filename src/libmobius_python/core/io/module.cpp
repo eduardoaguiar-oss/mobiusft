@@ -22,6 +22,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "module.hpp"
 #include <pymobius.hpp>
+#include "entry.hpp"
 #include "file.hpp"
 #include "folder.hpp"
 #include "line_reader.hpp"
@@ -42,8 +43,6 @@
 PyObject *func_get_current_folder (PyObject *, PyObject *);
 PyObject *func_io_new_slice_reader (PyObject *, PyObject *);
 PyObject *func_join_path (PyObject *, PyObject *);
-PyObject *func_new_entry_by_path (PyObject *, PyObject *);
-PyObject *func_new_entry_by_url (PyObject *, PyObject *);
 PyObject *func_new_path_from_win (PyObject *, PyObject *);
 PyObject *func_new_uri_from_path (PyObject *, PyObject *);
 PyObject *func_set_tempdir_path (PyObject *, PyObject *);

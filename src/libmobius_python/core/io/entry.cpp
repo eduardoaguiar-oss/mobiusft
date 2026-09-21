@@ -54,3 +54,73 @@ pymobius_core_io_entry_to_pyobject (const mobius::core::io::entry &obj)
 
     return ret;
 }
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Function new_entry_by_path
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_new_entry_by_path (PyObject *, PyObject *args)
+{
+    // parse arguments
+    std::string arg_path;
+
+    try
+    {
+        arg_path = mobius::py::get_arg_as_std_string (args, 0);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
+    }
+
+    // execute C++ code
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = pymobius_core_io_entry_to_pyobject (
+            mobius::core::io::new_entry_by_path (arg_path));
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Function new_entry_by_url
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_new_entry_by_url (PyObject *, PyObject *args)
+{
+    // parse arguments
+    std::string arg_url;
+
+    try
+    {
+        arg_url = mobius::py::get_arg_as_std_string (args, 0);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
+    }
+
+    // execute C++ code
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = pymobius_core_io_entry_to_pyobject (
+            mobius::core::io::new_entry_by_url (arg_url));
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    return ret;
+}
