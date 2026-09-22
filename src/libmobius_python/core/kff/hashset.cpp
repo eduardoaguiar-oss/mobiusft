@@ -195,7 +195,7 @@ tp_f_is_alert (core_kff_hashset_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_alert ());
+        ret = mobius::py::to_pyobject (self->obj->is_alert ());
     }
     catch (const std::exception &e)
     {

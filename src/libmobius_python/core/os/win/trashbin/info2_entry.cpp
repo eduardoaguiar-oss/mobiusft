@@ -85,7 +85,7 @@ tp_getter_is_deleted (os_win_trashbin_info2_entry_o *self, void *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_deleted ());
+        ret = mobius::py::to_pyobject (self->obj->is_deleted ());
     }
     catch (const std::exception &e)
     {

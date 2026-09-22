@@ -50,7 +50,7 @@ tp_f_eof (core_decoder_qdatastream_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (!bool (*self->obj));
+        ret = mobius::py::to_pyobject (!bool (*self->obj));
     }
     catch (const std::exception &e)
     {

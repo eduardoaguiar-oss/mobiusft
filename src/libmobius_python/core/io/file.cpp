@@ -453,7 +453,7 @@ tp_f_exists (core_io_file_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->exists ());
+        ret = mobius::py::to_pyobject (self->obj->exists ());
     }
     catch (const std::exception &e)
     {
@@ -473,7 +473,7 @@ tp_f_is_deleted (core_io_file_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_deleted ());
+        ret = mobius::py::to_pyobject (self->obj->is_deleted ());
     }
     catch (const std::exception &e)
     {
@@ -493,7 +493,7 @@ tp_f_is_reallocated (core_io_file_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_reallocated ());
+        ret = mobius::py::to_pyobject (self->obj->is_reallocated ());
     }
     catch (const std::exception &e)
     {
@@ -513,7 +513,7 @@ tp_f_is_hidden (core_io_file_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_hidden ());
+        ret = mobius::py::to_pyobject (self->obj->is_hidden ());
     }
     catch (const std::exception &e)
     {
@@ -533,7 +533,7 @@ tp_f_is_block_device (core_io_file_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_block_device ());
+        ret = mobius::py::to_pyobject (self->obj->is_block_device ());
     }
     catch (const std::exception &e)
     {
@@ -553,7 +553,7 @@ tp_f_is_char_device (core_io_file_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_char_device ());
+        ret = mobius::py::to_pyobject (self->obj->is_char_device ());
     }
     catch (const std::exception &e)
     {
@@ -573,7 +573,7 @@ tp_f_is_fifo (core_io_file_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_fifo ());
+        ret = mobius::py::to_pyobject (self->obj->is_fifo ());
     }
     catch (const std::exception &e)
     {
@@ -593,7 +593,7 @@ tp_f_is_symlink (core_io_file_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_symlink ());
+        ret = mobius::py::to_pyobject (self->obj->is_symlink ());
     }
     catch (const std::exception &e)
     {
@@ -613,7 +613,7 @@ tp_f_is_regular_file (core_io_file_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_regular_file ());
+        ret = mobius::py::to_pyobject (self->obj->is_regular_file ());
     }
     catch (const std::exception &e)
     {
@@ -633,7 +633,7 @@ tp_f_is_socket (core_io_file_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_socket ());
+        ret = mobius::py::to_pyobject (self->obj->is_socket ());
     }
     catch (const std::exception &e)
     {
@@ -653,7 +653,7 @@ tp_f_is_folder (core_io_file_o *, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (false);
+        ret = mobius::py::to_pyobject (false);
     }
     catch (const std::exception &e)
     {
@@ -673,7 +673,7 @@ tp_f_is_file (core_io_file_o *, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (true);
+        ret = mobius::py::to_pyobject (true);
     }
     catch (const std::exception &e)
     {

@@ -41,7 +41,7 @@ tp_getter_is_initialized (core_system_device_o *self, void *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_initialized ());
+        ret = mobius::py::to_pyobject (self->obj->is_initialized ());
     }
     catch (const std::exception &e)
     {

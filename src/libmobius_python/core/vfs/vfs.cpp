@@ -125,7 +125,7 @@ tp_f_is_available (core_vfs_vfs_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (mobius::py::GIL () (self->obj->is_available ()));
+        ret = mobius::py::to_pyobject (mobius::py::GIL () (self->obj->is_available ()));
     }
     catch (const std::exception &e)
     {

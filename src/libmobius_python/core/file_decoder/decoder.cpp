@@ -53,7 +53,7 @@ tp_f_is_instance (core_file_decoder_decoder_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_instance ());
+        ret = mobius::py::to_pyobject (self->obj->is_instance ());
     }
     catch (const std::exception &e)
     {

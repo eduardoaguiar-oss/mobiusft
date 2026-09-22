@@ -44,7 +44,7 @@ tp_getter_is_seekable (core_io_reader_o *self, void *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_seekable ());
+        ret = mobius::py::to_pyobject (self->obj->is_seekable ());
     }
     catch (const std::exception &e)
     {
@@ -64,7 +64,7 @@ tp_getter_is_rewindable (core_io_reader_o *self, void *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_rewindable ());
+        ret = mobius::py::to_pyobject (self->obj->is_rewindable ());
     }
     catch (const std::exception &e)
     {

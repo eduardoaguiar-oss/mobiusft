@@ -227,7 +227,7 @@ tp_f_is_valid (core_decoder_tdf_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_valid ());
+        ret = mobius::py::to_pyobject (self->obj->is_valid ());
     }
     catch (const std::exception &e)
     {

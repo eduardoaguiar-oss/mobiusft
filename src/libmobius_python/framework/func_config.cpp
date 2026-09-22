@@ -49,7 +49,7 @@ func_framework_has_config (PyObject *, PyObject *args)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (
+        ret = mobius::py::to_pyobject (
             mobius::framework::has_config (arg_name));
     }
     catch (const std::exception &e)

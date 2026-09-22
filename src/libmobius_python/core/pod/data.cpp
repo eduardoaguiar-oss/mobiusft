@@ -186,7 +186,7 @@ tp_f_is_null (core_pod_data_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_null ());
+        ret = mobius::py::to_pyobject (self->obj->is_null ());
     }
     catch (const std::exception &e)
     {
@@ -211,7 +211,7 @@ tp_f_is_bool (core_pod_data_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_bool ());
+        ret = mobius::py::to_pyobject (self->obj->is_bool ());
     }
     catch (const std::exception &e)
     {
@@ -236,7 +236,7 @@ tp_f_is_integer (core_pod_data_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_integer ());
+        ret = mobius::py::to_pyobject (self->obj->is_integer ());
     }
     catch (const std::exception &e)
     {
@@ -261,7 +261,7 @@ tp_f_is_float (core_pod_data_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_float ());
+        ret = mobius::py::to_pyobject (self->obj->is_float ());
     }
     catch (const std::exception &e)
     {
@@ -286,7 +286,7 @@ tp_f_is_datetime (core_pod_data_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_datetime ());
+        ret = mobius::py::to_pyobject (self->obj->is_datetime ());
     }
     catch (const std::exception &e)
     {
@@ -311,7 +311,7 @@ tp_f_is_string (core_pod_data_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_string ());
+        ret = mobius::py::to_pyobject (self->obj->is_string ());
     }
     catch (const std::exception &e)
     {
@@ -336,7 +336,7 @@ tp_f_is_bytearray (core_pod_data_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_bytearray ());
+        ret = mobius::py::to_pyobject (self->obj->is_bytearray ());
     }
     catch (const std::exception &e)
     {
@@ -361,7 +361,7 @@ tp_f_is_list (core_pod_data_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_list ());
+        ret = mobius::py::to_pyobject (self->obj->is_list ());
     }
     catch (const std::exception &e)
     {
@@ -386,7 +386,7 @@ tp_f_is_map (core_pod_data_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_map ());
+        ret = mobius::py::to_pyobject (self->obj->is_map ());
     }
     catch (const std::exception &e)
     {
@@ -525,7 +525,7 @@ to_pyobject (const mobius::core::pod::data &value)
         ret = mobius::py::pynone ();
 
     else if (value.is_bool ())
-        ret = mobius::py::pybool_from_bool (bool (value));
+        ret = mobius::py::to_pyobject (bool (value));
 
     else if (value.is_integer ())
         ret = mobius::py::pylong_from_std_int64_t (value.to_integer ());

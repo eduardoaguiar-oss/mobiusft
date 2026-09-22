@@ -170,7 +170,7 @@ tp_f_has_group (core_decoder_inifile_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->has_group (arg_group));
+        ret = mobius::py::to_pyobject (self->obj->has_group (arg_group));
     }
     catch (const std::exception &e)
     {
@@ -210,7 +210,7 @@ tp_f_has_value (core_decoder_inifile_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->has_value (arg_group, arg_name));
+        ret = mobius::py::to_pyobject (self->obj->has_value (arg_group, arg_name));
     }
     catch (const std::exception &e)
     {

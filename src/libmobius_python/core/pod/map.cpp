@@ -100,7 +100,7 @@ tp_f_get_size (core_pod_map_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->get_size ());
+        ret = mobius::py::to_pyobject (self->obj->get_size ());
     }
     catch (const std::exception &e)
     {
@@ -138,7 +138,7 @@ tp_f_contains (core_pod_map_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->contains (arg_key));
+        ret = mobius::py::to_pyobject (self->obj->contains (arg_key));
     }
     catch (const std::exception &e)
     {

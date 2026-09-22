@@ -497,7 +497,7 @@ tp_f_exists (core_io_folder_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (
+        ret = mobius::py::to_pyobject (
             mobius::py::GIL () (self->obj->exists ())
         );
     }
@@ -519,7 +519,7 @@ tp_f_is_deleted (core_io_folder_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_deleted ());
+        ret = mobius::py::to_pyobject (self->obj->is_deleted ());
     }
     catch (const std::exception &e)
     {
@@ -539,7 +539,7 @@ tp_f_is_reallocated (core_io_folder_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_reallocated ());
+        ret = mobius::py::to_pyobject (self->obj->is_reallocated ());
     }
     catch (const std::exception &e)
     {
@@ -559,7 +559,7 @@ tp_f_is_hidden (core_io_folder_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_hidden ());
+        ret = mobius::py::to_pyobject (self->obj->is_hidden ());
     }
     catch (const std::exception &e)
     {
@@ -579,7 +579,7 @@ tp_f_is_browseable (core_io_folder_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_browseable ());
+        ret = mobius::py::to_pyobject (self->obj->is_browseable ());
     }
     catch (const std::exception &e)
     {
@@ -599,7 +599,7 @@ tp_f_is_folder (core_io_folder_o *, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (true);
+        ret = mobius::py::to_pyobject (true);
     }
     catch (const std::exception &e)
     {
@@ -619,7 +619,7 @@ tp_f_is_file (core_io_folder_o *, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (false);
+        ret = mobius::py::to_pyobject (false);
     }
     catch (const std::exception &e)
     {

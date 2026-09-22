@@ -527,7 +527,7 @@ tp_f_test_key (core_os_win_dpapi_blob_o *self, PyObject *args)
     {
         auto rc =
             mobius::py::GIL () (self->obj->test_key (arg_key, arg_entropy));
-        ret = mobius::py::pybool_from_bool (rc);
+        ret = mobius::py::to_pyobject (rc);
     }
     catch (const std::exception &e)
     {
@@ -570,7 +570,7 @@ tp_f_decrypt (core_os_win_dpapi_blob_o *self, PyObject *args)
     {
         auto rc =
             mobius::py::GIL () (self->obj->decrypt (arg_key, arg_entropy));
-        ret = mobius::py::pybool_from_bool (rc);
+        ret = mobius::py::to_pyobject (rc);
     }
     catch (const std::exception &e)
     {
@@ -594,7 +594,7 @@ tp_f_is_decrypted (core_os_win_dpapi_blob_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_decrypted ());
+        ret = mobius::py::to_pyobject (self->obj->is_decrypted ());
     }
     catch (const std::exception &e)
     {

@@ -610,7 +610,7 @@ tp_f_is_empty (core_io_uri_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_empty ());
+        ret = mobius::py::to_pyobject (self->obj->is_empty ());
     }
     catch (const std::exception &e)
     {
@@ -635,7 +635,7 @@ tp_f_is_relative (core_io_uri_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_relative ());
+        ret = mobius::py::to_pyobject (self->obj->is_relative ());
     }
     catch (const std::exception &e)
     {
@@ -660,7 +660,7 @@ tp_f_is_absolute (core_io_uri_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_absolute ());
+        ret = mobius::py::to_pyobject (self->obj->is_absolute ());
     }
     catch (const std::exception &e)
     {

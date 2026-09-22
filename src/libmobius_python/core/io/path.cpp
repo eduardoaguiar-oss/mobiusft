@@ -349,7 +349,7 @@ tp_f_is_absolute (core_io_path_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_absolute ());
+        ret = mobius::py::to_pyobject (self->obj->is_absolute ());
     }
     catch (const std::exception &e)
     {
@@ -387,7 +387,7 @@ tp_f_filename_match (core_io_path_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->filename_match (arg_pattern));
+        ret = mobius::py::to_pyobject (self->obj->filename_match (arg_pattern));
     }
     catch (const std::exception &e)
     {

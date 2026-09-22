@@ -227,7 +227,7 @@ tp_f_eof (core_io_sequential_reader_adaptor_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->eof ());
+        ret = mobius::py::to_pyobject (self->obj->eof ());
     }
     catch (const std::exception &e)
     {

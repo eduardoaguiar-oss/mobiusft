@@ -136,7 +136,7 @@ tp_f_has_property (core_decoder_xml_element_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->has_property (arg_name));
+        ret = mobius::py::to_pyobject (self->obj->has_property (arg_name));
     }
     catch (const std::exception &e)
     {

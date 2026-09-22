@@ -100,7 +100,7 @@ tp_f_is_available (core_datasource_datasource_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_available ());
+        ret = mobius::py::to_pyobject (self->obj->is_available ());
     }
     catch (const std::exception &e)
     {

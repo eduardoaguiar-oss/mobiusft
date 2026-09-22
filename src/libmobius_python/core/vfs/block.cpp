@@ -318,7 +318,7 @@ tp_f_has_attribute (core_vfs_block_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->has_attribute (arg_name));
+        ret = mobius::py::to_pyobject (self->obj->has_attribute (arg_name));
     }
     catch (const std::exception &e)
     {
@@ -444,7 +444,7 @@ tp_f_is_handled (core_vfs_block_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_handled ());
+        ret = mobius::py::to_pyobject (self->obj->is_handled ());
     }
     catch (const std::exception &e)
     {
@@ -505,7 +505,7 @@ tp_f_is_complete (core_vfs_block_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_complete ());
+        ret = mobius::py::to_pyobject (self->obj->is_complete ());
     }
     catch (const std::exception &e)
     {
@@ -566,7 +566,7 @@ tp_f_is_available (core_vfs_block_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_available ());
+        ret = mobius::py::to_pyobject (self->obj->is_available ());
     }
     catch (const std::exception &e)
     {

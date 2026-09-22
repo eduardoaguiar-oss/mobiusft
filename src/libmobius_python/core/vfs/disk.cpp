@@ -125,7 +125,7 @@ tp_f_is_available (core_vfs_disk_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_available ());
+        ret = mobius::py::to_pyobject (self->obj->is_available ());
     }
     catch (const std::exception &e)
     {
@@ -163,7 +163,7 @@ tp_f_has_attribute (core_vfs_disk_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->has_attribute (arg_id));
+        ret = mobius::py::to_pyobject (self->obj->has_attribute (arg_id));
     }
     catch (const std::exception &e)
     {

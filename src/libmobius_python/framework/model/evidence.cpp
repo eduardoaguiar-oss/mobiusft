@@ -169,7 +169,7 @@ tp_f_has_attribute (framework_model_evidence_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->has_attribute (arg_id));
+        ret = mobius::py::to_pyobject (self->obj->has_attribute (arg_id));
     }
     catch (const std::exception &e)
     {
@@ -390,7 +390,7 @@ tp_f_has_tag (framework_model_evidence_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->has_tag (arg_name));
+        ret = mobius::py::to_pyobject (self->obj->has_tag (arg_name));
     }
     catch (const std::exception &e)
     {

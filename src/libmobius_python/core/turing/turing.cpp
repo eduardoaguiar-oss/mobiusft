@@ -83,7 +83,7 @@ tp_f_has_hash (core_turing_turing_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (
+        ret = mobius::py::to_pyobject (
             self->obj->has_hash (arg_type, arg_value));
     }
     catch (const std::exception &e)

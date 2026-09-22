@@ -47,7 +47,7 @@ tp_f_is_stream (core_crypt_cipher_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_stream ());
+        ret = mobius::py::to_pyobject (self->obj->is_stream ());
     }
     catch (const std::exception &e)
     {
@@ -72,7 +72,7 @@ tp_f_is_block (core_crypt_cipher_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_block ());
+        ret = mobius::py::to_pyobject (self->obj->is_block ());
     }
     catch (const std::exception &e)
     {
@@ -320,7 +320,7 @@ tp_f_check_tag (core_crypt_cipher_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->check_tag (arg_tag));
+        ret = mobius::py::to_pyobject (self->obj->check_tag (arg_tag));
     }
     catch (const std::exception &e)
     {

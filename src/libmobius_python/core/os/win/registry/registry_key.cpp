@@ -686,7 +686,7 @@ tp_f_has_subkeys (core_os_win_registry_registry_key_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->has_subkeys ());
+        ret = mobius::py::to_pyobject (self->obj->has_subkeys ());
     }
     catch (const std::exception &e)
     {

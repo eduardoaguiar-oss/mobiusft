@@ -768,7 +768,7 @@ tp_f_is_target_readonly (core_decoder_lnk_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_target_readonly ());
+        ret = mobius::py::to_pyobject (self->obj->is_target_readonly ());
     }
     catch (const std::exception &e)
     {
@@ -793,7 +793,7 @@ tp_f_is_target_hidden (core_decoder_lnk_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_target_hidden ());
+        ret = mobius::py::to_pyobject (self->obj->is_target_hidden ());
     }
     catch (const std::exception &e)
     {
@@ -818,7 +818,7 @@ tp_f_is_target_system (core_decoder_lnk_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_target_system ());
+        ret = mobius::py::to_pyobject (self->obj->is_target_system ());
     }
     catch (const std::exception &e)
     {
@@ -843,7 +843,7 @@ tp_f_is_target_directory (core_decoder_lnk_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_target_directory ());
+        ret = mobius::py::to_pyobject (self->obj->is_target_directory ());
     }
     catch (const std::exception &e)
     {
@@ -868,7 +868,7 @@ tp_f_is_target_archive (core_decoder_lnk_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_target_archive ());
+        ret = mobius::py::to_pyobject (self->obj->is_target_archive ());
     }
     catch (const std::exception &e)
     {
@@ -893,7 +893,7 @@ tp_f_is_target_temporary (core_decoder_lnk_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_target_temporary ());
+        ret = mobius::py::to_pyobject (self->obj->is_target_temporary ());
     }
     catch (const std::exception &e)
     {
@@ -918,7 +918,7 @@ tp_f_is_target_sparse (core_decoder_lnk_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_target_sparse ());
+        ret = mobius::py::to_pyobject (self->obj->is_target_sparse ());
     }
     catch (const std::exception &e)
     {
@@ -943,7 +943,7 @@ tp_f_is_target_reparse_point (core_decoder_lnk_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (
+        ret = mobius::py::to_pyobject (
             self->obj->is_target_reparse_point ()
         );
     }
@@ -970,7 +970,7 @@ tp_f_is_target_compressed (core_decoder_lnk_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_target_compressed ());
+        ret = mobius::py::to_pyobject (self->obj->is_target_compressed ());
     }
     catch (const std::exception &e)
     {
@@ -995,7 +995,7 @@ tp_f_is_target_offline (core_decoder_lnk_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_target_offline ());
+        ret = mobius::py::to_pyobject (self->obj->is_target_offline ());
     }
     catch (const std::exception &e)
     {
@@ -1020,7 +1020,7 @@ tp_f_is_target_content_indexed (core_decoder_lnk_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (
+        ret = mobius::py::to_pyobject (
             self->obj->is_target_content_indexed ()
         );
     }
@@ -1047,7 +1047,7 @@ tp_f_is_target_encrypted (core_decoder_lnk_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_target_encrypted ());
+        ret = mobius::py::to_pyobject (self->obj->is_target_encrypted ());
     }
     catch (const std::exception &e)
     {
@@ -1072,7 +1072,7 @@ tp_f_is_run_in_separate_process (core_decoder_lnk_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (
+        ret = mobius::py::to_pyobject (
             self->obj->is_run_in_separate_process ()
         );
     }
@@ -1099,7 +1099,7 @@ tp_f_is_run_as_user (core_decoder_lnk_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_run_as_user ());
+        ret = mobius::py::to_pyobject (self->obj->is_run_as_user ());
     }
     catch (const std::exception &e)
     {

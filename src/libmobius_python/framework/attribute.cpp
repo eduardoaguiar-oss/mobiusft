@@ -358,7 +358,7 @@ tp_getter_is_editable (framework_attribute_o *self, void *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_editable ());
+        ret = mobius::py::to_pyobject (self->obj->is_editable ());
     }
     catch (const std::exception &e)
     {

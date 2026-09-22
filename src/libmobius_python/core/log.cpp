@@ -253,7 +253,7 @@ tp_f_has_errors (core_log_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->has_errors ());
+        ret = mobius::py::to_pyobject (self->obj->has_errors ());
     }
     catch (const std::exception &e)
     {

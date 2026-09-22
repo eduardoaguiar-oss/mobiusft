@@ -308,7 +308,7 @@ tp_f_decrypt_with_key (core_os_win_dpapi_master_key_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (
+        ret = mobius::py::to_pyobject (
             mobius::py::GIL () (self->obj->decrypt_with_key (arg_key)));
     }
     catch (const std::exception &e)
@@ -349,7 +349,7 @@ tp_f_decrypt_with_password_hash (core_os_win_dpapi_master_key_o *self,
 
     try
     {
-        ret = mobius::py::pybool_from_bool (
+        ret = mobius::py::to_pyobject (
             mobius::py::GIL () (self->obj->decrypt_with_password_hash (
                 arg_sid, arg_password_hash)));
     }
@@ -391,7 +391,7 @@ tp_f_decrypt_with_password (core_os_win_dpapi_master_key_o *self,
 
     try
     {
-        ret = mobius::py::pybool_from_bool (mobius::py::GIL () (
+        ret = mobius::py::to_pyobject (mobius::py::GIL () (
             self->obj->decrypt_with_password (arg_sid, arg_password)));
     }
     catch (const std::exception &e)
@@ -416,7 +416,7 @@ tp_f_is_decrypted (core_os_win_dpapi_master_key_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_decrypted ());
+        ret = mobius::py::to_pyobject (self->obj->is_decrypted ());
     }
     catch (const std::exception &e)
     {

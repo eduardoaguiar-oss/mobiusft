@@ -440,7 +440,7 @@ tp_f_has_attribute (framework_model_item_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->has_attribute (arg_id));
+        ret = mobius::py::to_pyobject (self->obj->has_attribute (arg_id));
     }
     catch (const std::exception &e)
     {
@@ -607,7 +607,7 @@ tp_f_has_datasource (framework_model_item_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->has_datasource ());
+        ret = mobius::py::to_pyobject (self->obj->has_datasource ());
     }
     catch (const std::exception &e)
     {
@@ -734,7 +734,7 @@ tp_f_has_ant (framework_model_item_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->has_ant (arg_id));
+        ret = mobius::py::to_pyobject (self->obj->has_ant (arg_id));
     }
     catch (const std::exception &e)
     {

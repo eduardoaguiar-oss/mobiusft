@@ -86,7 +86,7 @@ tp_f_get_bool (core_decoder_mfc_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->get_bool ());
+        ret = mobius::py::to_pyobject (self->obj->get_bool ());
     }
     catch (const std::exception &e)
     {
