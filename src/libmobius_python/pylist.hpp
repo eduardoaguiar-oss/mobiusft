@@ -29,6 +29,37 @@ namespace mobius::py
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create new Python list from C++ container
 // @param container C++ container
+// @return Python list
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+template <typename C>
+PyObject *
+pylist_from_cpp_container (const C &container)
+{
+    PyObject *ret = PyList_New (0);
+
+    if (!ret)
+        return nullptr;
+
+    for (const auto &item : container)
+    {
+        PyObject *py_item = to_pyobject (item);
+
+        if (!py_item)
+        {
+            Py_CLEAR (ret);
+            return nullptr;
+        }
+
+        PyList_Append (ret, py_item);
+        Py_DECREF (py_item);
+    }
+
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create new Python list from C++ container
+// @param container C++ container
 // @param pyfunc Function to convert C++ items to Python objects
 // @return Python list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -66,30 +97,23 @@ pylist_from_cpp_container (const C &container, F pyfunc)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 template <typename F>
 auto
-pylist_to_cpp_container (PyObject *list, F cppfunc)
-    -> std::vector<decltype (cppfunc (nullptr))>
+pylist_to_cpp_container (PyObject *list, F cppfunc) -> std::vector<decltype (cppfunc (nullptr))>
 {
     std::vector<decltype (cppfunc (nullptr))> v;
 
     if (!PyList_Check (list))
-        throw std::invalid_argument (
-            MOBIUS_EXCEPTION_MSG ("object is not a list")
-        );
+        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("object is not a list"));
 
     Py_ssize_t size = PyList_Size (list);
     if (size == -1)
-        throw std::invalid_argument (
-            MOBIUS_EXCEPTION_MSG (get_error_message ())
-        );
+        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG (get_error_message ()));
 
     for (Py_ssize_t i = 0; i < size; i++)
     {
         PyObject *py_item = PyList_GetItem (list, i);
 
         if (!py_item)
-            throw std::runtime_error (
-                MOBIUS_EXCEPTION_MSG (get_error_message ())
-            );
+            throw std::runtime_error (MOBIUS_EXCEPTION_MSG (get_error_message ()));
 
         v.push_back (cppfunc (py_item));
     }
@@ -143,9 +167,7 @@ pylist_from_cpp_pair_container (const C &container, F1 pyf1, F2 pyf2)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 template <typename C, typename F1, typename F2, typename T>
 PyObject *
-pylist_from_cpp_pair_transform (
-    const C &container, F1 pyf1, F2 pyf2, T transform
-)
+pylist_from_cpp_pair_transform (const C &container, F1 pyf1, F2 pyf2, T transform)
 {
     PyObject *ret = PyList_New (0);
 
