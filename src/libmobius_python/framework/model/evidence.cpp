@@ -525,9 +525,7 @@ tp_f_get_tags (framework_model_evidence_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pyset_from_cpp_container (
-            self->obj->get_tags (), mobius::py::pystring_from_std_string
-        );
+        ret = mobius::py::pyset_from_cpp_container (self->obj->get_tags ());
     }
     catch (const std::exception &e)
     {

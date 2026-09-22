@@ -103,7 +103,7 @@ pydatetime_check (PyObject *obj)
 // @brief Create PyDateTime from mobius::core::datetime::datetime
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pydatetime_from_datetime (const mobius::core::datetime::datetime &dt)
+to_pyobject (const mobius::core::datetime::datetime &dt)
 {
     PyObject *ret = nullptr;
 
@@ -122,6 +122,15 @@ pydatetime_from_datetime (const mobius::core::datetime::datetime &dt)
         ret = mobius::py::pynone ();
 
     return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create PyDateTime from mobius::core::datetime::datetime
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+pydatetime_from_datetime (const mobius::core::datetime::datetime &dt)
+{
+    return to_pyobject (dt);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

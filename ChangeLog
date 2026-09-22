@@ -50,6 +50,21 @@ Mobius Forensic Toolkit 2.30
 	* libmobius_python: Remove legacy function vfs::get_imagefile_implementations
 	* libmobius_python: Remove legacy (char *) casting from tp_getset structures
 	* libmobius_python: Release type reference in tp_dealloc functions
+	* libmobius_python: Add new function PyObject *to_pyobject(bool);
+	* libmobius_python: Add new function PyObject *to_pyobject(std::int8_t);
+	* libmobius_python: Add new function PyObject *to_pyobject(std::int16_t);
+	* libmobius_python: Add new function PyObject *to_pyobject(std::int32_t);
+	* libmobius_python: Add new function PyObject *to_pyobject(std::int64_t);
+	* libmobius_python: Add new function PyObject *to_pyobject(std::uint8_t);
+	* libmobius_python: Add new function PyObject *to_pyobject(std::uint16_t);
+	* libmobius_python: Add new function PyObject *to_pyobject(std::uint32_t);
+	* libmobius_python: Add new function PyObject *to_pyobject(std::uint64_t);
+	* libmobius_python: Add new function PyObject *to_pyobject(double);
+	* libmobius_python: Add new function PyObject *to_pyobject(const std::string&);
+	* libmobius_python: Add new function PyObject *to_pyobject(const mobius::core::bytearray&);
+	* libmobius_python: Add new function PyObject *to_pyobject(const mobius::core::datetime::datetime&);
+	* libmobius_python: Add new function PyObject *to_pyobject(const mobius::core::datetime::datetime&);
+	* libmobius_python: Remove template parameter F from pyset_from_cpp_container function
 	* tools: dirfs use function vfs::get_imagefile_types
 	* tools: filesystem_scan use function vfs::get_imagefile_types
 	* tools: imagefile_cat use function vfs::get_imagefile_types

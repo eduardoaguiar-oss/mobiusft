@@ -18,49 +18,49 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#define PY_SSIZE_T_CLEAN        // PEP 353
+#define PY_SSIZE_T_CLEAN // PEP 353
 
 #include <Python.h>
 #include <mobius/core/exception.inc>
-#include <set>
 #include <stdexcept>
+#include <set>
 
 namespace mobius::py
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create new Python set from C++ set
 // @param container C++ set
-// @param pyfunc Function to convert C++ items to Python objects
 // @return Python set object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-template <typename C, typename F> PyObject *
-pyset_from_cpp_container (const C& container, F pyfunc)
+template <typename C>
+PyObject *
+pyset_from_cpp_container (const C &container)
 {
-  PyObject *ret = PySet_New (NULL);
+    PyObject *ret = PySet_New (NULL);
 
-  if (!ret)
-    return nullptr;
+    if (!ret)
+        return nullptr;
 
-  for (const auto& item : container)
+    for (const auto &item : container)
     {
-      PyObject *py_item = pyfunc (item);
+        PyObject *py_item = to_pyobject (item);
 
-      if (!py_item)
+        if (!py_item)
         {
-          Py_CLEAR (ret);
-          return nullptr;
+            Py_CLEAR (ret);
+            return nullptr;
         }
 
-      if (PySet_Add (ret, py_item) == -1)
+        if (PySet_Add (ret, py_item) == -1)
         {
-          Py_CLEAR (ret);
-          return nullptr;
+            Py_CLEAR (ret);
+            return nullptr;
         }
 
-      Py_DECREF (py_item);
+        Py_DECREF (py_item);
     }
 
-  return ret;
+    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -69,29 +69,30 @@ pyset_from_cpp_container (const C& container, F pyfunc)
 // @param cppfunc Function convert from Python objects to C++ items
 // @return set
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-template <typename F> auto
-pyset_to_cpp_container (PyObject *py_set, F cppfunc) -> std::set <decltype (cppfunc (nullptr))>
+template <typename F>
+auto
+pyset_to_cpp_container (PyObject *py_set, F cppfunc) -> std::set<decltype (cppfunc (nullptr))>
 {
-  std::set <decltype (cppfunc (nullptr))> s;
+    std::set<decltype (cppfunc (nullptr))> s;
 
-  if (!PyAnySet_Check (py_set))
-    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("object is not a set"));
+    if (!PyAnySet_Check (py_set))
+        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("object is not a set"));
 
-  PyObject *py_iter = PyObject_GetIter (py_set);
-  if (!py_iter)
-    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("could not get iterator for set object"));
+    PyObject *py_iter = PyObject_GetIter (py_set);
+    if (!py_iter)
+        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("could not get iterator for set object"));
 
-  PyObject *py_item;
+    PyObject *py_item;
 
-  while ((py_item = PyIter_Next (py_iter)))
+    while ((py_item = PyIter_Next (py_iter)))
     {
-      s.insert (cppfunc (py_item));
-      Py_XDECREF (py_item);
+        s.insert (cppfunc (py_item));
+        Py_XDECREF (py_item);
     }
 
-  Py_XDECREF (py_iter);
+    Py_XDECREF (py_iter);
 
-  return s;
+    return s;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -101,14 +102,13 @@ pyset_to_cpp_container (PyObject *py_set, F cppfunc) -> std::set <decltype (cppf
 // @param f Conversion function
 // @return C++ vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-template <typename F> decltype (auto)
+template <typename F>
+decltype (auto)
 get_arg_as_cpp_set (PyObject *args, std::uint32_t idx, F f)
 {
-  return pyset_to_cpp_container (get_arg (args, idx), f);
+    return pyset_to_cpp_container (get_arg (args, idx), f);
 }
 
 } // namespace mobius::py
 
 #endif
-
-

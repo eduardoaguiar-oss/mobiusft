@@ -137,6 +137,23 @@ PyObject *py_true ();
 PyObject *py_not_implemented ();
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// C++ -> Python concrete types conversion
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *to_pyobject(bool);
+PyObject *to_pyobject(std::int8_t);
+PyObject *to_pyobject(std::int16_t);
+PyObject *to_pyobject(std::int32_t);
+PyObject *to_pyobject(std::int64_t);
+PyObject *to_pyobject(std::uint8_t);
+PyObject *to_pyobject(std::uint16_t);
+PyObject *to_pyobject(std::uint32_t);
+PyObject *to_pyobject(std::uint64_t);
+PyObject *to_pyobject(double);
+PyObject *to_pyobject(const std::string&);
+PyObject *to_pyobject(const mobius::core::bytearray&);
+PyObject *to_pyobject(const mobius::core::datetime::datetime&);
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // C++ <-> Python concrete types conversion
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool pynone_check (PyObject *);

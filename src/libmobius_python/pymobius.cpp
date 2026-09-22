@@ -640,6 +640,150 @@ py_not_implemented ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create PyBytes from mobius::core::bytearray
+// @param b Bool value
+// @return Python Bool object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+to_pyobject (bool b)
+{
+    PyObject *ret = b ? Py_True : Py_False;
+    Py_INCREF (ret);
+
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create PyLong from std::int8_t
+// @param value Value
+// @return Python Long object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+to_pyobject (std::int8_t value)
+{
+    return PyLong_FromLong (value);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create PyLong from std::int16_t
+// @param value Value
+// @return Python Long object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+to_pyobject (std::int16_t value)
+{
+    return PyLong_FromLong (value);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create PyLong from std::int32_t
+// @param value Value
+// @return Python Long object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+to_pyobject (std::int32_t value)
+{
+    return PyLong_FromLong (value);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create PyLong from std::int64_t
+// @param value Value
+// @return Python Long object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+to_pyobject (std::int64_t value)
+{
+    return PyLong_FromLongLong (value);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create PyLong from std::uint8_t
+// @param value Value
+// @return Python Long object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+to_pyobject (std::uint8_t value)
+{
+    return PyLong_FromUnsignedLong (value);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create PyLong from std::uint16_t
+// @param value Value
+// @return Python Long object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+to_pyobject (std::uint16_t value)
+{
+    return PyLong_FromUnsignedLong (value);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create PyLong from std::uint32_t
+// @param value Value
+// @return Python Long object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+to_pyobject(std::uint32_t value)
+{
+    return PyLong_FromUnsignedLong (value);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create PyLong from std::uint64_t
+// @param value Value
+// @return Python Long object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+to_pyobject (std::uint64_t value)
+{
+    return PyLong_FromUnsignedLongLong (value);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create PyFloat from double
+// @param value Value
+// @return Python object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+to_pyobject (double value)
+{
+    return PyFloat_FromDouble (value);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create PyUnicode from std::string
+// @param s C++ string
+// @return Python Unicode object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+to_pyobject (const std::string &s)
+{
+    auto ret = PyUnicode_DecodeUTF8 (s.c_str (), s.size (), "replace");
+
+    if (!ret)
+        throw std::invalid_argument (
+            MOBIUS_EXCEPTION_MSG ("invalid C++ UTF-8 string")
+        );
+
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create PyBytes from mobius::core::bytearray
+// @param array Bytearray
+// @return Python Bytes object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+to_pyobject (const mobius::core::bytearray &array)
+{
+    return PyBytes_FromStringAndSize (
+        (const char *) array.data (), array.size ()
+    );
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Check if object is Py_None
 // @param value Python object
 // @return true/false
@@ -662,24 +806,6 @@ pystring_check (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create PyUnicode from std::string
-// @param s C++ string
-// @return Python Unicode object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-pystring_from_std_string (const std::string &s)
-{
-    auto ret = PyUnicode_DecodeUTF8 (s.c_str (), s.size (), "replace");
-
-    if (!ret)
-        throw std::invalid_argument (
-            MOBIUS_EXCEPTION_MSG ("invalid C++ UTF-8 string")
-        );
-
-    return ret;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create std::string from PyUnicode
 // @param value Python String
 // @return C++ string
@@ -699,6 +825,17 @@ pystring_as_std_string (PyObject *value)
         );
 
     return str;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create PyUnicode from std::string
+// @param s C++ string
+// @return Python Unicode object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+pystring_from_std_string (const std::string &s)
+{
+    return to_pyobject (s);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -938,7 +1075,7 @@ pylong_as_std_uint32_t (PyObject *value)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create PyLong from std::int64_t
 // @param value Value
-// @return Python Unicode object
+// @return Python Long object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pylong_from_std_int64_t (std::int64_t value)
@@ -960,7 +1097,7 @@ pylong_as_std_int64_t (PyObject *value)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create PyLong from std::uint64_t
 // @param value Value
-// @return Python Unicode object
+// @return Python Long object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pylong_from_std_uint64_t (std::uint64_t value)
