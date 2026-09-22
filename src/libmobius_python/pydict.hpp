@@ -20,8 +20,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #define PY_SSIZE_T_CLEAN // PEP 353
 
-#include <mobius/core/exception.inc>
 #include <Python.h>
+#include <mobius/core/exception.inc>
 #include <cstdint>
 #include <pymobius.hpp>
 #include <stdexcept>
@@ -30,6 +30,47 @@
 
 namespace mobius::py
 {
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create new Python dict from C++ container
+// @param container C++ container
+// @return Python dict
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+template <typename C>
+PyObject *
+pydict_from_cpp_container (const C &container)
+{
+    PyObject *ret = PyDict_New ();
+
+    if (!ret)
+        return nullptr;
+
+    for (const auto &p : container)
+    {
+        PyObject *py_key = to_pyobject (p.first);
+
+        if (!py_key)
+        {
+            Py_CLEAR (ret);
+            return nullptr;
+        }
+
+        PyObject *py_value = to_pyobject (p.second);
+
+        if (!py_value)
+        {
+            Py_DECREF (py_key);
+            Py_CLEAR (ret);
+            return nullptr;
+        }
+
+        PyDict_SetItem (ret, py_key, py_value);
+        Py_DECREF (py_key);
+        Py_DECREF (py_value);
+    }
+
+    return ret;
+}
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create new Python dict from C++ container
 // @param container C++ container
@@ -87,9 +128,7 @@ pydict_to_cpp_container (PyObject *py_dict, F1 cppfunc1, F2 cppfunc2)
     std::map<decltype (cppfunc1 (nullptr)), decltype (cppfunc2 (nullptr))> m;
 
     if (!PyDict_Check (py_dict))
-        throw std::invalid_argument (
-            MOBIUS_EXCEPTION_MSG ("argument is not a dict")
-        );
+        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("argument is not a dict"));
 
     PyObject *key, *value;
     Py_ssize_t pos = 0;
