@@ -425,7 +425,7 @@ tp_f_get_float32_be (core_decoder_data_decoder_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pyfloat_from_cpp (self->obj->get_float32_be ());
+        ret = mobius::py::to_pyobject (self->obj->get_float32_be ());
     }
     catch (const std::exception &e)
     {
@@ -450,7 +450,7 @@ tp_f_get_float32_le (core_decoder_data_decoder_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pyfloat_from_cpp (self->obj->get_float32_le ());
+        ret = mobius::py::to_pyobject (self->obj->get_float32_le ());
     }
     catch (const std::exception &e)
     {
@@ -475,7 +475,7 @@ tp_f_get_float64_be (core_decoder_data_decoder_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pyfloat_from_cpp (self->obj->get_float64_be ());
+        ret = mobius::py::to_pyobject (self->obj->get_float64_be ());
     }
     catch (const std::exception &e)
     {
@@ -500,7 +500,7 @@ tp_f_get_float64_le (core_decoder_data_decoder_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pyfloat_from_cpp (self->obj->get_float64_le ());
+        ret = mobius::py::to_pyobject (self->obj->get_float64_le ());
     }
     catch (const std::exception &e)
     {

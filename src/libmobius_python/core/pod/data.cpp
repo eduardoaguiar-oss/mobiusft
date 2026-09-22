@@ -531,7 +531,7 @@ to_pyobject (const mobius::core::pod::data &value)
         ret = mobius::py::pylong_from_std_int64_t (value.to_integer ());
 
     else if (value.is_float ())
-        ret = mobius::py::pyfloat_from_cpp (value.to_float ());
+        ret = mobius::py::to_pyobject (value.to_float ());
 
     else if (value.is_datetime ())
         ret = mobius::py::pydatetime_from_datetime (value.to_datetime ());

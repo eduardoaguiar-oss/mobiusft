@@ -72,6 +72,7 @@ Mobius Forensic Toolkit 2.30
 	* libmobius_python: Add Py_TPFLAGS_IMMUTABLETYPE flag to PyType_Spec structures
 	* libmobius_python: Use to_pyobject instead of pybool_from_bool
 	* libmobius_python: Use to_pyobject instead of pystring_from_std_string
+	* libmobius_python: Use to_pyobject instead of pyfloat_from_double
 	* tools: dirfs use function vfs::get_imagefile_types
 	* tools: filesystem_scan use function vfs::get_imagefile_types
 	* tools: imagefile_cat use function vfs::get_imagefile_types
