@@ -107,21 +107,24 @@ IfMacros:
 IncludeBlocks:   Preserve
 IncludeCategories:
   # Project headers (angle brackets only)
-  - Regex:           '^<mobius/'
+  - Regex:           '^<Python.h>'
     Priority:        1  # Highest priority (appears first)
+
+  - Regex:           '^<mobius/'
+    Priority:        2
 
   # Third-party libraries (adjust as needed)
   - Regex:           '^<(gtest|gmock|isl|json)/'
-    Priority:        2
+    Priority:        3
 
   # C++ standard library headers
   - Regex:           '^<(algorithm|array|vector|iostream|string|map|...)>$'
-    Priority:        4  # Lowest priority (appears last)
+    Priority:        5  # Lowest priority (appears last)
     SortPriority:    0
 
   # Catch-all for other system headers (e.g., <unistd.h>)
   - Regex:           '^<[^>]+>$'
-    Priority:        3
+    Priority:        4
     SortPriority:    0
 IncludeIsMainRegex: '(Test)?$'
 IncludeIsMainSourceRegex: ''
