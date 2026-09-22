@@ -240,10 +240,7 @@ tp_f_get_properties (core_decoder_xml_element_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pydict_from_cpp_container (
-            self->obj->get_properties (), mobius::py::pystring_from_std_string,
-            mobius::py::pystring_from_std_string
-        );
+        ret = mobius::py::pydict_from_cpp_container (self->obj->get_properties ());
     }
     catch (const std::exception &e)
     {

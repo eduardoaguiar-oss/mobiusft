@@ -712,10 +712,7 @@ tp_f_get_hashes (framework_model_evidence_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pydict_from_cpp_container (
-            self->obj->get_hashes (), mobius::py::pystring_from_std_string,
-            mobius::py::pystring_from_std_string
-        );
+        ret = mobius::py::pydict_from_cpp_container (self->obj->get_hashes ());
     }
     catch (const std::exception &e)
     {

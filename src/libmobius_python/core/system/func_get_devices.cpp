@@ -57,6 +57,7 @@ func_get_devices (PyObject *, PyObject *args)
         mobius::core::system::device_list dev_list;
 
         std::vector<mobius::core::system::device> selected_dev_list;
+
         std::copy_if (dev_list.begin (), dev_list.end (),
                       std::back_inserter (selected_dev_list),
                       [arg_subsystem, arg_type] (const auto &dev)

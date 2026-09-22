@@ -512,7 +512,7 @@ pymobius_core_pod_data_check (PyObject *value)
 // @return New core.pod.data object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_core_pod_data_to_pyobject (const mobius::core::pod::data &value)
+to_pyobject (const mobius::core::pod::data &value)
 {
     if (!core_pod_data_type)
         throw std::runtime_error (
@@ -560,6 +560,17 @@ pymobius_core_pod_data_to_pyobject (const mobius::core::pod::data &value)
         );
 
     return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>core.pod.data</i> Python object from C++ object
+// @param value C++ object
+// @return New core.pod.data object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+pymobius_core_pod_data_to_pyobject (const mobius::core::pod::data &value)
+{
+    return to_pyobject (value);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

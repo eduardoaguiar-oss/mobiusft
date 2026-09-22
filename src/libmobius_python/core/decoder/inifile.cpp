@@ -288,11 +288,7 @@ tp_f_get_values (core_decoder_inifile_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pydict_from_cpp_container (
-            self->obj->get_values (arg_group),
-            mobius::py::pystring_from_std_string,
-            mobius::py::pystring_from_std_string
-        );
+        ret = mobius::py::pydict_from_cpp_container (self->obj->get_values (arg_group));
     }
     catch (const std::exception &e)
     {

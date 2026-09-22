@@ -39,5 +39,6 @@ bool pymobius_core_pod_data_check (PyObject *);
 mobius::core::pod::data pymobius_core_pod_data_from_pyobject (PyObject *);
 PyObject *pymobius_core_pod_data_to_pyobject (const mobius::core::pod::data &);
 PyObject *pymobius_core_pod_data_to_python (const mobius::core::pod::data &);
+PyObject *to_pyobject (const mobius::core::pod::data &);
 
 #endif

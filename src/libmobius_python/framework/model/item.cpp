@@ -1095,11 +1095,7 @@ tp_f_count_evidences_grouped (framework_model_item_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pydict_from_cpp_container (
-            self->obj->count_evidences_grouped (),
-            mobius::py::pystring_from_std_string,
-            mobius::py::pylong_from_std_int64_t
-        );
+        ret = mobius::py::pydict_from_cpp_container (self->obj->count_evidences_grouped ());
     }
     catch (const std::exception &e)
     {
