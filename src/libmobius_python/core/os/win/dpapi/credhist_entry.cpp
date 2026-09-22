@@ -219,7 +219,7 @@ tp_getter_salt (core_os_win_dpapi_credhist_entry_o *self, void *)
 
     try
     {
-        ret = mobius::py::pybytes_from_bytearray (self->obj->get_salt ());
+        ret = mobius::py::to_pyobject (self->obj->get_salt ());
     }
     catch (const std::exception &e)
     {
@@ -286,7 +286,7 @@ tp_getter_hash_sha1 (core_os_win_dpapi_credhist_entry_o *self, void *)
 
     try
     {
-        ret = mobius::py::pybytes_from_bytearray (self->obj->get_hash_sha1 ());
+        ret = mobius::py::to_pyobject (self->obj->get_hash_sha1 ());
     }
     catch (const std::exception &e)
     {
@@ -308,7 +308,7 @@ tp_getter_hash_ntlm (core_os_win_dpapi_credhist_entry_o *self, void *)
 
     try
     {
-        ret = mobius::py::pybytes_from_bytearray (self->obj->get_hash_ntlm ());
+        ret = mobius::py::to_pyobject (self->obj->get_hash_ntlm ());
     }
     catch (const std::exception &e)
     {

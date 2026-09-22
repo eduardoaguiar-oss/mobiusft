@@ -146,7 +146,7 @@ tp_getter_password_data (core_os_win_credential_o *self, void *)
 
     try
     {
-        ret = mobius::py::pybytes_from_bytearray (
+        ret = mobius::py::to_pyobject (
             self->obj->get_password_data ());
     }
     catch (const std::exception &e)

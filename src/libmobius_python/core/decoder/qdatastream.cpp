@@ -225,7 +225,7 @@ tp_f_get_qbytearray (core_decoder_qdatastream_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybytes_from_bytearray (self->obj->get_qbytearray ());
+        ret = mobius::py::to_pyobject (self->obj->get_qbytearray ());
     }
     catch (const std::exception &e)
     {
@@ -276,7 +276,7 @@ tp_f_get_qimage (core_decoder_qdatastream_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybytes_from_bytearray (self->obj->get_qimage ());
+        ret = mobius::py::to_pyobject (self->obj->get_qimage ());
     }
     catch (const std::exception &e)
     {
@@ -301,7 +301,7 @@ tp_f_get_qpixmap (core_decoder_qdatastream_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybytes_from_bytearray (self->obj->get_qpixmap ());
+        ret = mobius::py::to_pyobject (self->obj->get_qpixmap ());
     }
     catch (const std::exception &e)
     {

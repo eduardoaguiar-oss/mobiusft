@@ -184,7 +184,7 @@ tp_f_get_digest (core_crypt_hmac_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybytes_from_bytearray (self->obj->get_digest ());
+        ret = mobius::py::to_pyobject (self->obj->get_digest ());
     }
     catch (const std::exception &e)
     {

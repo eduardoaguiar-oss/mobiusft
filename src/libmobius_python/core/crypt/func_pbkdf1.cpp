@@ -54,7 +54,7 @@ func_pbkdf1 (PyObject *, PyObject *args)
 
     try
     {
-        ret = mobius::py::pybytes_from_bytearray (
+        ret = mobius::py::to_pyobject (
             mobius::py::GIL () (mobius::core::crypt::pbkdf1 (
                 arg_hash_id, arg_key, arg_salt, arg_iterations, arg_dklen)));
     }

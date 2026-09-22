@@ -663,7 +663,7 @@ tp_f_get_bytearray_by_size (core_decoder_data_decoder_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pybytes_from_bytearray (self->obj->get_bytearray_by_size (arg_size));
+        ret = mobius::py::to_pyobject (self->obj->get_bytearray_by_size (arg_size));
     }
     catch (const std::exception &e)
     {

@@ -265,7 +265,7 @@ tp_getter_salt (core_os_win_dpapi_blob_o *self, void *)
 
     try
     {
-        ret = mobius::py::pybytes_from_bytearray (self->obj->get_salt ());
+        ret = mobius::py::to_pyobject (self->obj->get_salt ());
     }
     catch (const std::exception &e)
     {
@@ -287,7 +287,7 @@ tp_getter_hmac_key (core_os_win_dpapi_blob_o *self, void *)
 
     try
     {
-        ret = mobius::py::pybytes_from_bytearray (self->obj->get_hmac_key ());
+        ret = mobius::py::to_pyobject (self->obj->get_hmac_key ());
     }
     catch (const std::exception &e)
     {
@@ -354,7 +354,7 @@ tp_getter_hmac_value (core_os_win_dpapi_blob_o *self, void *)
 
     try
     {
-        ret = mobius::py::pybytes_from_bytearray (self->obj->get_hmac_value ());
+        ret = mobius::py::to_pyobject (self->obj->get_hmac_value ());
     }
     catch (const std::exception &e)
     {
@@ -399,7 +399,7 @@ tp_getter_plain_text (core_os_win_dpapi_blob_o *self, void *)
 
     try
     {
-        ret = mobius::py::pybytes_from_bytearray (self->obj->get_plain_text ());
+        ret = mobius::py::to_pyobject (self->obj->get_plain_text ());
     }
     catch (const std::exception &e)
     {
@@ -421,7 +421,7 @@ tp_getter_signature (core_os_win_dpapi_blob_o *self, void *)
 
     try
     {
-        ret = mobius::py::pybytes_from_bytearray (self->obj->get_signature ());
+        ret = mobius::py::to_pyobject (self->obj->get_signature ());
     }
     catch (const std::exception &e)
     {
@@ -443,7 +443,7 @@ tp_getter_signature_data (core_os_win_dpapi_blob_o *self, void *)
 
     try
     {
-        ret = mobius::py::pybytes_from_bytearray (
+        ret = mobius::py::to_pyobject (
             self->obj->get_signature_data ());
     }
     catch (const std::exception &e)

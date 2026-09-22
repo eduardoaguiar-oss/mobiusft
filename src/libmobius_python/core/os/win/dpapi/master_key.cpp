@@ -113,7 +113,7 @@ tp_getter_salt (core_os_win_dpapi_master_key_o *self, void *)
 
     try
     {
-        ret = mobius::py::pybytes_from_bytearray (self->obj->get_salt ());
+        ret = mobius::py::to_pyobject (self->obj->get_salt ());
     }
     catch (const std::exception &e)
     {
@@ -226,7 +226,7 @@ tp_getter_plain_text (core_os_win_dpapi_master_key_o *self, void *)
 
     try
     {
-        ret = mobius::py::pybytes_from_bytearray (self->obj->get_plain_text ());
+        ret = mobius::py::to_pyobject (self->obj->get_plain_text ());
     }
     catch (const std::exception &e)
     {

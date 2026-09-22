@@ -55,7 +55,7 @@ _serialize_to_bytearray (PyObject *args)
 
     try
     {
-        ret = mobius::py::pybytes_from_bytearray (
+        ret = mobius::py::to_pyobject (
             mobius::py::GIL () (mobius::core::pod::serialize (arg_data)));
     }
     catch (const std::exception &e)

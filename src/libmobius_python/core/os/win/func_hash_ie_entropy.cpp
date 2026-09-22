@@ -50,7 +50,7 @@ func_hash_ie_entropy (PyObject *, PyObject *args)
 
     try
     {
-        ret = mobius::py::pybytes_from_bytearray (
+        ret = mobius::py::to_pyobject (
             mobius::core::os::win::hash_ie_entropy (arg_url));
     }
     catch (const std::exception &e)

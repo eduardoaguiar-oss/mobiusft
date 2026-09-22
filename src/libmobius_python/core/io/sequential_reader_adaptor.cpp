@@ -99,7 +99,7 @@ tp_f_peek (core_io_sequential_reader_adaptor_o *self, PyObject *args)
             ret = mobius::py::pylong_from_std_uint8_t (self->obj->peek ());
 
         else
-            ret = mobius::py::pybytes_from_bytearray (self->obj->peek (arg_size));
+            ret = mobius::py::to_pyobject (self->obj->peek (arg_size));
     }
     catch (const std::exception &e)
     {
@@ -141,7 +141,7 @@ tp_f_get (core_io_sequential_reader_adaptor_o *self, PyObject *args)
             ret = mobius::py::pylong_from_std_uint8_t (self->obj->get ());
 
         else
-            ret = mobius::py::pybytes_from_bytearray (self->obj->get (arg_size));
+            ret = mobius::py::to_pyobject (self->obj->get (arg_size));
     }
     catch (const std::exception &e)
     {

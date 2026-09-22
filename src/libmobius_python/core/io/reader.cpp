@@ -136,7 +136,7 @@ tp_f_read (core_io_reader_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pybytes_from_bytearray (mobius::py::GIL () (self->obj->read (arg_size)));
+        ret = mobius::py::to_pyobject (mobius::py::GIL () (self->obj->read (arg_size)));
     }
     catch (const std::exception &e)
     {

@@ -54,7 +54,7 @@ func_pbkdf2_hmac (PyObject *, PyObject *args)
 
     try
     {
-        ret = mobius::py::pybytes_from_bytearray (
+        ret = mobius::py::to_pyobject (
             mobius::py::GIL () (mobius::core::crypt::pbkdf2_hmac (
                 arg_hash_id, arg_key, arg_salt, arg_iterations, arg_dklen)));
     }

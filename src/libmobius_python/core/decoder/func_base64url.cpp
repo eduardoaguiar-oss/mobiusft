@@ -55,7 +55,7 @@ decoder_func_base64url (PyObject *, PyObject *args)
         auto data =
             mobius::py::GIL () (mobius::core::decoder::base64url (arg_s));
 
-        ret = mobius::py::pybytes_from_bytearray (data);
+        ret = mobius::py::to_pyobject (data);
     }
     catch (const std::exception &e)
     {

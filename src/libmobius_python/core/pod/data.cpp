@@ -540,7 +540,7 @@ to_pyobject (const mobius::core::pod::data &value)
         ret = mobius::py::to_pyobject (value.to_string ());
 
     else if (value.is_bytearray ())
-        ret = mobius::py::pybytes_from_bytearray (
+        ret = mobius::py::to_pyobject (
             value.to_bytearray ()
         );
 

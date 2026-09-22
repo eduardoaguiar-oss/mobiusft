@@ -185,7 +185,7 @@ tp_getter_icon_data (framework_category_o *self, void *)
 
     try
     {
-        ret = mobius::py::pybytes_from_bytearray (self->obj->get_icon_data ());
+        ret = mobius::py::to_pyobject (self->obj->get_icon_data ());
     }
     catch (const std::exception &e)
     {

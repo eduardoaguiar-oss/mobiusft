@@ -50,7 +50,7 @@ func_hash_lm (PyObject *, PyObject *args)
 
     try
     {
-        ret = mobius::py::pybytes_from_bytearray (
+        ret = mobius::py::to_pyobject (
             mobius::core::os::win::hash_lm (arg_password));
     }
     catch (const std::exception &e)

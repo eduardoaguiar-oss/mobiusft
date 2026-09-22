@@ -58,7 +58,7 @@ func_pbkdf2_hmac_ms (PyObject *, PyObject *args)
 
     try
     {
-        ret = mobius::py::pybytes_from_bytearray (
+        ret = mobius::py::to_pyobject (
             mobius::core::os::win::pbkdf2_hmac_ms (
                 arg_key, arg_salt, arg_iterations, arg_dklen, arg_hash_id));
     }

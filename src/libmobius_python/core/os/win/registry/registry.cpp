@@ -474,7 +474,7 @@ tp_f_get_syskey (core_os_win_registry_registry_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybytes_from_bytearray (self->obj->get_syskey ());
+        ret = mobius::py::to_pyobject (self->obj->get_syskey ());
     }
     catch (const std::exception &e)
     {

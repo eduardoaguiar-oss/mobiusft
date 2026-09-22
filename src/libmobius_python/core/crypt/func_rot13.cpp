@@ -45,7 +45,7 @@ func_rot13 (PyObject *, PyObject *args)
 
     try
     {
-        ret = mobius::py::pybytes_from_bytearray (
+        ret = mobius::py::to_pyobject (
             mobius::core::crypt::rot13 (arg_data));
     }
     catch (const std::exception &e)

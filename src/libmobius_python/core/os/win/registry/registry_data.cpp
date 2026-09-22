@@ -113,7 +113,7 @@ tp_getter_data (core_os_win_registry_registry_data_o *self, void *)
 
     try
     {
-        ret = mobius::py::pybytes_from_bytearray (self->obj->get_data ());
+        ret = mobius::py::to_pyobject (self->obj->get_data ());
     }
     catch (const std::exception &e)
     {

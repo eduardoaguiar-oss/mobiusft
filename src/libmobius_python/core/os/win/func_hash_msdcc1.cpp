@@ -56,7 +56,7 @@ func_hash_msdcc1 (PyObject *, PyObject *args)
         auto digest = mobius::py::GIL () (
             mobius::core::os::win::hash_msdcc1 (arg_password, arg_username));
 
-        ret = mobius::py::pybytes_from_bytearray (digest);
+        ret = mobius::py::to_pyobject (digest);
     }
     catch (const std::exception &e)
     {

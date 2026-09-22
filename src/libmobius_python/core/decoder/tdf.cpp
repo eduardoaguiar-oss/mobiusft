@@ -158,7 +158,7 @@ tp_getter_payload (core_decoder_tdf_o *self, void *)
 
     try
     {
-        ret = mobius::py::pybytes_from_bytearray (self->obj->get_payload ());
+        ret = mobius::py::to_pyobject (self->obj->get_payload ());
     }
     catch (const std::exception &e)
     {

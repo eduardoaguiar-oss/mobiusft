@@ -53,7 +53,7 @@ decoder_func_hexstring (PyObject *, PyObject *args)
 
     try
     {
-        ret = mobius::py::pybytes_from_bytearray (
+        ret = mobius::py::to_pyobject (
             mobius::core::decoder::hexstring (arg_s, arg_sep));
     }
     catch (const std::exception &e)

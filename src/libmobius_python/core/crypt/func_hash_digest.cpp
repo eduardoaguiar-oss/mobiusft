@@ -55,7 +55,7 @@ func_hash_digest (PyObject *, PyObject *args)
     {
         auto digest = mobius::py::GIL () (
             mobius::core::crypt::hash_digest (arg_hash_id, arg_data));
-        ret = mobius::py::pybytes_from_bytearray (digest);
+        ret = mobius::py::to_pyobject (digest);
     }
     catch (const std::exception &e)
     {
