@@ -141,9 +141,9 @@ tp_getter_size (core_vfs_block_o *self, void *)
 // @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "uid", (getter) tp_getter_uid, (setter) tp_setter_uid, (char *) "Block UID", nullptr},
-    {(char *) "type", (getter) tp_getter_type, (setter) 0, (char *) "Type", nullptr},
-    {(char *) "size", (getter) tp_getter_size, (setter) 0, (char *) "Size in bytes", nullptr},
+    {"uid", (getter) tp_getter_uid, (setter) tp_setter_uid, "Block UID", nullptr},
+    {"type", (getter) tp_getter_type, (setter) 0, "Type", nullptr},
+    {"size", (getter) tp_getter_size, (setter) 0, "Size in bytes", nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
 
@@ -684,23 +684,23 @@ tp_f_new_slice_block (core_vfs_block_o *self, PyObject *args)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "get_state", (PyCFunction) tp_f_get_state, METH_VARARGS, "Get object state"},
-    {(char *) "add_parent", (PyCFunction) tp_f_add_parent, METH_VARARGS, "Add parent"},
-    {(char *) "get_parents", (PyCFunction) tp_f_get_parents, METH_VARARGS, "Get parents"},
-    {(char *) "add_child", (PyCFunction) tp_f_add_child, METH_VARARGS, "Add child"},
-    {(char *) "get_children", (PyCFunction) tp_f_get_children, METH_VARARGS, "Get children"},
-    {(char *) "has_attribute", (PyCFunction) tp_f_has_attribute, METH_VARARGS, "Check if block has a given attribute"},
-    {(char *) "get_attribute", (PyCFunction) tp_f_get_attribute, METH_VARARGS, "Get attribute"},
-    {(char *) "set_attribute", (PyCFunction) tp_f_set_attribute, METH_VARARGS, "Set attribute"},
-    {(char *) "get_attributes", (PyCFunction) tp_f_get_attributes, METH_VARARGS, "Get attributes"},
-    {(char *) "is_handled", (PyCFunction) tp_f_is_handled, METH_VARARGS, "Is block handled"},
-    {(char *) "set_handled", (PyCFunction) tp_f_set_handled, METH_VARARGS, "Set handled flag"},
-    {(char *) "is_complete", (PyCFunction) tp_f_is_complete, METH_VARARGS, "Is block complete"},
-    {(char *) "set_complete", (PyCFunction) tp_f_set_complete, METH_VARARGS, "Set complete flag"},
-    {(char *) "is_available", (PyCFunction) tp_f_is_available, METH_VARARGS, "Is block available"},
-    {(char *) "set_available", (PyCFunction) tp_f_set_available, METH_VARARGS, "Set available flag"},
-    {(char *) "new_reader", (PyCFunction) tp_f_new_reader, METH_VARARGS, "Create new reader"},
-    {(char *) "new_slice_block", (PyCFunction) tp_f_new_slice_block, METH_VARARGS, "Create new slice block"},
+    {"get_state", (PyCFunction) tp_f_get_state, METH_VARARGS, "Get object state"},
+    {"add_parent", (PyCFunction) tp_f_add_parent, METH_VARARGS, "Add parent"},
+    {"get_parents", (PyCFunction) tp_f_get_parents, METH_VARARGS, "Get parents"},
+    {"add_child", (PyCFunction) tp_f_add_child, METH_VARARGS, "Add child"},
+    {"get_children", (PyCFunction) tp_f_get_children, METH_VARARGS, "Get children"},
+    {"has_attribute", (PyCFunction) tp_f_has_attribute, METH_VARARGS, "Check if block has a given attribute"},
+    {"get_attribute", (PyCFunction) tp_f_get_attribute, METH_VARARGS, "Get attribute"},
+    {"set_attribute", (PyCFunction) tp_f_set_attribute, METH_VARARGS, "Set attribute"},
+    {"get_attributes", (PyCFunction) tp_f_get_attributes, METH_VARARGS, "Get attributes"},
+    {"is_handled", (PyCFunction) tp_f_is_handled, METH_VARARGS, "Is block handled"},
+    {"set_handled", (PyCFunction) tp_f_set_handled, METH_VARARGS, "Set handled flag"},
+    {"is_complete", (PyCFunction) tp_f_is_complete, METH_VARARGS, "Is block complete"},
+    {"set_complete", (PyCFunction) tp_f_set_complete, METH_VARARGS, "Set complete flag"},
+    {"is_available", (PyCFunction) tp_f_is_available, METH_VARARGS, "Is block available"},
+    {"set_available", (PyCFunction) tp_f_set_available, METH_VARARGS, "Set available flag"},
+    {"new_reader", (PyCFunction) tp_f_new_reader, METH_VARARGS, "Create new reader"},
+    {"new_slice_block", (PyCFunction) tp_f_new_slice_block, METH_VARARGS, "Create new slice block"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };
 

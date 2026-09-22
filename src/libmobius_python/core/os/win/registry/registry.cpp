@@ -123,9 +123,9 @@ tp_getter_keys (core_os_win_registry_registry_o *self, void *)
 // @brief registry: getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "files", (getter) tp_getter_files, (setter) 0,
-     (char *) "registry files", nullptr},
-    {(char *) "keys", (getter) tp_getter_keys, (setter) 0, (char *) "root keys",
+    {"files", (getter) tp_getter_files, (setter) 0,
+     "registry files", nullptr},
+    {"keys", (getter) tp_getter_keys, (setter) 0, "root keys",
      nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
@@ -487,25 +487,25 @@ tp_f_get_syskey (core_os_win_registry_registry_o *self, PyObject *)
 // @brief registry: methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "add_file_by_path", (PyCFunction) tp_f_add_file_by_path,
+    {"add_file_by_path", (PyCFunction) tp_f_add_file_by_path,
      METH_VARARGS, "add registry file by local path"},
-    {(char *) "add_file_by_url", (PyCFunction) tp_f_add_file_by_url,
+    {"add_file_by_url", (PyCFunction) tp_f_add_file_by_url,
      METH_VARARGS, "add registry file by URL"},
-    {(char *) "remove_file", (PyCFunction) tp_f_remove_file, METH_VARARGS,
+    {"remove_file", (PyCFunction) tp_f_remove_file, METH_VARARGS,
      "remove registry file from registry"},
-    {(char *) "get_key_by_path", (PyCFunction) tp_f_get_key_by_path,
+    {"get_key_by_path", (PyCFunction) tp_f_get_key_by_path,
      METH_VARARGS, "get key by path"},
-    {(char *) "get_key_by_mask", (PyCFunction) tp_f_get_key_by_mask,
+    {"get_key_by_mask", (PyCFunction) tp_f_get_key_by_mask,
      METH_VARARGS, "get keys by mask"},
-    {(char *) "get_value_by_path", (PyCFunction) tp_f_get_value_by_path,
+    {"get_value_by_path", (PyCFunction) tp_f_get_value_by_path,
      METH_VARARGS, "get value by path"},
-    {(char *) "get_value_by_mask", (PyCFunction) tp_f_get_value_by_mask,
+    {"get_value_by_mask", (PyCFunction) tp_f_get_value_by_mask,
      METH_VARARGS, "get values by mask"},
-    {(char *) "get_data_by_path", (PyCFunction) tp_f_get_data_by_path,
+    {"get_data_by_path", (PyCFunction) tp_f_get_data_by_path,
      METH_VARARGS, "get data by path"},
-    {(char *) "get_data_by_mask", (PyCFunction) tp_f_get_data_by_mask,
+    {"get_data_by_mask", (PyCFunction) tp_f_get_data_by_mask,
      METH_VARARGS, "get data by mask"},
-    {(char *) "get_syskey", (PyCFunction) tp_f_get_syskey, METH_VARARGS,
+    {"get_syskey", (PyCFunction) tp_f_get_syskey, METH_VARARGS,
      "get syskey"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };

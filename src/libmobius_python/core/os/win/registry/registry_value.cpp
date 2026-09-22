@@ -106,10 +106,10 @@ tp_getter_data (core_os_win_registry_registry_value_o *self, void *)
 // @brief registry_value: getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "name", (getter) tp_getter_name, (setter) 0,
-     (char *) "value name", nullptr},
-    {(char *) "data", (getter) tp_getter_data, (setter) 0,
-     (char *) "value data", nullptr},
+    {"name", (getter) tp_getter_name, (setter) 0,
+     "value name", nullptr},
+    {"data", (getter) tp_getter_data, (setter) 0,
+     "value data", nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
 

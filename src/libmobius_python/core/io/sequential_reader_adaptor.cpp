@@ -60,10 +60,10 @@ tp_getter_block_size (core_io_sequential_reader_adaptor_o *self, void *)
 // @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "block_size",
+    {"block_size",
      (getter) tp_getter_block_size,
      (setter) 0,
-     (char *) "Read ahead block size in bytes",
+     "Read ahead block size in bytes",
      nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
@@ -242,14 +242,14 @@ tp_f_eof (core_io_sequential_reader_adaptor_o *self, PyObject *)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "peek",
+    {"peek",
      (PyCFunction) tp_f_peek,
      METH_VARARGS,
      "Peek one or more bytes, without moving the reading position"},
-    {(char *) "get", (PyCFunction) tp_f_get, METH_VARARGS, "Get one or more bytes"},
-    {(char *) "skip", (PyCFunction) tp_f_skip, METH_VARARGS, "Skip size bytes forward"},
-    {(char *) "tell", (PyCFunction) tp_f_tell, METH_VARARGS, "Get current reading position"},
-    {(char *) "eof", (PyCFunction) tp_f_eof, METH_VARARGS, "Check if end-of-file (EOF) is reached"},
+    {"get", (PyCFunction) tp_f_get, METH_VARARGS, "Get one or more bytes"},
+    {"skip", (PyCFunction) tp_f_skip, METH_VARARGS, "Skip size bytes forward"},
+    {"tell", (PyCFunction) tp_f_tell, METH_VARARGS, "Get current reading position"},
+    {"eof", (PyCFunction) tp_f_eof, METH_VARARGS, "Check if end-of-file (EOF) is reached"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };
 

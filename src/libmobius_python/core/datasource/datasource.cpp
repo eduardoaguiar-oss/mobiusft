@@ -115,11 +115,11 @@ tp_f_is_available (core_datasource_datasource_o *self, PyObject *)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "get_type", (PyCFunction) tp_f_get_type, METH_VARARGS,
+    {"get_type", (PyCFunction) tp_f_get_type, METH_VARARGS,
      "Get datasource type"},
-    {(char *) "get_state", (PyCFunction) tp_f_get_state, METH_VARARGS,
+    {"get_state", (PyCFunction) tp_f_get_state, METH_VARARGS,
      "Get object state"},
-    {(char *) "is_available", (PyCFunction) tp_f_is_available, METH_VARARGS,
+    {"is_available", (PyCFunction) tp_f_is_available, METH_VARARGS,
      "Check if datasource is available"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };

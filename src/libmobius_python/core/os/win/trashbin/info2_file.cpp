@@ -216,18 +216,18 @@ tp_getter_entries (os_win_trashbin_info2_file_o *self, void *)
 // @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "version", (getter) tp_getter_version, (setter) 0,
-     (char *) "Struct version", nullptr},
-    {(char *) "number_of_files", (getter) tp_getter_number_of_files, (setter) 0,
-     (char *) "Number of files", nullptr},
-    {(char *) "last_file_idx", (getter) tp_getter_last_file_idx, (setter) 0,
-     (char *) "Last file index", nullptr},
-    {(char *) "record_size", (getter) tp_getter_record_size, (setter) 0,
-     (char *) "Record size", nullptr},
-    {(char *) "size", (getter) tp_getter_size, (setter) 0,
-     (char *) "Recycle bin size", nullptr},
-    {(char *) "entries", (getter) tp_getter_entries, (setter) 0,
-     (char *) "INFO2 entries", nullptr},
+    {"version", (getter) tp_getter_version, (setter) 0,
+     "Struct version", nullptr},
+    {"number_of_files", (getter) tp_getter_number_of_files, (setter) 0,
+     "Number of files", nullptr},
+    {"last_file_idx", (getter) tp_getter_last_file_idx, (setter) 0,
+     "Last file index", nullptr},
+    {"record_size", (getter) tp_getter_record_size, (setter) 0,
+     "Record size", nullptr},
+    {"size", (getter) tp_getter_size, (setter) 0,
+     "Recycle bin size", nullptr},
+    {"entries", (getter) tp_getter_entries, (setter) 0,
+     "INFO2 entries", nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
 

@@ -116,14 +116,14 @@ tp_getter_node (core_system_device_o *self, void *)
 // @brief getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "is_initialized", (getter) tp_getter_is_initialized, (setter) 0,
-     (char *) "check if device is initialized", nullptr},
-    {(char *) "type", (getter) tp_getter_type, (setter) 0,
-     (char *) "device type", nullptr},
-    {(char *) "subsystem", (getter) tp_getter_subsystem, (setter) 0,
-     (char *) "device subsystem", nullptr},
-    {(char *) "node", (getter) tp_getter_node, (setter) 0,
-     (char *) "device node", nullptr},
+    {"is_initialized", (getter) tp_getter_is_initialized, (setter) 0,
+     "check if device is initialized", nullptr},
+    {"type", (getter) tp_getter_type, (setter) 0,
+     "device type", nullptr},
+    {"subsystem", (getter) tp_getter_subsystem, (setter) 0,
+     "device subsystem", nullptr},
+    {"node", (getter) tp_getter_node, (setter) 0,
+     "device node", nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
 
@@ -225,11 +225,11 @@ tp_f_new_reader (core_system_device_o *self, PyObject *)
 // @brief methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "get_property", (PyCFunction) tp_f_get_property, METH_VARARGS,
+    {"get_property", (PyCFunction) tp_f_get_property, METH_VARARGS,
      "get property value"},
-    {(char *) "get_sysattr", (PyCFunction) tp_f_get_sysattr, METH_VARARGS,
+    {"get_sysattr", (PyCFunction) tp_f_get_sysattr, METH_VARARGS,
      "get system attribute"},
-    {(char *) "new_reader", (PyCFunction) tp_f_new_reader, METH_VARARGS,
+    {"new_reader", (PyCFunction) tp_f_new_reader, METH_VARARGS,
      "create new reader"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };

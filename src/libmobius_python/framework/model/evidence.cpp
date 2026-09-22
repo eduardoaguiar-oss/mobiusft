@@ -133,12 +133,12 @@ tp_getter_type (framework_model_evidence_o *self, void *)
 // @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "item", (getter) tp_getter_item, (setter) 0, (char *) "Case item",
+    {"item", (getter) tp_getter_item, (setter) 0, "Case item",
      nullptr},
-    {(char *) "uid", (getter) tp_getter_uid, (setter) 0, (char *) "UID",
+    {"uid", (getter) tp_getter_uid, (setter) 0, "UID",
      nullptr},
-    {(char *) "type", (getter) tp_getter_type, (setter) 0,
-     (char *) "Evidence type", nullptr},
+    {"type", (getter) tp_getter_type, (setter) 0,
+     "Evidence type", nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
 

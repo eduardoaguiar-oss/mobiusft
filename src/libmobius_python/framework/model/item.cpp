@@ -117,11 +117,11 @@ tp_getter_case (framework_model_item_o *self, void *)
 // @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "case", (getter) tp_getter_case, nullptr, (char *) "Case object",
+    {"case", (getter) tp_getter_case, nullptr, "Case object",
      nullptr},
-    {(char *) "category", (getter) tp_getter_category, nullptr,
-     (char *) "Category", nullptr},
-    {(char *) "uid", (getter) tp_getter_uid, nullptr, (char *) "Unique ID",
+    {"category", (getter) tp_getter_category, nullptr,
+     "Category", nullptr},
+    {"uid", (getter) tp_getter_uid, nullptr, "Unique ID",
      nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr}, // sentinel
 };

@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @file tempfile.cc C++ API <i>mobius.core.io.tempfile</i> class wrapper
+// @file tempfile.cpp C++ API <i>mobius.core.io.tempfile</i> class wrapper
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "tempfile.hpp"
@@ -82,8 +82,8 @@ tp_getter_size (core_io_tempfile_o *self, void *)
 // @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "path", (getter) tp_getter_path, nullptr, (char *) "Tempfile path", nullptr},
-    {(char *) "size", (getter) tp_getter_size, nullptr, (char *) "Tempfile size", nullptr},
+    {"path", (getter) tp_getter_path, nullptr, "Tempfile path", nullptr},
+    {"size", (getter) tp_getter_size, nullptr, "Tempfile size", nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr}, // sentinel
 };
 

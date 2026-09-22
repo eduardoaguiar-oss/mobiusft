@@ -148,16 +148,16 @@ tp_getter_last_execution_time (framework_model_ant_o *self, void *)
 // @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "item", (getter) tp_getter_item, (setter) 0, (char *) "Case item",
+    {"item", (getter) tp_getter_item, (setter) 0, "Case item",
      nullptr},
-    {(char *) "id", (getter) tp_getter_id, (setter) 0, (char *) "ANT ID",
+    {"id", (getter) tp_getter_id, (setter) 0, "ANT ID",
      nullptr},
-    {(char *) "name", (getter) tp_getter_name, (setter) 0, (char *) "Name",
+    {"name", (getter) tp_getter_name, (setter) 0, "Name",
      nullptr},
-    {(char *) "version", (getter) tp_getter_version, (setter) 0,
-     (char *) "Version", nullptr},
-    {(char *) "last_execution_time", (getter) tp_getter_last_execution_time,
-     (setter) 0, (char *) "Last execution date/time", nullptr},
+    {"version", (getter) tp_getter_version, (setter) 0,
+     "Version", nullptr},
+    {"last_execution_time", (getter) tp_getter_last_execution_time,
+     (setter) 0, "Last execution date/time", nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
 

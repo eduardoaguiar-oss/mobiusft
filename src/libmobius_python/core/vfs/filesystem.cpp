@@ -173,12 +173,12 @@ tp_getter_metadata (core_vfs_filesystem_o *self, void *)
 // @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "reader", (getter) tp_getter_reader, (setter) 0, (char *) "Volume reader object", nullptr},
-    {(char *) "offset", (getter) tp_getter_offset, (setter) 0, (char *) "Offset from the beginning of volume", nullptr},
-    {(char *) "size", (getter) tp_getter_size, (setter) 0, (char *) "Size in bytes", nullptr},
-    {(char *) "type", (getter) tp_getter_type, (setter) 0, (char *) "Filesystem type", nullptr},
-    {(char *) "name", (getter) tp_getter_name, (setter) 0, (char *) "Filesystem name", nullptr},
-    {(char *) "metadata", (getter) tp_getter_metadata, (setter) 0, (char *) "Metadata", nullptr},
+    {"reader", (getter) tp_getter_reader, (setter) 0, "Volume reader object", nullptr},
+    {"offset", (getter) tp_getter_offset, (setter) 0, "Offset from the beginning of volume", nullptr},
+    {"size", (getter) tp_getter_size, (setter) 0, "Size in bytes", nullptr},
+    {"type", (getter) tp_getter_type, (setter) 0, "Filesystem type", nullptr},
+    {"name", (getter) tp_getter_name, (setter) 0, "Filesystem name", nullptr},
+    {"metadata", (getter) tp_getter_metadata, (setter) 0, "Metadata", nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
 
@@ -249,8 +249,8 @@ tp_f_get_root_folder (core_vfs_filesystem_o *self, PyObject *)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "get_metadata", (PyCFunction) tp_f_get_metadata, METH_VARARGS, "Get metadata item"},
-    {(char *) "get_root_folder", (PyCFunction) tp_f_get_root_folder, METH_VARARGS, "Get root folder"},
+    {"get_metadata", (PyCFunction) tp_f_get_metadata, METH_VARARGS, "Get metadata item"},
+    {"get_root_folder", (PyCFunction) tp_f_get_root_folder, METH_VARARGS, "Get root folder"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };
 

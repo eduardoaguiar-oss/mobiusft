@@ -69,7 +69,7 @@ tp_f_read (core_io_line_reader_o *self, PyObject *)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "read", (PyCFunction) tp_f_read, METH_VARARGS, "Read line"}, {nullptr, nullptr, 0, nullptr} // sentinel
+    {"read", (PyCFunction) tp_f_read, METH_VARARGS, "Read line"}, {nullptr, nullptr, 0, nullptr} // sentinel
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

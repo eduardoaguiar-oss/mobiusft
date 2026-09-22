@@ -230,20 +230,20 @@ tp_getter_data (core_os_win_credential_o *self, void *)
 // @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "domain", (getter) tp_getter_domain, (setter) 0,
-     (char *) "Domain name", nullptr},
-    {(char *) "username", (getter) tp_getter_username, (setter) 0,
-     (char *) "User name", nullptr},
-    {(char *) "password", (getter) tp_getter_password, (setter) 0,
-     (char *) "Password", nullptr},
-    {(char *) "password_data", (getter) tp_getter_password_data, (setter) 0,
-     (char *) "Password data", nullptr},
-    {(char *) "flags", (getter) tp_getter_flags, (setter) 0, (char *) "Flags",
+    {"domain", (getter) tp_getter_domain, (setter) 0,
+     "Domain name", nullptr},
+    {"username", (getter) tp_getter_username, (setter) 0,
+     "User name", nullptr},
+    {"password", (getter) tp_getter_password, (setter) 0,
+     "Password", nullptr},
+    {"password_data", (getter) tp_getter_password_data, (setter) 0,
+     "Password data", nullptr},
+    {"flags", (getter) tp_getter_flags, (setter) 0, "Flags",
      nullptr},
-    {(char *) "last_update_time", (getter) tp_getter_last_update_time,
-     (setter) 0, (char *) "Last update date/time", nullptr},
-    {(char *) "data", (getter) tp_getter_data, (setter) 0,
-     (char *) "Credential data", nullptr},
+    {"last_update_time", (getter) tp_getter_last_update_time,
+     (setter) 0, "Last update date/time", nullptr},
+    {"data", (getter) tp_getter_data, (setter) 0,
+     "Credential data", nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
 

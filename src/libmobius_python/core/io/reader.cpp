@@ -98,17 +98,17 @@ tp_getter_size (core_io_reader_o *self, void *)
 // @brief getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "is_seekable",
+    {"is_seekable",
      (getter) tp_getter_is_seekable,
      (setter) 0,
-     (char *) "check if reader is seekable",
+     "check if reader is seekable",
      nullptr},
-    {(char *) "is_rewindable",
+    {"is_rewindable",
      (getter) tp_getter_is_rewindable,
      (setter) 0,
-     (char *) "check if reader is rewindable",
+     "check if reader is rewindable",
      nullptr},
-    {(char *) "size", (getter) tp_getter_size, (setter) 0, (char *) "data size in bytes", nullptr},
+    {"size", (getter) tp_getter_size, (setter) 0, "data size in bytes", nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
 
@@ -301,12 +301,12 @@ tp_f_get_block_size (core_io_reader_o *self, PyObject *)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "read", (PyCFunction) tp_f_read, METH_VARARGS, "Read bytes from reader"},
-    {(char *) "tell", (PyCFunction) tp_f_tell, METH_VARARGS, "Get current read position"},
-    {(char *) "seek", (PyCFunction) tp_f_seek, METH_VARARGS, "Set current read position"},
-    {(char *) "rewind", (PyCFunction) tp_f_rewind, METH_VARARGS, "Set current read position to the beginning of data"},
-    {(char *) "skip", (PyCFunction) tp_f_skip, METH_VARARGS, "Set read position n bytes ahead"},
-    {(char *) "get_block_size", (PyCFunction) tp_f_get_block_size, METH_VARARGS, "Get optimum block size"},
+    {"read", (PyCFunction) tp_f_read, METH_VARARGS, "Read bytes from reader"},
+    {"tell", (PyCFunction) tp_f_tell, METH_VARARGS, "Get current read position"},
+    {"seek", (PyCFunction) tp_f_seek, METH_VARARGS, "Set current read position"},
+    {"rewind", (PyCFunction) tp_f_rewind, METH_VARARGS, "Set current read position to the beginning of data"},
+    {"skip", (PyCFunction) tp_f_skip, METH_VARARGS, "Set read position n bytes ahead"},
+    {"get_block_size", (PyCFunction) tp_f_get_block_size, METH_VARARGS, "Get optimum block size"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };
 

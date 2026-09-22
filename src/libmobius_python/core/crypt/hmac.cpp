@@ -247,21 +247,21 @@ tp_f_clone (core_crypt_hmac_o *self, PyObject *)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "get_type", (PyCFunction) tp_f_get_type, METH_VARARGS,
+    {"get_type", (PyCFunction) tp_f_get_type, METH_VARARGS,
      "Get type"},
-    {(char *) "get_block_size", (PyCFunction) tp_f_get_block_size, METH_VARARGS,
+    {"get_block_size", (PyCFunction) tp_f_get_block_size, METH_VARARGS,
      "Get block size"},
-    {(char *) "get_digest_size", (PyCFunction) tp_f_get_digest_size,
+    {"get_digest_size", (PyCFunction) tp_f_get_digest_size,
      METH_VARARGS, "Get digest size"},
-    {(char *) "reset", (PyCFunction) tp_f_reset, METH_VARARGS,
+    {"reset", (PyCFunction) tp_f_reset, METH_VARARGS,
      "Reset hmac value"},
-    {(char *) "update", (PyCFunction) tp_f_update, METH_VARARGS,
+    {"update", (PyCFunction) tp_f_update, METH_VARARGS,
      "Update hmac value"},
-    {(char *) "get_digest", (PyCFunction) tp_f_get_digest, METH_VARARGS,
+    {"get_digest", (PyCFunction) tp_f_get_digest, METH_VARARGS,
      "Get hash digest"},
-    {(char *) "get_hex_digest", (PyCFunction) tp_f_get_hex_digest, METH_VARARGS,
+    {"get_hex_digest", (PyCFunction) tp_f_get_hex_digest, METH_VARARGS,
      "Get hash digest as hex string"},
-    {(char *) "clone", (PyCFunction) tp_f_clone, METH_VARARGS, "Clone object"},
+    {"clone", (PyCFunction) tp_f_clone, METH_VARARGS, "Clone object"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };
 

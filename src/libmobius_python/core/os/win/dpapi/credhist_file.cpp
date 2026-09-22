@@ -105,8 +105,8 @@ tp_getter_entries (core_os_win_dpapi_credhist_file_o *self, void *)
 // @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "entries", (getter) tp_getter_entries, (setter) 0,
-     (char *) "CREDHIST entries", nullptr},
+    {"entries", (getter) tp_getter_entries, (setter) 0,
+     "CREDHIST entries", nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
 
@@ -231,12 +231,12 @@ tp_f_decrypt_with_password (core_os_win_dpapi_credhist_file_o *self,
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "decrypt_with_key", (PyCFunction) tp_f_decrypt_with_key,
+    {"decrypt_with_key", (PyCFunction) tp_f_decrypt_with_key,
      METH_VARARGS, "Decrypt CREDHIST using key"},
-    {(char *) "decrypt_with_password_hash",
+    {"decrypt_with_password_hash",
      (PyCFunction) tp_f_decrypt_with_password_hash, METH_VARARGS,
      "Decrypt CREDHIST using password hash"},
-    {(char *) "decrypt_with_password", (PyCFunction) tp_f_decrypt_with_password,
+    {"decrypt_with_password", (PyCFunction) tp_f_decrypt_with_password,
      METH_VARARGS, "Decrypt CREDHIST using password"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };

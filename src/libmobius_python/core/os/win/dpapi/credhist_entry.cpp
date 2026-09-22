@@ -322,28 +322,28 @@ tp_getter_hash_ntlm (core_os_win_dpapi_credhist_entry_o *self, void *)
 // @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "revision", (getter) tp_getter_revision, (setter) 0,
-     (char *) "Struct revision", nullptr},
-    {(char *) "guid", (getter) tp_getter_guid, (setter) 0, (char *) "GUID",
+    {"revision", (getter) tp_getter_revision, (setter) 0,
+     "Struct revision", nullptr},
+    {"guid", (getter) tp_getter_guid, (setter) 0, "GUID",
      nullptr},
-    {(char *) "type", (getter) tp_getter_type, (setter) 0, (char *) "Type",
+    {"type", (getter) tp_getter_type, (setter) 0, "Type",
      nullptr},
-    {(char *) "hash_id", (getter) tp_getter_hash_id, (setter) 0,
-     (char *) "Hash algorithm ID", nullptr},
-    {(char *) "iterations", (getter) tp_getter_iterations, (setter) 0,
-     (char *) "Number of key iterations", nullptr},
-    {(char *) "cipher_id", (getter) tp_getter_cipher_id, (setter) 0,
-     (char *) "Cipher algorithm ID", nullptr},
-    {(char *) "salt", (getter) tp_getter_salt, (setter) 0, (char *) "Salt",
+    {"hash_id", (getter) tp_getter_hash_id, (setter) 0,
+     "Hash algorithm ID", nullptr},
+    {"iterations", (getter) tp_getter_iterations, (setter) 0,
+     "Number of key iterations", nullptr},
+    {"cipher_id", (getter) tp_getter_cipher_id, (setter) 0,
+     "Cipher algorithm ID", nullptr},
+    {"salt", (getter) tp_getter_salt, (setter) 0, "Salt",
      nullptr},
-    {(char *) "sid", (getter) tp_getter_sid, (setter) 0, (char *) "SID",
+    {"sid", (getter) tp_getter_sid, (setter) 0, "SID",
      nullptr},
-    {(char *) "cipher_text", (getter) tp_getter_cipher_text, (setter) 0,
-     (char *) "Cipher text", nullptr},
-    {(char *) "hash_sha1", (getter) tp_getter_hash_sha1, (setter) 0,
-     (char *) "SHA1 hash value", nullptr},
-    {(char *) "hash_ntlm", (getter) tp_getter_hash_ntlm, (setter) 0,
-     (char *) "NTLM hash value", nullptr},
+    {"cipher_text", (getter) tp_getter_cipher_text, (setter) 0,
+     "Cipher text", nullptr},
+    {"hash_sha1", (getter) tp_getter_hash_sha1, (setter) 0,
+     "SHA1 hash value", nullptr},
+    {"hash_ntlm", (getter) tp_getter_hash_ntlm, (setter) 0,
+     "NTLM hash value", nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
 
@@ -491,14 +491,14 @@ tp_f_is_decrypted (core_os_win_dpapi_credhist_entry_o *self, PyObject *)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "decrypt_with_key", (PyCFunction) tp_f_decrypt_with_key,
+    {"decrypt_with_key", (PyCFunction) tp_f_decrypt_with_key,
      METH_VARARGS, "Decrypt entry using key"},
-    {(char *) "decrypt_with_password_hash",
+    {"decrypt_with_password_hash",
      (PyCFunction) tp_f_decrypt_with_password_hash, METH_VARARGS,
      "Decrypt entry using password hash"},
-    {(char *) "decrypt_with_password", (PyCFunction) tp_f_decrypt_with_password,
+    {"decrypt_with_password", (PyCFunction) tp_f_decrypt_with_password,
      METH_VARARGS, "Decrypt entry using password"},
-    {(char *) "is_decrypted", (PyCFunction) tp_f_is_decrypted, METH_VARARGS,
+    {"is_decrypted", (PyCFunction) tp_f_is_decrypted, METH_VARARGS,
      "Check if entry is decrypted"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };

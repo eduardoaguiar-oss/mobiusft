@@ -172,18 +172,18 @@ tp_getter_payload (core_decoder_tdf_o *self, void *)
 // @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "version", (getter) tp_getter_version, (setter) 0,
-     (char *) "Version", nullptr},
-    {(char *) "major_version", (getter) tp_getter_major_version, (setter) 0,
-     (char *) "Major version", nullptr},
-    {(char *) "minor_version", (getter) tp_getter_minor_version, (setter) 0,
-     (char *) "Minor version", nullptr},
-    {(char *) "revision", (getter) tp_getter_revision, (setter) 0,
-     (char *) "Revision number", nullptr},
-    {(char *) "hash_value", (getter) tp_getter_hash_value, (setter) 0,
-     (char *) "MD5 hash value", nullptr},
-    {(char *) "payload", (getter) tp_getter_payload, (setter) 0,
-     (char *) "File payload", nullptr},
+    {"version", (getter) tp_getter_version, (setter) 0,
+     "Version", nullptr},
+    {"major_version", (getter) tp_getter_major_version, (setter) 0,
+     "Major version", nullptr},
+    {"minor_version", (getter) tp_getter_minor_version, (setter) 0,
+     "Minor version", nullptr},
+    {"revision", (getter) tp_getter_revision, (setter) 0,
+     "Revision number", nullptr},
+    {"hash_value", (getter) tp_getter_hash_value, (setter) 0,
+     "MD5 hash value", nullptr},
+    {"payload", (getter) tp_getter_payload, (setter) 0,
+     "File payload", nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
 
@@ -242,9 +242,9 @@ tp_f_is_valid (core_decoder_tdf_o *self, PyObject *)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "get_version_as_string", (PyCFunction) tp_f_get_version_as_string,
+    {"get_version_as_string", (PyCFunction) tp_f_get_version_as_string,
      METH_VARARGS, "Get version as string"},
-    {(char *) "is_valid", (PyCFunction) tp_f_is_valid, METH_VARARGS,
+    {"is_valid", (PyCFunction) tp_f_is_valid, METH_VARARGS,
      "Return true if file is valid"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };

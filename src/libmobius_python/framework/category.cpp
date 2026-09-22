@@ -235,14 +235,14 @@ tp_setter_icon_data (framework_category_o *self, PyObject *value, void *)
 // @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "id", (getter) tp_getter_id, nullptr, (char *) "category ID",
+    {"id", (getter) tp_getter_id, nullptr, "category ID",
      nullptr},
-    {(char *) "name", (getter) tp_getter_name, (setter) tp_setter_name,
-     (char *) "name", nullptr},
-    {(char *) "description", (getter) tp_getter_description,
-     (setter) tp_setter_description, (char *) "description", nullptr},
-    {(char *) "icon_data", (getter) tp_getter_icon_data,
-     (setter) tp_setter_icon_data, (char *) "icon data", nullptr},
+    {"name", (getter) tp_getter_name, (setter) tp_setter_name,
+     "name", nullptr},
+    {"description", (getter) tp_getter_description,
+     (setter) tp_setter_description, "description", nullptr},
+    {"icon_data", (getter) tp_getter_icon_data,
+     (setter) tp_setter_icon_data, "icon data", nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr}, // sentinel
 };
 

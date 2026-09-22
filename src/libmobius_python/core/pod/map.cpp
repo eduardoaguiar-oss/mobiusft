@@ -364,18 +364,18 @@ tp_f_get_values (core_pod_map_o *self, PyObject *)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "get_size", (PyCFunction) tp_f_get_size, METH_VARARGS,
+    {"get_size", (PyCFunction) tp_f_get_size, METH_VARARGS,
      "Get map size"},
-    {(char *) "contains", (PyCFunction) tp_f_contains, METH_VARARGS,
+    {"contains", (PyCFunction) tp_f_contains, METH_VARARGS,
      "Check if map contains a given key"},
-    {(char *) "get", (PyCFunction) tp_f_get, METH_VARARGS, "Get item"},
-    {(char *) "set", (PyCFunction) tp_f_set, METH_VARARGS, "Set item"},
-    {(char *) "remove", (PyCFunction) tp_f_remove, METH_VARARGS, "Remove item"},
-    {(char *) "update", (PyCFunction) tp_f_update, METH_VARARGS,
+    {"get", (PyCFunction) tp_f_get, METH_VARARGS, "Get item"},
+    {"set", (PyCFunction) tp_f_set, METH_VARARGS, "Set item"},
+    {"remove", (PyCFunction) tp_f_remove, METH_VARARGS, "Remove item"},
+    {"update", (PyCFunction) tp_f_update, METH_VARARGS,
      "Update with data from another map"},
-    {(char *) "to_python", (PyCFunction) tp_f_to_python, METH_VARARGS,
+    {"to_python", (PyCFunction) tp_f_to_python, METH_VARARGS,
      "Convert map to Python dict"},
-    {(char *) "get_values", (PyCFunction) tp_f_get_values, METH_VARARGS,
+    {"get_values", (PyCFunction) tp_f_get_values, METH_VARARGS,
      "Get items"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };

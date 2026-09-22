@@ -109,10 +109,10 @@ tp_getter_value (core_resource_o *self, void *)
 // @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "id", (getter) tp_getter_id, (setter) 0, (char *) "ID", nullptr},
-    {(char *) "description", (getter) tp_getter_description, (setter) 0,
-     (char *) "Description", nullptr},
-    {(char *) "value", (getter) tp_getter_value, (setter) 0, (char *) "Value",
+    {"id", (getter) tp_getter_id, (setter) 0, "ID", nullptr},
+    {"description", (getter) tp_getter_description, (setter) 0,
+     "Description", nullptr},
+    {"value", (getter) tp_getter_value, (setter) 0, "Value",
      nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };

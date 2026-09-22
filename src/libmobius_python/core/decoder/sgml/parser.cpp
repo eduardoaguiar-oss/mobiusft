@@ -119,8 +119,8 @@ tp_f_get_last (core_decoder_sgml_parser_o *self, PyObject *)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "get", (PyCFunction) tp_f_get, METH_VARARGS, "Get next element"},
-    {(char *) "get_last", (PyCFunction) tp_f_get_last, METH_VARARGS,
+    {"get", (PyCFunction) tp_f_get, METH_VARARGS, "Get next element"},
+    {"get_last", (PyCFunction) tp_f_get_last, METH_VARARGS,
      "Get last element"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };

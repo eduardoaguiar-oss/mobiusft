@@ -329,20 +329,20 @@ tp_f_get_events (core_log_o *self, PyObject *)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "error", (PyCFunction) tp_f_error, METH_VARARGS,
+    {"error", (PyCFunction) tp_f_error, METH_VARARGS,
      "Add error event"},
-    {(char *) "warning", (PyCFunction) tp_f_warning, METH_VARARGS,
+    {"warning", (PyCFunction) tp_f_warning, METH_VARARGS,
      "Add warning event"},
-    {(char *) "info", (PyCFunction) tp_f_info, METH_VARARGS, "Add info event"},
-    {(char *) "development", (PyCFunction) tp_f_development, METH_VARARGS,
+    {"info", (PyCFunction) tp_f_info, METH_VARARGS, "Add info event"},
+    {"development", (PyCFunction) tp_f_development, METH_VARARGS,
      "Add development event"},
-    {(char *) "debug", (PyCFunction) tp_f_debug, METH_VARARGS,
+    {"debug", (PyCFunction) tp_f_debug, METH_VARARGS,
      "Add debug event"},
-    {(char *) "has_errors", (PyCFunction) tp_f_has_errors, METH_VARARGS,
+    {"has_errors", (PyCFunction) tp_f_has_errors, METH_VARARGS,
      "Check if an error occurred"},
-    {(char *) "set_debug", (PyCFunction) tp_f_set_debug, METH_VARARGS,
+    {"set_debug", (PyCFunction) tp_f_set_debug, METH_VARARGS,
      "Set debug mode on/off"},
-    {(char *) "get_events", (PyCFunction) tp_f_get_events, METH_VARARGS,
+    {"get_events", (PyCFunction) tp_f_get_events, METH_VARARGS,
      "Get events"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };

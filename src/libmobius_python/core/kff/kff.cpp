@@ -246,17 +246,17 @@ tp_f_lookup (core_kff_kff_o *self, PyObject *args)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "new_connection", (PyCFunction) tp_f_new_connection, METH_VARARGS,
+    {"new_connection", (PyCFunction) tp_f_new_connection, METH_VARARGS,
      "create new connection set to KFF"},
-    {(char *) "new_hashset", (PyCFunction) tp_f_new_hashset, METH_VARARGS,
+    {"new_hashset", (PyCFunction) tp_f_new_hashset, METH_VARARGS,
      "Create hash set"},
-    {(char *) "remove_hashset", (PyCFunction) tp_f_remove_hashset, METH_VARARGS,
+    {"remove_hashset", (PyCFunction) tp_f_remove_hashset, METH_VARARGS,
      "Remove hash set"},
-    {(char *) "get_hashsets", (PyCFunction) tp_f_get_hashsets, METH_VARARGS,
+    {"get_hashsets", (PyCFunction) tp_f_get_hashsets, METH_VARARGS,
      "Get hash sets"},
-    {(char *) "alert_lookup", (PyCFunction) tp_f_alert_lookup, METH_VARARGS,
+    {"alert_lookup", (PyCFunction) tp_f_alert_lookup, METH_VARARGS,
      "Lookup hash in alert hash sets"},
-    {(char *) "lookup", (PyCFunction) tp_f_lookup, METH_VARARGS,
+    {"lookup", (PyCFunction) tp_f_lookup, METH_VARARGS,
      "Lookup hash in all hash sets"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };

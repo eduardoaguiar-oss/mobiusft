@@ -125,12 +125,12 @@ tp_getter_data (core_os_win_registry_registry_data_o *self, void *)
 // @brief registry_data: getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "size", (getter) tp_getter_size, (setter) 0,
-     (char *) "data size in bytes", nullptr},
-    {(char *) "type", (getter) tp_getter_type, (setter) 0, (char *) "data type",
+    {"size", (getter) tp_getter_size, (setter) 0,
+     "data size in bytes", nullptr},
+    {"type", (getter) tp_getter_type, (setter) 0, "data type",
      nullptr},
-    {(char *) "data", (getter) tp_getter_data, (setter) 0,
-     (char *) "data buffer", nullptr},
+    {"data", (getter) tp_getter_data, (setter) 0,
+     "data buffer", nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
 
@@ -220,11 +220,11 @@ tp_f_get_data_as_string (core_os_win_registry_registry_data_o *self,
 // @brief registry_data: methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "get_data_as_dword", (PyCFunction) tp_f_get_data_as_dword,
+    {"get_data_as_dword", (PyCFunction) tp_f_get_data_as_dword,
      METH_VARARGS, "get data as dword"},
-    {(char *) "get_data_as_qword", (PyCFunction) tp_f_get_data_as_qword,
+    {"get_data_as_qword", (PyCFunction) tp_f_get_data_as_qword,
      METH_VARARGS, "get data as qword"},
-    {(char *) "get_data_as_string", (PyCFunction) tp_f_get_data_as_string,
+    {"get_data_as_string", (PyCFunction) tp_f_get_data_as_string,
      METH_VARARGS, "get data as string"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };

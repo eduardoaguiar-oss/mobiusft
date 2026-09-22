@@ -71,7 +71,7 @@ tp_f_get_token (core_decoder_sgml_tokenizer_o *self, PyObject *)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "get_token", (PyCFunction) tp_f_get_token, METH_VARARGS,
+    {"get_token", (PyCFunction) tp_f_get_token, METH_VARARGS,
      "Get next token"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };

@@ -237,14 +237,14 @@ tp_setter_informative_text (core_ui_message_dialog_o *self, PyObject *value,
 // @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "type", (getter) tp_getter_type, (setter) 0,
-     (char *) "Message type", nullptr},
-    {(char *) "title", (getter) tp_getter_title, (setter) tp_setter_title,
-     (char *) "Window's title", nullptr},
-    {(char *) "text", (getter) tp_getter_text, (setter) tp_setter_text,
-     (char *) "Text", nullptr},
-    {(char *) "informative_text", (getter) tp_getter_informative_text,
-     (setter) tp_setter_informative_text, (char *) "Informative text", nullptr},
+    {"type", (getter) tp_getter_type, (setter) 0,
+     "Message type", nullptr},
+    {"title", (getter) tp_getter_title, (setter) tp_setter_title,
+     "Window's title", nullptr},
+    {"text", (getter) tp_getter_text, (setter) tp_setter_text,
+     "Text", nullptr},
+    {"informative_text", (getter) tp_getter_informative_text,
+     (setter) tp_setter_informative_text, "Informative text", nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
 
@@ -367,11 +367,11 @@ tp_f_run (core_ui_message_dialog_o *self, PyObject *)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "add_button", (PyCFunction) tp_f_add_button, METH_VARARGS,
+    {"add_button", (PyCFunction) tp_f_add_button, METH_VARARGS,
      "Add button"},
-    {(char *) "set_default_response", (PyCFunction) tp_f_set_default_response,
+    {"set_default_response", (PyCFunction) tp_f_set_default_response,
      METH_VARARGS, "Set default response"},
-    {(char *) "run", (PyCFunction) tp_f_run, METH_VARARGS, "Run dialog"},
+    {"run", (PyCFunction) tp_f_run, METH_VARARGS, "Run dialog"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };
 

@@ -97,7 +97,7 @@ tp_f_read (core_io_text_reader_o *self, PyObject *args)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "read", (PyCFunction) tp_f_read, METH_VARARGS, "Read bytes from text_reader"},
+    {"read", (PyCFunction) tp_f_read, METH_VARARGS, "Read bytes from text_reader"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };
 

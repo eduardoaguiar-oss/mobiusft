@@ -103,11 +103,11 @@ tp_getter_name (core_io_stream_o *self, void *)
 // @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "size", (getter) tp_getter_size, (setter) 0,
-     (char *) "Stream size", nullptr},
-    {(char *) "type", (getter) tp_getter_type, (setter) 0, (char *) "Type",
+    {"size", (getter) tp_getter_size, (setter) 0,
+     "Stream size", nullptr},
+    {"type", (getter) tp_getter_type, (setter) 0, "Type",
      nullptr},
-    {(char *) "name", (getter) tp_getter_name, (setter) 0, (char *) "Name",
+    {"name", (getter) tp_getter_name, (setter) 0, "Name",
      nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
@@ -141,7 +141,7 @@ tp_f_new_reader (core_io_stream_o *self, PyObject *)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "new_reader", (PyCFunction) tp_f_new_reader, METH_VARARGS,
+    {"new_reader", (PyCFunction) tp_f_new_reader, METH_VARARGS,
      "Create new reader"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };

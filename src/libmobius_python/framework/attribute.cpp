@@ -372,20 +372,20 @@ tp_getter_is_editable (framework_attribute_o *self, void *)
 // @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "id", (getter) tp_getter_id, nullptr, (char *) "attribute ID",
+    {"id", (getter) tp_getter_id, nullptr, "attribute ID",
      nullptr},
-    {(char *) "name", (getter) tp_getter_name, (setter) tp_setter_name,
-     (char *) "name", nullptr},
-    {(char *) "description", (getter) tp_getter_description,
-     (setter) tp_setter_description, (char *) "description", nullptr},
-    {(char *) "datatype", (getter) tp_getter_datatype,
-     (setter) tp_setter_datatype, (char *) "datatype", nullptr},
-    {(char *) "value_mask", (getter) tp_getter_value_mask,
-     (setter) tp_setter_value_mask, (char *) "value_mask", nullptr},
-    {(char *) "index", (getter) tp_getter_index, (setter) tp_setter_index,
-     (char *) "index", nullptr},
-    {(char *) "is_editable", (getter) tp_getter_is_editable, nullptr,
-     (char *) "flag: is editable", nullptr},
+    {"name", (getter) tp_getter_name, (setter) tp_setter_name,
+     "name", nullptr},
+    {"description", (getter) tp_getter_description,
+     (setter) tp_setter_description, "description", nullptr},
+    {"datatype", (getter) tp_getter_datatype,
+     (setter) tp_setter_datatype, "datatype", nullptr},
+    {"value_mask", (getter) tp_getter_value_mask,
+     (setter) tp_setter_value_mask, "value_mask", nullptr},
+    {"index", (getter) tp_getter_index, (setter) tp_setter_index,
+     "index", nullptr},
+    {"is_editable", (getter) tp_getter_is_editable, nullptr,
+     "flag: is editable", nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr}, // sentinel
 };
 

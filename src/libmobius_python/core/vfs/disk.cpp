@@ -105,9 +105,9 @@ tp_getter_name (core_vfs_disk_o *self, void *)
 // @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "type", (getter) tp_getter_type, (setter) 0, (char *) "Type", nullptr},
-    {(char *) "size", (getter) tp_getter_size, (setter) 0, (char *) "Size in bytes", nullptr},
-    {(char *) "name", (getter) tp_getter_name, (setter) 0, (char *) "Name", nullptr},
+    {"type", (getter) tp_getter_type, (setter) 0, "Type", nullptr},
+    {"size", (getter) tp_getter_size, (setter) 0, "Size in bytes", nullptr},
+    {"name", (getter) tp_getter_name, (setter) 0, "Name", nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
 
@@ -354,14 +354,14 @@ tp_f_new_reader (core_vfs_disk_o *self, PyObject *)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "is_available", (PyCFunction) tp_f_is_available, METH_VARARGS, "Check if disk is available"},
-    {(char *) "has_attribute", (PyCFunction) tp_f_has_attribute, METH_VARARGS, "Check if attribute exists"},
-    {(char *) "set_attribute", (PyCFunction) tp_f_set_attribute, METH_VARARGS, "Set attribute"},
-    {(char *) "get_attribute", (PyCFunction) tp_f_get_attribute, METH_VARARGS, "Get attribute"},
-    {(char *) "get_attributes", (PyCFunction) tp_f_get_attributes, METH_VARARGS, "Get attributes"},
-    {(char *) "get_state", (PyCFunction) tp_f_get_state, METH_VARARGS, "Get object state"},
-    {(char *) "get_path", (PyCFunction) tp_f_get_path, METH_VARARGS, "Get path to underlying file, when available"},
-    {(char *) "new_reader", (PyCFunction) tp_f_new_reader, METH_VARARGS, "Create new reader"},
+    {"is_available", (PyCFunction) tp_f_is_available, METH_VARARGS, "Check if disk is available"},
+    {"has_attribute", (PyCFunction) tp_f_has_attribute, METH_VARARGS, "Check if attribute exists"},
+    {"set_attribute", (PyCFunction) tp_f_set_attribute, METH_VARARGS, "Set attribute"},
+    {"get_attribute", (PyCFunction) tp_f_get_attribute, METH_VARARGS, "Get attribute"},
+    {"get_attributes", (PyCFunction) tp_f_get_attributes, METH_VARARGS, "Get attributes"},
+    {"get_state", (PyCFunction) tp_f_get_state, METH_VARARGS, "Get object state"},
+    {"get_path", (PyCFunction) tp_f_get_path, METH_VARARGS, "Get path to underlying file, when available"},
+    {"new_reader", (PyCFunction) tp_f_new_reader, METH_VARARGS, "Create new reader"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };
 

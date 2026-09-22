@@ -60,7 +60,7 @@ tp_f_release (core_database_connection_o *self, PyObject *)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "release", (PyCFunction) tp_f_release, METH_VARARGS,
+    {"release", (PyCFunction) tp_f_release, METH_VARARGS,
      "Release connection"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };

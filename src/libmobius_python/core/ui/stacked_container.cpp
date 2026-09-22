@@ -212,15 +212,15 @@ tp_f_get_selected (core_ui_stacked_container_o *self, PyObject *)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "add_child", (PyCFunction) tp_f_add_child, METH_VARARGS,
+    {"add_child", (PyCFunction) tp_f_add_child, METH_VARARGS,
      "Add child widget"},
-    {(char *) "remove_child", (PyCFunction) tp_f_remove_child, METH_VARARGS,
+    {"remove_child", (PyCFunction) tp_f_remove_child, METH_VARARGS,
      "Remove child widget"},
-    {(char *) "get_child", (PyCFunction) tp_f_get_child, METH_VARARGS,
+    {"get_child", (PyCFunction) tp_f_get_child, METH_VARARGS,
      "Get child widget"},
-    {(char *) "select_child", (PyCFunction) tp_f_select_child, METH_VARARGS,
+    {"select_child", (PyCFunction) tp_f_select_child, METH_VARARGS,
      "Select child widget"},
-    {(char *) "get_selected", (PyCFunction) tp_f_get_selected, METH_VARARGS,
+    {"get_selected", (PyCFunction) tp_f_get_selected, METH_VARARGS,
      "Get selected widget"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };

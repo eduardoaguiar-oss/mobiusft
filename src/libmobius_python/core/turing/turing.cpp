@@ -275,17 +275,17 @@ tp_f_new_transaction (core_turing_turing_o *self, PyObject *)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "has_hash", (PyCFunction) tp_f_has_hash, METH_VARARGS,
+    {"has_hash", (PyCFunction) tp_f_has_hash, METH_VARARGS,
      "Check if hash is set"},
-    {(char *) "set_hash", (PyCFunction) tp_f_set_hash, METH_VARARGS,
+    {"set_hash", (PyCFunction) tp_f_set_hash, METH_VARARGS,
      "Set hash type, value and password"},
-    {(char *) "get_hash_password", (PyCFunction) tp_f_get_hash_password,
+    {"get_hash_password", (PyCFunction) tp_f_get_hash_password,
      METH_VARARGS, "Get password for a given hash"},
-    {(char *) "remove_hashes", (PyCFunction) tp_f_remove_hashes, METH_VARARGS,
+    {"remove_hashes", (PyCFunction) tp_f_remove_hashes, METH_VARARGS,
      "Remove all hashes from database"},
-    {(char *) "get_hashes", (PyCFunction) tp_f_get_hashes, METH_VARARGS,
+    {"get_hashes", (PyCFunction) tp_f_get_hashes, METH_VARARGS,
      "get all hashes from database"},
-    {(char *) "new_transaction", (PyCFunction) tp_f_new_transaction,
+    {"new_transaction", (PyCFunction) tp_f_new_transaction,
      METH_VARARGS, "create new transaction"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };

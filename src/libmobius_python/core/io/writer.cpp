@@ -120,10 +120,10 @@ tp_getter_is_rewindable (core_io_writer_o *self, void *)
 // @brief getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "is_seekable", (getter) tp_getter_is_seekable, (setter) 0,
-     (char *) "check if writer is seekable", nullptr},
-    {(char *) "is_rewindable", (getter) tp_getter_is_rewindable, (setter) 0,
-     (char *) "check if writer is rewindable", nullptr},
+    {"is_seekable", (getter) tp_getter_is_seekable, (setter) 0,
+     "check if writer is seekable", nullptr},
+    {"is_rewindable", (getter) tp_getter_is_rewindable, (setter) 0,
+     "check if writer is rewindable", nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
 
@@ -322,17 +322,17 @@ tp_f_flush (core_io_writer_o *self, PyObject *)
 // @brief methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "write", (PyCFunction) tp_f_write, METH_VARARGS,
+    {"write", (PyCFunction) tp_f_write, METH_VARARGS,
      "writes bytes to writer"},
-    {(char *) "tell", (PyCFunction) tp_f_tell, METH_VARARGS,
+    {"tell", (PyCFunction) tp_f_tell, METH_VARARGS,
      "get current write position"},
-    {(char *) "seek", (PyCFunction) tp_f_seek, METH_VARARGS,
+    {"seek", (PyCFunction) tp_f_seek, METH_VARARGS,
      "set current write position"},
-    {(char *) "rewind", (PyCFunction) tp_f_rewind, METH_VARARGS,
+    {"rewind", (PyCFunction) tp_f_rewind, METH_VARARGS,
      "set current write position to the beginning of data"},
-    {(char *) "skip", (PyCFunction) tp_f_skip, METH_VARARGS,
+    {"skip", (PyCFunction) tp_f_skip, METH_VARARGS,
      "set write position n bytes ahead"},
-    {(char *) "flush", (PyCFunction) tp_f_flush, METH_VARARGS,
+    {"flush", (PyCFunction) tp_f_flush, METH_VARARGS,
      "write down data"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };

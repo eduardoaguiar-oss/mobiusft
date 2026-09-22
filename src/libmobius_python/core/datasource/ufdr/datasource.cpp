@@ -220,17 +220,17 @@ tp_f_get_extractions (core_datasource_ufdr_datasource_o *self, PyObject *)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "get_url", (PyCFunction) tp_f_get_url, METH_VARARGS,
+    {"get_url", (PyCFunction) tp_f_get_url, METH_VARARGS,
      "Get .ufdr URL"},
-    {(char *) "get_file_info", (PyCFunction) tp_f_get_file_info, METH_VARARGS,
+    {"get_file_info", (PyCFunction) tp_f_get_file_info, METH_VARARGS,
      "Get .ufdr file info"},
-    {(char *) "get_case_info", (PyCFunction) tp_f_get_case_info, METH_VARARGS,
+    {"get_case_info", (PyCFunction) tp_f_get_case_info, METH_VARARGS,
      "Get case info"},
-    {(char *) "set_case_info", (PyCFunction) tp_f_set_case_info, METH_VARARGS,
+    {"set_case_info", (PyCFunction) tp_f_set_case_info, METH_VARARGS,
      "Set case info"},
-    {(char *) "add_extraction", (PyCFunction) tp_f_add_extraction, METH_VARARGS,
+    {"add_extraction", (PyCFunction) tp_f_add_extraction, METH_VARARGS,
      "Add extraction"},
-    {(char *) "get_extractions", (PyCFunction) tp_f_get_extractions,
+    {"get_extractions", (PyCFunction) tp_f_get_extractions,
      METH_VARARGS, "Get extractions"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };

@@ -164,13 +164,13 @@ tp_getter_path (core_os_win_trashbin_ifile_o *self, void *)
 // @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "version", (getter) tp_getter_version, (setter) 0,
-     (char *) "Struct revision", nullptr},
-    {(char *) "size", (getter) tp_getter_size, (setter) 0, (char *) "File size",
+    {"version", (getter) tp_getter_version, (setter) 0,
+     "Struct revision", nullptr},
+    {"size", (getter) tp_getter_size, (setter) 0, "File size",
      nullptr},
-    {(char *) "deletion_time", (getter) tp_getter_deletion_time, (setter) 0,
-     (char *) "File deletion date/time", nullptr},
-    {(char *) "path", (getter) tp_getter_path, (setter) 0, (char *) "File path",
+    {"deletion_time", (getter) tp_getter_deletion_time, (setter) 0,
+     "File deletion date/time", nullptr},
+    {"path", (getter) tp_getter_path, (setter) 0, "File path",
      nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };

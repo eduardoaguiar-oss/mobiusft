@@ -105,12 +105,12 @@ tp_getter_size (core_file_decoder_section_o *self, void *)
 // @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "name", (getter) tp_getter_name, nullptr, (char *) "Section name",
+    {"name", (getter) tp_getter_name, nullptr, "Section name",
      nullptr},
-    {(char *) "offset", (getter) tp_getter_offset, nullptr,
-     (char *) "Section offset from the beginning of file", nullptr},
-    {(char *) "size", (getter) tp_getter_size, nullptr,
-     (char *) "Section size in bytes", nullptr},
+    {"offset", (getter) tp_getter_offset, nullptr,
+     "Section offset from the beginning of file", nullptr},
+    {"size", (getter) tp_getter_size, nullptr,
+     "Section size in bytes", nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr}, // sentinel
 };
 

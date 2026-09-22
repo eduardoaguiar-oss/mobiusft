@@ -211,17 +211,17 @@ tp_getter_size (os_win_trashbin_info2_entry_o *self, void *)
 // @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "is_deleted", (getter) tp_getter_is_deleted, (setter) 0,
-     (char *) "Is entry deleted", nullptr},
-    {(char *) "path", (getter) tp_getter_path, (setter) 0, (char *) "File path",
+    {"is_deleted", (getter) tp_getter_is_deleted, (setter) 0,
+     "Is entry deleted", nullptr},
+    {"path", (getter) tp_getter_path, (setter) 0, "File path",
      nullptr},
-    {(char *) "drive_number", (getter) tp_getter_drive_number, (setter) 0,
-     (char *) "Drive number", nullptr},
-    {(char *) "file_idx", (getter) tp_getter_file_idx, (setter) 0,
-     (char *) "File index", nullptr},
-    {(char *) "deletion_time", (getter) tp_getter_deletion_time, (setter) 0,
-     (char *) "File deletion date/time", nullptr},
-    {(char *) "size", (getter) tp_getter_size, (setter) 0, (char *) "File size",
+    {"drive_number", (getter) tp_getter_drive_number, (setter) 0,
+     "Drive number", nullptr},
+    {"file_idx", (getter) tp_getter_file_idx, (setter) 0,
+     "File index", nullptr},
+    {"deletion_time", (getter) tp_getter_deletion_time, (setter) 0,
+     "File deletion date/time", nullptr},
+    {"size", (getter) tp_getter_size, (setter) 0, "File size",
      nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };

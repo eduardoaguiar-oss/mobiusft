@@ -85,9 +85,9 @@ tp_getter_uid (framework_model_case_o *self, void *)
 // @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "root_item", (getter) tp_getter_root_item, (setter) 0,
-     (char *) "root item", nullptr},
-    {(char *) "uid", (getter) tp_getter_uid, (setter) 0, (char *) "case UID",
+    {"root_item", (getter) tp_getter_root_item, (setter) 0,
+     "root item", nullptr},
+    {"uid", (getter) tp_getter_uid, (setter) 0, "case UID",
      nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
@@ -315,19 +315,19 @@ tp_f_get_password_hashes (framework_model_case_o *self, PyObject *)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "get_path", (PyCFunction) tp_f_get_path, METH_VARARGS,
+    {"get_path", (PyCFunction) tp_f_get_path, METH_VARARGS,
      "get path inside case folder"},
-    {(char *) "create_path", (PyCFunction) tp_f_create_path, METH_VARARGS,
+    {"create_path", (PyCFunction) tp_f_create_path, METH_VARARGS,
      "create path inside case folder"},
-    {(char *) "new_connection", (PyCFunction) tp_f_new_connection, METH_VARARGS,
+    {"new_connection", (PyCFunction) tp_f_new_connection, METH_VARARGS,
      "create new connection to case database"},
-    {(char *) "new_transaction", (PyCFunction) tp_f_new_transaction,
+    {"new_transaction", (PyCFunction) tp_f_new_transaction,
      METH_VARARGS, "create new transaction for case database"},
-    {(char *) "get_item_by_uid", (PyCFunction) tp_f_get_item_by_uid,
+    {"get_item_by_uid", (PyCFunction) tp_f_get_item_by_uid,
      METH_VARARGS, "get item by UID"},
-    {(char *) "get_passwords", (PyCFunction) tp_f_get_passwords, METH_VARARGS,
+    {"get_passwords", (PyCFunction) tp_f_get_passwords, METH_VARARGS,
      "Get passwords"},
-    {(char *) "get_password_hashes", (PyCFunction) tp_f_get_password_hashes,
+    {"get_password_hashes", (PyCFunction) tp_f_get_password_hashes,
      METH_VARARGS, "Get password hashes"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };

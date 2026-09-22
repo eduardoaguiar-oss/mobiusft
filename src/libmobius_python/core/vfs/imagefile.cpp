@@ -131,10 +131,10 @@ tp_getter_sector_size (core_vfs_imagefile_o *self, void *)
 // @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "type", (getter) tp_getter_type, (setter) 0, (char *) "type", nullptr},
-    {(char *) "size", (getter) tp_getter_size, (setter) 0, (char *) "size", nullptr},
-    {(char *) "sectors", (getter) tp_getter_sectors, (setter) 0, (char *) "number of sectors", nullptr},
-    {(char *) "sector_size", (getter) tp_getter_sector_size, (setter) 0, (char *) "sector size", nullptr},
+    {"type", (getter) tp_getter_type, (setter) 0, "type", nullptr},
+    {"size", (getter) tp_getter_size, (setter) 0, "size", nullptr},
+    {"sectors", (getter) tp_getter_sectors, (setter) 0, "number of sectors", nullptr},
+    {"sector_size", (getter) tp_getter_sector_size, (setter) 0, "sector size", nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
 
@@ -320,12 +320,12 @@ tp_f_new_writer (core_vfs_imagefile_o *self, PyObject *)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "is_available", (PyCFunction) tp_f_is_available, METH_VARARGS, "Check if imagefile is available"},
-    {(char *) "get_attribute", (PyCFunction) tp_f_get_attribute, METH_VARARGS, "Get attribute value"},
-    {(char *) "set_attribute", (PyCFunction) tp_f_set_attribute, METH_VARARGS, "Set attribute value"},
-    {(char *) "get_attributes", (PyCFunction) tp_f_get_attributes, METH_VARARGS, "Get attributes"},
-    {(char *) "new_reader", (PyCFunction) tp_f_new_reader, METH_VARARGS, "Create new reader"},
-    {(char *) "new_writer", (PyCFunction) tp_f_new_writer, METH_VARARGS, "Create new writer"},
+    {"is_available", (PyCFunction) tp_f_is_available, METH_VARARGS, "Check if imagefile is available"},
+    {"get_attribute", (PyCFunction) tp_f_get_attribute, METH_VARARGS, "Get attribute value"},
+    {"set_attribute", (PyCFunction) tp_f_set_attribute, METH_VARARGS, "Set attribute value"},
+    {"get_attributes", (PyCFunction) tp_f_get_attributes, METH_VARARGS, "Get attributes"},
+    {"new_reader", (PyCFunction) tp_f_new_reader, METH_VARARGS, "Create new reader"},
+    {"new_writer", (PyCFunction) tp_f_new_writer, METH_VARARGS, "Create new writer"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };
 

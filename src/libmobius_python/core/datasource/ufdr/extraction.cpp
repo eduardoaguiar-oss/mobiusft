@@ -246,14 +246,14 @@ tp_setter_device_name (
 // @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "id", (getter) tp_getter_id, (setter) 0, (char *) "Extraction ID",
+    {"id", (getter) tp_getter_id, (setter) 0, "Extraction ID",
      nullptr},
-    {(char *) "type", (getter) tp_getter_type, (setter) tp_setter_type,
-     (char *) "Extraction type", nullptr},
-    {(char *) "name", (getter) tp_getter_name, (setter) tp_setter_name,
-     (char *) "Extraction name", nullptr},
-    {(char *) "device_name", (getter) tp_getter_device_name,
-     (setter) tp_setter_device_name, (char *) "Device name", nullptr},
+    {"type", (getter) tp_getter_type, (setter) tp_setter_type,
+     "Extraction type", nullptr},
+    {"name", (getter) tp_getter_name, (setter) tp_setter_name,
+     "Extraction name", nullptr},
+    {"device_name", (getter) tp_getter_device_name,
+     (setter) tp_setter_device_name, "Device name", nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
 

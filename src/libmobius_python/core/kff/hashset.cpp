@@ -122,10 +122,10 @@ tp_getter_hashes (core_kff_hashset_o *self, void *)
 // @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "description", (getter) tp_getter_description,
-     (setter) tp_setter_description, (char *) "Description", nullptr},
-    {(char *) "hashes", (getter) tp_getter_hashes, (setter) 0,
-     (char *) "hashes", nullptr},
+    {"description", (getter) tp_getter_description,
+     (setter) tp_setter_description, "Description", nullptr},
+    {"hashes", (getter) tp_getter_hashes, (setter) 0,
+     "hashes", nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
 
@@ -334,18 +334,18 @@ tp_f_remove (core_kff_hashset_o *self, PyObject *args)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "new_connection", (PyCFunction) tp_f_new_connection, METH_VARARGS,
+    {"new_connection", (PyCFunction) tp_f_new_connection, METH_VARARGS,
      "create new connection for database"},
-    {(char *) "new_transaction", (PyCFunction) tp_f_new_transaction,
+    {"new_transaction", (PyCFunction) tp_f_new_transaction,
      METH_VARARGS, "Create new database transaction"},
-    {(char *) "is_alert", (PyCFunction) tp_f_is_alert, METH_VARARGS,
+    {"is_alert", (PyCFunction) tp_f_is_alert, METH_VARARGS,
      "Return true if hash set is alert"},
-    {(char *) "get_size", (PyCFunction) tp_f_get_size, METH_VARARGS,
+    {"get_size", (PyCFunction) tp_f_get_size, METH_VARARGS,
      "Get number of hashes"},
-    {(char *) "clear", (PyCFunction) tp_f_clear, METH_VARARGS,
+    {"clear", (PyCFunction) tp_f_clear, METH_VARARGS,
      "Clear hash set"},
-    {(char *) "add", (PyCFunction) tp_f_add, METH_VARARGS, "Add hash"},
-    {(char *) "remove", (PyCFunction) tp_f_remove, METH_VARARGS, "Remove hash"},
+    {"add", (PyCFunction) tp_f_add, METH_VARARGS, "Add hash"},
+    {"remove", (PyCFunction) tp_f_remove, METH_VARARGS, "Remove hash"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };
 

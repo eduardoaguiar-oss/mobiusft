@@ -402,24 +402,24 @@ tp_f_filename_match (core_io_path_o *self, PyObject *args)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "get_value", (PyCFunction) tp_f_get_value, METH_VARARGS, "Get path"},
-    {(char *) "get_dirname", (PyCFunction) tp_f_get_dirname, METH_VARARGS, "Get directory name"},
-    {(char *) "get_filename", (PyCFunction) tp_f_get_filename, METH_VARARGS, "Get filename"},
-    {(char *) "get_prefix", (PyCFunction) tp_f_get_prefix, METH_VARARGS, "Get prefix"},
-    {(char *) "get_extension", (PyCFunction) tp_f_get_extension, METH_VARARGS, "Get extension"},
-    {(char *) "get_parent", (PyCFunction) tp_f_get_parent, METH_VARARGS, "Get parent path"},
-    {(char *) "get_sibling_by_name",
+    {"get_value", (PyCFunction) tp_f_get_value, METH_VARARGS, "Get path"},
+    {"get_dirname", (PyCFunction) tp_f_get_dirname, METH_VARARGS, "Get directory name"},
+    {"get_filename", (PyCFunction) tp_f_get_filename, METH_VARARGS, "Get filename"},
+    {"get_prefix", (PyCFunction) tp_f_get_prefix, METH_VARARGS, "Get prefix"},
+    {"get_extension", (PyCFunction) tp_f_get_extension, METH_VARARGS, "Get extension"},
+    {"get_parent", (PyCFunction) tp_f_get_parent, METH_VARARGS, "Get parent path"},
+    {"get_sibling_by_name",
      (PyCFunction) tp_f_get_sibling_by_name,
      METH_VARARGS,
      "Get sibling path by file name"},
-    {(char *) "get_sibling_by_extension",
+    {"get_sibling_by_extension",
      (PyCFunction) tp_f_get_sibling_by_extension,
      METH_VARARGS,
      "Get sibling path by extension"},
-    {(char *) "get_child_by_name", (PyCFunction) tp_f_get_child_by_name, METH_VARARGS, "Get child path by name"},
-    {(char *) "get_child_by_path", (PyCFunction) tp_f_get_child_by_path, METH_VARARGS, "Get child path by sub path"},
-    {(char *) "is_absolute", (PyCFunction) tp_f_is_absolute, METH_VARARGS, "Check if path is absolute"},
-    {(char *) "filename_match", (PyCFunction) tp_f_filename_match, METH_VARARGS, "Check if filename matches pattern"},
+    {"get_child_by_name", (PyCFunction) tp_f_get_child_by_name, METH_VARARGS, "Get child path by name"},
+    {"get_child_by_path", (PyCFunction) tp_f_get_child_by_path, METH_VARARGS, "Get child path by sub path"},
+    {"is_absolute", (PyCFunction) tp_f_is_absolute, METH_VARARGS, "Check if path is absolute"},
+    {"filename_match", (PyCFunction) tp_f_filename_match, METH_VARARGS, "Check if filename matches pattern"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };
 

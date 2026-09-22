@@ -295,15 +295,15 @@ tp_f_get_root_entries (core_vfs_vfs_o *self, PyObject *)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "get_state", (PyCFunction) tp_f_get_state, METH_VARARGS, "Get object state"},
-    {(char *) "clear", (PyCFunction) tp_f_clear, METH_VARARGS, "Clear VFS"},
-    {(char *) "rescan", (PyCFunction) tp_f_rescan, METH_VARARGS, "Rescan blocks and root entries"},
-    {(char *) "is_available", (PyCFunction) tp_f_is_available, METH_VARARGS, "Check if VFS is available"},
-    {(char *) "add_disk", (PyCFunction) tp_f_add_disk, METH_VARARGS, "Add disk"},
-    {(char *) "remove_disk", (PyCFunction) tp_f_remove_disk, METH_VARARGS, "Remove disk"},
-    {(char *) "get_disks", (PyCFunction) tp_f_get_disks, METH_VARARGS, "Get disks"},
-    {(char *) "get_blocks", (PyCFunction) tp_f_get_blocks, METH_VARARGS, "Get blocks"},
-    {(char *) "get_root_entries", (PyCFunction) tp_f_get_root_entries, METH_VARARGS, "Get root entries"},
+    {"get_state", (PyCFunction) tp_f_get_state, METH_VARARGS, "Get object state"},
+    {"clear", (PyCFunction) tp_f_clear, METH_VARARGS, "Clear VFS"},
+    {"rescan", (PyCFunction) tp_f_rescan, METH_VARARGS, "Rescan blocks and root entries"},
+    {"is_available", (PyCFunction) tp_f_is_available, METH_VARARGS, "Check if VFS is available"},
+    {"add_disk", (PyCFunction) tp_f_add_disk, METH_VARARGS, "Add disk"},
+    {"remove_disk", (PyCFunction) tp_f_remove_disk, METH_VARARGS, "Remove disk"},
+    {"get_disks", (PyCFunction) tp_f_get_disks, METH_VARARGS, "Get disks"},
+    {"get_blocks", (PyCFunction) tp_f_get_blocks, METH_VARARGS, "Get blocks"},
+    {"get_root_entries", (PyCFunction) tp_f_get_root_entries, METH_VARARGS, "Get root entries"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };
 

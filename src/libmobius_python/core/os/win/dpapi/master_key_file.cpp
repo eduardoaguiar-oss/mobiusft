@@ -208,18 +208,18 @@ tp_getter_credhist_guid (core_os_win_dpapi_master_key_file_o *self, void *)
 // @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "revision", (getter) tp_getter_revision, (setter) 0,
-     (char *) "Struct revision", nullptr},
-    {(char *) "guid", (getter) tp_getter_guid, (setter) 0, (char *) "GUID",
+    {"revision", (getter) tp_getter_revision, (setter) 0,
+     "Struct revision", nullptr},
+    {"guid", (getter) tp_getter_guid, (setter) 0, "GUID",
      nullptr},
-    {(char *) "flags", (getter) tp_getter_flags, (setter) 0,
-     (char *) "Master key file flags", nullptr},
-    {(char *) "master_key", (getter) tp_getter_master_key, (setter) 0,
-     (char *) "Master key", nullptr},
-    {(char *) "backup_key", (getter) tp_getter_backup_key, (setter) 0,
-     (char *) "Backup key", nullptr},
-    {(char *) "credhist_guid", (getter) tp_getter_credhist_guid, (setter) 0,
-     (char *) "CREDHIST GUID", nullptr},
+    {"flags", (getter) tp_getter_flags, (setter) 0,
+     "Master key file flags", nullptr},
+    {"master_key", (getter) tp_getter_master_key, (setter) 0,
+     "Master key", nullptr},
+    {"backup_key", (getter) tp_getter_backup_key, (setter) 0,
+     "Backup key", nullptr},
+    {"credhist_guid", (getter) tp_getter_credhist_guid, (setter) 0,
+     "CREDHIST GUID", nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
 

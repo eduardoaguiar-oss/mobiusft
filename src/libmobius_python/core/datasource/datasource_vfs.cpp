@@ -64,7 +64,7 @@ tp_f_get_vfs (core_datasource_datasource_vfs_o *self, PyObject *)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "get_vfs", (PyCFunction) tp_f_get_vfs, METH_VARARGS,
+    {"get_vfs", (PyCFunction) tp_f_get_vfs, METH_VARARGS,
      "Get VFS object"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };

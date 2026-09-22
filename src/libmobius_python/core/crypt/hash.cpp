@@ -245,19 +245,19 @@ tp_f_clone (core_crypt_hash_o *self, PyObject *)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "get_type", (PyCFunction) tp_f_get_type, METH_VARARGS,
+    {"get_type", (PyCFunction) tp_f_get_type, METH_VARARGS,
      "Get type"},
-    {(char *) "get_block_size", (PyCFunction) tp_f_get_block_size, METH_VARARGS,
+    {"get_block_size", (PyCFunction) tp_f_get_block_size, METH_VARARGS,
      "Get block size"},
-    {(char *) "get_digest_size", (PyCFunction) tp_f_get_digest_size,
+    {"get_digest_size", (PyCFunction) tp_f_get_digest_size,
      METH_VARARGS, "Get digest size"},
-    {(char *) "update", (PyCFunction) tp_f_update, METH_VARARGS, "Update hash"},
-    {(char *) "reset", (PyCFunction) tp_f_reset, METH_VARARGS, "Reset hash"},
-    {(char *) "get_digest", (PyCFunction) tp_f_get_digest, METH_VARARGS,
+    {"update", (PyCFunction) tp_f_update, METH_VARARGS, "Update hash"},
+    {"reset", (PyCFunction) tp_f_reset, METH_VARARGS, "Reset hash"},
+    {"get_digest", (PyCFunction) tp_f_get_digest, METH_VARARGS,
      "Get digest as byte array"},
-    {(char *) "get_hex_digest", (PyCFunction) tp_f_get_hex_digest, METH_VARARGS,
+    {"get_hex_digest", (PyCFunction) tp_f_get_hex_digest, METH_VARARGS,
      "Get digest as hexadecimal string"},
-    {(char *) "clone", (PyCFunction) tp_f_clone, METH_VARARGS, "Clone object"},
+    {"clone", (PyCFunction) tp_f_clone, METH_VARARGS, "Clone object"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };
 

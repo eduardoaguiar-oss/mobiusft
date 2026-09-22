@@ -71,14 +71,14 @@ tp_getter_copyright (core_application_o *self, void *)
 // @brief application: getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "name", (getter) tp_getter_name, (setter) 0,
-     (char *) "application name", nullptr},
-    {(char *) "version", (getter) tp_getter_version, (setter) 0,
-     (char *) "application version", nullptr},
-    {(char *) "title", (getter) tp_getter_title, (setter) 0,
-     (char *) "application title", nullptr},
-    {(char *) "copyright", (getter) tp_getter_copyright, (setter) 0,
-     (char *) "application copyright notice", nullptr},
+    {"name", (getter) tp_getter_name, (setter) 0,
+     "application name", nullptr},
+    {"version", (getter) tp_getter_version, (setter) 0,
+     "application version", nullptr},
+    {"title", (getter) tp_getter_title, (setter) 0,
+     "application title", nullptr},
+    {"copyright", (getter) tp_getter_copyright, (setter) 0,
+     "application copyright notice", nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
 
@@ -279,23 +279,23 @@ tp_f_stop (core_application_o *self, PyObject *)
 // @brief application: methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "get_config_path", (PyCFunction) tp_f_get_config_path,
+    {"get_config_path", (PyCFunction) tp_f_get_config_path,
      METH_VARARGS, "get config path"},
 
-    {(char *) "get_cache_path", (PyCFunction) tp_f_get_cache_path, METH_VARARGS,
+    {"get_cache_path", (PyCFunction) tp_f_get_cache_path, METH_VARARGS,
      "get cache path"},
 
-    {(char *) "get_data_path", (PyCFunction) tp_f_get_data_path, METH_VARARGS,
+    {"get_data_path", (PyCFunction) tp_f_get_data_path, METH_VARARGS,
      "get data path"},
 
-    {(char *) "get_extension_resource_path",
+    {"get_extension_resource_path",
      (PyCFunction) tp_f_get_extension_resource_path, METH_VARARGS,
      "get extension resource path"},
 
-    {(char *) "start", (PyCFunction) tp_f_start, METH_VARARGS,
+    {"start", (PyCFunction) tp_f_start, METH_VARARGS,
      "start application"},
 
-    {(char *) "stop", (PyCFunction) tp_f_stop, METH_VARARGS,
+    {"stop", (PyCFunction) tp_f_stop, METH_VARARGS,
      "stop application"},
 
     {nullptr, nullptr, 0, nullptr} // sentinel

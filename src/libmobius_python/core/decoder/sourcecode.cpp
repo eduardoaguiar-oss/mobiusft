@@ -88,9 +88,9 @@ tp_f_peek (core_decoder_sourcecode_o *self, PyObject *)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "get", (PyCFunction) tp_f_get, METH_VARARGS,
+    {"get", (PyCFunction) tp_f_get, METH_VARARGS,
      "Get next character"},
-    {(char *) "peek", (PyCFunction) tp_f_peek, METH_VARARGS,
+    {"peek", (PyCFunction) tp_f_peek, METH_VARARGS,
      "Peek next character"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };

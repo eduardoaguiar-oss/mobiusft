@@ -140,9 +140,9 @@ tp_getter_value (core_pod_data_o *self, void *)
 // @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "type", (getter) tp_getter_type, (setter) 0, (char *) "Data type",
+    {"type", (getter) tp_getter_type, (setter) 0, "Data type",
      nullptr},
-    {(char *) "value", (getter) tp_getter_value, (setter) 0, (char *) "Value",
+    {"value", (getter) tp_getter_value, (setter) 0, "Value",
      nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
@@ -401,25 +401,25 @@ tp_f_is_map (core_pod_data_o *self, PyObject *)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "clone", (PyCFunction) tp_f_clone, METH_VARARGS,
+    {"clone", (PyCFunction) tp_f_clone, METH_VARARGS,
      "Clone data object"},
-    {(char *) "is_null", (PyCFunction) tp_f_is_null, METH_VARARGS,
+    {"is_null", (PyCFunction) tp_f_is_null, METH_VARARGS,
      "Check if data is null"},
-    {(char *) "is_bool", (PyCFunction) tp_f_is_bool, METH_VARARGS,
+    {"is_bool", (PyCFunction) tp_f_is_bool, METH_VARARGS,
      "Check if data is boolean"},
-    {(char *) "is_integer", (PyCFunction) tp_f_is_integer, METH_VARARGS,
+    {"is_integer", (PyCFunction) tp_f_is_integer, METH_VARARGS,
      "Check if data is integer"},
-    {(char *) "is_float", (PyCFunction) tp_f_is_float, METH_VARARGS,
+    {"is_float", (PyCFunction) tp_f_is_float, METH_VARARGS,
      "Check if data is float"},
-    {(char *) "is_datetime", (PyCFunction) tp_f_is_datetime, METH_VARARGS,
+    {"is_datetime", (PyCFunction) tp_f_is_datetime, METH_VARARGS,
      "Check if data is datetime"},
-    {(char *) "is_string", (PyCFunction) tp_f_is_string, METH_VARARGS,
+    {"is_string", (PyCFunction) tp_f_is_string, METH_VARARGS,
      "Check if data is string"},
-    {(char *) "is_bytearray", (PyCFunction) tp_f_is_bytearray, METH_VARARGS,
+    {"is_bytearray", (PyCFunction) tp_f_is_bytearray, METH_VARARGS,
      "Check if data is bytearray"},
-    {(char *) "is_list", (PyCFunction) tp_f_is_list, METH_VARARGS,
+    {"is_list", (PyCFunction) tp_f_is_list, METH_VARARGS,
      "Check if data is list"},
-    {(char *) "is_map", (PyCFunction) tp_f_is_map, METH_VARARGS,
+    {"is_map", (PyCFunction) tp_f_is_map, METH_VARARGS,
      "Check if data is map"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };

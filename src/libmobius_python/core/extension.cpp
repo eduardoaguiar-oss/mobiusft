@@ -148,16 +148,16 @@ tp_getter_description (core_extension_o *self, void *)
 // @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "id", (getter) tp_getter_id, (setter) 0, (char *) "Extension ID",
+    {"id", (getter) tp_getter_id, (setter) 0, "Extension ID",
      nullptr},
-    {(char *) "name", (getter) tp_getter_name, (setter) 0,
-     (char *) "Extension name", nullptr},
-    {(char *) "version", (getter) tp_getter_version, (setter) 0,
-     (char *) "Extension version", nullptr},
-    {(char *) "authors", (getter) tp_getter_authors, (setter) 0,
-     (char *) "Authors", nullptr},
-    {(char *) "description", (getter) tp_getter_description, (setter) 0,
-     (char *) "Description", nullptr},
+    {"name", (getter) tp_getter_name, (setter) 0,
+     "Extension name", nullptr},
+    {"version", (getter) tp_getter_version, (setter) 0,
+     "Extension version", nullptr},
+    {"authors", (getter) tp_getter_authors, (setter) 0,
+     "Authors", nullptr},
+    {"description", (getter) tp_getter_description, (setter) 0,
+     "Description", nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
 
@@ -257,12 +257,12 @@ tp_f_uninstall (core_extension_o *self, PyObject *)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "start", (PyCFunction) tp_f_start, METH_VARARGS,
+    {"start", (PyCFunction) tp_f_start, METH_VARARGS,
      "Start extension"},
-    {(char *) "stop", (PyCFunction) tp_f_stop, METH_VARARGS, "Stop extension"},
-    {(char *) "install", (PyCFunction) tp_f_install, METH_VARARGS,
+    {"stop", (PyCFunction) tp_f_stop, METH_VARARGS, "Stop extension"},
+    {"install", (PyCFunction) tp_f_install, METH_VARARGS,
      "Install extension"},
-    {(char *) "uninstall", (PyCFunction) tp_f_uninstall, METH_VARARGS,
+    {"uninstall", (PyCFunction) tp_f_uninstall, METH_VARARGS,
      "Uninstall extension"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };

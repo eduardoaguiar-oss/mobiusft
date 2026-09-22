@@ -262,22 +262,22 @@ tp_getter_flags (core_os_win_dpapi_master_key_o *self, void *)
 // @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "revision", (getter) tp_getter_revision, nullptr,
-     (char *) "Struct revision", nullptr},
-    {(char *) "salt", (getter) tp_getter_salt, nullptr, (char *) "Salt",
+    {"revision", (getter) tp_getter_revision, nullptr,
+     "Struct revision", nullptr},
+    {"salt", (getter) tp_getter_salt, nullptr, "Salt",
      nullptr},
-    {(char *) "iterations", (getter) tp_getter_iterations, nullptr,
-     (char *) "Number of key iterations", nullptr},
-    {(char *) "hash_id", (getter) tp_getter_hash_id, nullptr,
-     (char *) "Hash algorithm ID", nullptr},
-    {(char *) "cipher_id", (getter) tp_getter_cipher_id, nullptr,
-     (char *) "Cipher algorithm ID", nullptr},
-    {(char *) "cipher_text", (getter) tp_getter_cipher_text, nullptr,
-     (char *) "Cipher text", nullptr},
-    {(char *) "plain_text", (getter) tp_getter_plain_text, nullptr,
-     (char *) "Plain text", nullptr},
-    {(char *) "flags", (getter) tp_getter_flags, nullptr,
-     (char *) "Master key file flags", nullptr},
+    {"iterations", (getter) tp_getter_iterations, nullptr,
+     "Number of key iterations", nullptr},
+    {"hash_id", (getter) tp_getter_hash_id, nullptr,
+     "Hash algorithm ID", nullptr},
+    {"cipher_id", (getter) tp_getter_cipher_id, nullptr,
+     "Cipher algorithm ID", nullptr},
+    {"cipher_text", (getter) tp_getter_cipher_text, nullptr,
+     "Cipher text", nullptr},
+    {"plain_text", (getter) tp_getter_plain_text, nullptr,
+     "Plain text", nullptr},
+    {"flags", (getter) tp_getter_flags, nullptr,
+     "Master key file flags", nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
 
@@ -430,14 +430,14 @@ tp_f_is_decrypted (core_os_win_dpapi_master_key_o *self, PyObject *)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "decrypt_with_key", (PyCFunction) tp_f_decrypt_with_key,
+    {"decrypt_with_key", (PyCFunction) tp_f_decrypt_with_key,
      METH_VARARGS, "Decrypt master key using key"},
-    {(char *) "decrypt_with_password_hash",
+    {"decrypt_with_password_hash",
      (PyCFunction) tp_f_decrypt_with_password_hash, METH_VARARGS,
      "Decrypt master key using password hash"},
-    {(char *) "decrypt_with_password", (PyCFunction) tp_f_decrypt_with_password,
+    {"decrypt_with_password", (PyCFunction) tp_f_decrypt_with_password,
      METH_VARARGS, "Decrypt master key using password"},
-    {(char *) "is_decrypted", (PyCFunction) tp_f_is_decrypted, METH_VARARGS,
+    {"is_decrypted", (PyCFunction) tp_f_is_decrypted, METH_VARARGS,
      "Check if master key is decrypted"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };

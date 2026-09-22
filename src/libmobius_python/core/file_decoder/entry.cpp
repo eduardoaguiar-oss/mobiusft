@@ -82,9 +82,9 @@ tp_getter_name (core_file_decoder_entry_o *self, void *)
 // @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "idx", (getter) tp_getter_idx, nullptr, (char *) "Entry number",
+    {"idx", (getter) tp_getter_idx, nullptr, "Entry number",
      nullptr},
-    {(char *) "name", (getter) tp_getter_name, nullptr, (char *) "Entry name",
+    {"name", (getter) tp_getter_name, nullptr, "Entry name",
      nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr}, // sentinel
 };

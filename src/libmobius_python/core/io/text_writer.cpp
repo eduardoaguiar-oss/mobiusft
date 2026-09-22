@@ -134,9 +134,9 @@ tp_f_flush (core_io_text_writer_o *self, PyObject *)
 // @brief methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "write", (PyCFunction) tp_f_write, METH_VARARGS,
+    {"write", (PyCFunction) tp_f_write, METH_VARARGS,
      "writes bytes to text_writer"},
-    {(char *) "flush", (PyCFunction) tp_f_flush, METH_VARARGS, "flush writer"},
+    {"flush", (PyCFunction) tp_f_flush, METH_VARARGS, "flush writer"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };
 

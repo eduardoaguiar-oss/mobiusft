@@ -160,17 +160,17 @@ tp_getter_root_key (core_os_win_registry_registry_file_o *self, void *)
 // @brief registry_file: getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "uid", (getter) tp_getter_uid, (setter) 0,
-     (char *) "unique identifier", nullptr},
-    {(char *) "role", (getter) tp_getter_role, (setter) 0, (char *) "file role",
+    {"uid", (getter) tp_getter_uid, (setter) 0,
+     "unique identifier", nullptr},
+    {"role", (getter) tp_getter_role, (setter) 0, "file role",
      nullptr},
-    {(char *) "path", (getter) tp_getter_path, (setter) 0,
-     (char *) "original path", nullptr},
-    {(char *) "last_modification_time",
+    {"path", (getter) tp_getter_path, (setter) 0,
+     "original path", nullptr},
+    {"last_modification_time",
      (getter) tp_getter_last_modification_time, (setter) 0,
-     (char *) "last modification time", nullptr},
-    {(char *) "root_key", (getter) tp_getter_root_key, (setter) 0,
-     (char *) "root key", nullptr},
+     "last modification time", nullptr},
+    {"root_key", (getter) tp_getter_root_key, (setter) 0,
+     "root key", nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
 
