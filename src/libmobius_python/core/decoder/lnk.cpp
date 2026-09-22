@@ -161,9 +161,7 @@ tp_getter_access_time (core_decoder_lnk_o *self, void *)
 
     try
     {
-        ret = mobius::py::to_pyobject (
-            self->obj->get_access_time ()
-        );
+        ret = mobius::py::to_pyobject (self->obj->get_access_time ());
     }
     catch (const std::exception &e)
     {
@@ -185,8 +183,7 @@ tp_getter_write_time (core_decoder_lnk_o *self, void *)
 
     try
     {
-        ret =
-            mobius::py::pydatetime_from_datetime (self->obj->get_write_time ());
+        ret = mobius::py::to_pyobject (self->obj->get_write_time ());
     }
     catch (const std::exception &e)
     {
@@ -208,8 +205,7 @@ tp_getter_file_size (core_decoder_lnk_o *self, void *)
 
     try
     {
-        ret =
-            mobius::py::pylong_from_std_uint32_t (self->obj->get_file_size ());
+        ret = mobius::py::to_pyobject (self->obj->get_file_size ());
     }
     catch (const std::exception &e)
     {
@@ -231,8 +227,7 @@ tp_getter_icon_index (core_decoder_lnk_o *self, void *)
 
     try
     {
-        ret =
-            mobius::py::pylong_from_std_uint32_t (self->obj->get_icon_index ());
+        ret = mobius::py::to_pyobject (self->obj->get_icon_index ());
     }
     catch (const std::exception &e)
     {
@@ -254,9 +249,7 @@ tp_getter_show_command (core_decoder_lnk_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint32_t (
-            self->obj->get_show_command ()
-        );
+        ret = mobius::py::to_pyobject (self->obj->get_show_command ());
     }
     catch (const std::exception &e)
     {
@@ -278,7 +271,7 @@ tp_getter_hotkeys (core_decoder_lnk_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint16_t (self->obj->get_hotkeys ());
+        ret = mobius::py::to_pyobject (self->obj->get_hotkeys ());
     }
     catch (const std::exception &e)
     {
@@ -300,9 +293,7 @@ tp_getter_volume_label (core_decoder_lnk_o *self, void *)
 
     try
     {
-        ret = mobius::py::to_pyobject (
-            self->obj->get_volume_label ()
-        );
+        ret = mobius::py::to_pyobject (self->obj->get_volume_label ());
     }
     catch (const std::exception &e)
     {
@@ -324,8 +315,7 @@ tp_getter_drive_type (core_decoder_lnk_o *self, void *)
 
     try
     {
-        ret =
-            mobius::py::pylong_from_std_uint32_t (self->obj->get_drive_type ());
+        ret = mobius::py::to_pyobject (self->obj->get_drive_type ());
     }
     catch (const std::exception &e)
     {
@@ -347,9 +337,7 @@ tp_getter_drive_serial_number (core_decoder_lnk_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint32_t (
-            self->obj->get_drive_serial_number ()
-        );
+        ret = mobius::py::to_pyobject (self->obj->get_drive_serial_number ());
     }
     catch (const std::exception &e)
     {
@@ -371,9 +359,7 @@ tp_getter_local_base_path (core_decoder_lnk_o *self, void *)
 
     try
     {
-        ret = mobius::py::to_pyobject (
-            self->obj->get_local_base_path ()
-        );
+        ret = mobius::py::to_pyobject (self->obj->get_local_base_path ());
     }
     catch (const std::exception &e)
     {
@@ -395,9 +381,7 @@ tp_getter_common_path_suffix (core_decoder_lnk_o *self, void *)
 
     try
     {
-        ret = mobius::py::to_pyobject (
-            self->obj->get_common_path_suffix ()
-        );
+        ret = mobius::py::to_pyobject (self->obj->get_common_path_suffix ());
     }
     catch (const std::exception &e)
     {
@@ -441,9 +425,7 @@ tp_getter_device_name (core_decoder_lnk_o *self, void *)
 
     try
     {
-        ret = mobius::py::to_pyobject (
-            self->obj->get_device_name ()
-        );
+        ret = mobius::py::to_pyobject (self->obj->get_device_name ());
     }
     catch (const std::exception &e)
     {
@@ -465,7 +447,7 @@ tp_getter_network_provider_type (core_decoder_lnk_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint32_t (
+        ret = mobius::py::to_pyobject (
             self->obj->get_network_provider_type ()
         );
     }
@@ -511,9 +493,7 @@ tp_getter_relative_path (core_decoder_lnk_o *self, void *)
 
     try
     {
-        ret = mobius::py::to_pyobject (
-            self->obj->get_relative_path ()
-        );
+        ret = mobius::py::to_pyobject (self->obj->get_relative_path ());
     }
     catch (const std::exception &e)
     {
@@ -535,9 +515,7 @@ tp_getter_working_dir (core_decoder_lnk_o *self, void *)
 
     try
     {
-        ret = mobius::py::to_pyobject (
-            self->obj->get_working_dir ()
-        );
+        ret = mobius::py::to_pyobject (self->obj->get_working_dir ());
     }
     catch (const std::exception &e)
     {

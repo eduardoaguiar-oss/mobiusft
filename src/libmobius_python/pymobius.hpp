@@ -180,7 +180,6 @@ std::string pystring_as_std_string (PyObject *);
 PyObject *pybytes_from_char (char);
 mobius::core::bytearray pybytes_as_bytearray (PyObject *);
 
-PyObject *pydatetime_from_datetime (const mobius::core::datetime::datetime &);
 mobius::core::datetime::datetime pydatetime_as_datetime (PyObject *);
 
 PyObject *pybool_from_bool (bool);
@@ -208,7 +207,6 @@ std::uint32_t pylong_as_std_uint32_t (PyObject *);
 std::uint64_t pylong_as_std_uint64_t (PyObject *);
 
 double pyfloat_as_cpp (PyObject *);
-PyObject *pyfloat_from_cpp (double);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // C++ <-> Python type conversion

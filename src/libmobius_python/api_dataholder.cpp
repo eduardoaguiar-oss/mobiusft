@@ -129,8 +129,8 @@ api_dataholder_setattr (
 )
 {
     PyObject_GenericSetAttr (
-        (PyObject *) obj, mobius::py::pystring_from_std_string (name),
-        mobius::py::pystring_from_std_string (value)
+        (PyObject *) obj, mobius::py::to_pyobject (name),
+        mobius::py::to_pyobject (value)
     );
 }
 
@@ -146,8 +146,8 @@ api_dataholder_setattr (
 )
 {
     PyObject_GenericSetAttr (
-        (PyObject *) obj, mobius::py::pystring_from_std_string (name),
-        mobius::py::pylong_from_std_int64_t (value)
+        (PyObject *) obj, mobius::py::to_pyobject (name),
+        mobius::py::to_pyobject (value)
     );
 }
 
@@ -165,8 +165,8 @@ api_dataholder_setattr (
 )
 {
     PyObject_GenericSetAttr (
-        (PyObject *) obj, mobius::py::pystring_from_std_string (name),
-        mobius::py::pydatetime_from_datetime (value)
+        (PyObject *) obj, mobius::py::to_pyobject (name),
+        mobius::py::to_pyobject (value)
     );
 }
 
@@ -182,6 +182,6 @@ api_dataholder_setattr (
 )
 {
     PyObject_GenericSetAttr (
-        (PyObject *) obj, mobius::py::pystring_from_std_string (name), value
+        (PyObject *) obj, mobius::py::to_pyobject (name), value
     );
 }

@@ -250,8 +250,7 @@ tp_f_get_qdatetime (core_decoder_qdatastream_o *self, PyObject *)
 
     try
     {
-        ret =
-            mobius::py::pydatetime_from_datetime (self->obj->get_qdatetime ());
+        ret = mobius::py::to_pyobject (self->obj->get_qdatetime ());
     }
     catch (const std::exception &e)
     {

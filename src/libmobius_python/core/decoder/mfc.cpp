@@ -438,8 +438,7 @@ tp_f_get_unix_time (core_decoder_mfc_o *self, PyObject *)
 
     try
     {
-        ret =
-            mobius::py::pydatetime_from_datetime (self->obj->get_unix_time ());
+        ret = mobius::py::to_pyobject (self->obj->get_unix_time ());
     }
     catch (const std::exception &e)
     {

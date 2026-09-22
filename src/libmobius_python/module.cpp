@@ -21,8 +21,8 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "module.hpp"
-#include <mobius/core/log.hpp>
 #include <Python.h>
+#include <mobius/core/log.hpp>
 #include <datetime.h>
 #include <pymobius.hpp>
 #include "api_dataholder.hpp"
@@ -113,8 +113,13 @@ to_pyobject (const mobius::core::datetime::datetime &dt)
         auto t = dt.get_time ();
 
         ret = PyDateTime_FromDateAndTime (
-            d.get_year (), d.get_month (), d.get_day (), t.get_hour (),
-            t.get_minute (), t.get_second (), 0
+            d.get_year (),
+            d.get_month (),
+            d.get_day (),
+            t.get_hour (),
+            t.get_minute (),
+            t.get_second (),
+            0
         );
     }
 
@@ -122,15 +127,6 @@ to_pyobject (const mobius::core::datetime::datetime &dt)
         ret = mobius::py::pynone ();
 
     return ret;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create PyDateTime from mobius::core::datetime::datetime
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-pydatetime_from_datetime (const mobius::core::datetime::datetime &dt)
-{
-    return to_pyobject (dt);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -143,9 +139,12 @@ pydatetime_as_datetime (PyObject *obj)
 
     if (!mobius::py::pynone_check (obj))
         dt = mobius::core::datetime::datetime (
-            PyDateTime_GET_YEAR (obj), PyDateTime_GET_MONTH (obj),
-            PyDateTime_GET_DAY (obj), PyDateTime_DATE_GET_HOUR (obj),
-            PyDateTime_DATE_GET_MINUTE (obj), PyDateTime_DATE_GET_SECOND (obj)
+            PyDateTime_GET_YEAR (obj),
+            PyDateTime_GET_MONTH (obj),
+            PyDateTime_GET_DAY (obj),
+            PyDateTime_DATE_GET_HOUR (obj),
+            PyDateTime_DATE_GET_MINUTE (obj),
+            PyDateTime_DATE_GET_SECOND (obj)
         );
 
     return dt;

@@ -17,10 +17,10 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #define PY_SSIZE_T_CLEAN // PEP 353
 
-#include <mobius/core/exception.inc>
+#include <pymobius.hpp>
 #include <bytesobject.h>
 #include <frameobject.h>
-#include <pymobius.hpp>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 
 namespace mobius::py
@@ -1144,17 +1144,6 @@ double
 pyfloat_as_cpp (PyObject *value)
 {
     return PyFloat_AS_DOUBLE (value);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create PyFloat from double
-// @param value Value
-// @return Python object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-pyfloat_from_cpp (double value)
-{
-    return PyFloat_FromDouble (value);
 }
 
 } // namespace mobius::py

@@ -46,8 +46,7 @@ tp_f_get_timestamp (framework_model_event_o *self, PyObject *)
 
     try
     {
-        ret =
-            mobius::py::pydatetime_from_datetime (self->obj->get_timestamp ());
+        ret = mobius::py::to_pyobject (self->obj->get_timestamp ());
     }
     catch (const std::exception &e)
     {
