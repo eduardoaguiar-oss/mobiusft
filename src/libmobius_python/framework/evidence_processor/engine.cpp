@@ -235,8 +235,10 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 static void
 tp_dealloc (framework_evidence_processor_engine_o *self)
 {
+    PyTypeObject *tp = Py_TYPE (self);
     delete self->obj;
-    Py_TYPE (self)->tp_free ((PyObject *) self);
+    tp->tp_free (reinterpret_cast<PyObject *> (self));
+    Py_DECREF (tp);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -257,7 +259,7 @@ static PyType_Spec framework_evidence_processor_engine_spec = {
     .name = "mobius.framework.evidence_processor.engine",
     .basicsize = sizeof (framework_evidence_processor_engine_o),
     .itemsize = 0,
-    .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+    .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE | Py_TPFLAGS_IMMUTABLETYPE,
     .slots = framework_evidence_processor_engine_slots,
 };
 

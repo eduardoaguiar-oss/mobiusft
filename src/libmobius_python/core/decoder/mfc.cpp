@@ -541,8 +541,10 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 static void
 tp_dealloc (core_decoder_mfc_o *self)
 {
+    PyTypeObject *tp = Py_TYPE (self);
     delete self->obj;
-    Py_TYPE (self)->tp_free ((PyObject *) self);
+    tp->tp_free (reinterpret_cast<PyObject *> (self));
+    Py_DECREF (tp);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -563,7 +565,7 @@ static PyType_Spec core_decoder_mfc_spec = {
     .name = "mobius.core.decoder.mfc",
     .basicsize = sizeof (core_decoder_mfc_o),
     .itemsize = 0,
-    .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+    .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE | Py_TPFLAGS_IMMUTABLETYPE,
     .slots = core_decoder_mfc_slots,
 };
 

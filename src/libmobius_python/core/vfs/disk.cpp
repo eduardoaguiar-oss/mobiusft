@@ -372,8 +372,10 @@ static PyMethodDef tp_methods[] = {
 static void
 tp_dealloc (core_vfs_disk_o *self)
 {
+    PyTypeObject *tp = Py_TYPE (self);
     delete self->obj;
-    Py_TYPE (self)->tp_free ((PyObject *) self);
+    tp->tp_free (reinterpret_cast<PyObject *> (self));
+    Py_DECREF (tp);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -394,7 +396,7 @@ static PyType_Spec core_vfs_disk_spec = {
     .name = "mobius.core.vfs.disk",
     .basicsize = sizeof (core_vfs_disk_o),
     .itemsize = 0,
-    .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+    .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE | Py_TPFLAGS_IMMUTABLETYPE,
     .slots = core_vfs_disk_slots,
 };
 

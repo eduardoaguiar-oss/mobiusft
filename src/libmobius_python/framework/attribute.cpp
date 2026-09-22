@@ -396,8 +396,10 @@ static PyGetSetDef tp_getset[] = {
 static void
 tp_dealloc (framework_attribute_o *self)
 {
+    PyTypeObject *tp = Py_TYPE (self);
     delete self->obj;
-    Py_TYPE (self)->tp_free ((PyObject *) self);
+    tp->tp_free (reinterpret_cast<PyObject *> (self));
+    Py_DECREF (tp);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -417,7 +419,7 @@ static PyType_Spec framework_attribute_spec = {
     .name = "mobius.framework.attribute",
     .basicsize = sizeof (framework_attribute_o),
     .itemsize = 0,
-    .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+    .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE | Py_TPFLAGS_IMMUTABLETYPE,
     .slots = framework_attribute_slots,
 };
 

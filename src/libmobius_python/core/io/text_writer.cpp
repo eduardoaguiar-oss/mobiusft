@@ -156,8 +156,10 @@ io_text_writer_tp_alloc ()
 static void
 tp_dealloc (core_io_text_writer_o *self)
 {
+    PyTypeObject *tp = Py_TYPE (self);
     delete self->obj;
-    Py_TYPE (self)->tp_free ((PyObject *) self);
+    tp->tp_free (reinterpret_cast<PyObject *> (self));
+    Py_DECREF (tp);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
