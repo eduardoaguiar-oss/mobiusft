@@ -214,9 +214,7 @@ tp_getter_data (core_os_win_credential_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylist_from_cpp_pair_container (
-            self->obj->get_data (), mobius::py::pystring_from_std_string,
-            mobius::py::pybytes_from_bytearray);
+        ret = mobius::py::pylist_from_cpp_pair_container (self->obj->get_data ());
     }
     catch (const std::exception &e)
     {

@@ -363,8 +363,7 @@ tp_f_get_data (core_decoder_mfc_o *self, PyObject *args)
 
     try
     {
-        ret =
-            mobius::py::pybytes_from_bytearray (self->obj->get_data (arg_size));
+        ret = mobius::py::to_pyobject (self->obj->get_data (arg_size));
     }
     catch (const std::exception &e)
     {

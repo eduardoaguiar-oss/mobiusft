@@ -106,9 +106,7 @@ tp_getter_hashes (core_kff_hashset_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylist_from_cpp_pair_container (
-            self->obj->get_hashes (), mobius::py::pystring_from_std_string,
-            mobius::py::pystring_from_std_string);
+        ret = mobius::py::pylist_from_cpp_pair_container (self->obj->get_hashes ());
     }
     catch (const std::exception &e)
     {

@@ -17,10 +17,10 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #define PY_SSIZE_T_CLEAN // PEP 353
 
-#include <pymobius.hpp>
 #include <mobius/core/exception.inc>
 #include <bytesobject.h>
 #include <frameobject.h>
+#include <pymobius.hpp>
 #include <stdexcept>
 
 namespace mobius::py
@@ -71,9 +71,7 @@ get_arg_as_std_string (PyObject *args, std::uint32_t idx)
 // @return Argument
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-get_arg_as_std_string (
-    PyObject *args, std::uint32_t idx, const std::string &value
-)
+get_arg_as_std_string (PyObject *args, std::uint32_t idx, const std::string &value)
 {
     if (idx < get_arg_size (args))
         return get_arg_as_std_string (args, idx);
@@ -101,9 +99,7 @@ get_arg_as_bytearray (PyObject *args, std::uint32_t idx)
 // @return Argument
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::bytearray
-get_arg_as_bytearray (
-    PyObject *args, std::uint32_t idx, const mobius::core::bytearray &value
-)
+get_arg_as_bytearray (PyObject *args, std::uint32_t idx, const mobius::core::bytearray &value)
 {
     if (idx < get_arg_size (args))
         return get_arg_as_bytearray (args, idx);
@@ -136,11 +132,7 @@ get_arg_as_datetime (PyObject *args, std::uint32_t idx)
 // @return Argument
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::datetime::datetime
-get_arg_as_datetime (
-    PyObject *args,
-    std::uint32_t idx,
-    const mobius::core::datetime::datetime &value
-)
+get_arg_as_datetime (PyObject *args, std::uint32_t idx, const mobius::core::datetime::datetime &value)
 {
     if (idx < get_arg_size (args))
         return get_arg_as_datetime (args, idx);
@@ -197,9 +189,7 @@ get_arg_as_char (PyObject *args, std::uint32_t idx)
     }
 
     else
-        throw std::invalid_argument (
-            MOBIUS_EXCEPTION_MSG ("invalid Python string")
-        );
+        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid Python string"));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -499,9 +489,8 @@ get_error_message ()
 
     PyErr_NormalizeException (&exc_type, &exc_value, &exc_traceback);
 
-    std::string msg =
-        mobius::py::pystring_as_std_string (PyObject_Str (exc_type)) + ' ' +
-        mobius::py::pystring_as_std_string (PyObject_Str (exc_value));
+    std::string msg = mobius::py::pystring_as_std_string (PyObject_Str (exc_type)) + ' ' +
+                      mobius::py::pystring_as_std_string (PyObject_Str (exc_value));
 
     auto p_traceback = reinterpret_cast<PyTracebackObject *> (exc_traceback);
 
@@ -511,18 +500,9 @@ get_error_message ()
 
         if (f_code)
         {
-            msg += "\nFile: \"" +
-                   mobius::py::pystring_as_std_string (
-                       PyObject_Str (f_code->co_filename)
-                   ) +
-                   "\", line " +
-                   std::to_string (
-                       PyCode_Addr2Line (f_code, p_traceback->tb_lasti)
-                   ) +
-                   ", in " +
-                   mobius::py::pystring_as_std_string (
-                       PyObject_Str (f_code->co_name)
-                   );
+            msg += "\nFile: \"" + mobius::py::pystring_as_std_string (PyObject_Str (f_code->co_filename)) +
+                   "\", line " + std::to_string (PyCode_Addr2Line (f_code, p_traceback->tb_lasti)) + ", in " +
+                   mobius::py::pystring_as_std_string (PyObject_Str (f_code->co_name));
 
             Py_DECREF (f_code);
         }
@@ -725,7 +705,7 @@ to_pyobject (std::uint16_t value)
 // @return Python Long object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-to_pyobject(std::uint32_t value)
+to_pyobject (std::uint32_t value)
 {
     return PyLong_FromUnsignedLong (value);
 }
@@ -785,9 +765,7 @@ to_pyobject (const std::string &s)
     auto ret = PyUnicode_DecodeUTF8 (s.c_str (), s.size (), "replace");
 
     if (!ret)
-        throw std::invalid_argument (
-            MOBIUS_EXCEPTION_MSG ("invalid C++ UTF-8 string")
-        );
+        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid C++ UTF-8 string"));
 
     return ret;
 }
@@ -800,9 +778,7 @@ to_pyobject (const std::string &s)
 PyObject *
 to_pyobject (const mobius::core::bytearray &array)
 {
-    return PyBytes_FromStringAndSize (
-        (const char *) array.data (), array.size ()
-    );
+    return PyBytes_FromStringAndSize ((const char *) array.data (), array.size ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -842,9 +818,7 @@ pystring_as_std_string (PyObject *value)
         str = buffer;
 
     else
-        throw std::invalid_argument (
-            MOBIUS_EXCEPTION_MSG ("invalid Python string")
-        );
+        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid Python string"));
 
     return str;
 }
@@ -872,19 +846,6 @@ pybytes_check (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create PyBytes from mobius::core::bytearray
-// @param array Bytearray
-// @return Python Bytes object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-pybytes_from_bytearray (const mobius::core::bytearray &array)
-{
-    return PyBytes_FromStringAndSize (
-        (const char *) array.data (), array.size ()
-    );
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create mobius::core::bytearray from PyBytes
 // @param value Python Object
 // @return Bytearray
@@ -898,9 +859,7 @@ pybytes_as_bytearray (PyObject *value)
     if (PyBytes_AsStringAndSize (value, &buffer, &length) == -1)
         throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid bytes"));
 
-    return mobius::core::bytearray (
-        reinterpret_cast<const std::uint8_t *> (buffer), length
-    );
+    return mobius::core::bytearray (reinterpret_cast<const std::uint8_t *> (buffer), length);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

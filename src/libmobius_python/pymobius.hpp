@@ -172,12 +172,11 @@ PyObject *to_pyobject (const mobius::core::bytearray &);
 PyObject *to_pyobject (const mobius::core::datetime::datetime &);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// C++ <-> Python concrete types conversion
+// Python -> C++ Python concrete types conversion
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *pystring_from_std_string (const std::string &);
 std::string pystring_as_std_string (PyObject *);
 
-PyObject *pybytes_from_bytearray (const mobius::core::bytearray &);
 PyObject *pybytes_from_char (char);
 mobius::core::bytearray pybytes_as_bytearray (PyObject *);
 

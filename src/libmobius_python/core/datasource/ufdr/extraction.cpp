@@ -309,10 +309,7 @@ tp_f_get_metadata (core_datasource_ufdr_extraction_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pylist_from_cpp_pair_container (
-            self->obj->get_metadata (), mobius::py::pystring_from_std_string,
-            mobius::py::pystring_from_std_string
-        );
+        ret = mobius::py::pylist_from_cpp_pair_container (self->obj->get_metadata ());
     }
     catch (const std::exception &e)
     {

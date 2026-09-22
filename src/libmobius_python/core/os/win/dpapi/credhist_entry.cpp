@@ -263,8 +263,7 @@ tp_getter_cipher_text (core_os_win_dpapi_credhist_entry_o *self, void *)
 
     try
     {
-        ret =
-            mobius::py::pybytes_from_bytearray (self->obj->get_cipher_text ());
+        ret = mobius::py::to_pyobject (self->obj->get_cipher_text ());
     }
     catch (const std::exception &e)
     {

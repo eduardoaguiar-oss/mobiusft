@@ -124,6 +124,40 @@ pylist_to_cpp_container (PyObject *list, F cppfunc) -> std::vector<decltype (cpp
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create new Python list from C++ pair container
 // @param container C++ container
+// @return Python list
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+template <typename C>
+PyObject *
+pylist_from_cpp_pair_container (const C &container)
+{
+    PyObject *ret = PyList_New (0);
+
+    if (!ret)
+        return nullptr;
+
+    for (const auto &p : container)
+    {
+        PyObject *py_item = PyTuple_New (2);
+
+        if (!py_item)
+        {
+            Py_CLEAR (ret);
+            return nullptr;
+        }
+
+        PyTuple_SetItem (py_item, 0, to_pyobject (p.first));
+        PyTuple_SetItem (py_item, 1, to_pyobject (p.second));
+
+        PyList_Append (ret, py_item);
+        Py_DECREF (py_item);
+    }
+
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create new Python list from C++ pair container
+// @param container C++ container
 // @param pyf1 Function to convert first value
 // @param pyf2 Function to convert second value
 // @return Python list
