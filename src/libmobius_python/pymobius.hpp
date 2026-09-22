@@ -18,16 +18,17 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#define PY_SSIZE_T_CLEAN        // PEP 353
+#define PY_SSIZE_T_CLEAN // PEP 353
 
 #include <Python.h>
 #include <mobius/core/bytearray.hpp>
 #include <mobius/core/datetime/datetime.hpp>
 #include <mobius/core/exception.inc>
 #include <cstdint>
-#include <string>
 #include <stdexcept>
 #include <type_traits>
+#include <utility>
+#include <string>
 
 namespace mobius::py
 {
@@ -52,9 +53,10 @@ std::uint64_t get_arg_as_uint64_t (PyObject *, std::uint32_t);
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Parse function arguments (with default value)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::string get_arg_as_std_string (PyObject *, std::uint32_t, const std::string&);
-mobius::core::bytearray get_arg_as_bytearray (PyObject *, std::uint32_t, const mobius::core::bytearray&);
-mobius::core::datetime::datetime get_arg_as_datetime (PyObject *, std::uint32_t, const mobius::core::datetime::datetime&);
+std::string get_arg_as_std_string (PyObject *, std::uint32_t, const std::string &);
+mobius::core::bytearray get_arg_as_bytearray (PyObject *, std::uint32_t, const mobius::core::bytearray &);
+mobius::core::datetime::datetime
+get_arg_as_datetime (PyObject *, std::uint32_t, const mobius::core::datetime::datetime &);
 bool get_arg_as_bool (PyObject *, std::uint32_t, bool);
 char get_arg_as_char (PyObject *, std::uint32_t, char);
 int get_arg_as_int (PyObject *, std::uint32_t, int);
@@ -72,13 +74,14 @@ std::uint64_t get_arg_as_uint64_t (PyObject *, std::uint32_t, std::uint64_t);
 // @param f Check function
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-template <typename F> bool
+template <typename F>
+bool
 check_arg (PyObject *args, std::uint32_t idx, F f)
 {
-  if (idx < get_arg_size (args))
-    return f (get_arg (args, idx));
+    if (idx < get_arg_size (args))
+        return f (get_arg (args, idx));
 
-  throw std::out_of_range (MOBIUS_EXCEPTION_MSG ("argument index out of range"));
+    throw std::out_of_range (MOBIUS_EXCEPTION_MSG ("argument index out of range"));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -88,12 +91,13 @@ check_arg (PyObject *args, std::uint32_t idx, F f)
 // @param f Conversion function
 // @return C++ object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-template <typename F, typename D> decltype (auto)
+template <typename F, typename D>
+decltype (auto)
 get_arg_as_cpp (PyObject *args, std::uint32_t idx, F f, D d)
 {
-  if (idx < get_arg_size (args))
-    return f (get_arg (args, idx));
-  return d;
+    if (idx < get_arg_size (args))
+        return f (get_arg (args, idx));
+    return d;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -103,21 +107,22 @@ get_arg_as_cpp (PyObject *args, std::uint32_t idx, F f, D d)
 // @param f Conversion function
 // @return C++ object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-template <typename F> decltype (auto)
+template <typename F>
+decltype (auto)
 get_arg_as_cpp (PyObject *args, std::uint32_t idx, F f)
 {
-  return f (get_arg (args, idx));
+    return f (get_arg (args, idx));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Error handling
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void reset_error ();
-void set_attribute_error (const std::string&);
-void set_invalid_type_error (const std::string&);
-void set_value_error (const std::string&);
-void set_io_error (const std::string&);
-void set_runtime_error (const std::string&);
+void set_attribute_error (const std::string &);
+void set_invalid_type_error (const std::string &);
+void set_value_error (const std::string &);
+void set_io_error (const std::string &);
+void set_runtime_error (const std::string &);
 void set_stop_iteration ();
 std::string get_error_message ();
 
@@ -137,45 +142,49 @@ PyObject *py_true ();
 PyObject *py_not_implemented ();
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// Type checking functions
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool pybool_check (PyObject *);
+bool pybytes_check (PyObject *);
+bool pydatetime_check (PyObject *);
+bool pylong_check (PyObject *);
+bool pynone_check (PyObject *);
+bool pystring_check (PyObject *);
+bool pyfloat_check (PyObject *);
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // C++ -> Python concrete types conversion
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *to_pyobject(bool);
-PyObject *to_pyobject(std::int8_t);
-PyObject *to_pyobject(std::int16_t);
-PyObject *to_pyobject(std::int32_t);
-PyObject *to_pyobject(std::int64_t);
-PyObject *to_pyobject(std::uint8_t);
-PyObject *to_pyobject(std::uint16_t);
-PyObject *to_pyobject(std::uint32_t);
-PyObject *to_pyobject(std::uint64_t);
-PyObject *to_pyobject(double);
-PyObject *to_pyobject(const std::string&);
-PyObject *to_pyobject(const mobius::core::bytearray&);
-PyObject *to_pyobject(const mobius::core::datetime::datetime&);
+PyObject *to_pyobject (bool);
+PyObject *to_pyobject (std::int8_t);
+PyObject *to_pyobject (std::int16_t);
+PyObject *to_pyobject (std::int32_t);
+PyObject *to_pyobject (std::int64_t);
+PyObject *to_pyobject (std::uint8_t);
+PyObject *to_pyobject (std::uint16_t);
+PyObject *to_pyobject (std::uint32_t);
+PyObject *to_pyobject (std::uint64_t);
+PyObject *to_pyobject (double);
+PyObject *to_pyobject (const std::string &);
+PyObject *to_pyobject (const mobius::core::bytearray &);
+PyObject *to_pyobject (const mobius::core::datetime::datetime &);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // C++ <-> Python concrete types conversion
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-bool pynone_check (PyObject *);
-
-bool pystring_check (PyObject *);
-PyObject *pystring_from_std_string (const std::string&);
+PyObject *pystring_from_std_string (const std::string &);
 std::string pystring_as_std_string (PyObject *);
 
-bool pybytes_check (PyObject *);
-PyObject *pybytes_from_bytearray (const mobius::core::bytearray&);
+PyObject *pybytes_from_bytearray (const mobius::core::bytearray &);
 PyObject *pybytes_from_char (char);
 mobius::core::bytearray pybytes_as_bytearray (PyObject *);
 
-bool pydatetime_check (PyObject *);
-PyObject *pydatetime_from_datetime (const mobius::core::datetime::datetime&);
+PyObject *pydatetime_from_datetime (const mobius::core::datetime::datetime &);
 mobius::core::datetime::datetime pydatetime_as_datetime (PyObject *);
 
-bool pybool_check (PyObject *);
 PyObject *pybool_from_bool (bool);
 bool pybool_as_bool (PyObject *);
 
-bool pylong_check (PyObject *);
 PyObject *pylong_from_int (int);
 int pylong_as_int (PyObject *);
 
@@ -197,7 +206,6 @@ std::uint16_t pylong_as_std_uint16_t (PyObject *);
 std::uint32_t pylong_as_std_uint32_t (PyObject *);
 std::uint64_t pylong_as_std_uint64_t (PyObject *);
 
-bool pyfloat_check (PyObject *);
 double pyfloat_as_cpp (PyObject *);
 PyObject *pyfloat_from_cpp (double);
 
@@ -208,49 +216,49 @@ template <typename T>
 bool
 isinstance (PyObject *value, T *type)
 {
-  return PyObject_IsInstance (value, reinterpret_cast<PyObject *> (type));
+    return PyObject_IsInstance (value, reinterpret_cast<PyObject *> (type));
 }
 
 template <typename O, typename T>
 auto
 from_pyobject (PyObject *value, T *type)
 {
-  if (isinstance (value, type))
-    return * (reinterpret_cast <O *>(value)->obj);
+    if (isinstance (value, type))
+        return *(reinterpret_cast<O *> (value)->obj);
 
-  throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("object must be an instance of " + std::string (type->tp_name)));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("object must be an instance of " + std::string (type->tp_name)));
 }
 
 template <typename O, typename Tcpp, typename T>
 PyObject *
-to_pyobject (const Tcpp& obj, T *type)
+to_pyobject (const Tcpp &obj, T *type)
 {
-  PyObject *ret = _PyObject_New (type);
+    PyObject *ret = _PyObject_New (type);
 
-  if (ret)
-    ((O *) ret)->obj = new Tcpp (obj);
-
-  return ret;
-}
-
-template <typename O, typename Tcpp, typename T>
-PyObject *
-to_pyobject_nullable (const Tcpp& obj, T *type)
-{
-  PyObject *ret = nullptr;
-
-  if (obj)
-    {
-      ret = _PyObject_New (type);
-
-      if (ret)
+    if (ret)
         ((O *) ret)->obj = new Tcpp (obj);
+
+    return ret;
+}
+
+template <typename O, typename Tcpp, typename T>
+PyObject *
+to_pyobject_nullable (const Tcpp &obj, T *type)
+{
+    PyObject *ret = nullptr;
+
+    if (obj)
+    {
+        ret = _PyObject_New (type);
+
+        if (ret)
+            ((O *) ret)->obj = new Tcpp (obj);
     }
 
-  else
-    ret = mobius::py::pynone ();
+    else
+        ret = mobius::py::pynone ();
 
-  return ret;
+    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -260,21 +268,22 @@ to_pyobject_nullable (const Tcpp& obj, T *type)
 // @param pycheck Function to check value object
 // @return -1 if error, 0 if OK
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-template <typename F> void
-check_setter_value (PyObject *value, const char* attr_name, F pycheck)
+template <typename F>
+void
+check_setter_value (PyObject *value, const char *attr_name, F pycheck)
 {
-  // If it is a delete operation, then return with error
-  if (value == nullptr)
+    // If it is a delete operation, then return with error
+    if (value == nullptr)
     {
-      std::string msg = "cannot delete '" + std::string (attr_name) + "' attribute";
-      throw std::invalid_argument (MOBIUS_EXCEPTION_MSG (msg.c_str ()));
+        std::string msg = "cannot delete '" + std::string (attr_name) + "' attribute";
+        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG (msg.c_str ()));
     }
 
-  // Check argument type
-  if (!pycheck (value))
+    // Check argument type
+    if (!pycheck (value))
     {
-      std::string msg = "invalid type for '" + std::string (attr_name) + "' attribute";
-      throw std::invalid_argument (MOBIUS_EXCEPTION_MSG (msg.c_str ()));
+        std::string msg = "invalid type for '" + std::string (attr_name) + "' attribute";
+        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG (msg.c_str ()));
     }
 }
 
@@ -285,22 +294,74 @@ check_setter_value (PyObject *value, const char* attr_name, F pycheck)
 // @param pyf2 Function to convert second value
 // @return Python Tuple
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-template <typename T, typename F1, typename F2> PyObject *
-pytuple_from_cpp_pair (const T& p, F1 pyf1, F2 pyf2)
+template <typename T, typename F1, typename F2>
+PyObject *
+pytuple_from_cpp_pair (const T &p, F1 pyf1, F2 pyf2)
 {
-  PyObject *ret = PyTuple_New (2);
+    PyObject *ret = PyTuple_New (2);
 
-  if (ret)
+    if (ret)
     {
-      PyTuple_SetItem (ret, 0, pyf1 (p.first));
-      PyTuple_SetItem (ret, 1, pyf2 (p.second));
+        PyTuple_SetItem (ret, 0, pyf1 (p.first));
+        PyTuple_SetItem (ret, 1, pyf2 (p.second));
     }
 
-  return ret;
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Primary template for converting Python object to C++ object
+// @tparam T C++ type
+// @param value Python object
+// @return C++ object of type T
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+template <typename T>
+T to_cpp (PyObject *value) = delete;
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Call C++ object member function with arguments, handling exceptions
+// and converting the result to a Python object
+//
+// @tparam obj_type Type of the C++ object
+// @tparam func_type Type of the C++ member function
+// @tparam Args Types of the arguments to pass to the C++ function
+// @param obj Pointer to the C++ object on which to call the member function
+// @param f Pointer to the C++ member function to call
+// @param args Arguments to pass to the C++ function
+// @return Python object representing the result of the C++ function, including void
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+template <typename obj_type, typename func_type, typename... Args>
+PyObject *
+call_method (obj_type *obj, func_type &&f, Args &&...args)
+{
+    PyObject *ret = nullptr;
+
+    try
+    {
+        using result_type = std::invoke_result_t<func_type, obj_type *, Args...>;
+
+        if constexpr (std::is_void_v<result_type>)
+        {
+            (obj->*f) (std::forward<Args> (args)...);
+            ret = pynone ();
+        }
+        else
+        {
+            ret = to_pyobject ((obj->*f) (std::forward<Args> (args)...));
+        }
+    }
+    catch (const std::exception &e)
+    {
+        set_runtime_error (e.what ());
+    }
+    catch (...)
+    {
+        set_runtime_error ("unknown C++ exception");
+    }
+
+    return ret;
 }
 
 } // namespace mobius::py
 
 #endif
-
-
