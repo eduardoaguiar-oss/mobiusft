@@ -174,7 +174,7 @@ tp_getter_deletion_time (os_win_trashbin_info2_entry_o *self, void *)
 
     try
     {
-        ret = mobius::py::pydatetime_from_datetime (
+        ret = mobius::py::to_pyobject (
             self->obj->get_deletion_time ());
     }
     catch (const std::exception &e)

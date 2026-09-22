@@ -191,7 +191,7 @@ tp_getter_last_update_time (core_os_win_credential_o *self, void *)
 
     try
     {
-        ret = mobius::py::pydatetime_from_datetime (
+        ret = mobius::py::to_pyobject (
             self->obj->get_last_update_time ());
     }
     catch (const std::exception &e)

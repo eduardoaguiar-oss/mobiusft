@@ -326,7 +326,7 @@ tp_getter_access_time (core_io_folder_o *self, void *)
 
     try
     {
-        ret = mobius::py::pydatetime_from_datetime (
+        ret = mobius::py::to_pyobject (
             self->obj->get_access_time ()
         );
     }
@@ -348,7 +348,7 @@ tp_getter_modification_time (core_io_folder_o *self, void *)
 
     try
     {
-        ret = mobius::py::pydatetime_from_datetime (
+        ret = mobius::py::to_pyobject (
             self->obj->get_modification_time ()
         );
     }
@@ -370,7 +370,7 @@ tp_getter_metadata_time (core_io_folder_o *self, void *)
 
     try
     {
-        ret = mobius::py::pydatetime_from_datetime (
+        ret = mobius::py::to_pyobject (
             self->obj->get_metadata_time ()
         );
     }
@@ -392,7 +392,7 @@ tp_getter_creation_time (core_io_folder_o *self, void *)
 
     try
     {
-        ret = mobius::py::pydatetime_from_datetime (
+        ret = mobius::py::to_pyobject (
             self->obj->get_creation_time ()
         );
     }
@@ -414,7 +414,7 @@ tp_getter_deletion_time (core_io_folder_o *self, void *)
 
     try
     {
-        ret = mobius::py::pydatetime_from_datetime (
+        ret = mobius::py::to_pyobject (
             self->obj->get_deletion_time ()
         );
     }
@@ -436,7 +436,7 @@ tp_getter_backup_time (core_io_folder_o *self, void *)
 
     try
     {
-        ret = mobius::py::pydatetime_from_datetime (
+        ret = mobius::py::to_pyobject (
             self->obj->get_backup_time ()
         );
     }

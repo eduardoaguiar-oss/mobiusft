@@ -54,7 +54,7 @@ func_new_datetime_from_cocoa_timestamp (PyObject *, PyObject *args)
 
     try
     {
-        ret = mobius::py::pydatetime_from_datetime (
+        ret = mobius::py::to_pyobject (
             mobius::core::datetime::new_datetime_from_cocoa_timestamp (
                 std::min (arg_timestamp, MAX_PYTHON_COCOA_TIMESTAMP)
             )
@@ -92,7 +92,7 @@ func_new_datetime_from_dot_net_timestamp (PyObject *, PyObject *args)
 
     try
     {
-        ret = mobius::py::pydatetime_from_datetime (
+        ret = mobius::py::to_pyobject (
             mobius::core::datetime::new_datetime_from_dot_net_timestamp (
                 std::min (arg_timestamp, MAX_PYTHON_DOT_NET_TIMESTAMP)
             )
@@ -130,7 +130,7 @@ func_new_datetime_from_nt_timestamp (PyObject *, PyObject *args)
 
     try
     {
-        ret = mobius::py::pydatetime_from_datetime (
+        ret = mobius::py::to_pyobject (
             mobius::core::datetime::new_datetime_from_nt_timestamp (std::min (arg_timestamp, MAX_PYTHON_NT_TIMESTAMP))
         );
     }

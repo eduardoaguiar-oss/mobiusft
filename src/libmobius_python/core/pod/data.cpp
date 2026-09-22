@@ -534,7 +534,7 @@ to_pyobject (const mobius::core::pod::data &value)
         ret = mobius::py::to_pyobject (value.to_float ());
 
     else if (value.is_datetime ())
-        ret = mobius::py::pydatetime_from_datetime (value.to_datetime ());
+        ret = mobius::py::to_pyobject (value.to_datetime ());
 
     else if (value.is_string ())
         ret = mobius::py::to_pyobject (value.to_string ());

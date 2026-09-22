@@ -133,7 +133,7 @@ tp_getter_last_execution_time (framework_model_ant_o *self, void *)
 
     try
     {
-        ret = mobius::py::pydatetime_from_datetime (
+        ret = mobius::py::to_pyobject (
             self->obj->get_last_execution_time ());
     }
     catch (const std::exception &e)

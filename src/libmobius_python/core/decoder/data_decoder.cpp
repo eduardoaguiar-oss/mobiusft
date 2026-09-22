@@ -525,7 +525,7 @@ tp_f_get_hfs_datetime (core_decoder_data_decoder_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pydatetime_from_datetime (self->obj->get_hfs_datetime ());
+        ret = mobius::py::to_pyobject (self->obj->get_hfs_datetime ());
     }
     catch (const std::exception &e)
     {
@@ -550,7 +550,7 @@ tp_f_get_iso9660_datetime (core_decoder_data_decoder_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pydatetime_from_datetime (self->obj->get_iso9660_datetime ());
+        ret = mobius::py::to_pyobject (self->obj->get_iso9660_datetime ());
     }
     catch (const std::exception &e)
     {
@@ -575,7 +575,7 @@ tp_f_get_nt_datetime (core_decoder_data_decoder_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pydatetime_from_datetime (self->obj->get_nt_datetime ());
+        ret = mobius::py::to_pyobject (self->obj->get_nt_datetime ());
     }
     catch (const std::exception &e)
     {
@@ -600,7 +600,7 @@ tp_f_get_unix_datetime (core_decoder_data_decoder_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pydatetime_from_datetime (self->obj->get_unix_datetime ());
+        ret = mobius::py::to_pyobject (self->obj->get_unix_datetime ());
     }
     catch (const std::exception &e)
     {
@@ -625,7 +625,7 @@ tp_f_get_fat_datetime (core_decoder_data_decoder_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pydatetime_from_datetime (self->obj->get_fat_datetime ());
+        ret = mobius::py::to_pyobject (self->obj->get_fat_datetime ());
     }
     catch (const std::exception &e)
     {

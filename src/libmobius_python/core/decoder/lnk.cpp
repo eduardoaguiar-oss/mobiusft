@@ -137,7 +137,7 @@ tp_getter_creation_time (core_decoder_lnk_o *self, void *)
 
     try
     {
-        ret = mobius::py::pydatetime_from_datetime (
+        ret = mobius::py::to_pyobject (
             self->obj->get_creation_time ()
         );
     }
@@ -161,7 +161,7 @@ tp_getter_access_time (core_decoder_lnk_o *self, void *)
 
     try
     {
-        ret = mobius::py::pydatetime_from_datetime (
+        ret = mobius::py::to_pyobject (
             self->obj->get_access_time ()
         );
     }

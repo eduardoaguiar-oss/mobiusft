@@ -179,7 +179,7 @@ tp_getter_last_modification_time (core_os_win_registry_registry_key_o *self, voi
 
     try
     {
-        ret = mobius::py::pydatetime_from_datetime (
+        ret = mobius::py::to_pyobject (
             self->obj->get_last_modification_time ());
     }
     catch (const std::exception &e)

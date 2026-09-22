@@ -48,7 +48,7 @@ func_new_datetime_from_iso_string (PyObject *, PyObject *args)
 
     try
     {
-        ret = mobius::py::pydatetime_from_datetime (
+        ret = mobius::py::to_pyobject (
             mobius::core::datetime::new_datetime_from_iso_string (arg_str));
     }
     catch (const std::exception &e)
