@@ -52,7 +52,7 @@ tp_f_read (core_io_line_reader_o *self, PyObject *)
         bool rc = mobius::py::GIL () (self->obj->read (line));
 
         if (rc)
-            ret = mobius::py::pystring_from_std_string (line);
+            ret = mobius::py::to_pyobject (line);
 
         else
             ret = mobius::py::pynone ();
@@ -179,7 +179,7 @@ tp_iternext (PyObject *self)
         std::string line;
 
         if (reinterpret_cast<core_io_line_reader_o *> (self)->obj->read (line))
-            ret = mobius::py::pystring_from_std_string (line);
+            ret = mobius::py::to_pyobject (line);
 
         else
             mobius::py::set_stop_iteration ();

@@ -105,7 +105,7 @@ tp_getter_provider_guid (core_os_win_dpapi_blob_o *self, void *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (
+        ret = mobius::py::to_pyobject (
             self->obj->get_provider_guid ());
     }
     catch (const std::exception &e)
@@ -151,7 +151,7 @@ tp_getter_master_key_guid (core_os_win_dpapi_blob_o *self, void *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (
+        ret = mobius::py::to_pyobject (
             self->obj->get_master_key_guid ());
     }
     catch (const std::exception &e)
@@ -196,7 +196,7 @@ tp_getter_description (core_os_win_dpapi_blob_o *self, void *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (
+        ret = mobius::py::to_pyobject (
             self->obj->get_description ());
     }
     catch (const std::exception &e)

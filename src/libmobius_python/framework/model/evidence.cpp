@@ -119,7 +119,7 @@ tp_getter_type (framework_model_evidence_o *self, void *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_type ());
+        ret = mobius::py::to_pyobject (self->obj->get_type ());
     }
     catch (const std::exception &e)
     {
@@ -685,7 +685,7 @@ tp_f_get_hash (framework_model_evidence_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (
+        ret = mobius::py::to_pyobject (
             self->obj->get_hash (arg_type)
         );
     }

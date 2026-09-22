@@ -201,7 +201,7 @@ tp_f_get_version_as_string (core_decoder_tdf_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (
+        ret = mobius::py::to_pyobject (
             self->obj->get_version_as_string ());
     }
     catch (const std::exception &e)

@@ -197,7 +197,7 @@ tp_f_get_selected (core_ui_stacked_container_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_selected ());
+        ret = mobius::py::to_pyobject (self->obj->get_selected ());
     }
     catch (const std::exception &e)
     {

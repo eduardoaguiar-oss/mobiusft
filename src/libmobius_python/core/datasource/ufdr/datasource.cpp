@@ -51,7 +51,7 @@ tp_f_get_url (core_datasource_ufdr_datasource_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_url ());
+        ret = mobius::py::to_pyobject (self->obj->get_url ());
     }
     catch (const std::exception &e)
     {

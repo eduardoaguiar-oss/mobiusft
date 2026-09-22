@@ -107,7 +107,7 @@ tp_getter_guid (core_os_win_dpapi_credhist_entry_o *self, void *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_guid ());
+        ret = mobius::py::to_pyobject (self->obj->get_guid ());
     }
     catch (const std::exception &e)
     {
@@ -241,7 +241,7 @@ tp_getter_sid (core_os_win_dpapi_credhist_entry_o *self, void *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_sid ());
+        ret = mobius::py::to_pyobject (self->obj->get_sid ());
     }
     catch (const std::exception &e)
     {

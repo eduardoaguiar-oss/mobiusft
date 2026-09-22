@@ -61,7 +61,7 @@ tp_getter_type (core_system_device_o *self, void *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_type ());
+        ret = mobius::py::to_pyobject (self->obj->get_type ());
     }
     catch (const std::exception &e)
     {
@@ -102,7 +102,7 @@ tp_getter_node (core_system_device_o *self, void *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_node ());
+        ret = mobius::py::to_pyobject (self->obj->get_node ());
     }
     catch (const std::exception &e)
     {
@@ -151,7 +151,7 @@ tp_f_get_property (core_system_device_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (
+        ret = mobius::py::to_pyobject (
             self->obj->get_property (arg_name));
     }
     catch (const std::exception &e)
@@ -187,7 +187,7 @@ tp_f_get_sysattr (core_system_device_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (
+        ret = mobius::py::to_pyobject (
             self->obj->get_sysattr (arg_name));
     }
     catch (const std::exception &e)

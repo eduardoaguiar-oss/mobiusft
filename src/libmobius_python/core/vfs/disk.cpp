@@ -47,7 +47,7 @@ tp_getter_type (core_vfs_disk_o *self, void *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_type ());
+        ret = mobius::py::to_pyobject (self->obj->get_type ());
     }
     catch (const std::exception &e)
     {
@@ -91,7 +91,7 @@ tp_getter_name (core_vfs_disk_o *self, void *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_name ());
+        ret = mobius::py::to_pyobject (self->obj->get_name ());
     }
     catch (const std::exception &e)
     {
@@ -314,7 +314,7 @@ tp_f_get_path (core_vfs_disk_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_path ());
+        ret = mobius::py::to_pyobject (self->obj->get_path ());
     }
     catch (const std::exception &e)
     {

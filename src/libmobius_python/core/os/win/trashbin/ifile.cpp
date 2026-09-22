@@ -150,7 +150,7 @@ tp_getter_path (core_os_win_trashbin_ifile_o *self, void *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_path ());
+        ret = mobius::py::to_pyobject (self->obj->get_path ());
     }
     catch (const std::exception &e)
     {

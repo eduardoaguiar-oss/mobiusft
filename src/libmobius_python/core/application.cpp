@@ -106,7 +106,7 @@ tp_f_get_config_path (core_application_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (
+        ret = mobius::py::to_pyobject (
             self->obj->get_config_path (arg_rpath)
         );
     }
@@ -142,7 +142,7 @@ tp_f_get_cache_path (core_application_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (
+        ret = mobius::py::to_pyobject (
             self->obj->get_cache_path (arg_rpath)
         );
     }
@@ -178,7 +178,7 @@ tp_f_get_data_path (core_application_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (
+        ret = mobius::py::to_pyobject (
             self->obj->get_data_path (arg_rpath)
         );
     }
@@ -219,7 +219,7 @@ tp_f_get_extension_resource_path (core_application_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (
+        ret = mobius::py::to_pyobject (
             self->obj->get_extension_resource_path (arg_extension_id, arg_rpath)
         );
     }

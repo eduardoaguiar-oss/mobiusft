@@ -47,7 +47,7 @@ tp_getter_description (core_kff_hashset_o *self, void *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (
+        ret = mobius::py::to_pyobject (
             self->obj->get_description ());
     }
     catch (const std::exception &e)

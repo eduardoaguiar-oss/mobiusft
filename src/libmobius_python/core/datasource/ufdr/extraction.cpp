@@ -69,7 +69,7 @@ tp_getter_type (core_datasource_ufdr_extraction_o *self, void *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_type ());
+        ret = mobius::py::to_pyobject (self->obj->get_type ());
     }
     catch (const std::exception &e)
     {
@@ -130,7 +130,7 @@ tp_getter_name (core_datasource_ufdr_extraction_o *self, void *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_name ());
+        ret = mobius::py::to_pyobject (self->obj->get_name ());
     }
     catch (const std::exception &e)
     {
@@ -191,7 +191,7 @@ tp_getter_device_name (core_datasource_ufdr_extraction_o *self, void *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (
+        ret = mobius::py::to_pyobject (
             self->obj->get_device_name ()
         );
     }

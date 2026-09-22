@@ -81,7 +81,7 @@ tp_f_read (core_io_text_reader_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (
+        ret = mobius::py::to_pyobject (
             mobius::py::GIL () ((arg_size == max_size) ? _read_all (self->obj) : self->obj->read (arg_size))
         );
     }

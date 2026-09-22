@@ -44,7 +44,7 @@ tp_getter_id (framework_attribute_o *self, void *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_id ());
+        ret = mobius::py::to_pyobject (self->obj->get_id ());
     }
     catch (const std::exception &e)
     {
@@ -66,7 +66,7 @@ tp_getter_name (framework_attribute_o *self, void *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_name ());
+        ret = mobius::py::to_pyobject (self->obj->get_name ());
     }
     catch (const std::exception &e)
     {
@@ -124,7 +124,7 @@ tp_getter_description (framework_attribute_o *self, void *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (
+        ret = mobius::py::to_pyobject (
             self->obj->get_description ());
     }
     catch (const std::exception &e)
@@ -183,7 +183,7 @@ tp_getter_datatype (framework_attribute_o *self, void *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_datatype ());
+        ret = mobius::py::to_pyobject (self->obj->get_datatype ());
     }
     catch (const std::exception &e)
     {

@@ -119,7 +119,7 @@ tp_f_get_path (framework_model_case_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (
+        ret = mobius::py::to_pyobject (
             self->obj->get_path (arg_rpath));
     }
     catch (const std::exception &e)
@@ -158,7 +158,7 @@ tp_f_create_path (framework_model_case_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (
+        ret = mobius::py::to_pyobject (
             self->obj->create_path (arg_rpath));
     }
     catch (const std::exception &e)

@@ -57,7 +57,7 @@ decoder_func_get_filetype (PyObject *, PyObject *args)
         auto filetype = mobius::py::GIL () (
             mobius::core::decoder::get_filetype (arg_reader));
 
-        ret = mobius::py::pystring_from_std_string (filetype);
+        ret = mobius::py::to_pyobject (filetype);
     }
     catch (const std::exception &e)
     {

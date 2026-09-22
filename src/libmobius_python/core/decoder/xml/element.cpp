@@ -48,7 +48,7 @@ tp_f_get_name (core_decoder_xml_element_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_name ());
+        ret = mobius::py::to_pyobject (self->obj->get_name ());
     }
     catch (const std::exception &e)
     {
@@ -73,7 +73,7 @@ tp_f_get_path (core_decoder_xml_element_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_path ());
+        ret = mobius::py::to_pyobject (self->obj->get_path ());
     }
     catch (const std::exception &e)
     {
@@ -98,7 +98,7 @@ tp_f_get_content (core_decoder_xml_element_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_content ());
+        ret = mobius::py::to_pyobject (self->obj->get_content ());
     }
     catch (const std::exception &e)
     {
@@ -174,7 +174,7 @@ tp_f_get_property (core_decoder_xml_element_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (
+        ret = mobius::py::to_pyobject (
             self->obj->get_property (arg_name)
         );
     }
@@ -214,7 +214,7 @@ tp_f_get_property_by_path (core_decoder_xml_element_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (
+        ret = mobius::py::to_pyobject (
             self->obj->get_property_by_path (arg_path)
         );
     }

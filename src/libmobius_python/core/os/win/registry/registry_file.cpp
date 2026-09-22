@@ -86,7 +86,7 @@ tp_getter_role (core_os_win_registry_registry_file_o *self, void *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_role ());
+        ret = mobius::py::to_pyobject (self->obj->get_role ());
     }
     catch (const std::exception &e)
     {
@@ -106,7 +106,7 @@ tp_getter_path (core_os_win_registry_registry_file_o *self, void *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_path ());
+        ret = mobius::py::to_pyobject (self->obj->get_path ());
     }
     catch (const std::exception &e)
     {

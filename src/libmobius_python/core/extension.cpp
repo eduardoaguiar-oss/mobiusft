@@ -44,7 +44,7 @@ tp_getter_id (core_extension_o *self, void *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_id ());
+        ret = mobius::py::to_pyobject (self->obj->get_id ());
     }
     catch (const std::exception &e)
     {
@@ -66,7 +66,7 @@ tp_getter_name (core_extension_o *self, void *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_name ());
+        ret = mobius::py::to_pyobject (self->obj->get_name ());
     }
     catch (const std::exception &e)
     {
@@ -88,7 +88,7 @@ tp_getter_version (core_extension_o *self, void *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_version ());
+        ret = mobius::py::to_pyobject (self->obj->get_version ());
     }
     catch (const std::exception &e)
     {
@@ -110,7 +110,7 @@ tp_getter_authors (core_extension_o *self, void *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_authors ());
+        ret = mobius::py::to_pyobject (self->obj->get_authors ());
     }
     catch (const std::exception &e)
     {
@@ -132,7 +132,7 @@ tp_getter_description (core_extension_o *self, void *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (
+        ret = mobius::py::to_pyobject (
             self->obj->get_description ()
         );
     }

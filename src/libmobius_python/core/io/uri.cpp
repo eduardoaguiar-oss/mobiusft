@@ -82,7 +82,7 @@ tp_f_get_value (core_io_uri_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_value ());
+        ret = mobius::py::to_pyobject (self->obj->get_value ());
     }
     catch (const std::exception &e)
     {
@@ -107,7 +107,7 @@ tp_f_get_scheme (core_io_uri_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_scheme ());
+        ret = mobius::py::to_pyobject (self->obj->get_scheme ());
     }
     catch (const std::exception &e)
     {
@@ -172,7 +172,7 @@ tp_f_get_path (core_io_uri_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (
+        ret = mobius::py::to_pyobject (
             self->obj->get_path (arg_encoding));
     }
     catch (const std::exception &e)
@@ -212,7 +212,7 @@ tp_f_get_query (core_io_uri_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (
+        ret = mobius::py::to_pyobject (
             self->obj->get_query (arg_encoding));
     }
     catch (const std::exception &e)
@@ -252,7 +252,7 @@ tp_f_get_fragment (core_io_uri_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (
+        ret = mobius::py::to_pyobject (
             self->obj->get_fragment (arg_encoding));
     }
     catch (const std::exception &e)
@@ -278,7 +278,7 @@ tp_f_get_username (core_io_uri_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_username ());
+        ret = mobius::py::to_pyobject (self->obj->get_username ());
     }
     catch (const std::exception &e)
     {
@@ -303,7 +303,7 @@ tp_f_get_password (core_io_uri_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_password ());
+        ret = mobius::py::to_pyobject (self->obj->get_password ());
     }
     catch (const std::exception &e)
     {
@@ -328,7 +328,7 @@ tp_f_get_host (core_io_uri_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_host ());
+        ret = mobius::py::to_pyobject (self->obj->get_host ());
     }
     catch (const std::exception &e)
     {
@@ -353,7 +353,7 @@ tp_f_get_port (core_io_uri_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_port ());
+        ret = mobius::py::to_pyobject (self->obj->get_port ());
     }
     catch (const std::exception &e)
     {
@@ -559,7 +559,7 @@ tp_f_get_filename (core_io_uri_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_filename ());
+        ret = mobius::py::to_pyobject (self->obj->get_filename ());
     }
     catch (const std::exception &e)
     {

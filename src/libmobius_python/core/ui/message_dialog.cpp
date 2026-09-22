@@ -68,7 +68,7 @@ tp_getter_title (core_ui_message_dialog_o *self, void *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_title ());
+        ret = mobius::py::to_pyobject (self->obj->get_title ());
     }
     catch (const std::exception &e)
     {
@@ -126,7 +126,7 @@ tp_getter_text (core_ui_message_dialog_o *self, void *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_text ());
+        ret = mobius::py::to_pyobject (self->obj->get_text ());
     }
     catch (const std::exception &e)
     {
@@ -184,7 +184,7 @@ tp_getter_informative_text (core_ui_message_dialog_o *self, void *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (
+        ret = mobius::py::to_pyobject (
             self->obj->get_informative_text ());
     }
     catch (const std::exception &e)

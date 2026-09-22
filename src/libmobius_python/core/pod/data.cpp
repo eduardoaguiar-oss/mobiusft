@@ -537,7 +537,7 @@ to_pyobject (const mobius::core::pod::data &value)
         ret = mobius::py::pydatetime_from_datetime (value.to_datetime ());
 
     else if (value.is_string ())
-        ret = mobius::py::pystring_from_std_string (value.to_string ());
+        ret = mobius::py::to_pyobject (value.to_string ());
 
     else if (value.is_bytearray ())
         ret = mobius::py::pybytes_from_bytearray (

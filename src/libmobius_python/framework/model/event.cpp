@@ -72,7 +72,7 @@ tp_f_get_text (framework_model_event_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_text ());
+        ret = mobius::py::to_pyobject (self->obj->get_text ());
     }
     catch (const std::exception &e)
     {

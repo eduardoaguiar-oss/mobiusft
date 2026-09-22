@@ -54,7 +54,7 @@ encoder_func_hexstring (PyObject *, PyObject *args)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (
+        ret = mobius::py::to_pyobject (
             mobius::core::encoder::hexstring (arg_data, arg_sep));
     }
     catch (const std::exception &e)

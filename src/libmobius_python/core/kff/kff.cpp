@@ -231,7 +231,7 @@ tp_f_lookup (core_kff_kff_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (
+        ret = mobius::py::to_pyobject (
             std::string (1, self->obj->lookup (arg_type, arg_value)));
     }
     catch (const std::exception &e)

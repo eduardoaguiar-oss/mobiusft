@@ -46,7 +46,7 @@ tp_f_get_id (framework_evidence_processor_profile_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_id ());
+        ret = mobius::py::to_pyobject (self->obj->get_id ());
     }
     catch (const std::exception &e)
     {
@@ -71,7 +71,7 @@ tp_f_get_name (framework_evidence_processor_profile_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_name ());
+        ret = mobius::py::to_pyobject (self->obj->get_name ());
     }
     catch (const std::exception &e)
     {
@@ -96,7 +96,7 @@ tp_f_get_description (framework_evidence_processor_profile_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (
+        ret = mobius::py::to_pyobject (
             self->obj->get_description ()
         );
     }
@@ -123,7 +123,7 @@ tp_f_get_processor_scope (framework_evidence_processor_profile_o *self, PyObject
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (
+        ret = mobius::py::to_pyobject (
             self->obj->get_processor_scope ()
         );
     }

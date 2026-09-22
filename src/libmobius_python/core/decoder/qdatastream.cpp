@@ -200,7 +200,7 @@ tp_f_get_qstring (core_decoder_qdatastream_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_qstring ());
+        ret = mobius::py::to_pyobject (self->obj->get_qstring ());
     }
     catch (const std::exception &e)
     {

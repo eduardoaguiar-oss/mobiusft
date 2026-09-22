@@ -703,7 +703,7 @@ tp_f_get_string_by_size (core_decoder_data_decoder_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_string_by_size (arg_size, arg_encode));
+        ret = mobius::py::to_pyobject (self->obj->get_string_by_size (arg_size, arg_encode));
     }
     catch (const std::exception &e)
     {
@@ -741,7 +741,7 @@ tp_f_get_c_string (core_decoder_data_decoder_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_c_string (arg_encode));
+        ret = mobius::py::to_pyobject (self->obj->get_c_string (arg_encode));
     }
     catch (const std::exception &e)
     {
@@ -779,7 +779,7 @@ tp_f_get_hex_string_by_size (core_decoder_data_decoder_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_hex_string_by_size (arg_size));
+        ret = mobius::py::to_pyobject (self->obj->get_hex_string_by_size (arg_size));
     }
     catch (const std::exception &e)
     {
@@ -804,7 +804,7 @@ tp_f_get_guid (core_decoder_data_decoder_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_guid ());
+        ret = mobius::py::to_pyobject (self->obj->get_guid ());
     }
     catch (const std::exception &e)
     {
@@ -829,7 +829,7 @@ tp_f_get_uuid (core_decoder_data_decoder_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_uuid ());
+        ret = mobius::py::to_pyobject (self->obj->get_uuid ());
     }
     catch (const std::exception &e)
     {
@@ -854,7 +854,7 @@ tp_f_get_sid (core_decoder_data_decoder_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_sid ());
+        ret = mobius::py::to_pyobject (self->obj->get_sid ());
     }
     catch (const std::exception &e)
     {
@@ -879,7 +879,7 @@ tp_f_get_ipv4 (core_decoder_data_decoder_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_ipv4 ());
+        ret = mobius::py::to_pyobject (self->obj->get_ipv4 ());
     }
     catch (const std::exception &e)
     {
@@ -904,7 +904,7 @@ tp_f_get_ipv4_be (core_decoder_data_decoder_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_ipv4_be ());
+        ret = mobius::py::to_pyobject (self->obj->get_ipv4_be ());
     }
     catch (const std::exception &e)
     {
@@ -929,7 +929,7 @@ tp_f_get_ipv4_le (core_decoder_data_decoder_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_ipv4_le ());
+        ret = mobius::py::to_pyobject (self->obj->get_ipv4_le ());
     }
     catch (const std::exception &e)
     {
@@ -954,7 +954,7 @@ tp_f_get_ipv6 (core_decoder_data_decoder_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_ipv6 ());
+        ret = mobius::py::to_pyobject (self->obj->get_ipv6 ());
     }
     catch (const std::exception &e)
     {
@@ -979,7 +979,7 @@ tp_f_get_ipv4_mapped_ipv6 (core_decoder_data_decoder_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_ipv4_mapped_ipv6 ());
+        ret = mobius::py::to_pyobject (self->obj->get_ipv4_mapped_ipv6 ());
     }
     catch (const std::exception &e)
     {

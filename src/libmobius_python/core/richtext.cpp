@@ -599,7 +599,7 @@ tp_f_to_html (core_richtext_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->to_html ());
+        ret = mobius::py::to_pyobject (self->obj->to_html ());
     }
     catch (const std::exception &e)
     {
@@ -624,7 +624,7 @@ tp_f_to_markdown (core_richtext_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->to_markdown ());
+        ret = mobius::py::to_pyobject (self->obj->to_markdown ());
     }
     catch (const std::exception &e)
     {
@@ -649,7 +649,7 @@ tp_f_to_latex (core_richtext_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->to_latex ());
+        ret = mobius::py::to_pyobject (self->obj->to_latex ());
     }
     catch (const std::exception &e)
     {
@@ -674,7 +674,7 @@ tp_f_to_pango (core_richtext_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->to_pango ());
+        ret = mobius::py::to_pyobject (self->obj->to_pango ());
     }
     catch (const std::exception &e)
     {

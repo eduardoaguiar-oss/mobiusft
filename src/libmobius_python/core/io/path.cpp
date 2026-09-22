@@ -47,7 +47,7 @@ tp_f_get_value (core_io_path_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_value ());
+        ret = mobius::py::to_pyobject (self->obj->get_value ());
     }
     catch (const std::exception &e)
     {
@@ -72,7 +72,7 @@ tp_f_get_dirname (core_io_path_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_dirname ());
+        ret = mobius::py::to_pyobject (self->obj->get_dirname ());
     }
     catch (const std::exception &e)
     {
@@ -97,7 +97,7 @@ tp_f_get_filename (core_io_path_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_filename ());
+        ret = mobius::py::to_pyobject (self->obj->get_filename ());
     }
     catch (const std::exception &e)
     {
@@ -122,7 +122,7 @@ tp_f_get_prefix (core_io_path_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_prefix ());
+        ret = mobius::py::to_pyobject (self->obj->get_prefix ());
     }
     catch (const std::exception &e)
     {
@@ -147,7 +147,7 @@ tp_f_get_extension (core_io_path_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_extension ());
+        ret = mobius::py::to_pyobject (self->obj->get_extension ());
     }
     catch (const std::exception &e)
     {
@@ -680,7 +680,7 @@ func_to_win_path (PyObject *, PyObject *args)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (to_win_path (path));
+        ret = mobius::py::to_pyobject (to_win_path (path));
     }
     catch (const std::exception &e)
     {

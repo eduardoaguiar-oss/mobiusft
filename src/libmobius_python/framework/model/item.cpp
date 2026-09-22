@@ -80,7 +80,7 @@ tp_getter_category (framework_model_item_o *self, void *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_category ());
+        ret = mobius::py::to_pyobject (self->obj->get_category ());
     }
     catch (const std::exception &e)
     {
@@ -360,7 +360,7 @@ tp_f_get_data_path (framework_model_item_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (
+        ret = mobius::py::to_pyobject (
             self->obj->get_data_path (arg_rpath)
         );
     }
@@ -400,7 +400,7 @@ tp_f_create_data_path (framework_model_item_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (
+        ret = mobius::py::to_pyobject (
             self->obj->create_data_path (arg_rpath)
         );
     }

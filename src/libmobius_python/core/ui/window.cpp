@@ -235,7 +235,7 @@ tp_f_get_title (core_ui_window_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_title ());
+        ret = mobius::py::to_pyobject (self->obj->get_title ());
     }
     catch (const std::exception &e)
     {

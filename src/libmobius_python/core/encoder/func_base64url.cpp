@@ -52,7 +52,7 @@ encoder_func_base64url (PyObject *, PyObject *args)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (
+        ret = mobius::py::to_pyobject (
             mobius::py::GIL () (mobius::core::encoder::base64url (arg_data)));
     }
     catch (const std::exception &e)
