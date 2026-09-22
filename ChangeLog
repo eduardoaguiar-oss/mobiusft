@@ -75,6 +75,7 @@ Mobius Forensic Toolkit 2.30
 	* libmobius_python: Use to_pyobject instead of pyfloat_from_double
 	* libmobius_python: Use to_pyobject instead of pydatetime_from_datetime
 	* libmobius_python: Use to_pyobject instead of pybytes_from_bytearray
+	* libmobius_python: Use to_pyobject instead of pylong_from_std_uint64_t
 	* tools: dirfs use function vfs::get_imagefile_types
 	* tools: filesystem_scan use function vfs::get_imagefile_types
 	* tools: imagefile_cat use function vfs::get_imagefile_types

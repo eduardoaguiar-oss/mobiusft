@@ -46,7 +46,7 @@ tp_getter_idx (core_file_decoder_entry_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint64_t (self->obj->get_idx ());
+        ret = mobius::py::to_pyobject (self->obj->get_idx ());
     }
     catch (const std::exception &e)
     {

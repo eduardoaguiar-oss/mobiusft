@@ -52,7 +52,7 @@ func_subscribe (PyObject *, PyObject *args)
     {
         auto callback = mobius::py::new_callback (arg_id, arg_f);
 
-        ret = mobius::py::pylong_from_std_uint64_t (
+        ret = mobius::py::to_pyobject (
             mobius::core::subscribe (arg_id, callback)
         );
     }

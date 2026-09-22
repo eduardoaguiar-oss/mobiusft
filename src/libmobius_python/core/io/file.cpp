@@ -141,7 +141,7 @@ tp_getter_inode (core_io_file_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint64_t (self->obj->get_inode ());
+        ret = mobius::py::to_pyobject (self->obj->get_inode ());
     }
     catch (const std::exception &e)
     {
@@ -161,7 +161,7 @@ tp_getter_size (core_io_file_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint64_t (self->obj->get_size ());
+        ret = mobius::py::to_pyobject (self->obj->get_size ());
     }
     catch (const std::exception &e)
     {

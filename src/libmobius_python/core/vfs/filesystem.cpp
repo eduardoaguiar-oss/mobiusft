@@ -71,7 +71,7 @@ tp_getter_offset (core_vfs_filesystem_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint64_t (self->obj->get_offset ());
+        ret = mobius::py::to_pyobject (self->obj->get_offset ());
     }
     catch (const std::exception &e)
     {
@@ -93,7 +93,7 @@ tp_getter_size (core_vfs_filesystem_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint64_t (self->obj->get_size ());
+        ret = mobius::py::to_pyobject (self->obj->get_size ());
     }
     catch (const std::exception &e)
     {

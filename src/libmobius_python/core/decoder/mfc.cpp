@@ -161,7 +161,7 @@ tp_f_get_qword (core_decoder_mfc_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint64_t (self->obj->get_qword ());
+        ret = mobius::py::to_pyobject (self->obj->get_qword ());
     }
     catch (const std::exception &e)
     {

@@ -45,7 +45,7 @@ tp_getter_size (core_io_stream_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint64_t (self->obj->get_size ());
+        ret = mobius::py::to_pyobject (self->obj->get_size ());
     }
     catch (const std::exception &e)
     {

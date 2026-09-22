@@ -170,7 +170,7 @@ tp_f_get_data_as_qword (core_os_win_registry_registry_data_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint64_t (
+        ret = mobius::py::to_pyobject (
             self->obj->get_data_as_qword ());
     }
     catch (const std::exception &e)

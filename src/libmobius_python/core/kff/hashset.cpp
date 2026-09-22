@@ -220,7 +220,7 @@ tp_f_get_size (core_kff_hashset_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint64_t (self->obj->get_size ());
+        ret = mobius::py::to_pyobject (self->obj->get_size ());
     }
     catch (const std::exception &e)
     {

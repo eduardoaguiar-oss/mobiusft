@@ -125,7 +125,7 @@ tp_f_tell (core_decoder_data_decoder_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint64_t (self->obj->tell ());
+        ret = mobius::py::to_pyobject (self->obj->tell ());
     }
     catch (const std::exception &e)
     {
@@ -150,7 +150,7 @@ tp_f_get_size (core_decoder_data_decoder_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint64_t (self->obj->get_size ());
+        ret = mobius::py::to_pyobject (self->obj->get_size ());
     }
     catch (const std::exception &e)
     {
@@ -325,7 +325,7 @@ tp_f_get_uint64_le (core_decoder_data_decoder_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint64_t (self->obj->get_uint64_le ());
+        ret = mobius::py::to_pyobject (self->obj->get_uint64_le ());
     }
     catch (const std::exception &e)
     {
@@ -400,7 +400,7 @@ tp_f_get_uint64_be (core_decoder_data_decoder_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint64_t (self->obj->get_uint64_be ());
+        ret = mobius::py::to_pyobject (self->obj->get_uint64_be ());
     }
     catch (const std::exception &e)
     {

@@ -83,7 +83,7 @@ tp_getter_version (core_os_win_trashbin_ifile_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint64_t (self->obj->get_version ());
+        ret = mobius::py::to_pyobject (self->obj->get_version ());
     }
     catch (const std::exception &e)
     {
@@ -105,7 +105,7 @@ tp_getter_size (core_os_win_trashbin_ifile_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint64_t (self->obj->get_size ());
+        ret = mobius::py::to_pyobject (self->obj->get_size ());
     }
     catch (const std::exception &e)
     {

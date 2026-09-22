@@ -630,7 +630,7 @@ tp_getter_header_offset (core_decoder_lnk_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint64_t (
+        ret = mobius::py::to_pyobject (
             self->obj->get_header_offset ()
         );
     }
@@ -654,7 +654,7 @@ tp_getter_link_target_id_list_offset (core_decoder_lnk_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint64_t (
+        ret = mobius::py::to_pyobject (
             self->obj->get_link_target_id_list_offset ()
         );
     }
@@ -678,7 +678,7 @@ tp_getter_link_info_offset (core_decoder_lnk_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint64_t (
+        ret = mobius::py::to_pyobject (
             self->obj->get_link_info_offset ()
         );
     }

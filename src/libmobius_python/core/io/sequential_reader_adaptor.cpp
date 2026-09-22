@@ -46,7 +46,7 @@ tp_getter_block_size (core_io_sequential_reader_adaptor_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint64_t (self->obj->get_block_size ());
+        ret = mobius::py::to_pyobject (self->obj->get_block_size ());
     }
     catch (const std::exception &e)
     {
@@ -202,7 +202,7 @@ tp_f_tell (core_io_sequential_reader_adaptor_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint64_t (self->obj->tell ());
+        ret = mobius::py::to_pyobject (self->obj->tell ());
     }
     catch (const std::exception &e)
     {

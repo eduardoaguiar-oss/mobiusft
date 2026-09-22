@@ -87,7 +87,7 @@ tp_getter_version (os_win_trashbin_info2_file_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint64_t (self->obj->get_version ());
+        ret = mobius::py::to_pyobject (self->obj->get_version ());
     }
     catch (const std::exception &e)
     {
