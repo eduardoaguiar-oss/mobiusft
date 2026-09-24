@@ -24,57 +24,12 @@
 #include <pygil.hpp>
 #include <pymobius.hpp>
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Check if object is an instance of <i>mobius.core.io.writer</i>
-// @param pyobj Python object
-// @return true/false
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-bool
-pymobius_core_io_writer_check (PyObject *pyobj)
+namespace
 {
-    return PyObject_IsInstance (pyobj, (PyObject *) &core_io_writer_t);
-}
+// @brief Global pointer to hold the heap-allocated type
+static PyTypeObject *core_io_writer_type = nullptr;
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create new object from C++ object
-// @param obj C++ object
-// @return new object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-pymobius_core_io_writer_to_pyobject (const mobius::core::io::writer &obj)
-{
-    PyObject *ret = nullptr;
-
-    if (obj)
-    {
-        ret = _PyObject_New (&core_io_writer_t);
-
-        if (ret)
-            ((core_io_writer_o *) ret)->obj =
-                new mobius::core::io::writer (obj);
-    }
-    else
-    {
-        ret = mobius::py::pynone ();
-    }
-
-    return ret;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>mobius::core::io::writer</i> C++ object from Python object
-// @param value Python object
-// @return C++ object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::core::io::writer
-pymobius_core_io_writer_from_pyobject (PyObject *value)
-{
-    if (!pymobius_core_io_writer_check (value))
-        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG (
-            "object must be an instance of mobius.core.io.writer"));
-
-    return *(reinterpret_cast<core_io_writer_o *> (value)->obj);
-}
+} // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief is_seekable getter
@@ -120,10 +75,8 @@ tp_getter_is_rewindable (core_io_writer_o *self, void *)
 // @brief getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {"is_seekable", (getter) tp_getter_is_seekable, (setter) 0,
-     "check if writer is seekable", nullptr},
-    {"is_rewindable", (getter) tp_getter_is_rewindable, (setter) 0,
-     "check if writer is rewindable", nullptr},
+    {"is_seekable", (getter) tp_getter_is_seekable, (setter) 0, "check if writer is seekable", nullptr},
+    {"is_rewindable", (getter) tp_getter_is_rewindable, (setter) 0, "check if writer is rewindable", nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
 
@@ -322,30 +275,14 @@ tp_f_flush (core_io_writer_o *self, PyObject *)
 // @brief methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {"write", (PyCFunction) tp_f_write, METH_VARARGS,
-     "writes bytes to writer"},
-    {"tell", (PyCFunction) tp_f_tell, METH_VARARGS,
-     "get current write position"},
-    {"seek", (PyCFunction) tp_f_seek, METH_VARARGS,
-     "set current write position"},
-    {"rewind", (PyCFunction) tp_f_rewind, METH_VARARGS,
-     "set current write position to the beginning of data"},
-    {"skip", (PyCFunction) tp_f_skip, METH_VARARGS,
-     "set write position n bytes ahead"},
-    {"flush", (PyCFunction) tp_f_flush, METH_VARARGS,
-     "write down data"},
+    {"write", (PyCFunction) tp_f_write, METH_VARARGS, "writes bytes to writer"},
+    {"tell", (PyCFunction) tp_f_tell, METH_VARARGS, "get current write position"},
+    {"seek", (PyCFunction) tp_f_seek, METH_VARARGS, "set current write position"},
+    {"rewind", (PyCFunction) tp_f_rewind, METH_VARARGS, "set current write position to the beginning of data"},
+    {"skip", (PyCFunction) tp_f_skip, METH_VARARGS, "set write position n bytes ahead"},
+    {"flush", (PyCFunction) tp_f_flush, METH_VARARGS, "write down data"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief tp_alloc
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-core_io_writer_o *
-io_writer_tp_alloc ()
-{
-    return (core_io_writer_o *) core_io_writer_t.tp_alloc (&core_io_writer_t,
-                                                           0);
-}
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief tp_dealloc
@@ -359,56 +296,99 @@ tp_dealloc (core_io_writer_o *self)
     Py_DECREF (tp);
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief type structure
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyTypeObject core_io_writer_t = {
-    PyVarObject_HEAD_INIT (nullptr, 0)        // header
-    "mobius.core.io.writer",                  // tp_name
-    sizeof (core_io_writer_o),                // tp_basicsize
-    0,                                        // tp_itemsize
-    (destructor) tp_dealloc,                  // tp_dealloc
-    0,                                        // tp_print
-    0,                                        // tp_getattr
-    0,                                        // tp_setattr
-    0,                                        // tp_compare
-    0,                                        // tp_repr
-    0,                                        // tp_as_number
-    0,                                        // tp_as_sequence
-    0,                                        // tp_as_mapping
-    0,                                        // tp_hash
-    0,                                        // tp_call
-    0,                                        // tp_str
-    0,                                        // tp_getattro
-    0,                                        // tp_setattro
-    0,                                        // tp_as_buffer
-    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, // tp_flags
-    "writer for mobius.core.io.file",         // tp_doc
-    0,                                        // tp_traverse
-    0,                                        // tp_clear
-    0,                                        // tp_richcompare
-    0,                                        // tp_weaklistoffset
-    0,                                        // tp_iter
-    0,                                        // tp_iternext
-    tp_methods,                               // tp_methods
-    0,                                        // tp_members
-    tp_getset,                                // tp_getset
-    0,                                        // tp_base
-    0,                                        // tp_dict
-    0,                                        // tp_descr_get
-    0,                                        // tp_descr_set
-    0,                                        // tp_dictoffset
-    0,                                        // tp_init
-    0,                                        // tp_alloc
-    0,                                        // tp_new
-    0,                                        // tp_free
-    0,                                        // tp_is_gc
-    0,                                        // tp_bases
-    0,                                        // tp_mro
-    0,                                        // tp_cache
-    0,                                        // tp_subclasses
-    0,                                        // tp_weaklist
-    0,                                        // tp_del
-    0,                                        // tp_version_tag
-    0,                                        // tp_finalize
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type Slots
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Slot core_io_writer_slots[] = {
+    {Py_tp_dealloc, reinterpret_cast<void *> (tp_dealloc)},
+    {Py_tp_doc, const_cast<char *> ("core.io.writer()\n\n--\n\ncore.io.writer class")},
+    {Py_tp_getset, reinterpret_cast<void *> (tp_getset)},
+    {Py_tp_methods, reinterpret_cast<void *> (tp_methods)},
+    {0, nullptr} // Sentinel
 };
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type specification
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Spec core_io_writer_spec = {
+    .name = "mobius.core.io.writer",
+    .basicsize = sizeof (core_io_writer_o),
+    .itemsize = 0,
+    .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE | Py_TPFLAGS_IMMUTABLETYPE,
+    .slots = core_io_writer_slots,
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>mobius.core.io.writer</i> type
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject
+new_core_io_writer_type ()
+{
+    // If type is already created, return it
+    if (core_io_writer_type)
+        return mobius::py::pytypeobject (core_io_writer_type);
+
+    // Allocate type from spec
+    core_io_writer_type = reinterpret_cast<PyTypeObject *> (PyType_FromSpec (&core_io_writer_spec));
+
+    if (!core_io_writer_type)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("Failed to create mobius.core.io.writer type"));
+
+    // Create type
+    mobius::py::pytypeobject type (core_io_writer_type);
+    type.create ();
+
+    return type;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if value is an instance of <i>core.io.writer</i>
+// @param value Python value
+// @return true/false
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+pymobius_core_io_writer_check (PyObject *value)
+{
+    if (!core_io_writer_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("core.io.writer type is not initialized")
+        );
+
+    return mobius::py::isinstance (value, core_io_writer_type);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>core.io.writer</i> Python object from C++ object
+// @param obj C++ object
+// @return New core.io.writer object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+pymobius_core_io_writer_to_pyobject (const mobius::core::io::writer &obj)
+{
+    if (!core_io_writer_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("core.io.writer type is not initialized")
+        );
+
+    return mobius::py::to_pyobject_nullable<core_io_writer_o> (
+        obj, core_io_writer_type
+    );
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>core.io.writer</i> C++ object from Python object
+// @param value Python value
+// @return core.io.writer object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::io::writer
+pymobius_core_io_writer_from_pyobject (PyObject *value)
+{
+    if (!core_io_writer_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("core.io.writer type is not initialized")
+        );
+
+    return mobius::py::from_pyobject<core_io_writer_o> (
+        value, core_io_writer_type
+    );
+}

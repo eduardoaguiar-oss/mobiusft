@@ -20,23 +20,22 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
 #include <mobius/core/io/writer.hpp>
+#include <pytypeobject.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
     PyObject_HEAD mobius::core::io::writer *obj;
 } core_io_writer_o;
 
-extern PyTypeObject core_io_writer_t;
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject new_core_io_writer_type ();
 bool pymobius_core_io_writer_check (PyObject *);
-PyObject *
-pymobius_core_io_writer_to_pyobject (const mobius::core::io::writer &);
+PyObject *pymobius_core_io_writer_to_pyobject (const mobius::core::io::writer &);
 mobius::core::io::writer pymobius_core_io_writer_from_pyobject (PyObject *);
 
 #endif
