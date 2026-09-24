@@ -19,7 +19,6 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/io/file.hpp>
-#include <mobius/core/metadata.hpp>
 #include <mobius/core/vfs/imagefile_impl_base.hpp>
 #include <functional>
 #include <memory>
@@ -166,11 +165,6 @@ class imagefile
     {
         return impl_->new_writer ();
     }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Prototypes
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    mobius::core::metadata get_metadata () const;
 
   private:
     std::shared_ptr<imagefile_impl_base> impl_;

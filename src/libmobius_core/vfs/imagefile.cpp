@@ -100,31 +100,6 @@ imagefile::imagefile (const mobius::core::io::file &f, const std::string &type)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get metadata
-// @return imagefile metadata
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::core::metadata
-imagefile::get_metadata () const
-{
-    // imagefile metadata
-    mobius::core::metadata metadata = {
-        {"type", "Type", "std::string", get_type ()},
-        {"size", "Size", "size_type", std::to_string (get_size ()) + " bytes"},
-        {"sectors", "Number of sectors", "size_type", std::to_string (get_sectors ())},
-        {"sector_size", "Sector size", "size_type", std::to_string (get_sector_size ()) + " bytes"}
-    };
-
-    // implementation specific metadata
-    for (const auto &p : get_attributes ())
-    {
-        auto description = mobius::core::string::capitalize (mobius::core::string::replace (p.first, "_", " "));
-        metadata.add (p.first, description, "std::string", p.second.to_string ());
-    }
-
-    return metadata;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create new imagefile object by URL
 // @param url Imagefile URL
 // @param type Imagefile type (default = "autodetect")
