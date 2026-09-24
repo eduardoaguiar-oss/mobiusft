@@ -102,15 +102,6 @@ static PyMethodDef tp_methods[] = {
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief tp_alloc
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static core_io_text_reader_o *
-tp_alloc ()
-{
-    return (core_io_text_reader_o *) core_io_text_reader_type->tp_alloc (core_io_text_reader_type, 0);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief tp_dealloc
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
@@ -172,7 +163,6 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyType_Slot core_io_text_reader_slots[] = {
     {Py_tp_new, reinterpret_cast<void *> (tp_new)},
-    {Py_tp_alloc, reinterpret_cast<void *> (tp_alloc)},
     {Py_tp_dealloc, reinterpret_cast<void *> (tp_dealloc)},
     {Py_tp_doc, const_cast<char *> ("core.io.text_reader class")},
     {Py_tp_methods, reinterpret_cast<void *> (tp_methods)},

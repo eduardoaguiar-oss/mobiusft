@@ -311,15 +311,6 @@ static PyMethodDef tp_methods[] = {
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief tp_alloc
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static core_io_reader_o *
-tp_alloc ()
-{
-    return (core_io_reader_o *) core_io_reader_type->tp_alloc (core_io_reader_type, 0);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief tp_dealloc
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
@@ -335,7 +326,6 @@ tp_dealloc (core_io_reader_o *self)
 // @brief Type Slots
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyType_Slot core_io_reader_slots[] = {
-    {Py_tp_alloc, reinterpret_cast<void *> (tp_alloc)},
     {Py_tp_dealloc, reinterpret_cast<void *> (tp_dealloc)},
     {Py_tp_doc, const_cast<char *> ("core.io.reader class")},
     {Py_tp_getset, reinterpret_cast<void *> (tp_getset)},
