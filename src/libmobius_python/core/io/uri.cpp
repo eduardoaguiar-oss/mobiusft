@@ -830,3 +830,38 @@ pymobius_core_io_uri_from_pyobject (PyObject *value)
 
     return mobius::py::from_pyobject<core_io_uri_o> (value, core_io_uri_type);
 }
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Function new_uri_from_path
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_new_uri_from_path (PyObject *, PyObject *args)
+{
+    // parse input args
+    std::string arg_value;
+
+    try
+    {
+        arg_value = mobius::py::get_arg_as_std_string (args, 0);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
+    }
+
+    // execute C++ code
+    PyObject *ret = nullptr;
+
+    try
+    {
+        auto p = mobius::core::io::new_uri_from_path (arg_value);
+        ret = pymobius_core_io_uri_to_pyobject (p);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    return ret;
+}

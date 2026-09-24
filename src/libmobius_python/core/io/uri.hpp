@@ -38,4 +38,6 @@ bool pymobius_core_io_uri_check (PyObject *);
 PyObject *pymobius_core_io_uri_to_pyobject (const mobius::core::io::uri &);
 mobius::core::io::uri pymobius_core_io_uri_from_pyobject (PyObject *);
 
+PyObject *func_new_uri_from_path (PyObject *, PyObject *);
+
 #endif
