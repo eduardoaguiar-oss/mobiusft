@@ -100,10 +100,10 @@ new_core_io_module ()
     module.add_type ("stream", new_core_io_stream_type ());
     module.add_type ("tempfile", new_core_io_tempfile_type ());
     module.add_type ("text_reader", new_core_io_text_reader_type ());
-    module.add_type ("text_writer", &core_io_text_writer_t);
-    module.add_type ("uri", &core_io_uri_t);
-    module.add_type ("walker", new_io_walker_type ());
-    module.add_type ("writer", &core_io_writer_t);
+    module.add_type ("text_writer", new_core_io_text_writer_type ());
+    module.add_type ("uri", new_core_io_uri_type ());
+    module.add_type ("walker", new_core_io_walker_type ());
+    module.add_type ("writer", new_core_io_writer_type ());
 
     // Return module
     return module;
