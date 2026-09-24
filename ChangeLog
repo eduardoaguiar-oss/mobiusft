@@ -2,6 +2,7 @@ Mobius Forensic Toolkit 2.30
 	* app-chromium: Use db.new_statement_with_pattern in file_cookies::_load_cookies
 	* app-chromium: Use db.new_statement_with_pattern in file_web_data::_get_unmasked_credit_cards
 	* datasource-vfs: Use function vfs.get_imagefile_types
+	* disk-image-scanner: Add new C++ extension to scan disk images
 	* vfs-imagefile-dossier: Use register/unregister_imagefile_type
 	* vfs-imagefile-dossier: Use split imagefile internally
 	* vfs-imagefile-ewf: Use register/unregister_imagefile_type
@@ -21,6 +22,7 @@ Mobius Forensic Toolkit 2.30
 	* libmobius_core: Remove vfs::make_imagefile_resource function
 	* libmobius_core: Remove vfs::build_imagefile_implementation function
 	* libmobius_core: Remove database::new_statement (pattern, schema_version) function
+	* libmobius_core: Remove unused vfs::imagefile::get_metadata method
 	* libmobius_python: Improve mobius.core.vfs.block class using the PyType_FromSpec API
 	* libmobius_python: Improve mobius.core.vfs.disk class using the PyType_FromSpec API
 	* libmobius_python: Improve mobius.core.vfs.filesystem class using the PyType_FromSpec API
@@ -82,6 +84,8 @@ Mobius Forensic Toolkit 2.30
 	* libmobius_python: Use to_pyobject instead of pylong_from_std_uint64_t
 	* libmobius_python: Remove pybytes_from_bytearray function
 	* libmobius_python: Remove pyfloat_from_cpp function
+	* libmobius_python: Move function core.io.new_uri_from_path to uri.cpp
+	* pymobius.evidence: Introduce new "Virtual Disk Image" evidence type
 	* tools: dirfs use function vfs::get_imagefile_types
 	* tools: filesystem_scan use function vfs::get_imagefile_types
 	* tools: imagefile_cat use function vfs::get_imagefile_types

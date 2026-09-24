@@ -828,6 +828,28 @@ MODEL = [
                   ]),
          ]
          ),
+    args(id="virtual-disk-image",
+         name="Virtual Disk Images",
+         description="Virtual-machine disk images",
+         master_views=[
+             args(id="table",
+                  columns=[
+                      args(id='creation_time', name="Creation Time (UTC)", format='datetime', first_sortable=True),
+                      args(id='modification_time', name="Last Modification Time (UTC)", format='datetime', is_sortable=True),
+                      args(id='type', name="Type", is_sortable=True),
+                      args(id="path", name="Path", is_sortable=True),
+                  ]),
+         ],
+         detail_views=[
+             args(id="metadata",
+                  rows=[
+                      args(id='creation_time', name="Creation Time (UTC)"),
+                      args(id='modification_time', name="Last Modification Time (UTC)"),
+                      args(id='type', name="Type"),
+                      args(id="path", name="Path"),
+                  ]),
+         ]
+         ),
     args(id="visited-url",
          name="Visited URLs",
          description="URLs visited by users",

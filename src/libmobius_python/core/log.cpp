@@ -44,9 +44,7 @@ _event_as_dataholder (const mobius::core::event &event)
 
     if (pyobj)
     {
-        api_dataholder_setattr (
-            pyobj, "type", static_cast<int> (event.get_type ())
-        );
+        api_dataholder_setattr (pyobj, "type", static_cast<int> (event.get_type ()));
         api_dataholder_setattr (pyobj, "timestamp", event.get_timestamp ());
         api_dataholder_setattr (pyobj, "filename", event.get_filename ());
         api_dataholder_setattr (pyobj, "funcname", event.get_funcname ());
@@ -313,9 +311,7 @@ tp_f_get_events (core_log_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pylist_from_cpp_container (
-            self->obj->get_events (), _event_as_dataholder
-        );
+        ret = mobius::py::pylist_from_cpp_container (self->obj->get_events (), _event_as_dataholder);
     }
     catch (const std::exception &e)
     {
@@ -329,21 +325,14 @@ tp_f_get_events (core_log_o *self, PyObject *)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {"error", (PyCFunction) tp_f_error, METH_VARARGS,
-     "Add error event"},
-    {"warning", (PyCFunction) tp_f_warning, METH_VARARGS,
-     "Add warning event"},
+    {"error", (PyCFunction) tp_f_error, METH_VARARGS, "Add error event"},
+    {"warning", (PyCFunction) tp_f_warning, METH_VARARGS, "Add warning event"},
     {"info", (PyCFunction) tp_f_info, METH_VARARGS, "Add info event"},
-    {"development", (PyCFunction) tp_f_development, METH_VARARGS,
-     "Add development event"},
-    {"debug", (PyCFunction) tp_f_debug, METH_VARARGS,
-     "Add debug event"},
-    {"has_errors", (PyCFunction) tp_f_has_errors, METH_VARARGS,
-     "Check if an error occurred"},
-    {"set_debug", (PyCFunction) tp_f_set_debug, METH_VARARGS,
-     "Set debug mode on/off"},
-    {"get_events", (PyCFunction) tp_f_get_events, METH_VARARGS,
-     "Get events"},
+    {"development", (PyCFunction) tp_f_development, METH_VARARGS, "Add development event"},
+    {"debug", (PyCFunction) tp_f_debug, METH_VARARGS, "Add debug event"},
+    {"has_errors", (PyCFunction) tp_f_has_errors, METH_VARARGS, "Check if an error occurred"},
+    {"set_debug", (PyCFunction) tp_f_set_debug, METH_VARARGS, "Set debug mode on/off"},
+    {"get_events", (PyCFunction) tp_f_get_events, METH_VARARGS, "Get events"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };
 
@@ -364,9 +353,7 @@ tp_new (PyTypeObject *type, PyObject *, PyObject *)
     {
         try
         {
-            ret->obj = new mobius::core::log (
-                mobius::py::get_filename (), mobius::py::get_funcname ()
-            );
+            ret->obj = new mobius::core::log (mobius::py::get_filename (), mobius::py::get_funcname ());
         }
         catch (const std::exception &e)
         {
@@ -425,9 +412,7 @@ new_core_log_type ()
         return mobius::py::pytypeobject (core_log_type);
 
     // Allocate type from spec
-    core_log_type = reinterpret_cast<PyTypeObject *> (
-        PyType_FromSpec (&core_log_spec)
-    );
+    core_log_type = reinterpret_cast<PyTypeObject *> (PyType_FromSpec (&core_log_spec));
 
     // Create type
     mobius::py::pytypeobject type (core_log_type);
@@ -445,9 +430,7 @@ bool
 pymobius_core_log_check (PyObject *value)
 {
     if (!core_log_type)
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("log type is not initialized")
-        );
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("log type is not initialized"));
 
     return mobius::py::isinstance (value, core_log_type);
 }
@@ -461,9 +444,7 @@ PyObject *
 pymobius_core_log_to_pyobject (const mobius::core::log &obj)
 {
     if (!core_log_type)
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("log type is not initialized")
-        );
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("log type is not initialized"));
 
     return mobius::py::to_pyobject<core_log_o> (obj, core_log_type);
 }
@@ -477,11 +458,7 @@ mobius::core::log
 pymobius_core_log_from_pyobject (PyObject *value)
 {
     if (!core_log_type)
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("log type is not initialized")
-        );
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("log type is not initialized"));
 
-    return mobius::py::from_pyobject<core_log_o> (
-        value, core_log_type
-    );
+    return mobius::py::from_pyobject<core_log_o> (value, core_log_type);
 }
