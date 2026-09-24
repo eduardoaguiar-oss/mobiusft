@@ -31,12 +31,11 @@ typedef struct
 } core_io_walker_o;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// Functions
+// Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::py::pytypeobject new_io_walker_type ();
+mobius::py::pytypeobject new_core_io_walker_type ();
 bool pymobius_core_io_walker_check (PyObject *);
-PyObject *
-pymobius_core_io_walker_to_pyobject (const mobius::core::io::walker &);
+PyObject *pymobius_core_io_walker_to_pyobject (const mobius::core::io::walker &);
 mobius::core::io::walker pymobius_core_io_walker_from_pyobject (PyObject *);
 
 #endif
