@@ -20,6 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
 #include <mobius/core/io/uri.hpp>
+#include <pytypeobject.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -29,13 +30,12 @@ typedef struct
     PyObject_HEAD mobius::core::io::uri *obj;
 } core_io_uri_o;
 
-extern PyTypeObject core_io_uri_t;
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject new_core_io_uri_type ();
 bool pymobius_core_io_uri_check (PyObject *);
-PyObject *pymobius_core_io_uri_to_pyobject (mobius::core::io::uri);
+PyObject *pymobius_core_io_uri_to_pyobject (const mobius::core::io::uri &);
 mobius::core::io::uri pymobius_core_io_uri_from_pyobject (PyObject *);
 
 #endif

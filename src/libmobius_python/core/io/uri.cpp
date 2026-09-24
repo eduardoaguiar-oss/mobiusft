@@ -21,52 +21,17 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "uri.hpp"
-#include "module.hpp"
 #include <mobius/core/exception.inc>
 #include <pymobius.hpp>
 #include <stdexcept>
+#include "module.hpp"
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Check if object type is <i>uri</i>
-// @param pyobj Python object
-// @return true/false
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-bool
-pymobius_core_io_uri_check (PyObject *pyobj)
+namespace
 {
-    return PyObject_IsInstance (pyobj, (PyObject *) &core_io_uri_t);
-}
+// @brief Global pointer to hold the heap-allocated type
+static PyTypeObject *core_io_uri_type = nullptr;
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>uri</i> Python object from C++ object
-// @param obj C++ object
-// @return new uri object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-pymobius_core_io_uri_to_pyobject (mobius::core::io::uri obj)
-{
-    PyObject *ret = _PyObject_New (&core_io_uri_t);
-
-    if (ret)
-        ((core_io_uri_o *) ret)->obj = new mobius::core::io::uri (obj);
-
-    return ret;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>uri</i> C++ object from Python object
-// @param pyobj Python object
-// @return uri object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::core::io::uri
-pymobius_core_io_uri_from_pyobject (PyObject *pyobj)
-{
-    if (!PyObject_IsInstance (pyobj, (PyObject *) &core_io_uri_t))
-        throw std::invalid_argument (
-            MOBIUS_EXCEPTION_MSG ("object type must be mobius.core.io.uri"));
-
-    return *(reinterpret_cast<core_io_uri_o *> (pyobj)->obj);
-}
+} // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>get_value</i> method implementation
@@ -132,8 +97,7 @@ tp_f_get_authority (core_io_uri_o *self, PyObject *)
 
     try
     {
-        ret =
-            mobius::py::pystring_from_std_string (self->obj->get_authority ());
+        ret = mobius::py::pystring_from_std_string (self->obj->get_authority ());
     }
     catch (const std::exception &e)
     {
@@ -158,8 +122,7 @@ tp_f_get_path (core_io_uri_o *self, PyObject *args)
 
     try
     {
-        arg_encoding =
-            mobius::py::get_arg_as_std_string (args, 0, std::string ());
+        arg_encoding = mobius::py::get_arg_as_std_string (args, 0, std::string ());
     }
     catch (const std::exception &e)
     {
@@ -172,8 +135,7 @@ tp_f_get_path (core_io_uri_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::to_pyobject (
-            self->obj->get_path (arg_encoding));
+        ret = mobius::py::to_pyobject (self->obj->get_path (arg_encoding));
     }
     catch (const std::exception &e)
     {
@@ -198,8 +160,7 @@ tp_f_get_query (core_io_uri_o *self, PyObject *args)
 
     try
     {
-        arg_encoding =
-            mobius::py::get_arg_as_std_string (args, 0, std::string ());
+        arg_encoding = mobius::py::get_arg_as_std_string (args, 0, std::string ());
     }
     catch (const std::exception &e)
     {
@@ -212,8 +173,7 @@ tp_f_get_query (core_io_uri_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::to_pyobject (
-            self->obj->get_query (arg_encoding));
+        ret = mobius::py::to_pyobject (self->obj->get_query (arg_encoding));
     }
     catch (const std::exception &e)
     {
@@ -238,8 +198,7 @@ tp_f_get_fragment (core_io_uri_o *self, PyObject *args)
 
     try
     {
-        arg_encoding =
-            mobius::py::get_arg_as_std_string (args, 0, std::string ());
+        arg_encoding = mobius::py::get_arg_as_std_string (args, 0, std::string ());
     }
     catch (const std::exception &e)
     {
@@ -252,8 +211,7 @@ tp_f_get_fragment (core_io_uri_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::to_pyobject (
-            self->obj->get_fragment (arg_encoding));
+        ret = mobius::py::to_pyobject (self->obj->get_fragment (arg_encoding));
     }
     catch (const std::exception &e)
     {
@@ -416,8 +374,7 @@ tp_f_get_sibling_by_name (core_io_uri_o *self, PyObject *args)
 
     try
     {
-        ret = pymobius_core_io_uri_to_pyobject (
-            self->obj->get_sibling_by_name (arg_filename));
+        ret = pymobius_core_io_uri_to_pyobject (self->obj->get_sibling_by_name (arg_filename));
     }
     catch (const std::exception &e)
     {
@@ -455,8 +412,7 @@ tp_f_get_sibling_by_extension (core_io_uri_o *self, PyObject *args)
 
     try
     {
-        ret = pymobius_core_io_uri_to_pyobject (
-            self->obj->get_sibling_by_extension (arg_extension));
+        ret = pymobius_core_io_uri_to_pyobject (self->obj->get_sibling_by_extension (arg_extension));
     }
     catch (const std::exception &e)
     {
@@ -494,8 +450,7 @@ tp_f_get_child_by_name (core_io_uri_o *self, PyObject *args)
 
     try
     {
-        ret = pymobius_core_io_uri_to_pyobject (
-            self->obj->get_child_by_name (arg_name));
+        ret = pymobius_core_io_uri_to_pyobject (self->obj->get_child_by_name (arg_name));
     }
     catch (const std::exception &e)
     {
@@ -533,8 +488,7 @@ tp_f_get_child_by_path (core_io_uri_o *self, PyObject *args)
 
     try
     {
-        ret = pymobius_core_io_uri_to_pyobject (
-            self->obj->get_child_by_path (arg_subpath));
+        ret = pymobius_core_io_uri_to_pyobject (self->obj->get_child_by_path (arg_subpath));
     }
     catch (const std::exception &e)
     {
@@ -584,8 +538,7 @@ tp_f_get_extension (core_io_uri_o *self, PyObject *)
 
     try
     {
-        ret =
-            mobius::py::pystring_from_std_string (self->obj->get_extension ());
+        ret = mobius::py::pystring_from_std_string (self->obj->get_extension ());
     }
     catch (const std::exception &e)
     {
@@ -675,47 +628,29 @@ tp_f_is_absolute (core_io_uri_o *self, PyObject *)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {"get_value", (PyCFunction) tp_f_get_value, METH_VARARGS,
-     "Get URI as string"},
-    {"get_scheme", (PyCFunction) tp_f_get_scheme, METH_VARARGS,
-     "Get scheme"},
-    {"get_authority", (PyCFunction) tp_f_get_authority, METH_VARARGS,
-     "Get authority"},
-    {"get_path", (PyCFunction) tp_f_get_path, METH_VARARGS,
-     "Get path"},
-    {"get_query", (PyCFunction) tp_f_get_query, METH_VARARGS,
-     "Get query"},
-    {"get_fragment", (PyCFunction) tp_f_get_fragment, METH_VARARGS,
-     "Get fragment"},
-    {"get_username", (PyCFunction) tp_f_get_username, METH_VARARGS,
-     "Get user name"},
-    {"get_password", (PyCFunction) tp_f_get_password, METH_VARARGS,
-     "Get password"},
-    {"get_host", (PyCFunction) tp_f_get_host, METH_VARARGS,
-     "Get host"},
-    {"get_port", (PyCFunction) tp_f_get_port, METH_VARARGS,
-     "Get port"},
-    {"get_parent", (PyCFunction) tp_f_get_parent, METH_VARARGS,
-     "Get parent URI"},
-    {"get_sibling_by_name", (PyCFunction) tp_f_get_sibling_by_name,
-     METH_VARARGS, "Get sibling URI by name"},
+    {"get_value", (PyCFunction) tp_f_get_value, METH_VARARGS, "Get URI as string"},
+    {"get_scheme", (PyCFunction) tp_f_get_scheme, METH_VARARGS, "Get scheme"},
+    {"get_authority", (PyCFunction) tp_f_get_authority, METH_VARARGS, "Get authority"},
+    {"get_path", (PyCFunction) tp_f_get_path, METH_VARARGS, "Get path"},
+    {"get_query", (PyCFunction) tp_f_get_query, METH_VARARGS, "Get query"},
+    {"get_fragment", (PyCFunction) tp_f_get_fragment, METH_VARARGS, "Get fragment"},
+    {"get_username", (PyCFunction) tp_f_get_username, METH_VARARGS, "Get user name"},
+    {"get_password", (PyCFunction) tp_f_get_password, METH_VARARGS, "Get password"},
+    {"get_host", (PyCFunction) tp_f_get_host, METH_VARARGS, "Get host"},
+    {"get_port", (PyCFunction) tp_f_get_port, METH_VARARGS, "Get port"},
+    {"get_parent", (PyCFunction) tp_f_get_parent, METH_VARARGS, "Get parent URI"},
+    {"get_sibling_by_name", (PyCFunction) tp_f_get_sibling_by_name, METH_VARARGS, "Get sibling URI by name"},
     {"get_sibling_by_extension",
-     (PyCFunction) tp_f_get_sibling_by_extension, METH_VARARGS,
+     (PyCFunction) tp_f_get_sibling_by_extension,
+     METH_VARARGS,
      "Get sibling URI by extension"},
-    {"get_child_by_name", (PyCFunction) tp_f_get_child_by_name,
-     METH_VARARGS, "Get child URI by name"},
-    {"get_child_by_path", (PyCFunction) tp_f_get_child_by_path,
-     METH_VARARGS, "Get child URI by path"},
-    {"get_filename", (PyCFunction) tp_f_get_filename, METH_VARARGS,
-     "Get filename"},
-    {"get_extension", (PyCFunction) tp_f_get_extension, METH_VARARGS,
-     "Get extension"},
-    {"is_empty", (PyCFunction) tp_f_is_empty, METH_VARARGS,
-     "Check if URI is empty"},
-    {"is_relative", (PyCFunction) tp_f_is_relative, METH_VARARGS,
-     "Check if URI is relative"},
-    {"is_absolute", (PyCFunction) tp_f_is_absolute, METH_VARARGS,
-     "Check if URI is absolute"},
+    {"get_child_by_name", (PyCFunction) tp_f_get_child_by_name, METH_VARARGS, "Get child URI by name"},
+    {"get_child_by_path", (PyCFunction) tp_f_get_child_by_path, METH_VARARGS, "Get child URI by path"},
+    {"get_filename", (PyCFunction) tp_f_get_filename, METH_VARARGS, "Get filename"},
+    {"get_extension", (PyCFunction) tp_f_get_extension, METH_VARARGS, "Get extension"},
+    {"is_empty", (PyCFunction) tp_f_is_empty, METH_VARARGS, "Check if URI is empty"},
+    {"is_relative", (PyCFunction) tp_f_is_relative, METH_VARARGS, "Check if URI is relative"},
+    {"is_absolute", (PyCFunction) tp_f_is_absolute, METH_VARARGS, "Check if URI is absolute"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };
 
@@ -764,8 +699,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     }
 
     // Create Python object
-    core_io_uri_o *ret =
-        reinterpret_cast<core_io_uri_o *> (type->tp_alloc (type, 0));
+    core_io_uri_o *ret = reinterpret_cast<core_io_uri_o *> (type->tp_alloc (type, 0));
 
     if (ret)
     {
@@ -776,8 +710,15 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 
             else
                 ret->obj = new mobius::core::io::uri (
-                    arg_scheme, arg_username, arg_password, arg_host, arg_port,
-                    arg_path, arg_query, arg_fragment);
+                    arg_scheme,
+                    arg_username,
+                    arg_password,
+                    arg_host,
+                    arg_port,
+                    arg_path,
+                    arg_query,
+                    arg_fragment
+                );
         }
         catch (const std::exception &e)
         {
@@ -803,56 +744,89 @@ tp_dealloc (core_io_uri_o *self)
     Py_DECREF (tp);
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Type structure
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyTypeObject core_io_uri_t = {
-    PyVarObject_HEAD_INIT (nullptr, 0)        // header
-    "mobius.core.io.uri",                     // tp_name
-    sizeof (core_io_uri_o),                   // tp_basicsize
-    0,                                        // tp_itemsize
-    (destructor) tp_dealloc,                  // tp_dealloc
-    0,                                        // tp_print
-    0,                                        // tp_getattr
-    0,                                        // tp_setattr
-    0,                                        // tp_compare
-    0,                                        // tp_repr
-    0,                                        // tp_as_number
-    0,                                        // tp_as_sequence
-    0,                                        // tp_as_mapping
-    0,                                        // tp_hash
-    0,                                        // tp_call
-    0,                                        // tp_str
-    0,                                        // tp_getattro
-    0,                                        // tp_setattro
-    0,                                        // tp_as_buffer
-    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, // tp_flags
-    "uri class",                              // tp_doc
-    0,                                        // tp_traverse
-    0,                                        // tp_clear
-    0,                                        // tp_richcompare
-    0,                                        // tp_weaklistoffset
-    0,                                        // tp_iter
-    0,                                        // tp_iternext
-    tp_methods,                               // tp_methods
-    0,                                        // tp_members
-    0,                                        // tp_getset
-    0,                                        // tp_base
-    0,                                        // tp_dict
-    0,                                        // tp_descr_get
-    0,                                        // tp_descr_set
-    0,                                        // tp_dictoffset
-    0,                                        // tp_init
-    0,                                        // tp_alloc
-    tp_new,                                   // tp_new
-    0,                                        // tp_free
-    0,                                        // tp_is_gc
-    0,                                        // tp_bases
-    0,                                        // tp_mro
-    0,                                        // tp_cache
-    0,                                        // tp_subclasses
-    0,                                        // tp_weaklist
-    0,                                        // tp_del
-    0,                                        // tp_version_tag
-    0,                                        // tp_finalize
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type Slots
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Slot core_io_uri_slots[] = {
+    {Py_tp_new, reinterpret_cast<void *> (tp_new)},
+    {Py_tp_dealloc, reinterpret_cast<void *> (tp_dealloc)},
+    {Py_tp_doc, const_cast<char *> ("core.io.uri()\n\n--\n\ncore.io.uri class")},
+    {Py_tp_methods, reinterpret_cast<void *> (tp_methods)},
+    {0, nullptr} // Sentinel
 };
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type specification
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Spec core_io_uri_spec = {
+    .name = "mobius.core.io.uri",
+    .basicsize = sizeof (core_io_uri_o),
+    .itemsize = 0,
+    .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE | Py_TPFLAGS_IMMUTABLETYPE,
+    .slots = core_io_uri_slots,
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>mobius.core.io.uri</i> type
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject
+new_core_io_uri_type ()
+{
+    // If type is already created, return it
+    if (core_io_uri_type)
+        return mobius::py::pytypeobject (core_io_uri_type);
+
+    // Allocate type from spec
+    core_io_uri_type = reinterpret_cast<PyTypeObject *> (PyType_FromSpec (&core_io_uri_spec));
+
+    if (!core_io_uri_type)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("Failed to create mobius.core.io.uri type"));
+
+    // Create type
+    mobius::py::pytypeobject type (core_io_uri_type);
+    type.create ();
+
+    return type;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if value is an instance of <i>core.io.uri</i>
+// @param value Python value
+// @return true/false
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+pymobius_core_io_uri_check (PyObject *value)
+{
+    if (!core_io_uri_type)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("core.io.uri type is not initialized"));
+
+    return mobius::py::isinstance (value, core_io_uri_type);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>core.io.uri</i> Python object from C++ object
+// @param obj C++ object
+// @return New core.io.uri object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+pymobius_core_io_uri_to_pyobject (const mobius::core::io::uri &obj)
+{
+    if (!core_io_uri_type)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("core.io.uri type is not initialized"));
+
+    return mobius::py::to_pyobject<core_io_uri_o> (obj, core_io_uri_type);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>core.io.uri</i> C++ object from Python object
+// @param value Python value
+// @return core.io.uri object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::io::uri
+pymobius_core_io_uri_from_pyobject (PyObject *value)
+{
+    if (!core_io_uri_type)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("core.io.uri type is not initialized"));
+
+    return mobius::py::from_pyobject<core_io_uri_o> (value, core_io_uri_type);
+}
