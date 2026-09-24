@@ -20,24 +20,22 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
 #include <mobius/core/io/text_writer.hpp>
+#include <pytypeobject.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
     PyObject_HEAD mobius::core::io::text_writer *obj;
 } core_io_text_writer_o;
 
-extern PyTypeObject core_io_text_writer_t;
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject new_core_io_text_writer_type ();
 bool pymobius_core_io_text_writer_check (PyObject *);
-PyObject *pymobius_core_io_text_writer_to_pyobject (
-    const mobius::core::io::text_writer &);
-mobius::core::io::text_writer
-pymobius_core_io_text_writer_from_pyobject (PyObject *);
+PyObject *pymobius_core_io_text_writer_to_pyobject (const mobius::core::io::text_writer &);
+mobius::core::io::text_writer pymobius_core_io_text_writer_from_pyobject (PyObject *);
 
 #endif
