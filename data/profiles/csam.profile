@@ -21,5 +21,6 @@ app-sticky-notes
 app-utorrent
 derived-opened-files
 derived-pdis
+disk-image-scanner
 os-win
 tag-alert-kff
