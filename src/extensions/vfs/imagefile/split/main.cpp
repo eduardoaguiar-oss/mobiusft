@@ -41,6 +41,7 @@ start ()
         .description = "Split image file",
         .is_writeable = true,
         .is_virtual_disk = false,
+        .is_raw = true,
         .file_extensions = {"001"},
         .is_instance = imagefile_impl::is_instance,
         .builder = [] (const mobius::core::io::file &f) { return std::make_shared<imagefile_impl> (f); },

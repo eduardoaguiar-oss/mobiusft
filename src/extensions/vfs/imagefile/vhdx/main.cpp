@@ -41,6 +41,7 @@ start ()
         .description = "Microsoft VHDX image file",
         .is_writeable = false,
         .is_virtual_disk = true,
+        .is_raw = false,
         .file_extensions = {"vhdx"},
         .is_instance = imagefile_impl::is_instance,
         .builder = [] (const mobius::core::io::file &f) { return std::make_shared<imagefile_impl> (f); },

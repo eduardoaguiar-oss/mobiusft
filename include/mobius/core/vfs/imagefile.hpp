@@ -29,7 +29,7 @@
 namespace mobius::core::vfs
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief imagefile handle class
+// @brief Imagefile handle class
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class imagefile
@@ -186,6 +186,9 @@ struct imagefile_type
 
     // @brief If the imagefile type represents a virtual disk
     bool is_virtual_disk = false;
+
+    // @brief If the imagefile is raw
+    bool is_raw = false;
 
     // @brief Supported file extensions for the imagefile type
     std::set<std::string> file_extensions;

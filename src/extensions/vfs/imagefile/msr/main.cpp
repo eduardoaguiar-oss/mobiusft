@@ -41,6 +41,7 @@ start ()
         .description = "Samsung Secret Zone image file",
         .is_writeable = false,
         .is_virtual_disk = false,
+        .is_raw = false,
         .file_extensions = {"MSR", "msr"},
         .is_instance = imagefile_impl::is_instance,
         .builder = [] (const mobius::core::io::file &f) { return std::make_shared<imagefile_impl> (f); },
