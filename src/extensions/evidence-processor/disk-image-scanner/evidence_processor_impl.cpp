@@ -31,7 +31,7 @@
 
 namespace
 {
-// @brief Supported virtual disk image types
+// @brief Supported disk image types
 std::unordered_set<std::string> supported_image_types;
 
 } // namespace
@@ -81,7 +81,7 @@ evidence_processor_impl::on_folder_entered (const mobius::core::io::folder &fold
 void
 evidence_processor_impl::on_complete ()
 {
-    _save_virtual_disk_images ();
+    _save_disk_images ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -109,7 +109,7 @@ evidence_processor_impl::_scan_folder (const mobius::core::io::folder &folder)
                 std::string ext = name.substr (pos + 1);
 
                 if (supported_image_types.find (ext) != supported_image_types.end ())
-                    _process_virtual_disk_file (f);
+                    _process_disk_image_file (f);
             }
         }
         catch (const std::exception &e)
@@ -120,11 +120,11 @@ evidence_processor_impl::_scan_folder (const mobius::core::io::folder &folder)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Process a virtual disk file
-// @param f File object representing the virtual disk image
+// @brief Process a disk image file
+// @param f File object representing the disk image
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_processor_impl::_process_virtual_disk_file (const mobius::core::io::file &f)
+evidence_processor_impl::_process_disk_image_file (const mobius::core::io::file &f)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -134,13 +134,14 @@ evidence_processor_impl::_process_virtual_disk_file (const mobius::core::io::fil
 
         if (img && img.get_type () != "raw")
         {
-            virtual_disk_image vdi;
+            disk_image disk_img;
 
-            vdi.type = img.get_type ();
-            vdi.metadata = img.get_attributes ();
-            vdi.f = f;
+            disk_img.type = img.get_type ();
+            disk_img.metadata = img.get_attributes ();
+            disk_img.f = f;
+            // disk_img.is_virtual
 
-            virtual_disk_images_.emplace_back (vdi);
+            disk_images_.emplace_back (disk_img);
         }
     }
     catch (const std::exception &e)
@@ -150,20 +151,21 @@ evidence_processor_impl::_process_virtual_disk_file (const mobius::core::io::fil
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Save virtual disk images
+// @brief Save disk images
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_processor_impl::_save_virtual_disk_images ()
+evidence_processor_impl::_save_disk_images ()
 {
-    for (const auto &vdi : virtual_disk_images_)
+    for (const auto &vdi : disk_images_)
     {
-        auto e = item_.new_evidence ("virtual-disk-image");
+        auto e = item_.new_evidence ("disk-image");
 
         // Attributes
         e.set_attribute ("type", vdi.type);
         e.set_attribute ("path", vdi.f.get_path ());
         e.set_attribute ("creation_time", vdi.f.get_creation_time ());
         e.set_attribute ("modification_time", vdi.f.get_modification_time ());
+        e.set_attribute ("is_virtual_disk", vdi.is_virtual);
 
         // Metadata
         e.set_attribute ("metadata", vdi.metadata);

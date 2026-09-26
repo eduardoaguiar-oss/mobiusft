@@ -33,14 +33,17 @@ class evidence_processor_impl : public mobius::framework::evidence_processor::ev
 {
   public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Virtual Disk Image structure
-    // @details This structure represents a virtual disk image and contains relevant information about it.
+    // @brief Disk Image structure
+    // @details This structure represents a disk image and contains relevant information about it.
     // @note This structure is used internally by the evidence processor implementation.
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    struct virtual_disk_image
+    struct disk_image
     {
         // @brief Type
         std::string type;
+
+        // @brief Is virtual disk?
+        bool is_virtual = false;
 
         // @brief Metadata
         mobius::core::pod::map metadata;
@@ -71,16 +74,16 @@ class evidence_processor_impl : public mobius::framework::evidence_processor::ev
     // @brief Mediator
     mobius::framework::evidence_processor::mediator mediator_;
 
-    // @brief Virtual disk images discovered during the scan
-    std::vector<virtual_disk_image> virtual_disk_images_;
+    // @brief Disk images discovered during the scan
+    std::vector<disk_image> disk_images_;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void _scan_folder (const mobius::core::io::folder &);
-    void _process_virtual_disk_file (const mobius::core::io::file &);
+    void _process_disk_image_file (const mobius::core::io::file &);
 
-    void _save_virtual_disk_images ();
+    void _save_disk_images ();
 };
 
 } // namespace mobius::extension::disk_image_scanner

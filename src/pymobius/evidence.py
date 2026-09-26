@@ -411,6 +411,30 @@ MODEL = [
                   ]),
          ]
          ),
+    args(id="disk-image",
+         name="Disk Images",
+         description="Disk image files",
+         master_views=[
+             args(id="table",
+                  columns=[
+                      args(id='creation_time', name="Creation Time (UTC)", format='datetime', first_sortable=True),
+                      args(id='modification_time', name="Last Modification Time (UTC)", format='datetime', is_sortable=True),
+                      args(id='type', name="Type", is_sortable=True),
+                      args(id='is_virtual', name="Is Virtual", format="bool", is_sortable=True),
+                      args(id="path", name="Path", is_sortable=True),
+                  ]),
+         ],
+         detail_views=[
+             args(id="metadata",
+                  rows=[
+                      args(id='creation_time', name="Creation Time (UTC)"),
+                      args(id='modification_time', name="Last Modification Time (UTC)"),
+                      args(id='type', name="Type"),
+                      args(id='is_virtual', name="Is Virtual", format="bool"),
+                      args(id="path", name="Path"),
+                  ]),
+         ]
+         ),
     args(id="encryption-key",
          name="Encryption Keys",
          description="Encryption keys",
@@ -825,28 +849,6 @@ MODEL = [
                       args(id='web_addresses', name='Web Addresses', format="multiline"),
                       args(id='notes', name='Notes', format="multiline"),
                       args(id='organizations', name='Organizations', format="multiline"),
-                  ]),
-         ]
-         ),
-    args(id="virtual-disk-image",
-         name="Virtual Disk Images",
-         description="Virtual-machine disk images",
-         master_views=[
-             args(id="table",
-                  columns=[
-                      args(id='creation_time', name="Creation Time (UTC)", format='datetime', first_sortable=True),
-                      args(id='modification_time', name="Last Modification Time (UTC)", format='datetime', is_sortable=True),
-                      args(id='type', name="Type", is_sortable=True),
-                      args(id="path", name="Path", is_sortable=True),
-                  ]),
-         ],
-         detail_views=[
-             args(id="metadata",
-                  rows=[
-                      args(id='creation_time', name="Creation Time (UTC)"),
-                      args(id='modification_time', name="Last Modification Time (UTC)"),
-                      args(id='type', name="Type"),
-                      args(id="path", name="Path"),
                   ]),
          ]
          ),
