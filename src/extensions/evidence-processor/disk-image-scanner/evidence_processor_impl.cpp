@@ -16,16 +16,12 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "evidence_processor_impl.hpp"
-#include <mobius/core/datasource/datasource_vfs.hpp>
-#include <mobius/core/io/path.hpp>
-#include <mobius/core/io/uri.hpp>
 #include <mobius/core/io/walker.hpp>
 #include <mobius/core/log.hpp>
 #include <mobius/core/mediator.hpp>
 #include <mobius/core/pod/data.hpp>
 #include <mobius/core/string_functions.hpp>
 #include <mobius/core/vfs/imagefile.hpp>
-#include <mobius/framework/evidence_flag.hpp>
 #include <mobius/framework/model/evidence.hpp>
 #include <unordered_set>
 
@@ -59,10 +55,11 @@ evidence_processor_impl::evidence_processor_impl (
     {
         if (!type.is_raw)
         {
-            std::copy (
+            std::transform (
                 type.file_extensions.begin (),
                 type.file_extensions.end (),
-                std::inserter (supported_extensions, supported_extensions.end ())
+                std::inserter (supported_extensions, supported_extensions.end ()),
+                [] (const std::string &s) { return mobius::core::string::tolower (s); }
             );
 
             if (type.is_virtual_disk)
