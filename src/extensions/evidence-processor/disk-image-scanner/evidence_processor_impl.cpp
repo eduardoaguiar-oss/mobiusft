@@ -31,8 +31,11 @@
 
 namespace
 {
-// @brief Supported disk image types
-std::unordered_set<std::string> supported_image_types;
+// @brief Supported file extensions
+std::unordered_set<std::string> supported_extensions;
+
+// @brief Virtual disk types
+std::unordered_set<std::string> virtual_disk_image_types;
 
 } // namespace
 
@@ -54,13 +57,16 @@ evidence_processor_impl::evidence_processor_impl (
 {
     for (const auto &type : mobius::core::vfs::get_imagefile_types ())
     {
-        if (type.is_virtual_disk)
+        if (!type.is_raw)
         {
             std::copy (
                 type.file_extensions.begin (),
                 type.file_extensions.end (),
-                std::inserter (supported_image_types, supported_image_types.end ())
+                std::inserter (supported_extensions, supported_extensions.end ())
             );
+
+            if (type.is_virtual_disk)
+                virtual_disk_image_types.insert (type.id);
         }
     }
 }
@@ -108,7 +114,7 @@ evidence_processor_impl::_scan_folder (const mobius::core::io::folder &folder)
             {
                 std::string ext = name.substr (pos + 1);
 
-                if (supported_image_types.find (ext) != supported_image_types.end ())
+                if (supported_extensions.find (ext) != supported_extensions.end ())
                     _process_disk_image_file (f);
             }
         }
@@ -132,17 +138,17 @@ evidence_processor_impl::_process_disk_image_file (const mobius::core::io::file 
     {
         mobius::core::vfs::imagefile img (f);
 
-        if (img && img.get_type () != "raw")
-        {
-            disk_image disk_img;
+        if (!img)
+            return;
 
-            disk_img.type = img.get_type ();
-            disk_img.metadata = img.get_attributes ();
-            disk_img.f = f;
-            // disk_img.is_virtual
+        disk_image disk_img;
 
-            disk_images_.emplace_back (disk_img);
-        }
+        disk_img.type = img.get_type ();
+        disk_img.metadata = img.get_attributes ();
+        disk_img.f = f;
+        disk_img.is_virtual = virtual_disk_image_types.find (disk_img.type) != virtual_disk_image_types.end ();
+
+        disk_images_.emplace_back (disk_img);
     }
     catch (const std::exception &e)
     {
@@ -165,7 +171,7 @@ evidence_processor_impl::_save_disk_images ()
         e.set_attribute ("path", vdi.f.get_path ());
         e.set_attribute ("creation_time", vdi.f.get_creation_time ());
         e.set_attribute ("modification_time", vdi.f.get_modification_time ());
-        e.set_attribute ("is_virtual_disk", vdi.is_virtual);
+        e.set_attribute ("is_virtual", vdi.is_virtual);
 
         // Metadata
         e.set_attribute ("metadata", vdi.metadata);
