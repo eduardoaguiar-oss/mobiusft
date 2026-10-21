@@ -1,3 +1,5 @@
+Mobius Forensic Toolkit 2.31
+
 Mobius Forensic Toolkit 2.30
 	* app-chromium: Use db.new_statement_with_pattern in file_cookies::_load_cookies
 	* app-chromium: Use db.new_statement_with_pattern in file_web_data::_get_unmasked_credit_cards
