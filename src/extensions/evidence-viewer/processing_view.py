@@ -416,9 +416,7 @@ class ProcessingView(object):
             profile_id = self.__profile_combobox.get_active_id()
 
             if profile_id:
-                transaction = mobius.framework.new_config_transaction()
                 mobius.framework.set_config('evidence.last_profile', profile_id)
-                transaction.commit()
 
             # Iterate over selected items and start a new thread for each item that has data source,
             # using the __thread_execute method. Each thread is set as a daemon,
@@ -475,8 +473,6 @@ class ProcessingView(object):
     # the processing continues asynchronously.
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __thread_execute(self, ant, item):
-        guard = mobius.core.thread_guard()
-
         ant.reset()
         ant.run()
 
@@ -488,7 +484,6 @@ class ProcessingView(object):
     # @param item The evidence item to be updated.
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __thread_update(self, ant, item):
-        guard = mobius.core.thread_guard()
         connection = item.new_connection()
 
         ant.update()
