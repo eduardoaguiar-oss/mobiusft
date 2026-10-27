@@ -38,7 +38,10 @@ class attribute::impl
     // @brief check if object is valid
     // @return true/false
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    operator bool () const { return uid_ != -1; }
+    operator bool () const
+    {
+        return uid_ != -1;
+    }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief get id
@@ -114,8 +117,7 @@ class attribute::impl
     is_editable () const
     {
         _load_data ();
-        return value_mask_.empty () && id_ != "uid" && id_ != "category" &&
-               id_ != "ctime" && id_ != "mtime";
+        return value_mask_.empty () && id_ != "uid" && id_ != "category" && id_ != "ctime" && id_ != "mtime";
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -179,9 +181,11 @@ attribute::impl::set_name (const std::string &name)
 
     auto db = get_category_database ();
 
-    auto stmt = db.new_statement ("UPDATE attribute "
-                                  "SET name = ? "
-                                  "WHERE uid = ?");
+    auto stmt = db.new_statement (
+        "UPDATE attribute "
+        "SET name = ? "
+        "WHERE uid = ?"
+    );
 
     stmt.bind (1, name);
     stmt.bind (2, uid_);
@@ -204,9 +208,11 @@ attribute::impl::set_description (const std::string &description)
 
     auto db = get_category_database ();
 
-    auto stmt = db.new_statement ("UPDATE attribute "
-                                  "SET description = ? "
-                                  "WHERE uid = ?");
+    auto stmt = db.new_statement (
+        "UPDATE attribute "
+        "SET description = ? "
+        "WHERE uid = ?"
+    );
 
     stmt.bind (1, description);
     stmt.bind (2, uid_);
@@ -229,9 +235,11 @@ attribute::impl::set_datatype (const std::string &datatype)
 
     auto db = get_category_database ();
 
-    auto stmt = db.new_statement ("UPDATE attribute "
-                                  "SET datatype = ? "
-                                  "WHERE uid = ?");
+    auto stmt = db.new_statement (
+        "UPDATE attribute "
+        "SET datatype = ? "
+        "WHERE uid = ?"
+    );
 
     stmt.bind (1, datatype);
     stmt.bind (2, uid_);
@@ -254,9 +262,11 @@ attribute::impl::set_value_mask (const std::string &value_mask)
 
     auto db = get_category_database ();
 
-    auto stmt = db.new_statement ("UPDATE attribute "
-                                  "SET value_mask = ? "
-                                  "WHERE uid = ?");
+    auto stmt = db.new_statement (
+        "UPDATE attribute "
+        "SET value_mask = ? "
+        "WHERE uid = ?"
+    );
 
     stmt.bind (1, value_mask);
     stmt.bind (2, uid_);
@@ -282,9 +292,11 @@ attribute::impl::set_index (std::uint32_t index)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // get category UID
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    auto stmt = db.new_statement ("SELECT category_uid "
-                                  "FROM attribute "
-                                  "WHERE uid = ?");
+    auto stmt = db.new_statement (
+        "SELECT category_uid "
+        "FROM attribute "
+        "WHERE uid = ?"
+    );
 
     stmt.bind (1, uid_);
 
@@ -296,9 +308,11 @@ attribute::impl::set_index (std::uint32_t index)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // set attribute's idx = -1 to avoid duplicated index
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    stmt = db.new_statement ("UPDATE attribute "
-                             "SET idx = -1 "
-                             "WHERE uid = ?");
+    stmt = db.new_statement (
+        "UPDATE attribute "
+        "SET idx = -1 "
+        "WHERE uid = ?"
+    );
 
     stmt.bind (1, uid_);
     stmt.execute ();
@@ -308,19 +322,23 @@ attribute::impl::set_index (std::uint32_t index)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     if (index < index_)
     {
-        stmt = db.new_statement ("UPDATE attribute "
-                                 "SET idx = idx + 1 "
-                                 "WHERE category_uid = ? "
-                                 "AND idx >= ? "
-                                 "AND idx < ?");
+        stmt = db.new_statement (
+            "UPDATE attribute "
+            "SET idx = idx + 1 "
+            "WHERE category_uid = ? "
+            "AND idx >= ? "
+            "AND idx < ?"
+        );
     }
     else
     {
-        stmt = db.new_statement ("UPDATE attribute "
-                                 "SET idx = idx - 1 "
-                                 "WHERE category_uid = ? "
-                                 "AND idx <= ? "
-                                 "AND idx > ?");
+        stmt = db.new_statement (
+            "UPDATE attribute "
+            "SET idx = idx - 1 "
+            "WHERE category_uid = ? "
+            "AND idx <= ? "
+            "AND idx > ?"
+        );
     }
 
     stmt.bind (1, category_uid);
@@ -331,9 +349,11 @@ attribute::impl::set_index (std::uint32_t index)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // set attribute's index
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    stmt = db.new_statement ("UPDATE attribute "
-                             "SET idx = ? "
-                             "WHERE uid = ?");
+    stmt = db.new_statement (
+        "UPDATE attribute "
+        "SET idx = ? "
+        "WHERE uid = ?"
+    );
 
     stmt.bind (1, static_cast<int> (index));
     stmt.bind (2, static_cast<int> (uid_));
@@ -343,7 +363,7 @@ attribute::impl::set_index (std::uint32_t index)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief load data on demand
+// @brief Load data on demand
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 attribute::impl::_load_data () const
@@ -354,9 +374,11 @@ attribute::impl::_load_data () const
     // load data
     auto db = get_category_database ();
 
-    auto stmt = db.new_statement ("SELECT * "
-                                  "FROM attribute "
-                                  "WHERE uid = ?");
+    auto stmt = db.new_statement (
+        "SELECT * "
+        "FROM attribute "
+        "WHERE uid = ?"
+    );
 
     stmt.bind (1, uid_);
 
@@ -375,7 +397,7 @@ attribute::impl::_load_data () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief constructor
+// @brief Constructor
 // @param uid attribute UID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 attribute::attribute (std::int64_t uid)
@@ -384,7 +406,7 @@ attribute::attribute (std::int64_t uid)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief default constructor
+// @brief Default constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 attribute::attribute ()
     : impl_ (std::make_shared<impl> ())
@@ -392,13 +414,17 @@ attribute::attribute ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief check if object is valid
+// @brief Check if object is valid
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-attribute::operator bool () const { return impl_->operator bool (); }
+attribute::
+operator bool () const
+{
+    return impl_->operator bool ();
+}
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief get id
+// @brief Get ID
 // @return id
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
@@ -408,7 +434,7 @@ attribute::get_id () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief get name
+// @brief Get name
 // @return name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
@@ -418,7 +444,7 @@ attribute::get_name () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief set name
+// @brief Set name
 // @param name name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
@@ -428,7 +454,7 @@ attribute::set_name (const std::string &name)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief get description
+// @brief Get description
 // @return description
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
@@ -438,7 +464,7 @@ attribute::get_description () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief set description
+// @brief Set description
 // @param description description
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
@@ -448,7 +474,7 @@ attribute::set_description (const std::string &description)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief get datatype
+// @brief Get datatype
 // @return datatype
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
@@ -458,7 +484,7 @@ attribute::get_datatype () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief set datatype
+// @brief Set datatype
 // @param datatype datatype
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
@@ -468,7 +494,7 @@ attribute::set_datatype (const std::string &datatype)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief get value mask
+// @brief Get value mask
 // @return value mask
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
@@ -478,7 +504,7 @@ attribute::get_value_mask () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief set value mask
+// @brief Set value mask
 // @param value_mask value_mask
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
@@ -488,7 +514,7 @@ attribute::set_value_mask (const std::string &value_mask)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief get index
+// @brief Get index
 // @return index
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
@@ -498,7 +524,7 @@ attribute::get_index () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief set index
+// @brief Set index
 // @param index index
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
@@ -508,7 +534,7 @@ attribute::set_index (std::uint32_t index)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief check if attribute is editable
+// @brief Check if attribute is editable
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool

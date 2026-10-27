@@ -17,12 +17,13 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/application.hpp>
 #include <mobius/core/database/database.hpp>
-#include <mobius/core/thread_guard.hpp>
 #include <mobius/framework/category.hpp>
+#include <mutex>
 
 namespace
 {
-static const std::string RESOURCE_ID = "database.category";
+// Mutex to protect write access across threads
+static std::mutex mutex_;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get database instance
@@ -31,60 +32,52 @@ static const std::string RESOURCE_ID = "database.category";
 static mobius::core::database::database
 _get_database ()
 {
-    mobius::core::database::database db;
+    static mobius::core::database::database db;
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // If DB instance is already opened for current thread, simply return it
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    if (mobius::core::has_thread_resource (RESOURCE_ID))
-        db = mobius::core::get_thread_resource<
-            mobius::core::database::database> (RESOURCE_ID);
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Otherwise, create a new DB instance and associate to current thread
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    else
+    if (!db)
     {
         // create database instance
         mobius::core::application app;
         auto path = app.get_config_path ("category.sqlite");
 
         db = mobius::core::database::database (path);
-
-        // create db tables, if necessary
-        auto transaction = db.new_transaction ();
-
+        db.execute ("PRAGMA journal_mode=WAL");
+        db.execute ("PRAGMA synchronous=FULL");
         db.execute ("PRAGMA foreign_keys = ON;");
 
-        db.execute ("CREATE TABLE IF NOT EXISTS category"
-                    "(uid INTEGER PRIMARY KEY AUTOINCREMENT,"
-                    "id TEXT NOT NULL,"
-                    "name TEXT NULL,"
-                    "description TEXT NULL,"
-                    "icon_data BLOB NULL)");
+        // create db tables, if necessary
+        db.execute (
+            "CREATE TABLE IF NOT EXISTS category"
+            "(uid INTEGER PRIMARY KEY AUTOINCREMENT,"
+            "id TEXT NOT NULL,"
+            "name TEXT NULL,"
+            "description TEXT NULL,"
+            "icon_data BLOB NULL)"
+        );
 
-        db.execute ("CREATE UNIQUE INDEX IF NOT EXISTS idx_category "
-                    "ON category (id)");
+        db.execute (
+            "CREATE UNIQUE INDEX IF NOT EXISTS idx_category "
+            "ON category (id)"
+        );
 
-        db.execute ("CREATE TABLE IF NOT EXISTS attribute"
-                    "(uid INTEGER PRIMARY KEY AUTOINCREMENT,"
-                    "category_uid INTEGER NOT NULL,"
-                    "id TEXT NOT NULL,"
-                    "name TEXT NULL,"
-                    "description TEXT NULL,"
-                    "datatype TEXT NULL,"
-                    "value_mask TEXT NULL,"
-                    "idx INTEGER NOT NULL,"
-                    "FOREIGN KEY (category_uid) REFERENCES category (uid) ON "
-                    "DELETE CASCADE)");
+        db.execute (
+            "CREATE TABLE IF NOT EXISTS attribute"
+            "(uid INTEGER PRIMARY KEY AUTOINCREMENT,"
+            "category_uid INTEGER NOT NULL,"
+            "id TEXT NOT NULL,"
+            "name TEXT NULL,"
+            "description TEXT NULL,"
+            "datatype TEXT NULL,"
+            "value_mask TEXT NULL,"
+            "idx INTEGER NOT NULL,"
+            "FOREIGN KEY (category_uid) REFERENCES category (uid) ON "
+            "DELETE CASCADE)"
+        );
 
-        db.execute ("CREATE UNIQUE INDEX IF NOT EXISTS idx_attribute_1 "
-                    "ON attribute (category_uid, id)");
-
-        transaction.commit ();
-
-        // save DB instance for future reuse
-        mobius::core::set_thread_resource (RESOURCE_ID, db);
+        db.execute (
+            "CREATE UNIQUE INDEX IF NOT EXISTS idx_attribute_1 "
+            "ON attribute (category_uid, id)"
+        );
     }
 
     return db;
@@ -110,7 +103,10 @@ class category::impl
     // @brief check if object is valid
     // @return true/false
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    operator bool () const { return uid_ != -1; }
+    operator bool () const
+    {
+        return uid_ != -1;
+    }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief get id
@@ -191,7 +187,7 @@ class category::impl
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief constructor
+// @brief Constructor
 // @param uid unique ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 category::impl::impl (std::int64_t uid)
@@ -200,7 +196,7 @@ category::impl::impl (std::int64_t uid)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief set name
+// @brief Set name
 // @param name new category name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
@@ -208,11 +204,15 @@ category::impl::set_name (const std::string &name)
 {
     _load_data ();
 
+    std::lock_guard<std::mutex> lock (mutex_);
+    
     auto db = _get_database ();
 
-    auto stmt = db.new_statement ("UPDATE category "
-                                  "SET name = ? "
-                                  "WHERE uid = ?");
+    auto stmt = db.new_statement (
+        "UPDATE category "
+        "SET name = ? "
+        "WHERE uid = ?"
+    );
 
     stmt.bind (1, name);
     stmt.bind (2, uid_);
@@ -222,7 +222,7 @@ category::impl::set_name (const std::string &name)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief set description
+// @brief Set description
 // @param description description
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
@@ -230,11 +230,14 @@ category::impl::set_description (const std::string &description)
 {
     _load_data ();
 
+    std::lock_guard<std::mutex> lock (mutex_);
     auto db = _get_database ();
 
-    auto stmt = db.new_statement ("UPDATE category "
-                                  "SET description = ? "
-                                  "WHERE uid = ?");
+    auto stmt = db.new_statement (
+        "UPDATE category "
+        "SET description = ? "
+        "WHERE uid = ?"
+    );
 
     stmt.bind (1, description);
     stmt.bind (2, uid_);
@@ -244,7 +247,7 @@ category::impl::set_description (const std::string &description)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief set icon data
+// @brief Set icon data
 // @param icon_data icon data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
@@ -252,11 +255,14 @@ category::impl::set_icon_data (const mobius::core::bytearray &icon_data)
 {
     _load_data ();
 
+    std::lock_guard<std::mutex> lock (mutex_);
     auto db = _get_database ();
 
-    auto stmt = db.new_statement ("UPDATE category "
-                                  "SET icon_data = ? "
-                                  "WHERE uid = ?");
+    auto stmt = db.new_statement (
+        "UPDATE category "
+        "SET icon_data = ? "
+        "WHERE uid = ?"
+    );
 
     stmt.bind (1, icon_data);
     stmt.bind (2, uid_);
@@ -266,7 +272,7 @@ category::impl::set_icon_data (const mobius::core::bytearray &icon_data)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief get attribute
+// @brief Get attribute
 // @param id attribute ID
 // @return attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -275,10 +281,12 @@ category::impl::get_attribute (const std::string &id) const
 {
     auto db = _get_database ();
 
-    auto stmt = db.new_statement ("SELECT uid "
-                                  "FROM attribute "
-                                  "WHERE category_uid = ? "
-                                  "AND id = ?");
+    auto stmt = db.new_statement (
+        "SELECT uid "
+        "FROM attribute "
+        "WHERE category_uid = ? "
+        "AND id = ?"
+    );
 
     stmt.bind (1, uid_);
     stmt.bind (2, id);
@@ -295,7 +303,7 @@ category::impl::get_attribute (const std::string &id) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief New attribute
+// @brief New Attribute
 // @param id attribute ID
 // @return attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -314,9 +322,11 @@ category::impl::new_attribute (const std::string &id)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     auto db = _get_database ();
 
-    auto stmt = db.new_statement ("SELECT MAX (idx) "
-                                  "FROM attribute "
-                                  "WHERE category_uid = ?");
+    auto stmt = db.new_statement (
+        "SELECT MAX (idx) "
+        "FROM attribute "
+        "WHERE category_uid = ?"
+    );
 
     stmt.bind (1, uid_);
     stmt.fetch_row ();
@@ -325,8 +335,12 @@ category::impl::new_attribute (const std::string &id)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // create attribute
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    stmt = db.new_statement ("INSERT INTO attribute "
-                             "VALUES (NULL, ?, ?, NULL, NULL, ?, NULL, ?)");
+    std::lock_guard<std::mutex> lock (mutex_);
+
+    stmt = db.new_statement (
+        "INSERT INTO attribute "
+        "VALUES (NULL, ?, ?, NULL, NULL, ?, NULL, ?)"
+    );
 
     stmt.bind (1, uid_);
     stmt.bind (2, id);
@@ -342,17 +356,20 @@ category::impl::new_attribute (const std::string &id)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Remove attribute
+// @brief Remove Attribute
 // @param id attribute ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 category::impl::remove_attribute (const std::string &id)
 {
+    std::lock_guard<std::mutex> lock (mutex_);
     auto db = _get_database ();
 
-    auto stmt = db.new_statement ("DELETE FROM attribute "
-                                  "WHERE category_uid = ? "
-                                  "AND id = ?");
+    auto stmt = db.new_statement (
+        "DELETE FROM attribute "
+        "WHERE category_uid = ? "
+        "AND id = ?"
+    );
 
     stmt.bind (1, uid_);
     stmt.bind (2, id);
@@ -360,7 +377,7 @@ category::impl::remove_attribute (const std::string &id)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get attributes
+// @brief Get Attributes
 // @return attributes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector<attribute>
@@ -370,10 +387,12 @@ category::impl::get_attributes () const
 
     auto db = _get_database ();
 
-    auto stmt = db.new_statement ("SELECT uid "
-                                  "FROM attribute "
-                                  "WHERE category_uid = ? "
-                                  "ORDER BY idx");
+    auto stmt = db.new_statement (
+        "SELECT uid "
+        "FROM attribute "
+        "WHERE category_uid = ? "
+        "ORDER BY idx"
+    );
 
     stmt.bind (1, uid_);
 
@@ -386,7 +405,7 @@ category::impl::get_attributes () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief load data on demand
+// @brief Load data on demand
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 category::impl::_load_data () const
@@ -397,9 +416,11 @@ category::impl::_load_data () const
     // load data
     auto db = _get_database ();
 
-    auto stmt = db.new_statement ("SELECT * "
-                                  "FROM category "
-                                  "WHERE uid = ?");
+    auto stmt = db.new_statement (
+        "SELECT * "
+        "FROM category "
+        "WHERE uid = ?"
+    );
 
     stmt.bind (1, uid_);
 
@@ -425,7 +446,7 @@ category::category (std::int64_t uid)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Default constructor
+// @brief Default Constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 category::category ()
     : impl_ (std::make_shared<impl> ())
@@ -433,13 +454,17 @@ category::category ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Check if object is valid
+// @brief Check If Object Is Valid
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-category::operator bool () const { return impl_->operator bool (); }
+category::
+operator bool () const
+{
+    return impl_->operator bool ();
+}
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief get id
+// @brief Get ID
 // @return id
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
@@ -449,7 +474,7 @@ category::get_id () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief get name
+// @brief Get Name
 // @return name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
@@ -459,7 +484,7 @@ category::get_name () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief set name
+// @brief Set Name
 // @param name name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
@@ -469,7 +494,7 @@ category::set_name (const std::string &name)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief get description
+// @brief Get Description
 // @return description
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
@@ -479,7 +504,7 @@ category::get_description () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief set description
+// @brief Set Description
 // @param description description
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
@@ -489,7 +514,7 @@ category::set_description (const std::string &description)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief get icon data
+// @brief Get Icon Data
 // @return icon data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::bytearray
@@ -499,7 +524,7 @@ category::get_icon_data () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief set icon data
+// @brief Set Icon Data
 // @param icon_data icon data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
@@ -509,7 +534,7 @@ category::set_icon_data (const mobius::core::bytearray &icon_data)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief get attribute
+// @brief Get Attribute
 // @param id attribute ID
 // @return attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -520,7 +545,7 @@ category::get_attribute (const std::string &id) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief create new attribute
+// @brief Create New Attribute
 // @param id attribute ID
 // @return attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -531,7 +556,7 @@ category::new_attribute (const std::string &id)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief remove attribute
+// @brief Remove Attribute
 // @param id attribute ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
@@ -541,7 +566,7 @@ category::remove_attribute (const std::string &id)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief get attributes
+// @brief Get Attributes
 // @return attributes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector<attribute>
@@ -581,9 +606,11 @@ get_category (const std::string &id)
 {
     auto db = _get_database ();
 
-    auto stmt = db.new_statement ("SELECT uid "
-                                  "FROM category "
-                                  "WHERE id = ?");
+    auto stmt = db.new_statement (
+        "SELECT uid "
+        "FROM category "
+        "WHERE id = ?"
+    );
 
     stmt.bind (1, id);
 
@@ -618,8 +645,10 @@ new_category (const std::string &id)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     auto db = _get_database ();
 
-    auto stmt = db.new_statement ("INSERT INTO category "
-                                  "VALUES (NULL, ?, NULL, NULL, NULL)");
+    auto stmt = db.new_statement (
+        "INSERT INTO category "
+        "VALUES (NULL, ?, NULL, NULL, NULL)"
+    );
 
     stmt.bind (1, id);
     stmt.execute ();
@@ -640,8 +669,10 @@ remove_category (const std::string &id)
 {
     auto db = _get_database ();
 
-    auto stmt = db.new_statement ("DELETE FROM category "
-                                  "WHERE id = ?");
+    auto stmt = db.new_statement (
+        "DELETE FROM category "
+        "WHERE id = ?"
+    );
 
     stmt.bind (1, id);
     stmt.execute ();
@@ -656,8 +687,10 @@ get_categories ()
 {
     auto db = _get_database ();
 
-    auto stmt = db.new_statement ("SELECT uid "
-                                  "FROM category");
+    auto stmt = db.new_statement (
+        "SELECT uid "
+        "FROM category"
+    );
 
     std::vector<category> categories;
 
