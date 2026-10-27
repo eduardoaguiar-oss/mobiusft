@@ -38,7 +38,7 @@ class database
     // Constructors
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     database ();
-    explicit database (const std::string &);
+    explicit database (const std::string &, bool = false);
     database (const database &) noexcept = default;
     database (database &&) noexcept = default;
 

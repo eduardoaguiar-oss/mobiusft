@@ -67,7 +67,7 @@ class database::impl
     // Constructors and destructor
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     impl () = default;
-    explicit impl (const std::string &);
+    impl (const std::string &, bool);
     ~impl ();
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -106,6 +106,9 @@ class database::impl
     // Database file path
     std::string path_;
 
+    // Whether the database should be opened in serialized mode
+    bool is_serialized_ = false;
+
     // Database handle. This is a pointer to the sqlite3 database object.
     mutable sqlite3 *db_ = nullptr;
 
@@ -118,10 +121,12 @@ class database::impl
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create database implementation object
-// @param path database file path
+// @param path Database file path
+// @param is_serialized Whether the database should be opened in serialized mode
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-database::impl::impl (const std::string &path)
-    : path_ (path)
+database::impl::impl (const std::string &path, bool is_serialized)
+    : path_ (path),
+      is_serialized_ (is_serialized)
 {
 }
 
@@ -139,29 +144,37 @@ database::impl::~impl ()
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get database handle
-// @return sqlite3 database handle
+// @return sqlite3 Database handle
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 sqlite3 *
 database::impl::_get_db () const
 {
-    if (db_)
-        return db_;
+    // Open database if not already opened
+    if (!db_)
+    {
+        if (path_.empty ())
+            throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("null database"));
 
-    if (path_.empty ())
-        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("null database"));
+        if (sqlite3_threadsafe () == 0)
+            throw std::runtime_error ("SQLite library built without thread support");
 
-    // define flags, including multi-thread support
-    int flags = SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE;
+        // Open database
+        int flags = SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE;
+        flags |= is_serialized_ ? SQLITE_OPEN_FULLMUTEX : SQLITE_OPEN_NOMUTEX;
 
-    if (sqlite3_threadsafe () != 0)
-        flags |= SQLITE_OPEN_NOMUTEX;
+        int rc = sqlite3_open_v2 (path_.c_str (), &db_, flags, nullptr);
 
-    // open database
-    int rc = sqlite3_open_v2 (path_.c_str (), &db_, flags, nullptr);
+        if (rc != SQLITE_OK)
+        {
+            std::string err_msg = db_ ? sqlite3_errmsg (db_) : "Out of memory";
+            sqlite3_close_v2 (db_);
+            db_ = nullptr;
 
-    if (rc != SQLITE_OK)
-        throw std::runtime_error (MOBIUS_EXCEPTION_SQLITE);
+            throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("Failed to open database: " + err_msg));
+        }
+    }
 
+    // Return database handle
     return db_;
 }
 
@@ -247,7 +260,14 @@ database::impl::new_statement (const std::string &sql)
 std::string
 database::impl::get_error_message () const
 {
-    return sqlite3_errmsg (_get_db ());
+    auto db = _get_db ();
+
+    sqlite3_mutex *mutex = sqlite3_db_mutex (db);
+    sqlite3_mutex_enter (mutex);
+    std::string err_msg = sqlite3_errmsg (db);
+    sqlite3_mutex_leave (mutex);
+
+    return err_msg;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -324,9 +344,10 @@ database::database ()
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create database object
 // @param path database file path
+// @param is_serialized Whether the database should be opened in serialized mode
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-database::database (const std::string &path)
-    : impl_ (std::make_shared<impl> (path))
+database::database (const std::string &path, bool is_serialized)
+    : impl_ (std::make_shared<impl> (path, is_serialized))
 {
 }
 

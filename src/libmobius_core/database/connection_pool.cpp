@@ -15,11 +15,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <chrono>
 #include <mobius/core/database/connection.hpp>
 #include <mobius/core/database/connection_pool.hpp>
 #include <mobius/core/database/database.hpp>
 #include <mobius/core/exception.inc>
+#include <chrono>
 #include <mutex>
 #include <stdexcept>
 #include <thread>
@@ -90,8 +90,7 @@ void
 connection_pool::impl::set_path (const std::string &path)
 {
     if (!path_.empty ())
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("Database path cannot be changed"));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("Database path cannot be changed"));
 
     path_ = path;
 }
@@ -104,8 +103,7 @@ database
 connection_pool::impl::get_database ()
 {
     if (path_.empty ())
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("Database path not set"));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("Database path not set"));
 
     // main thread: acquire connection if necessary
     auto thread_id = std::this_thread::get_id ();
@@ -119,8 +117,7 @@ connection_pool::impl::get_database ()
     auto iter = pool_.find (thread_id);
 
     if (iter == pool_.end ())
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("No acquired connection found"));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("No acquired connection found"));
 
     return iter->second;
 }
@@ -133,8 +130,7 @@ void
 connection_pool::impl::acquire ()
 {
     if (path_.empty ())
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("Database path not set"));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("Database path not set"));
 
     auto thread_id = std::this_thread::get_id ();
 
@@ -152,8 +148,7 @@ connection_pool::impl::acquire ()
     else
     {
         if (iter != pool_.end ())
-            throw std::runtime_error (
-                MOBIUS_EXCEPTION_MSG ("Connection has already been acquired"));
+            throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("Connection has already been acquired"));
 
         pool_[thread_id] = database (path_);
     }
