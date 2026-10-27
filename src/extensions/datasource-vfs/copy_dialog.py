@@ -113,8 +113,6 @@ class CopyDialog(object):
     # @brief Export thread
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __export_thread(self, reader, writer):
-        guard = mobius.core.thread_guard()
-
         BLOCK_SIZE = 1048576
         pct = 0.0
         size = 0

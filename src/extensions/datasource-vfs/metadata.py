@@ -22,5 +22,5 @@
 EXTENSION_ID = 'datasource-vfs'
 EXTENSION_NAME = 'Datasource VFS Viewer'
 EXTENSION_AUTHOR = 'Eduardo Aguiar'
-EXTENSION_VERSION = '1.7'
+EXTENSION_VERSION = '1.8'
 EXTENSION_DESCRIPTION = 'Datasource viewer for VFS datasources'
