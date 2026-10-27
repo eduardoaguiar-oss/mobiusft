@@ -1,10 +1,25 @@
 Mobius Forensic Toolkit 2.31
+	* datasource-vfs: Remove thread_guard usage
+	* evidence-viewer: Remove thread_guard usage
+	* evidence-viewer: Remove framework.new_config_transaction calls
+	* floppy-imager: Remove thread_guard usage
+	* iped-frontend: Remove thread_guard usage
+	* iped-frontend: Remove framework.new_config_transaction calls
+	* report-generator: Remove thread_guard usage
+	* report-generator: Remove framework.new_config_transaction calls
 	* libmobius_core: Improve database::database with full implementation class
+	* libmobius_core: Check for SQLite3 multithread support in database constructor
+	* libmobius_core: Enable foreign key enforcement on every connection in database class
+	* libmobius_core: Add new is_serialized option in database constructor class
+	* libmobius_core: Remove thread_guard class
 	* libmobius_framework: Use SQLite WAL journal mode in config module
 	* libmobius_framework: Remove thread_guard from config module
+	* libmobius_framework: Use single DB connection shared by all threads in config module
 	* libmobius_framework: Add prefix to library name
 	* libmobius_framework: Use SQLite WAL journal mode in category module
 	* libmobius_framework: Remove thread_guard from category module
+	* libmobius_framework: Use single DB connection shared by all threads in category module
+	* libmobius_python: Remove core.thread_guard class
 
 Mobius Forensic Toolkit 2.30
 	* app-chromium: Use db.new_statement_with_pattern in file_cookies::_load_cookies

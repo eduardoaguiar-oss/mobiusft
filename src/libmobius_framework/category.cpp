@@ -40,10 +40,11 @@ _get_database ()
         mobius::core::application app;
         auto path = app.get_config_path ("category.sqlite");
 
-        db = mobius::core::database::database (path);
-        db.execute ("PRAGMA journal_mode=WAL");
+        db = mobius::core::database::database (path, true);
+        db.execute ("PRAGMA busy_timeout=60000");
         db.execute ("PRAGMA synchronous=FULL");
-        db.execute ("PRAGMA foreign_keys = ON;");
+        db.execute ("PRAGMA journal_mode=WAL");
+        db.execute ("PRAGMA foreign_keys=ON;");
 
         // create db tables, if necessary
         db.execute (
