@@ -36,62 +36,60 @@ class database;
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class statement
 {
-public:
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Constructors
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  statement ();
-  statement (database, sqlite3_stmt *);
-  statement (const statement&) noexcept = default;
-  statement (statement&&) noexcept = default;
+  public:
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Constructors
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    statement ();
+    statement (database, sqlite3_stmt *);
+    statement (const statement &) noexcept = default;
+    statement (statement &&) noexcept = default;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Operators
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  statement& operator= (const statement&) noexcept = default;
-  statement& operator= (statement&&) noexcept = default;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Operators
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    statement &operator= (const statement &) noexcept = default;
+    statement &operator= (statement &&) noexcept = default;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Prototypes
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  void bind (int, bool);
-  void bind (int, int);
-  void bind (int, std::int64_t);
-  void bind (int, double);
-  void bind (int, const char *);
-  void bind (int, const std::string&);
-  void bind (int, const mobius::core::bytearray&);
-  void bind (int, const mobius::core::datetime::datetime&);
-  void bind (int, const mobius::core::pod::data&);
-  void bind_null (int);
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Prototypes
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    void bind (int, bool);
+    void bind (int, int);
+    void bind (int, std::int64_t);
+    void bind (int, double);
+    void bind (int, const char *);
+    void bind (int, const std::string &);
+    void bind (int, const mobius::core::bytearray &);
+    void bind (int, const mobius::core::datetime::datetime &);
+    void bind (int, const mobius::core::pod::data &);
+    void bind_null (int);
 
-  void execute ();
-  void reset ();
-  bool fetch_row ();
+    void execute ();
+    void reset ();
+    bool fetch_row ();
 
-  int get_column_count ();
-  bool is_column_null (int);
+    int get_column_count ();
+    bool is_column_null (int);
 
-  bool get_column_bool (int);
-  int get_column_int (int);
-  std::int64_t get_column_int64 (int);
-  double get_column_double (int);
-  std::string get_column_string (int);
-  mobius::core::bytearray get_column_bytearray (int);
-  mobius::core::datetime::datetime get_column_datetime (int);
-  mobius::core::pod::data get_column_pod (int);
+    bool get_column_bool (int);
+    int get_column_int (int);
+    std::int64_t get_column_int64 (int);
+    double get_column_double (int);
+    std::string get_column_string (int);
+    mobius::core::bytearray get_column_bytearray (int);
+    mobius::core::datetime::datetime get_column_datetime (int);
+    mobius::core::pod::data get_column_pod (int);
 
-private:
-  struct impl;
-  std::shared_ptr <impl> impl_;
+  private:
+    struct impl;
+    std::shared_ptr<impl> impl_;
 
-  // helper function
-  std::string get_error_message () const;
-  int step ();
+    // helper function
+    std::string get_error_message () const;
+    int step ();
 };
 
 } // namespace mobius::core::database
 
 #endif
-
-

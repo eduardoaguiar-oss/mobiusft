@@ -31,8 +31,6 @@ namespace mobius::core::database
 // @brief sqlite3 database class
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-struct database_impl;
-
 class database
 {
   public:
@@ -67,7 +65,11 @@ class database
     bool table_has_column (const std::string &, const std::string &) const;
 
   private:
-    std::shared_ptr<database_impl> impl_;
+    // @brief Forward declaration of the implementation class
+    class impl;
+
+    // @brief Pointer to the database implementation.
+    std::shared_ptr<impl> impl_;
 };
 
 } // namespace mobius::core::database

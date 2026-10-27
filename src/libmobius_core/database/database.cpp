@@ -23,7 +23,6 @@
 #include <sqlite3.h>
 #include <stdexcept>
 #include <thread>
-#include <unordered_set>
 
 namespace
 {
@@ -58,55 +57,99 @@ static sqlite3_init sqlite3_instance;
 
 namespace mobius::core::database
 {
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Implementation struct
+// @brief Implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-struct database_impl
+class database::impl
 {
+  public:
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Constructors and destructor
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    impl () = default;
+    explicit impl (const std::string &);
+    ~impl ();
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Bool operator
+    // @return true if the database path is set, false otherwise
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    operator bool () const
+    {
+        return !path_.empty ();
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get database file path
+    // @return database file path
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::string
+    get_path () const
+    {
+        return path_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Prototypes
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    void execute (const std::string &);
+    sqlite3_stmt *new_statement (const std::string &);
+    bool new_transaction ();
+    void end_transaction ();
+    std::string get_error_message () const;
+    std::int64_t get_last_insert_row_id () const;
+    std::int64_t get_changes () const;
+    bool has_table (const std::string &) const;
+    bool table_has_column (const std::string &, const std::string &) const;
+
+  private:
+    // Database file path
+    std::string path_;
+
     // Database handle. This is a pointer to the sqlite3 database object.
-    sqlite3 *db = nullptr;
+    mutable sqlite3 *db_ = nullptr;
 
     // Transaction level. This is used to track nested transactions.
-    int transaction_level = 0;
+    int transaction_level_ = 0;
 
-    // Database file path
-    std::string path;
-
-    // Flag to indicate if the database is null
-    bool is_null = true;
-
-    // Destructor
-    ~database_impl ();
+    // Get database handle
+    sqlite3 *_get_db () const;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Destroy shared implementation
+// @brief Create database implementation object
+// @param path database file path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-database_impl::~database_impl ()
+database::impl::impl (const std::string &path)
+    : path_ (path)
 {
-    if (db != nullptr)
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Destroy database implementation object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+database::impl::~impl ()
+{
+    if (db_)
     {
-        sqlite3_close (db);
-        db = nullptr;
+        sqlite3_close (db_);
+        db_ = nullptr;
     }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create null database object
+// @brief Get database handle
+// @return sqlite3 database handle
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-database::database ()
-    : impl_ (std::make_shared<database_impl> ())
+sqlite3 *
+database::impl::_get_db () const
 {
-}
+    if (db_)
+        return db_;
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create database object
-// @param path database file path
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-database::database (const std::string &path)
-    : impl_ (std::make_shared<database_impl> ())
-{
+    if (path_.empty ())
+        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("null database"));
+
     // define flags, including multi-thread support
     int flags = SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE;
 
@@ -114,23 +157,12 @@ database::database (const std::string &path)
         flags |= SQLITE_OPEN_NOMUTEX;
 
     // open database
-    int rc = sqlite3_open_v2 (path.c_str (), &(impl_->db), flags, nullptr);
+    int rc = sqlite3_open_v2 (path_.c_str (), &db_, flags, nullptr);
 
     if (rc != SQLITE_OK)
         throw std::runtime_error (MOBIUS_EXCEPTION_SQLITE);
 
-    impl_->path = path;
-    impl_->is_null = false;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Check whether database is not null
-// @return true/false
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-database::
-operator bool () const
-{
-    return !impl_->is_null;
+    return db_;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -138,13 +170,14 @@ operator bool () const
 // @param sql SQL statement
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-database::execute (const std::string &sql)
+database::impl::execute (const std::string &sql)
 {
     int rc = SQLITE_BUSY;
 
     while (rc == SQLITE_BUSY)
     {
-        rc = sqlite3_exec (impl_->db, sql.c_str (), nullptr, nullptr, nullptr);
+        auto db = _get_db ();
+        rc = sqlite3_exec (db, sql.c_str (), nullptr, nullptr, nullptr);
 
         if (rc == SQLITE_BUSY)
             std::this_thread::sleep_for (std::chrono::microseconds (SLEEP_TIME));
@@ -158,21 +191,22 @@ database::execute (const std::string &sql)
 // @brief Create new transaction object
 // @return transaction object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-transaction
-database::new_transaction ()
+bool
+database::impl::new_transaction ()
 {
-    bool is_master = impl_->transaction_level++ == 0;
+    bool is_master = transaction_level_ == 0;
+    ++transaction_level_;
 
-    return transaction (*this, is_master);
+    return is_master;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief End current transaction
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-database::end_transaction ()
+database::impl::end_transaction ()
 {
-    impl_->transaction_level--;
+    transaction_level_--;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -180,15 +214,16 @@ database::end_transaction ()
 // @param sql SQL command
 // @return statement object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-statement
-database::new_statement (const std::string &sql)
+sqlite3_stmt *
+database::impl::new_statement (const std::string &sql)
 {
     sqlite3_stmt *stmt = nullptr;
+    auto db = _get_db ();
     int rc = SQLITE_BUSY;
 
     while (rc == SQLITE_BUSY)
     {
-        rc = sqlite3_prepare_v2 (impl_->db, sql.c_str (), -1, &stmt, nullptr);
+        rc = sqlite3_prepare_v2 (db, sql.c_str (), -1, &stmt, nullptr);
 
         if (rc == SQLITE_BUSY)
             std::this_thread::sleep_for (std::chrono::microseconds (SLEEP_TIME));
@@ -202,7 +237,147 @@ database::new_statement (const std::string &sql)
         throw std::runtime_error (MOBIUS_EXCEPTION_SQLITE);
     }
 
-    return statement (*this, stmt);
+    return stmt;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get last error message
+// @return error message
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+database::impl::get_error_message () const
+{
+    return sqlite3_errmsg (_get_db ());
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get last insert row ID
+// @return row ID
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::int64_t
+database::impl::get_last_insert_row_id () const
+{
+    return sqlite3_last_insert_rowid (_get_db ());
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get number of rows affected by last statement
+// @return Number of rows affected
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::int64_t
+database::impl::get_changes () const
+{
+    return sqlite3_changes (_get_db ());
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if database has a given table
+// @param table Table name
+// @return true/false
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+database::impl::has_table (const std::string &table) const
+{
+    return sqlite3_table_column_metadata (
+               _get_db (),     // db
+               nullptr,        // zDbName
+               table.c_str (), // zTableName
+               nullptr,        // zColumnName
+               nullptr,        // pzDataType
+               nullptr,        // pzCollSeq
+               nullptr,        // pNotNull
+               nullptr,        // pPrimaryKey
+               nullptr         // pAutoinc
+           ) == SQLITE_OK;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if table has a given column
+// @param table Table name
+// @param column Column name
+// @return true/false
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+database::impl::table_has_column (const std::string &table, const std::string &column) const
+{
+    return sqlite3_table_column_metadata (
+               _get_db (),      // db
+               nullptr,         // zDbName
+               table.c_str (),  // zTableName
+               column.c_str (), // zColumnName
+               nullptr,         // pzDataType
+               nullptr,         // pzCollSeq
+               nullptr,         // pNotNull
+               nullptr,         // pPrimaryKey
+               nullptr          // pAutoinc
+           ) == SQLITE_OK;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create null database object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+database::database ()
+    : impl_ (std::make_shared<impl> ())
+{
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create database object
+// @param path database file path
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+database::database (const std::string &path)
+    : impl_ (std::make_shared<impl> (path))
+{
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check whether database is not null
+// @return true/false
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+database::
+operator bool () const
+{
+    return impl_->operator bool ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Execute SQL command
+// @param sql SQL statement
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+database::execute (const std::string &sql)
+{
+    impl_->execute (sql);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create new transaction object
+// @return transaction object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+transaction
+database::new_transaction ()
+{
+    return transaction (*this, impl_->new_transaction ());
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief End current transaction
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+database::end_transaction ()
+{
+    impl_->end_transaction ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create new statement object
+// @param sql SQL command
+// @return statement object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+statement
+database::new_statement (const std::string &sql)
+{
+    return statement (*this, impl_->new_statement (sql));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -221,7 +396,7 @@ database::new_statement (const std::string &sql)
 //
 // @par Example:
 // @code
-// auto stmt = createDynamicStatement(
+// auto stmt = db.new_statement_with_pattern(
 //     "SELECT {users:u.id}, {users:u.name} FROM users u WHERE {users.active}=1"
 // );
 // @endcode
@@ -290,7 +465,7 @@ database::new_statement_with_pattern (const std::string &pattern)
 std::string
 database::get_path () const
 {
-    return impl_->path;
+    return impl_->get_path ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -300,7 +475,7 @@ database::get_path () const
 std::string
 database::get_error_message () const
 {
-    return sqlite3_errmsg (impl_->db);
+    return impl_->get_error_message ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -310,7 +485,7 @@ database::get_error_message () const
 std::int64_t
 database::get_last_insert_row_id () const
 {
-    return sqlite3_last_insert_rowid (impl_->db);
+    return impl_->get_last_insert_row_id ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -320,7 +495,7 @@ database::get_last_insert_row_id () const
 std::int64_t
 database::get_changes () const
 {
-    return sqlite3_changes (impl_->db);
+    return impl_->get_changes ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -331,17 +506,7 @@ database::get_changes () const
 bool
 database::has_table (const std::string &table) const
 {
-    return sqlite3_table_column_metadata (
-               impl_->db,      // db
-               nullptr,        // zDbName
-               table.c_str (), // zTableName
-               nullptr,        // zColumnName
-               nullptr,        // pzDataType
-               nullptr,        // pzCollSeq
-               nullptr,        // pNotNull
-               nullptr,        // pPrimaryKey
-               nullptr         // pAutoinc
-           ) == SQLITE_OK;
+    return impl_->has_table (table);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -353,17 +518,7 @@ database::has_table (const std::string &table) const
 bool
 database::table_has_column (const std::string &table, const std::string &column) const
 {
-    return sqlite3_table_column_metadata (
-               impl_->db,       // db
-               nullptr,         // zDbName
-               table.c_str (),  // zTableName
-               column.c_str (), // zColumnName
-               nullptr,         // pzDataType
-               nullptr,         // pzCollSeq
-               nullptr,         // pNotNull
-               nullptr,         // pPrimaryKey
-               nullptr          // pAutoinc
-           ) == SQLITE_OK;
+    return impl_->table_has_column (table, column);
 }
 
 } // namespace mobius::core::database
