@@ -721,7 +721,6 @@ class Widget(object):
     # @brief data retrieval thread
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def on_thread_retrieve_data(self, floppy, sectors):
-        guard = mobius.core.thread_guard()
 
         # set data
         if self.image.data == '':
