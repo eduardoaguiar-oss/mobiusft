@@ -316,10 +316,7 @@ class ProcessingView(object):
     # @brief Save current state
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def on_destroy(self):
-        transaction = mobius.framework.new_config_transaction()
         mobius.framework.set_config('iped.sector_size', self.__sector_size_spinbutton.get_value_as_int())
-        transaction.commit()
-
         self.__mediator.clear()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -331,10 +328,7 @@ class ProcessingView(object):
 
         if treeiter:
             self.__profile = model.get_value(treeiter, 0)
-
-            transaction = mobius.framework.new_config_transaction()
             mobius.framework.set_config('iped.last_profile', self.__profile)
-            transaction.commit()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief on_execute_button_clicked event
@@ -386,15 +380,12 @@ class ProcessingView(object):
     # @brief Handle 'value-changed' spinbutton event
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __on_xmx_value_changed(self, spinbutton, *args):
-        transaction = mobius.framework.new_config_transaction()
         mobius.framework.set_config('iped.xmx', spinbutton.get_value_as_int())
-        transaction.commit()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Processing thread
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __processing_thread(self, option):
-        guard = mobius.core.thread_guard()
         case = option.itemlist[0].case
         connection = case.new_connection()
 

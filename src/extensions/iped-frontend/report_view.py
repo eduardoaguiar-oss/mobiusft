@@ -136,9 +136,7 @@ class NoContentListWidget(object):
         self.__entry.grab_focus()
 
         # Save the updated list to config
-        transaction = mobius.framework.new_config_transaction()
         mobius.framework.set_config('iped.last_no_content_items', self.__items)
-        transaction.commit()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Add a row to the listbox
@@ -443,9 +441,7 @@ class ReportView(object):
     # @brief Set config variable
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __set_config(self, key, value):
-        transaction = mobius.framework.new_config_transaction()
         mobius.framework.set_config(key, value)
-        transaction.commit()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief on_click_output_folder button clicked
@@ -617,7 +613,6 @@ class ReportView(object):
     # @brief Report generation thread
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __generate_report_thread(self, option):
-        guard = mobius.core.thread_guard()
         connection = option.case.new_connection()
 
         # remove previous report folder and .log

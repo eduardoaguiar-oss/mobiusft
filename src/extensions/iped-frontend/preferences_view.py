@@ -107,10 +107,7 @@ class PreferencesView(object):
 
         # check if folder contains 'iped.jar' file
         if os.path.exists(jar_path):
-            transaction = mobius.framework.new_config_transaction()
             mobius.framework.set_config('iped.folder_path', path)
-            transaction.commit()
-
             self.__control.set_iped_path(path)
 
         # Show error dialog
