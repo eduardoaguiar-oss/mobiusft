@@ -40,7 +40,6 @@
 #include "resource.hpp"
 #include "richtext.hpp"
 #include "system/module.hpp"
-#include "thread_guard.hpp"
 #include "turing/module.hpp"
 #include "ui/module.hpp"
 #include "vfs/module.hpp"
@@ -113,7 +112,6 @@ new_core_module ()
     module.add_type ("log", new_core_log_type ());
     module.add_type ("resource", new_core_resource_type ());
     module.add_type ("richtext", new_core_richtext_type ());
-    module.add_type ("thread_guard", new_core_thread_guard_type ());
 
     // Build submodules
     module.add_submodule ("crypt", new_core_crypt_module ());

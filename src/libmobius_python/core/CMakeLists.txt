@@ -55,7 +55,6 @@ add_library(mobius_python_core STATIC
     log.cpp
     resource.cpp
     richtext.cpp
-    thread_guard.cpp
 )
 
 set_target_properties(mobius_python_core PROPERTIES
