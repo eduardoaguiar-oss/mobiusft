@@ -22,5 +22,5 @@
 EXTENSION_ID = 'report-generator'
 EXTENSION_NAME = 'Report Generator'
 EXTENSION_AUTHOR = 'Eduardo Aguiar'
-EXTENSION_VERSION = '1.0'
+EXTENSION_VERSION = '1.1'
 EXTENSION_DESCRIPTION = 'Report Generator Extension'

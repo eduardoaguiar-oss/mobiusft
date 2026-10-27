@@ -34,17 +34,6 @@ from gi.repository import GdkPixbuf
 from metadata import *
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# @brief Set config value
-# @param name Config name
-# @param value Config value
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-def set_config(name, value):
-    transaction = mobius.framework.new_config_transaction()
-    mobius.framework.set_config(name, value)
-    transaction.commit()
-
-
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # @brief Get all items from the list of items, including their children
 # @param itemlist List of items
 # @return List of all items, including children
@@ -338,7 +327,7 @@ class ReportGeneratorView(object):
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __set_output_folder(self, path):
         self.__output_folder = path
-        set_config('last_report_folder', self.__output_folder)
+        mobius.framework.set_config('last_report_folder', self.__output_folder)
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Update output folder based on .ASAP file path and on template type selected
@@ -437,7 +426,7 @@ class ReportGeneratorView(object):
             self.__template_type = treemodel[treeiter][TEMPLATE_TYPE]
 
             if self.__template_id:
-                set_config('last_report_template', self.__template_id)
+                mobius.framework.set_config('last_report_template', self.__template_id)
                 self.__update_output_folder()
 
         else:
@@ -491,7 +480,7 @@ class ReportGeneratorView(object):
 
         # Set selected .ASAP file
         self.__asap_path = selected_path
-        set_config('last_asap_file', self.__asap_path)
+        mobius.framework.set_config('last_asap_file', self.__asap_path)
 
         # Update output folder based on .ASAP file if available
         self.__update_output_folder()
@@ -573,7 +562,6 @@ class ReportGeneratorView(object):
     def __generate_report_thread(self, model):
         try:
             # Multithreading guard to ensure thread safety when accessing Mobius core resources
-            guard = mobius.core.thread_guard()
             connection = model.case.new_connection()
 
             # Generate report using generator
