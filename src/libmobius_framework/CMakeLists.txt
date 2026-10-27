@@ -47,7 +47,6 @@ add_library(mobius_framework SHARED
 )
 
 set_target_properties(mobius_framework PROPERTIES
-    PREFIX ""
     POSITION_INDEPENDENT_CODE ON
 )
 
