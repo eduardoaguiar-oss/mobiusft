@@ -18,12 +18,13 @@
 #include <mobius/core/application.hpp>
 #include <mobius/core/database/database.hpp>
 #include <mobius/core/mediator.hpp>
-#include <mobius/core/thread_guard.hpp>
 #include <mobius/framework/config.hpp>
+#include <mutex>
 
 namespace
 {
-static const std::string RESOURCE_ID = "database.config";
+// Mutex to protect write access across threads
+static std::mutex mutex_;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get database instance
@@ -32,39 +33,24 @@ static const std::string RESOURCE_ID = "database.config";
 static mobius::core::database::database
 _get_database ()
 {
-    mobius::core::database::database db;
+    static mobius::core::database::database db;
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // If DB instance is already opened for current thread, simply return it
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    if (mobius::core::has_thread_resource (RESOURCE_ID))
-        db = mobius::core::get_thread_resource<
-            mobius::core::database::database> (RESOURCE_ID);
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Otherwise, create a new DB instance and associate to current thread
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    else
+    if (!db)
     {
         // create database instance
         mobius::core::application app;
         auto path = app.get_config_path ("mobiusft.sqlite");
 
         db = mobius::core::database::database (path);
+        db.execute ("PRAGMA journal_mode=WAL");
+        db.execute ("PRAGMA synchronous=FULL");
 
         // create db tables, if necessary
-        auto transaction = db.new_transaction ();
-
         db.execute (
             "CREATE TABLE IF NOT EXISTS configuration"
             "(var TEXT PRIMARY KEY,"
             "value BLOB NULL);"
         );
-
-        transaction.commit ();
-
-        // save DB instance for future reuse
-        mobius::core::set_thread_resource (RESOURCE_ID, db);
     }
 
     return db;
@@ -140,16 +126,19 @@ get_config (const std::string &name)
 void
 set_config (const std::string &name, const mobius::core::pod::data &value)
 {
-    auto db = _get_database ();
+    {
+        std::lock_guard<std::mutex> lock (mutex_);
+        auto db = _get_database ();
 
-    auto statement = db.new_statement (
-        "INSERT OR REPLACE INTO configuration "
-        "VALUES (?, ?)"
-    );
+        auto statement = db.new_statement (
+            "INSERT OR REPLACE INTO configuration "
+            "VALUES (?, ?)"
+        );
 
-    statement.bind (1, name);
-    statement.bind (2, value);
-    statement.execute ();
+        statement.bind (1, name);
+        statement.bind (2, value);
+        statement.execute ();
+    }
 
     mobius::core::emit ("config-set", name, value);
 }
@@ -161,15 +150,18 @@ set_config (const std::string &name, const mobius::core::pod::data &value)
 void
 remove_config (const std::string &name)
 {
-    auto db = _get_database ();
+    {
+        std::lock_guard<std::mutex> lock (mutex_);
+        auto db = _get_database ();
 
-    auto statement = db.new_statement (
-        "DELETE FROM configuration "
-        "WHERE var = ?"
-    );
+        auto statement = db.new_statement (
+            "DELETE FROM configuration "
+            "WHERE var = ?"
+        );
 
-    statement.bind (1, name);
-    statement.execute ();
+        statement.bind (1, name);
+        statement.execute ();
+    }
 
     mobius::core::emit ("config-remove", name);
 }

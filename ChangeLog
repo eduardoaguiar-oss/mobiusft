@@ -1,5 +1,7 @@
 Mobius Forensic Toolkit 2.31
 	* libmobius_core: Improve database::database with full implementation class
+	* libmobius_framework: Use SQLite WAL journal mode in config module
+	* libmobius_framework: Remove thread_guard from config module
 
 Mobius Forensic Toolkit 2.30
 	* app-chromium: Use db.new_statement_with_pattern in file_cookies::_load_cookies
