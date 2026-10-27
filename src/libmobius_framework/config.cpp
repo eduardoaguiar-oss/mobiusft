@@ -19,16 +19,17 @@
 #include <mobius/core/database/database.hpp>
 #include <mobius/core/mediator.hpp>
 #include <mobius/framework/config.hpp>
-#include <mutex>
 
 namespace
 {
-// Mutex to protect write access across threads
-static std::mutex mutex_;
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get database instance
 // @return Database object
+//
+// A single connection is shared by all threads. It is opened in serialized
+// mode (SQLITE_OPEN_FULLMUTEX), so SQLite locks it internally on every API
+// call. This is safe because each config function uses only its own local
+// statement.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static mobius::core::database::database
 _get_database ()
@@ -37,19 +38,18 @@ _get_database ()
 
     if (!db)
     {
-        // create database instance
         mobius::core::application app;
         auto path = app.get_config_path ("mobiusft.sqlite");
 
-        db = mobius::core::database::database (path);
-        db.execute ("PRAGMA journal_mode=WAL");
+        db = mobius::core::database::database (path, true);
+        db.execute ("PRAGMA busy_timeout=60000");
         db.execute ("PRAGMA synchronous=FULL");
+        db.execute ("PRAGMA journal_mode=WAL");
 
-        // create db tables, if necessary
         db.execute (
             "CREATE TABLE IF NOT EXISTS configuration"
             "(var TEXT PRIMARY KEY,"
-            "value BLOB NULL);"
+            "value BLOB NULL)"
         );
     }
 
@@ -60,17 +60,6 @@ _get_database ()
 
 namespace mobius::framework
 {
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create new transaction to config database
-// @return New database transaction
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::core::database::transaction
-new_config_transaction ()
-{
-    auto db = _get_database ();
-    return db.new_transaction ();
-}
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Check if config value exists
 // @param name Value name
@@ -126,19 +115,16 @@ get_config (const std::string &name)
 void
 set_config (const std::string &name, const mobius::core::pod::data &value)
 {
-    {
-        std::lock_guard<std::mutex> lock (mutex_);
-        auto db = _get_database ();
+    auto db = _get_database ();
 
-        auto statement = db.new_statement (
-            "INSERT OR REPLACE INTO configuration "
-            "VALUES (?, ?)"
-        );
+    auto statement = db.new_statement (
+        "INSERT OR REPLACE INTO configuration "
+        "VALUES (?, ?)"
+    );
 
-        statement.bind (1, name);
-        statement.bind (2, value);
-        statement.execute ();
-    }
+    statement.bind (1, name);
+    statement.bind (2, value);
+    statement.execute ();
 
     mobius::core::emit ("config-set", name, value);
 }
@@ -150,20 +136,24 @@ set_config (const std::string &name, const mobius::core::pod::data &value)
 void
 remove_config (const std::string &name)
 {
-    {
-        std::lock_guard<std::mutex> lock (mutex_);
-        auto db = _get_database ();
+    auto db = _get_database ();
 
-        auto statement = db.new_statement (
-            "DELETE FROM configuration "
-            "WHERE var = ?"
-        );
+    auto statement = db.new_statement (
+        "DELETE FROM configuration "
+        "WHERE var = ?"
+    );
 
-        statement.bind (1, name);
-        statement.execute ();
-    }
+    statement.bind (1, name);
+    statement.execute ();
 
     mobius::core::emit ("config-remove", name);
+}
+
+mobius::core::database::transaction
+new_config_transaction ()
+{
+    auto db = _get_database ();
+    return db.new_transaction ();
 }
 
 } // namespace mobius::framework
