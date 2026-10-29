@@ -28,31 +28,6 @@ namespace
 {
 static constexpr int SLEEP_TIME = 200; // microseconds
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief libsqlite3 initialization class
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class sqlite3_init
-{
-  public:
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Initialize libsqlite3
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    sqlite3_init ()
-    {
-        sqlite3_initialize ();
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Cleanup libsqlite3
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    ~sqlite3_init ()
-    {
-        sqlite3_shutdown ();
-    }
-};
-
-static sqlite3_init sqlite3_instance;
-
 } // namespace
 
 namespace mobius::core::database
@@ -170,7 +145,7 @@ database::impl::_get_db () const
             sqlite3_close_v2 (db_);
             db_ = nullptr;
 
-            throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("Failed to open database: " + err_msg));
+            throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("failed to open database: " + err_msg));
         }
     }
 

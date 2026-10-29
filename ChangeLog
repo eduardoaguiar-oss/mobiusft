@@ -12,6 +12,7 @@ Mobius Forensic Toolkit 2.31
 	* libmobius_core: Enable foreign key enforcement on every connection in database class
 	* libmobius_core: Add new is_serialized option in database constructor class
 	* libmobius_core: Remove thread_guard class
+	* libmobius_core: Remove database::sqlite3_init class and instance
 	* libmobius_framework: Use SQLite WAL journal mode in config module
 	* libmobius_framework: Remove thread_guard from config module
 	* libmobius_framework: Use single DB connection shared by all threads in config module
