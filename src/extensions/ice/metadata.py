@@ -22,5 +22,5 @@
 EXTENSION_ID = 'ice'
 EXTENSION_NAME = 'Integrated Case Environment (ICE)'
 EXTENSION_AUTHOR = 'Eduardo Aguiar'
-EXTENSION_VERSION = '2.17'
+EXTENSION_VERSION = '2.18'
 EXTENSION_DESCRIPTION = 'Integrated Case Environment'

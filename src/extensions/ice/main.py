@@ -230,16 +230,12 @@ class ICEWindow(object):
         width, height = self.__widget.get_size()
 
         # save configuration
-        transaction = mobius.framework.new_config_transaction()
-
         mobius.framework.set_config('ice.window.x', x)
         mobius.framework.set_config('ice.window.y', y)
         mobius.framework.set_config('ice.window.width', width)
         mobius.framework.set_config('ice.window.height', height)
 
         self.__case_view.on_destroy()
-
-        transaction.commit()
 
         # destroy widget
         mobius.core.unsubscribe(self.__event_uid_1)
