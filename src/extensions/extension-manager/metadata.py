@@ -22,5 +22,5 @@
 EXTENSION_ID = 'extension-manager'
 EXTENSION_NAME = 'Extension Manager'
 EXTENSION_AUTHOR = 'Eduardo Aguiar'
-EXTENSION_VERSION = '1.11'
+EXTENSION_VERSION = '1.12'
 EXTENSION_DESCRIPTION = 'Install/uninstall and browse extensions'

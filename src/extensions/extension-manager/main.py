@@ -821,16 +821,12 @@ def cb_app_starting():
 
         # if response = YES, set current version and show extension manager
         if rc == mobius.core.ui.message_dialog.button_yes:
-            transaction = mobius.framework.new_config_transaction()
             mobius.framework.set_config('general.current-version', app.version)
-            transaction.commit()
             on_activate(EXTENSION_ID)
 
         # else if response = NO, just set current version
         elif rc == mobius.core.ui.message_dialog.button_no:
-            transaction = mobius.framework.new_config_transaction()
             mobius.framework.set_config('general.current-version', app.version)
-            transaction.commit()
 
         # otherwise, do nothing, and this dialog will be shown next time
 
