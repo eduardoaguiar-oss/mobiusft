@@ -13,6 +13,7 @@ Mobius Forensic Toolkit 2.31
 	* part-catalogue: Remove framework.new_config_transaction calls
 	* report-generator: Remove thread_guard usage
 	* report-generator: Remove framework.new_config_transaction calls
+	* sdi-window-manager: Remove framework.new_config_transaction calls
 	* libmobius_core: Improve database::database with full implementation class
 	* libmobius_core: Check for SQLite3 multithread support in database constructor
 	* libmobius_core: Enable foreign key enforcement on every connection in database class

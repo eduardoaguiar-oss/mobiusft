@@ -130,12 +130,10 @@ def destroy_working_area(uid):
     x, y = working_area.window.get_position()
     width, height = working_area.window.get_size()
 
-    transaction = mobius.framework.new_config_transaction()
     mobius.framework.set_config(f'{working_area.id}.window.x', x)
     mobius.framework.set_config(f'{working_area.id}.window.y', y)
     mobius.framework.set_config(f'{working_area.id}.window.width', width)
     mobius.framework.set_config(f'{working_area.id}.window.height', height)
-    transaction.commit()
 
     # destroy working area
     working_area.window.destroy()
