@@ -1,10 +1,12 @@
 Mobius Forensic Toolkit 2.31
 	* datasource-vfs: Remove thread_guard usage
+	* datasource-vfs: Remove framework.new_config_transaction calls
 	* evidence-viewer: Remove thread_guard usage
 	* evidence-viewer: Remove framework.new_config_transaction calls
 	* floppy-imager: Remove thread_guard usage
 	* iped-frontend: Remove thread_guard usage
 	* iped-frontend: Remove framework.new_config_transaction calls
+	* part-catalogue: Remove framework.new_config_transaction calls
 	* report-generator: Remove thread_guard usage
 	* report-generator: Remove framework.new_config_transaction calls
 	* libmobius_core: Improve database::database with full implementation class

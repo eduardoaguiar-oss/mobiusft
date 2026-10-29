@@ -229,9 +229,7 @@ class Widget(object):
             for part in self.__mediator.call('part.get_by_category', category.id):
                 part_model.append((part.id, part))
 
-            transaction = mobius.framework.new_config_transaction()
             mobius.framework.set_config('part-catalogue.last-category', category.id)
-            transaction.commit()
 
         self.__category = category
 
