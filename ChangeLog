@@ -5,6 +5,7 @@ Mobius Forensic Toolkit 2.31
 	* evidence-viewer: Remove framework.new_config_transaction calls
 	* extension-manager: Remove framework.new_config_transaction calls
 	* floppy-imager: Remove thread_guard usage
+	* gtk-ui: Remove framework.new_config_transaction calls
 	* iped-frontend: Remove thread_guard usage
 	* iped-frontend: Remove framework.new_config_transaction calls
 	* part-catalogue: Remove framework.new_config_transaction calls

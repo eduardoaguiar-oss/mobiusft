@@ -486,10 +486,7 @@ class HexViewWidget(object):
         if self.__textview:
             textbuffer = self.__textview.get_buffer()
             textbuffer.set_encoding(encoding)
-
-            transaction = mobius.framework.new_config_transaction()
             mobius.framework.set_config('gtk-ui-hexview.encoding', encoding)
-            transaction.commit()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Handle view->bytes_per_line
@@ -498,10 +495,7 @@ class HexViewWidget(object):
         if self.__textview:
             textbuffer = self.__textview.get_buffer()
             textbuffer.width = bytes_per_line
-
-            transaction = mobius.framework.new_config_transaction()
             mobius.framework.set_config('gtk-ui-hexview.bytes_per_line', bytes_per_line)
-            transaction.commit()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Go to address

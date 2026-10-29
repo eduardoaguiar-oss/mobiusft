@@ -22,5 +22,5 @@
 EXTENSION_ID = 'gtk-ui'
 EXTENSION_NAME = 'GTK User Interface'
 EXTENSION_AUTHOR = 'Eduardo Aguiar'
-EXTENSION_VERSION = '1.17'
+EXTENSION_VERSION = '1.18'
 EXTENSION_DESCRIPTION = 'GTK User Interface abstraction layer'
