@@ -18,7 +18,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/database/transaction.hpp>
 #include <mobius/core/pod/data.hpp>
 #include <string>
 
@@ -31,8 +30,6 @@ void set_config (const std::string&, const mobius::core::pod::data&);
 mobius::core::pod::data get_config (const std::string&);
 bool has_config (const std::string&);
 void remove_config (const std::string&);
-
-mobius::core::database::transaction new_config_transaction ();
 
 } // namespace mobius::framework
 

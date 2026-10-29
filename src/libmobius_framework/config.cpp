@@ -149,11 +149,4 @@ remove_config (const std::string &name)
     mobius::core::emit ("config-remove", name);
 }
 
-mobius::core::database::transaction
-new_config_transaction ()
-{
-    auto db = _get_database ();
-    return db.new_transaction ();
-}
-
 } // namespace mobius::framework
