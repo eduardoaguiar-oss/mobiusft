@@ -41,7 +41,6 @@ PyObject *func_framework_has_config (PyObject *, PyObject *);
 PyObject *func_framework_set_config (PyObject *, PyObject *);
 PyObject *func_framework_get_config (PyObject *, PyObject *);
 PyObject *func_framework_remove_config (PyObject *, PyObject *);
-PyObject *func_framework_new_config_transaction (PyObject *, PyObject *);
 
 namespace
 {
@@ -50,24 +49,18 @@ namespace
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef module_methods[] = {
     {"get_category", func_framework_get_category, METH_VARARGS, "Get category"},
-    {"new_category", func_framework_new_category, METH_VARARGS,
-     "Create new category"},
-    {"remove_category", func_framework_remove_category, METH_VARARGS,
-     "Remove category"},
-    {"get_categories", func_framework_get_categories, METH_VARARGS,
-     "Get all categories"},
-    {"remove_categories", func_framework_remove_categories, METH_VARARGS,
-     "Remove all categories"},
-    {"new_category_transaction", func_framework_new_category_transaction,
-     METH_VARARGS, "Create new transaction object to category database"},
-    {"has_config", func_framework_has_config, METH_VARARGS,
-     "Check if config values exists"},
+    {"new_category", func_framework_new_category, METH_VARARGS, "Create new category"},
+    {"remove_category", func_framework_remove_category, METH_VARARGS, "Remove category"},
+    {"get_categories", func_framework_get_categories, METH_VARARGS, "Get all categories"},
+    {"remove_categories", func_framework_remove_categories, METH_VARARGS, "Remove all categories"},
+    {"new_category_transaction",
+     func_framework_new_category_transaction,
+     METH_VARARGS,
+     "Create new transaction object to category database"},
+    {"has_config", func_framework_has_config, METH_VARARGS, "Check if config values exists"},
     {"set_config", func_framework_set_config, METH_VARARGS, "Set config value"},
     {"get_config", func_framework_get_config, METH_VARARGS, "Get config value"},
-    {"remove_config", func_framework_remove_config, METH_VARARGS,
-     "Remove config value"},
-    {"new_config_transaction", func_framework_new_config_transaction,
-     METH_VARARGS, "Create new transaction object to config database"},
+    {"remove_config", func_framework_remove_config, METH_VARARGS, "Remove config value"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };
 
@@ -107,9 +100,7 @@ new_framework_module ()
     module.add_constant ("SCAN_TYPE_ALL_FILES", 3);
 
     // Add submodules
-    module.add_submodule (
-        "evidence_processor", new_framework_evidence_processor_module ()
-    );
+    module.add_submodule ("evidence_processor", new_framework_evidence_processor_module ());
     module.add_submodule ("model", new_framework_model_module ());
 
     // Return module
@@ -130,14 +121,11 @@ class sampling_file_callback
     }
 
     void
-    operator() (
-        const std::string &sampling_id, const mobius::core::io::reader &reader
-    )
+    operator() (const std::string &sampling_id, const mobius::core::io::reader &reader)
     {
         mobius::py::GIL_guard gil_guard;
 
-        f_ (mobius::py::pystring_from_std_string (sampling_id),
-            pymobius_core_io_reader_to_pyobject (reader));
+        f_ (mobius::py::pystring_from_std_string (sampling_id), pymobius_core_io_reader_to_pyobject (reader));
     }
 
   private:
@@ -158,14 +146,11 @@ class sampling_folder_callback
     }
 
     void
-    operator() (
-        const std::string &sampling_id, const mobius::core::io::folder &folder
-    )
+    operator() (const std::string &sampling_id, const mobius::core::io::folder &folder)
     {
         mobius::py::GIL_guard gil_guard;
 
-        f_ (mobius::py::pystring_from_std_string (sampling_id),
-            pymobius_core_io_folder_to_pyobject (folder));
+        f_ (mobius::py::pystring_from_std_string (sampling_id), pymobius_core_io_folder_to_pyobject (folder));
     }
 
   private:
@@ -190,8 +175,7 @@ class config_set_callback
     {
         mobius::py::GIL_guard gil_guard;
 
-        f_ (mobius::py::pystring_from_std_string (name),
-            pymobius_core_pod_data_to_python (value));
+        f_ (mobius::py::pystring_from_std_string (name), pymobius_core_pod_data_to_python (value));
     }
 
   private:

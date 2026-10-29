@@ -20,10 +20,9 @@
 // @brief  C++ API module wrapper
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "core/database/transaction.hpp"
-#include "core/pod/data.hpp"
-#include <mobius/framework/config.hpp>
 #include <pymobius.hpp>
+#include <mobius/framework/config.hpp>
+#include "core/pod/data.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <b>has_config</b> function implementation
@@ -49,8 +48,7 @@ func_framework_has_config (PyObject *, PyObject *args)
 
     try
     {
-        ret = mobius::py::to_pyobject (
-            mobius::framework::has_config (arg_name));
+        ret = mobius::py::to_pyobject (mobius::framework::has_config (arg_name));
     }
     catch (const std::exception &e)
     {
@@ -74,8 +72,7 @@ func_framework_set_config (PyObject *, PyObject *args)
     try
     {
         arg_name = mobius::py::get_arg_as_std_string (args, 0);
-        arg_value = mobius::py::get_arg_as_cpp (
-            args, 1, pymobius_core_pod_data_from_pyobject);
+        arg_value = mobius::py::get_arg_as_cpp (args, 1, pymobius_core_pod_data_from_pyobject);
     }
     catch (const std::exception &e)
     {
@@ -122,8 +119,7 @@ func_framework_get_config (PyObject *, PyObject *args)
 
     try
     {
-        ret = pymobius_core_pod_data_to_python (
-            mobius::framework::get_config (arg_name));
+        ret = pymobius_core_pod_data_to_python (mobius::framework::get_config (arg_name));
     }
     catch (const std::exception &e)
     {
@@ -166,30 +162,4 @@ func_framework_remove_config (PyObject *, PyObject *args)
 
     // return None
     return mobius::py::pynone ();
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>new_config_transaction</i> method implementation
-// @param self object
-// @param args argument list
-// @return new transaction object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-func_framework_new_config_transaction (PyObject *, PyObject *)
-{
-    // execute C++ function
-    PyObject *ret = nullptr;
-
-    try
-    {
-        ret = pymobius_core_database_transaction_to_pyobject (
-            mobius::framework::new_config_transaction ());
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-    }
-
-    // return value
-    return ret;
 }
