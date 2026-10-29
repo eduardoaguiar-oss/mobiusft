@@ -26,7 +26,7 @@ Mobius Forensic Toolkit 2.31
 	* libmobius_framework: Add prefix to library name
 	* libmobius_framework: Use SQLite WAL journal mode in category module
 	* libmobius_framework: Remove thread_guard from category module
-	* libmobius_framework: Use single DB connection shared by all threads in category module
+	* libmobius_framework: Use one DB connection per thread in category module
 	* libmobius_framework: Remove new_config_transaction function
 	* libmobius_python: Remove core.thread_guard class
 	* libmobius_python: Remove framework.new_config_transaction function

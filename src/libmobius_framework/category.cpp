@@ -18,13 +18,9 @@
 #include <mobius/core/application.hpp>
 #include <mobius/core/database/database.hpp>
 #include <mobius/framework/category.hpp>
-#include <mutex>
 
 namespace
 {
-// Mutex to protect write access across threads
-static std::mutex mutex_;
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get database instance
 // @return Database object
@@ -32,7 +28,7 @@ static std::mutex mutex_;
 static mobius::core::database::database
 _get_database ()
 {
-    static mobius::core::database::database db;
+    thread_local mobius::core::database::database db;
 
     if (!db)
     {
@@ -40,7 +36,7 @@ _get_database ()
         mobius::core::application app;
         auto path = app.get_config_path ("category.sqlite");
 
-        db = mobius::core::database::database (path, true);
+        db = mobius::core::database::database (path, false);
         db.execute ("PRAGMA busy_timeout=60000");
         db.execute ("PRAGMA synchronous=FULL");
         db.execute ("PRAGMA journal_mode=WAL");
@@ -205,8 +201,6 @@ category::impl::set_name (const std::string &name)
 {
     _load_data ();
 
-    std::lock_guard<std::mutex> lock (mutex_);
-    
     auto db = _get_database ();
 
     auto stmt = db.new_statement (
@@ -231,7 +225,6 @@ category::impl::set_description (const std::string &description)
 {
     _load_data ();
 
-    std::lock_guard<std::mutex> lock (mutex_);
     auto db = _get_database ();
 
     auto stmt = db.new_statement (
@@ -256,7 +249,6 @@ category::impl::set_icon_data (const mobius::core::bytearray &icon_data)
 {
     _load_data ();
 
-    std::lock_guard<std::mutex> lock (mutex_);
     auto db = _get_database ();
 
     auto stmt = db.new_statement (
@@ -336,8 +328,6 @@ category::impl::new_attribute (const std::string &id)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // create attribute
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::lock_guard<std::mutex> lock (mutex_);
-
     stmt = db.new_statement (
         "INSERT INTO attribute "
         "VALUES (NULL, ?, ?, NULL, NULL, ?, NULL, ?)"
@@ -363,7 +353,6 @@ category::impl::new_attribute (const std::string &id)
 void
 category::impl::remove_attribute (const std::string &id)
 {
-    std::lock_guard<std::mutex> lock (mutex_);
     auto db = _get_database ();
 
     auto stmt = db.new_statement (
