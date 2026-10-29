@@ -635,9 +635,7 @@ class KFFView(object):
         if rc != Gtk.ResponseType.OK:
             return
 
-        transaction = mobius.framework.new_config_transaction()
         mobius.framework.set_config('general.save-folder', folder)
-        transaction.commit()
 
         # add extension to name
         uri_root, uri_ext = os.path.splitext(url)

@@ -9,6 +9,7 @@ Mobius Forensic Toolkit 2.31
 	* ice: Remove framework.new_config_transaction calls
 	* iped-frontend: Remove thread_guard usage
 	* iped-frontend: Remove framework.new_config_transaction calls
+	* kff-manager: Remove framework.new_config_transaction calls
 	* part-catalogue: Remove framework.new_config_transaction calls
 	* report-generator: Remove thread_guard usage
 	* report-generator: Remove framework.new_config_transaction calls
