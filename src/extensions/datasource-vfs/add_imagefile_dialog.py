@@ -82,10 +82,7 @@ class AddImageFileDialog(object):
 
         # save image file type
         if filefilter and filefilter.imagetype:
-            imagetype = filefilter.imagetype
-            transaction = mobius.framework.new_config_transaction()
-            mobius.framework.set_config('disk.last-imagetype', imagetype)
-            transaction.commit()
+            mobius.framework.set_config('disk.last-imagetype', filefilter.imagetype)
 
         if rc == Gtk.ResponseType.OK:
             return url
