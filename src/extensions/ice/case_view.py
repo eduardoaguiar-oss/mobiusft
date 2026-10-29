@@ -371,9 +371,7 @@ class CaseView(object):
         self.__treeview.expand_selected_items()
 
         # save configuration
-        transaction = mobius.framework.new_config_transaction()
         mobius.framework.set_config('ice.last-category-added', category.id)
-        transaction.commit()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Handle remove item
