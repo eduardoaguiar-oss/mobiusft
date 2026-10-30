@@ -36,14 +36,14 @@ _get_database ()
         mobius::core::application app;
         auto path = app.get_config_path ("category.sqlite");
 
-        db = mobius::core::database::database (path, false);
-        db.execute ("PRAGMA busy_timeout=60000");
-        db.execute ("PRAGMA synchronous=FULL");
-        db.execute ("PRAGMA journal_mode=WAL");
-        db.execute ("PRAGMA foreign_keys=ON;");
+        auto new_db = mobius::core::database::database (path, false);
+        new_db.execute ("PRAGMA busy_timeout=60000");
+        new_db.execute ("PRAGMA synchronous=FULL");
+        new_db.execute ("PRAGMA journal_mode=WAL");
+        new_db.execute ("PRAGMA foreign_keys=ON;");
 
         // create db tables, if necessary
-        db.execute (
+        new_db.execute (
             "CREATE TABLE IF NOT EXISTS category"
             "(uid INTEGER PRIMARY KEY AUTOINCREMENT,"
             "id TEXT NOT NULL,"
@@ -52,12 +52,12 @@ _get_database ()
             "icon_data BLOB NULL)"
         );
 
-        db.execute (
+        new_db.execute (
             "CREATE UNIQUE INDEX IF NOT EXISTS idx_category "
             "ON category (id)"
         );
 
-        db.execute (
+        new_db.execute (
             "CREATE TABLE IF NOT EXISTS attribute"
             "(uid INTEGER PRIMARY KEY AUTOINCREMENT,"
             "category_uid INTEGER NOT NULL,"
@@ -71,10 +71,12 @@ _get_database ()
             "DELETE CASCADE)"
         );
 
-        db.execute (
+        new_db.execute (
             "CREATE UNIQUE INDEX IF NOT EXISTS idx_attribute_1 "
             "ON attribute (category_uid, id)"
         );
+
+        db = new_db;
     }
 
     return db;
