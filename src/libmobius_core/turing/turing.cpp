@@ -16,11 +16,11 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/application.hpp>
-#include <mobius/core/database/connection_pool.hpp>
+#include <mobius/core/database/database.hpp>
 #include <mobius/core/string_functions.hpp>
 #include <mobius/core/turing/turing.hpp>
-#include <string>
 #include <tuple>
+#include <string>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Usage:
@@ -69,17 +69,18 @@ class turing::impl
     // @brief Check if object is valid
     // @return true/false
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    operator bool () const noexcept { return is_database_loaded_; }
+    operator bool () const noexcept
+    {
+        return is_database_loaded_;
+    }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     mobius::core::database::transaction new_transaction ();
     bool has_hash (const std::string &, const std::string &);
-    void set_hash (const std::string &, const std::string &,
-                   const std::string &);
-    std::pair<pwd_status, std::string>
-    get_hash_password (const std::string &, const std::string &) const;
+    void set_hash (const std::string &, const std::string &, const std::string &);
+    std::pair<pwd_status, std::string> get_hash_password (const std::string &, const std::string &) const;
     hashlist_type get_hashes () const;
     void remove_hashes ();
 
@@ -113,15 +114,16 @@ turing::impl::new_transaction ()
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-turing::impl::has_hash (const std::string &hash_type,
-                        const std::string &hash_value)
+turing::impl::has_hash (const std::string &hash_type, const std::string &hash_value)
 {
     _load_database ();
 
-    auto stmt = db_.new_statement ("SELECT 1 "
-                                   "FROM hash "
-                                   "WHERE type = ? "
-                                   "AND value = ?");
+    auto stmt = db_.new_statement (
+        "SELECT 1 "
+        "FROM hash "
+        "WHERE type = ? "
+        "AND value = ?"
+    );
 
     stmt.bind (1, hash_type);
     stmt.bind (2, hash_value);
@@ -136,21 +138,17 @@ turing::impl::has_hash (const std::string &hash_type,
 // @param password Password as UTF-8 string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-turing::impl::set_hash (const std::string &hash_type,
-                        const std::string &hash_value,
-                        const std::string &password)
+turing::impl::set_hash (const std::string &hash_type, const std::string &hash_value, const std::string &password)
 {
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // handle LM hashes as two separated halves
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     if (hash_type == "lm" && hash_value.length () > 16)
     {
-        set_hash (hash_type, hash_value.substr (0, 16),
-                  mobius::core::string::toupper (password.substr (0, 7)));
+        set_hash (hash_type, hash_value.substr (0, 16), mobius::core::string::toupper (password.substr (0, 7)));
 
         if (password.length () > 7)
-            set_hash (hash_type, hash_value.substr (16),
-                      mobius::core::string::toupper (password.substr (7)));
+            set_hash (hash_type, hash_value.substr (16), mobius::core::string::toupper (password.substr (7)));
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -164,8 +162,10 @@ turing::impl::set_hash (const std::string &hash_type,
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     _load_database ();
 
-    auto stmt = db_.new_statement ("INSERT INTO hash "
-                                   "VALUES (?, ?, ?)");
+    auto stmt = db_.new_statement (
+        "INSERT INTO hash "
+        "VALUES (?, ?, ?)"
+    );
 
     stmt.bind (1, hash_type);
     stmt.bind (2, hash_value);
@@ -180,8 +180,7 @@ turing::impl::set_hash (const std::string &hash_type,
 // @return status, password
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::pair<turing::pwd_status, std::string>
-turing::impl::get_hash_password (const std::string &hash_type,
-                                 const std::string &hash_value) const
+turing::impl::get_hash_password (const std::string &hash_type, const std::string &hash_value) const
 {
     std::string password;
     pwd_status status = pwd_status::not_found;
@@ -229,10 +228,12 @@ turing::impl::get_hash_password (const std::string &hash_type,
     {
         _load_database ();
 
-        auto stmt = db_.new_statement ("SELECT password "
-                                       "FROM hash "
-                                       "WHERE type = ? "
-                                       "AND value = ?");
+        auto stmt = db_.new_statement (
+            "SELECT password "
+            "FROM hash "
+            "WHERE type = ? "
+            "AND value = ?"
+        );
 
         stmt.bind (1, hash_type);
         stmt.bind (2, hash_value);
@@ -256,9 +257,11 @@ turing::impl::get_hashes () const
 {
     _load_database ();
 
-    auto stmt = db_.new_statement ("SELECT type, value, password "
-                                   "FROM hash "
-                                   "ORDER BY type, value");
+    auto stmt = db_.new_statement (
+        "SELECT type, value, password "
+        "FROM hash "
+        "ORDER BY type, value"
+    );
 
     hashlist_type hashes;
 
@@ -307,17 +310,21 @@ turing::impl::_load_database () const
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // create table 'meta'
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    db_.execute ("CREATE TABLE IF NOT EXISTS meta ("
-                 "key TEXT PRIMARY KEY,"
-                 "value TEXT NOT NULL"
-                 ");");
+    db_.execute (
+        "CREATE TABLE IF NOT EXISTS meta ("
+        "key TEXT PRIMARY KEY,"
+        "value TEXT NOT NULL"
+        ");"
+    );
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // set schema version
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    auto stmt = db_.new_statement ("SELECT value "
-                                   "FROM meta "
-                                   "WHERE key = 'version'");
+    auto stmt = db_.new_statement (
+        "SELECT value "
+        "FROM meta "
+        "WHERE key = 'version'"
+    );
 
     if (stmt.fetch_row ())
     {
@@ -326,9 +333,11 @@ turing::impl::_load_database () const
         if (current_version < SCHEMA_VERSION)
         {
             // update schema version
-            stmt = db_.new_statement ("UPDATE meta "
-                                      "SET value = ? "
-                                      "WHERE key = 'version'");
+            stmt = db_.new_statement (
+                "UPDATE meta "
+                "SET value = ? "
+                "WHERE key = 'version'"
+            );
 
             stmt.bind (1, SCHEMA_VERSION);
             stmt.execute ();
@@ -338,8 +347,10 @@ turing::impl::_load_database () const
     else
     {
         // insert 'version' metadata
-        stmt = db_.new_statement ("INSERT INTO meta "
-                                  "VALUES ('version', ?)");
+        stmt = db_.new_statement (
+            "INSERT INTO meta "
+            "VALUES ('version', ?)"
+        );
 
         stmt.bind (1, SCHEMA_VERSION);
         stmt.execute ();
@@ -348,11 +359,13 @@ turing::impl::_load_database () const
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // create 'hash' table
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    db_.execute ("CREATE TABLE IF NOT EXISTS hash"
-                 "(type TEXT NOT NULL,"
-                 "value TEXT NOT NULL,"
-                 "password TEXT NOT NULL,"
-                 "PRIMARY KEY (type, value))");
+    db_.execute (
+        "CREATE TABLE IF NOT EXISTS hash"
+        "(type TEXT NOT NULL,"
+        "value TEXT NOT NULL,"
+        "password TEXT NOT NULL,"
+        "PRIMARY KEY (type, value))"
+    );
 
     transaction.commit ();
     db_.execute ("PRAGMA foreign_keys = ON;");
@@ -399,8 +412,7 @@ turing::has_hash (const std::string &hash_type, const std::string &hash_value)
 // @param password Password as UTF-8 string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-turing::set_hash (const std::string &hash_type, const std::string &hash_value,
-                  const std::string &password)
+turing::set_hash (const std::string &hash_type, const std::string &hash_value, const std::string &password)
 {
     impl_->set_hash (hash_type, hash_value, password);
 }
@@ -412,8 +424,7 @@ turing::set_hash (const std::string &hash_type, const std::string &hash_value,
 // @return status, password
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::pair<turing::pwd_status, std::string>
-turing::get_hash_password (const std::string &hash_type,
-                           const std::string &hash_value) const
+turing::get_hash_password (const std::string &hash_type, const std::string &hash_value) const
 {
     return impl_->get_hash_password (hash_type, hash_value);
 }
