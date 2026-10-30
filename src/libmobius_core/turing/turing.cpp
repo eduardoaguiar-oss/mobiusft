@@ -42,6 +42,64 @@ static const std::string LM_NULL = "aad3b435b51404ee";
 static const std::string NT_NULL = "31d6cfe0d16ae931b73c59d7e0c089c0";
 static constexpr int SCHEMA_VERSION = 2;
 
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get database instance
+// @return Database object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static mobius::core::database::database
+_get_database ()
+{
+    thread_local mobius::core::database::database db;
+
+    if (!db)
+    {
+        // Create database instance
+        mobius::core::application app;
+        auto path = app.get_config_path ("turing.sqlite");
+
+        auto new_db = mobius::core::database::database (path, false);
+        new_db.execute ("PRAGMA busy_timeout=60000");
+        new_db.execute ("PRAGMA synchronous=FULL");
+        new_db.execute ("PRAGMA journal_mode=WAL");
+        new_db.execute ("PRAGMA foreign_keys=ON");
+
+        // Create table 'meta'
+        new_db.execute (
+            "CREATE TABLE IF NOT EXISTS meta ("
+            "key TEXT PRIMARY KEY,"
+            "value TEXT NOT NULL"
+            ");"
+        );
+
+        // Create 'hash' table
+        new_db.execute (
+            "CREATE TABLE IF NOT EXISTS hash"
+            "(type TEXT NOT NULL,"
+            "value TEXT NOT NULL,"
+            "password TEXT NOT NULL,"
+            "PRIMARY KEY (type, value))"
+        );
+
+        auto transaction = new_db.new_transaction ();
+
+        // Set schema version
+        auto stmt = new_db.new_statement (
+            "INSERT OR REPLACE INTO meta "
+            "VALUES ('version', ?)"
+        );
+
+        stmt.bind (1, SCHEMA_VERSION);
+        stmt.execute ();
+
+        transaction.commit ();
+
+        // Assign new database instance to thread-local variable
+        db = new_db;
+    }
+
+    return db;
+}
+
 } // namespace
 
 namespace mobius::core::turing
@@ -52,47 +110,28 @@ namespace mobius::core::turing
 class turing::impl
 {
   public:
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Constructors
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     impl () = default;
     impl (impl &&) = delete;
     impl (const impl &) = delete;
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Operators
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     impl &operator= (const impl &) = delete;
     impl &operator= (impl &&) = delete;
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Check if object is valid
-    // @return true/false
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    operator bool () const noexcept
-    {
-        return is_database_loaded_;
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     mobius::core::database::transaction new_transaction ();
     bool has_hash (const std::string &, const std::string &);
     void set_hash (const std::string &, const std::string &, const std::string &);
     std::pair<pwd_status, std::string> get_hash_password (const std::string &, const std::string &) const;
     hashlist_type get_hashes () const;
     void remove_hashes ();
-
-  private:
-    // @brief Flag is database loaded?
-    mutable bool is_database_loaded_ = false;
-
-    // @brief database object
-    mutable mobius::core::database::database db_;
-
-    // Helper functions
-    void _load_database () const;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -102,9 +141,8 @@ class turing::impl
 mobius::core::database::transaction
 turing::impl::new_transaction ()
 {
-    _load_database ();
-
-    return db_.new_transaction ();
+    auto db = _get_database ();
+    return db.new_transaction ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -116,9 +154,9 @@ turing::impl::new_transaction ()
 bool
 turing::impl::has_hash (const std::string &hash_type, const std::string &hash_value)
 {
-    _load_database ();
+    auto db = _get_database ();
 
-    auto stmt = db_.new_statement (
+    auto stmt = db.new_statement (
         "SELECT 1 "
         "FROM hash "
         "WHERE type = ? "
@@ -140,9 +178,9 @@ turing::impl::has_hash (const std::string &hash_type, const std::string &hash_va
 void
 turing::impl::set_hash (const std::string &hash_type, const std::string &hash_value, const std::string &password)
 {
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // handle LM hashes as two separated halves
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     if (hash_type == "lm" && hash_value.length () > 16)
     {
         set_hash (hash_type, hash_value.substr (0, 16), mobius::core::string::toupper (password.substr (0, 7)));
@@ -151,18 +189,18 @@ turing::impl::set_hash (const std::string &hash_type, const std::string &hash_va
             set_hash (hash_type, hash_value.substr (16), mobius::core::string::toupper (password.substr (7)));
     }
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // if hash already exists then return
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     if (has_hash (hash_type, hash_value))
         return;
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // insert hash
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    _load_database ();
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto db = _get_database ();
 
-    auto stmt = db_.new_statement (
+    auto stmt = db.new_statement (
         "INSERT INTO hash "
         "VALUES (?, ?, ?)"
     );
@@ -221,14 +259,14 @@ turing::impl::get_hash_password (const std::string &hash_type, const std::string
         }
     }
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // select hash from table
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Select hash from table
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     else
     {
-        _load_database ();
+        auto db = _get_database ();
 
-        auto stmt = db_.new_statement (
+        auto stmt = db.new_statement (
             "SELECT password "
             "FROM hash "
             "WHERE type = ? "
@@ -255,9 +293,9 @@ turing::impl::get_hash_password (const std::string &hash_type, const std::string
 turing::hashlist_type
 turing::impl::get_hashes () const
 {
-    _load_database ();
+    auto db = _get_database ();
 
-    auto stmt = db_.new_statement (
+    auto stmt = db.new_statement (
         "SELECT type, value, password "
         "FROM hash "
         "ORDER BY type, value"
@@ -282,98 +320,9 @@ turing::impl::get_hashes () const
 void
 turing::impl::remove_hashes ()
 {
-    _load_database ();
-
-    auto stmt = db_.new_statement ("DELETE FROM hash");
+    auto db = _get_database ();
+    auto stmt = db.new_statement ("DELETE FROM hash");
     stmt.execute ();
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Load database, if necessary
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-turing::impl::_load_database () const
-{
-    if (is_database_loaded_)
-        return;
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // open database
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    mobius::core::application app;
-    const auto path = app.get_config_path ("turing.sqlite");
-    db_ = mobius::core::database::database (path);
-    db_.execute ("PRAGMA foreign_keys = OFF;");
-
-    auto transaction = db_.new_transaction ();
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // create table 'meta'
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    db_.execute (
-        "CREATE TABLE IF NOT EXISTS meta ("
-        "key TEXT PRIMARY KEY,"
-        "value TEXT NOT NULL"
-        ");"
-    );
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // set schema version
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    auto stmt = db_.new_statement (
-        "SELECT value "
-        "FROM meta "
-        "WHERE key = 'version'"
-    );
-
-    if (stmt.fetch_row ())
-    {
-        int current_version = stmt.get_column_int (0);
-
-        if (current_version < SCHEMA_VERSION)
-        {
-            // update schema version
-            stmt = db_.new_statement (
-                "UPDATE meta "
-                "SET value = ? "
-                "WHERE key = 'version'"
-            );
-
-            stmt.bind (1, SCHEMA_VERSION);
-            stmt.execute ();
-        }
-    }
-
-    else
-    {
-        // insert 'version' metadata
-        stmt = db_.new_statement (
-            "INSERT INTO meta "
-            "VALUES ('version', ?)"
-        );
-
-        stmt.bind (1, SCHEMA_VERSION);
-        stmt.execute ();
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // create 'hash' table
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    db_.execute (
-        "CREATE TABLE IF NOT EXISTS hash"
-        "(type TEXT NOT NULL,"
-        "value TEXT NOT NULL,"
-        "password TEXT NOT NULL,"
-        "PRIMARY KEY (type, value))"
-    );
-
-    transaction.commit ();
-    db_.execute ("PRAGMA foreign_keys = ON;");
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // set database loaded
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    is_database_loaded_ = true;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
