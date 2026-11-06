@@ -21,6 +21,7 @@ Mobius Forensic Toolkit 2.31
 	* libmobius_core: Remove database::sqlite3_init class and instance
 	* libmobius_core: Remove connection_pool dependency from turing module
 	* libmobius_core: Use one DB connection per thread in turing module
+	* libmobius_core: Add operator bool() to database::statement class
 	* libmobius_framework: Use SQLite WAL journal mode in config module
 	* libmobius_framework: Remove thread_guard from config module
 	* libmobius_framework: Use single DB connection shared by all threads in config module

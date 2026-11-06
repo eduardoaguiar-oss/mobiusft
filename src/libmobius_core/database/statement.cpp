@@ -64,13 +64,23 @@ statement::statement ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief create statement object
+// @brief Create statement object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 statement::statement (database db, sqlite3_stmt *stmt)
 {
     impl_ = std::make_shared<impl> ();
     impl_->stmt = stmt;
     impl_->db = db;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if statement is valid
+// @return True if valid, false otherwise
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+statement::
+operator bool () const
+{
+    return impl_ && impl_->stmt != nullptr;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -129,9 +139,7 @@ statement::bind (int idx, double value)
 void
 statement::bind (int idx, const char *value)
 {
-    if (sqlite3_bind_text (
-            impl_->stmt, idx, value, strlen (value), SQLITE_TRANSIENT
-        ) != SQLITE_OK)
+    if (sqlite3_bind_text (impl_->stmt, idx, value, strlen (value), SQLITE_TRANSIENT) != SQLITE_OK)
         throw std::runtime_error (MOBIUS_EXCEPTION_SQLITE);
 }
 
@@ -143,15 +151,10 @@ statement::bind (int idx, const char *value)
 void
 statement::bind (int idx, const std::string &value)
 {
-    auto rc = sqlite3_bind_text64 (
-        impl_->stmt, idx, value.c_str (), value.length (), SQLITE_TRANSIENT,
-        SQLITE_UTF8
-    );
+    auto rc = sqlite3_bind_text64 (impl_->stmt, idx, value.c_str (), value.length (), SQLITE_TRANSIENT, SQLITE_UTF8);
 
     if (rc == SQLITE_TOOBIG)
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("data too big to persist")
-        );
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("data too big to persist"));
 
     else if (rc != SQLITE_OK)
         throw std::runtime_error (MOBIUS_EXCEPTION_SQLITE);
@@ -165,14 +168,10 @@ statement::bind (int idx, const std::string &value)
 void
 statement::bind (int idx, const mobius::core::bytearray &value)
 {
-    auto rc = sqlite3_bind_blob64 (
-        impl_->stmt, idx, value.begin (), value.size (), SQLITE_TRANSIENT
-    );
+    auto rc = sqlite3_bind_blob64 (impl_->stmt, idx, value.begin (), value.size (), SQLITE_TRANSIENT);
 
     if (rc == SQLITE_TOOBIG)
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("data too big to persist")
-        );
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("data too big to persist"));
 
     else if (rc != SQLITE_OK)
         throw std::runtime_error (MOBIUS_EXCEPTION_SQLITE);
@@ -190,10 +189,8 @@ statement::bind (int idx, const mobius::core::datetime::datetime &value)
     {
         auto timestamp = to_string (value);
 
-        if (sqlite3_bind_text (
-                impl_->stmt, idx, timestamp.c_str (), timestamp.length (),
-                SQLITE_TRANSIENT
-            ) != SQLITE_OK)
+        if (sqlite3_bind_text (impl_->stmt, idx, timestamp.c_str (), timestamp.length (), SQLITE_TRANSIENT) !=
+            SQLITE_OK)
             throw std::runtime_error (MOBIUS_EXCEPTION_SQLITE);
     }
 
@@ -343,8 +340,7 @@ statement::get_column_double (int idx)
 std::string
 statement::get_column_string (int idx)
 {
-    const char *p_text =
-        reinterpret_cast<const char *> (sqlite3_column_text (impl_->stmt, idx));
+    const char *p_text = reinterpret_cast<const char *> (sqlite3_column_text (impl_->stmt, idx));
     std::string value;
 
     if (p_text != nullptr)
@@ -366,9 +362,7 @@ statement::get_column_bytearray (int idx)
     const void *p_blob = sqlite3_column_blob (impl_->stmt, idx);
 
     if (p_blob && size > 0)
-        value = mobius::core::bytearray (
-            reinterpret_cast<const uint8_t *> (p_blob), size
-        );
+        value = mobius::core::bytearray (reinterpret_cast<const uint8_t *> (p_blob), size);
 
     return value;
 }
@@ -382,8 +376,7 @@ statement::get_column_datetime (int idx)
 {
     mobius::core::datetime::datetime value;
 
-    const char *p_text =
-        reinterpret_cast<const char *> (sqlite3_column_text (impl_->stmt, idx));
+    const char *p_text = reinterpret_cast<const char *> (sqlite3_column_text (impl_->stmt, idx));
 
     if (p_text != nullptr)
         value = mobius::core::datetime::new_datetime_from_iso_string (p_text);
@@ -405,9 +398,7 @@ statement::get_column_pod (int idx)
 
     if (p_blob && size > 0)
     {
-        mobius::core::bytearray bytes (
-            reinterpret_cast<const uint8_t *> (p_blob), size
-        );
+        mobius::core::bytearray bytes (reinterpret_cast<const uint8_t *> (p_blob), size);
         value = mobius::core::pod::unserialize (bytes);
     }
 
@@ -439,9 +430,7 @@ statement::step ()
         rc = sqlite3_step (impl_->stmt);
 
         if (rc == SQLITE_BUSY)
-            std::this_thread::sleep_for (
-                std::chrono::microseconds (SLEEP_TIME)
-            );
+            std::this_thread::sleep_for (std::chrono::microseconds (SLEEP_TIME));
     }
 
     return rc;

@@ -50,6 +50,7 @@ class statement
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     statement &operator= (const statement &) noexcept = default;
     statement &operator= (statement &&) noexcept = default;
+    explicit operator bool () const;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
