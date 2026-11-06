@@ -845,6 +845,58 @@ rstrip (const std::string &str, const std::string &chars)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Strip chars from both ends of a string
+// @param str string
+// @param chars chars
+// @return a new string
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string_view
+strip_view (std::string_view str, std::string_view chars)
+{
+    const auto pos1 = str.find_first_not_of (chars);
+    const auto pos2 = str.find_last_not_of (chars);
+
+    if (pos1 == std::string::npos || pos2 == std::string::npos)
+        return {};
+
+    return str.substr (pos1, pos2 - pos1 + 1);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief strip chars from the beginning of a string
+// @param str string
+// @param chars chars
+// @return a new string
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string_view
+lstrip_view (std::string_view str, std::string_view chars)
+{
+    const auto pos = str.find_first_not_of (chars);
+
+    if (pos == std::string::npos)
+        return {};
+
+    return str.substr (pos);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief strip chars from the end of a string
+// @param str string
+// @param chars chars
+// @return a new string
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string_view
+rstrip_view (std::string_view str, std::string_view chars)
+{
+    const auto pos = str.find_last_not_of (chars);
+
+    if (pos == std::string::npos)
+        return {};
+
+    return str.substr (0, pos + 1);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief split string into parts
 // @param str string
 // @param sep separator string
@@ -869,7 +921,7 @@ split (const std::string &str, const std::string &sep)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief get n word from string
+// @brief Get n word from string
 // @param str string
 // @param n word index (negative values count from right to left)
 // @param sep separator string
@@ -912,6 +964,55 @@ join (const std::vector<std::string> &vec, const std::string &sep)
     }
 
     return result;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief split string into parts
+// @param str string
+// @param sep separator string
+// @return vector containing parts
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::vector<std::string_view>
+split_view (std::string_view str, std::string_view sep)
+{
+    std::vector<std::string_view> result;
+    std::string_view::size_type start = 0;
+    std::string_view::size_type end = str.find (sep);
+
+    while (end != std::string_view::npos)
+    {
+        result.push_back (str.substr (start, end - start));
+        start = end + sep.length ();
+        end = str.find (sep, start);
+    }
+
+    result.push_back (str.substr (start));
+    return result;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get n word from string
+// @param str string
+// @param n word index (negative values count from right to left)
+// @param sep separator string
+// @return word
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string_view
+word_view (std::string_view str, int n, std::string_view sep)
+{
+    std::string_view word;
+
+    // split string
+    auto d = split_view (str, sep);
+
+    if (n < 0)
+        n = d.size () + n;
+
+    // get n word
+    if (n >= 0 && n < static_cast<int> (d.size ()))
+        word = d[n];
+
+    return word;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

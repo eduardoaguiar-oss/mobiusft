@@ -59,15 +59,19 @@ std::string latex_escape (const std::string&);
 std::string latex_unescape (const std::string&);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// remove chars functions
+// Remove chars functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string lstrip (const std::string&, const std::string& = " \t\r\n");
 std::string rstrip (const std::string&, const std::string& = " \t\r\n");
 std::string strip (const std::string&, const std::string& = " \t\r\n");
 std::string remove_char (const std::string&, char);
 
+std::string_view rstrip_view (std::string_view, std::string_view = " \t\r\n");
+std::string_view lstrip_view (std::string_view, std::string_view = " \t\r\n");
+std::string_view strip_view (std::string_view, std::string_view = " \t\r\n");
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// format functions
+// Format functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string lpad (const std::string&, std::string::size_type, char = ' ');
 std::string rpad (const std::string&, std::string::size_type, char = ' ');
@@ -80,8 +84,11 @@ std::vector <std::string> split (const std::string&, const std::string& = " ");
 std::string word (const std::string&, int, const std::string& = " ");
 std::string join (const std::vector <std::string>&, const std::string& = " ");
 
+std::vector <std::string_view> split_view (std::string_view, std::string_view);
+std::string_view word_view (std::string_view, int, std::string_view = " ");
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// compare functions
+// Compare functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool startswith (const std::string&, const std::string&);
 bool endswith (const std::string&, const std::string&);
@@ -91,7 +98,7 @@ bool case_insensitive_match (const std::string&, const std::string&);
 bool case_sensitive_match (const std::string&, const std::string&);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// representation functions
+// Representation functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string to_hex (std::uint64_t, unsigned int = 1);
 std::string to_string (std::uint64_t, unsigned int = 1, char = '0');
