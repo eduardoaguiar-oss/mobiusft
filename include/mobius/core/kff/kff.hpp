@@ -40,6 +40,7 @@ constexpr int FILE_TYPE_ALERT_MALWARE = 2;
 // Prototypes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::database::database get_database ();
+mobius::core::database::transaction new_transaction ();
 bool has_size (uint64_t);
 std::map<std::string, int64_t> get_file_count_by_type ();
 
