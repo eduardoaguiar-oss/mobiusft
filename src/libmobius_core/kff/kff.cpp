@@ -100,29 +100,6 @@ _get_hash_type_string (std::uint16_t index)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get hash ID by hash type
-// @param hash_type The hash type as a string
-// @return The hash ID as a uint16_t, or 0 if the hash type is not found
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static std::uint16_t
-_get_hash_type_id (const std::string &hash_type)
-{
-    static const std::unordered_map<std::string, std::uint16_t> HASH_ID_MAP = []
-    {
-        std::unordered_map<std::string, std::uint16_t> m;
-
-        for (std::size_t i = 0; i < HASH_TYPES.size (); ++i)
-            m[HASH_TYPES[i]] = static_cast<std::uint16_t> (i);
-
-        return m;
-    }();
-
-    auto iter = HASH_ID_MAP.find (hash_type);
-
-    return iter != HASH_ID_MAP.end () ? iter->second : 0;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create DB tables
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
