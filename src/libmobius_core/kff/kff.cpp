@@ -16,18 +16,258 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/application.hpp>
+#include <mobius/core/database/database.hpp>
 #include <mobius/core/exception.inc>
 #include <mobius/core/io/file.hpp>
 #include <mobius/core/io/folder.hpp>
 #include <mobius/core/io/path.hpp>
 #include <mobius/core/kff/kff.hpp>
+#include <mobius/core/log.hpp>
+#include <atomic>
+#include <format>
 #include <mutex>
 #include <stdexcept>
-#include <string>
 #include <unordered_map>
+#include <string>
+#include <vector>
+
+namespace
+{
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// Control variables
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+// @brief Schema version
+static constexpr int SCHEMA_VERSION = 1;
+
+// @brief Flag to ensure the DB schema is created only once
+static std::atomic<bool> schema_flag_ {false};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief File types
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static constexpr int FILE_TYPE_REGULAR = 0;
+static constexpr int FILE_TYPE_ALERT_CSAM = 1;
+static constexpr int FILE_TYPE_ALERT_MALWARE = 2;
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Hash types
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static constexpr std::uint16_t HASH_TYPE_NONE = 0;
+static constexpr std::uint16_t HASH_TYPE_ED2K = 1;
+static constexpr std::uint16_t HASH_TYPE_MD5 = 2;
+static constexpr std::uint16_t HASH_TYPE_SHA1 = 3;
+static constexpr std::uint16_t HASH_TYPE_SHA2_256 = 4;
+static constexpr std::uint16_t HASH_TYPE_SHA2_512 = 5;
+
+static std::vector<std::string> HASH_TYPES = {
+    "", // Placeholder for no hash type
+    "ed2k",
+    "md5",
+    "sha1",
+    "sha2_256",
+    "sha2_512",
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get hash type by index
+// @param index The index of the hash type
+// @return The hash type as a string, or an empty string if the index is invalid
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static std::string
+_get_hash_type (std::uint16_t index)
+{
+    if (index < HASH_TYPES.size ())
+        return HASH_TYPES[index];
+
+    return {};
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get hash ID by hash type
+// @param hash_type The hash type as a string
+// @return The hash ID as a uint16_t, or 0 if the hash type is not found
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static std::uint16_t
+_get_hash_type_id (const std::string &hash_type)
+{
+    static const std::unordered_map<std::string, std::uint16_t> HASH_ID_MAP = []
+    {
+        std::unordered_map<std::string, std::uint16_t> m;
+
+        for (std::size_t i = 0; i < HASH_TYPES.size (); ++i)
+            m[HASH_TYPES[i]] = static_cast<std::uint16_t> (i);
+
+        return m;
+    }();
+
+    auto iter = HASH_ID_MAP.find (hash_type);
+
+    return iter != HASH_ID_MAP.end () ? iter->second : 0;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create DB tables
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static void
+_create_db_tables (mobius::core::database::database &db)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    // Table: meta
+    db.execute (
+        "CREATE TABLE IF NOT EXISTS meta "
+        "(key TEXT PRIMARY KEY, value BLOB);"
+    );
+
+    db.execute (
+        "INSERT OR REPLACE INTO meta (key, value) VALUES "
+        "('schema_version', '1'), "
+        "('creation_time', datetime ('now'));"
+    );
+
+    // Table: file
+    db.execute (
+        "CREATE TABLE IF NOT EXISTS file "
+        "(id INTEGER PRIMARY KEY, type INTEGER NOT NULL, size INTEGER NULL);"
+    );
+
+    // Table: hash
+    db.execute (
+        "CREATE TABLE IF NOT EXISTS hash "
+        "(type INTEGER NOT NULL, value BLOB NOT NULL, file_id INTEGER NOT NULL, PRIMARY KEY (type, value)) WITHOUT "
+        "ROWID;"
+    );
+
+    // Table: thumbnail
+    db.execute (
+        "CREATE TABLE IF NOT EXISTS thumbnail "
+        "(file_id INTEGER PRIMARY KEY, data BLOB);"
+    );
+
+    // Table: attribute
+    db.execute (
+        "CREATE TABLE IF NOT EXISTS attribute "
+        "(file_id INTEGER NOT NULL, type INTEGER NOT NULL, value BLOB);"
+    );
+
+    // Table: file_type
+    db.execute (
+        "CREATE TABLE IF NOT EXISTS file_type "
+        "(id INTEGER PRIMARY KEY, name TEXT NOT NULL);"
+    );
+
+    db.execute (
+        "INSERT OR REPLACE INTO file_type (id, name) VALUES "
+        "(0, 'info'), "
+        "(1, 'alert.csam'), "
+        "(2, 'alert.malware');"
+    );
+
+    // Table: hash_type
+    db.execute (
+        "CREATE TABLE IF NOT EXISTS hash_type "
+        "(id INTEGER PRIMARY KEY, name TEXT NOT NULL);"
+    );
+
+    db.execute (
+        "INSERT OR REPLACE INTO hash_type (id, name) VALUES "
+        "(1, 'ed2k'), "
+        "(2, 'md5'), "
+        "(3, 'sha1'), "
+        "(4, 'sha2_256'), "
+        "(5, 'sha2_512');"
+    );
+
+    // Table: attribute_type
+    db.execute (
+        "CREATE TABLE IF NOT EXISTS attribute_type "
+        "(id INTEGER NOT NULL, name TEXT NOT NULL);"
+    );
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create DB indexes
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static void
+_create_db_indexes (mobius::core::database::database &db)
+{
+    db.execute ("CREATE INDEX IF NOT EXISTS idx_file_size ON file (size);");
+    db.execute ("CREATE INDEX IF NOT EXISTS idx_hash_file ON hash (file_id);");
+    db.execute ("CREATE INDEX IF NOT EXISTS idx_attribute_file ON attribute (file_id);");
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create DB schema and constants
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static void
+_create_db_schema (mobius::core::database::database &db)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
+        db.execute ("BEGIN IMMEDIATE;");
+
+        if (!schema_flag_.load (std::memory_order_acquire))
+        {
+            _create_db_tables (db);
+            _create_db_indexes (db);
+        }
+
+        db.execute ("COMMIT;");
+    }
+    catch (const std::exception &e)
+    {
+        db.execute ("ROLLBACK;");
+        log.error (__LINE__, std::format ("Failed to create KFF database schema: {}", e.what ()));
+    }
+    catch (...)
+    {
+        db.execute ("ROLLBACK;");
+        log.error (__LINE__, "Failed to create KFF database schema");
+    }
+}
+
+} // namespace
 
 namespace mobius::core::kff
 {
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get database instance
+// @return Database object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::database::database
+get_database ()
+{
+    thread_local mobius::core::database::database db;
+
+    if (!db)
+    {
+        // Create database instance
+        mobius::core::application app;
+        auto path = app.get_config_path ("kff.sqlite");
+
+        auto new_db = mobius::core::database::database (path, false);
+        new_db.execute ("PRAGMA busy_timeout=60000");
+        new_db.execute ("PRAGMA synchronous=NORMAL");
+        new_db.execute ("PRAGMA journal_mode=WAL");
+        new_db.execute ("PRAGMA foreign_keys=OFF;");
+
+        // Create database schema if necessary
+        if (!schema_flag_.load (std::memory_order_acquire))
+        {
+            _create_db_schema (new_db);
+            schema_flag_.store (true, std::memory_order_release);
+        }
+
+        // Assign the newly created database instance to the thread-local variable
+        db = new_db;
+    }
+
+    return db;
+}
+
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -79,7 +319,10 @@ _init ()
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-kff::kff () { std::call_once (is_loaded_, _init); }
+kff::kff ()
+{
+    std::call_once (is_loaded_, _init);
+}
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create connection_set object to hashset databases
@@ -113,8 +356,7 @@ kff::new_hashset (const std::string &id, bool is_alert)
         const std::lock_guard<std::mutex> lock (mutex_);
 
         if (hashsets_.find (id) != hashsets_.end ())
-            throw std::runtime_error (
-                MOBIUS_EXCEPTION_MSG ("hashset '" + id + "' already exists"));
+            throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("hashset '" + id + "' already exists"));
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -167,8 +409,7 @@ kff::get_hashsets () const
 {
     const std::lock_guard<std::mutex> lock (mutex_);
 
-    return std::vector<std::pair<std::string, hashset>> (hashsets_.begin (),
-                                                         hashsets_.end ());
+    return std::vector<std::pair<std::string, hashset>> (hashsets_.begin (), hashsets_.end ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
