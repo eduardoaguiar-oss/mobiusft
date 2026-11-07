@@ -106,6 +106,7 @@ add_library(mobius_core SHARED
     resource.cpp
     richtext.cpp
     string_functions.cpp
+    string_view.cpp
     unittest.cpp
     zlib_functions.cpp
 )
