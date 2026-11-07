@@ -32,9 +32,18 @@ namespace mobius::core::kff
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // File types
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-constexpr int FILE_TYPE_REGULAR = 0;
-constexpr int FILE_TYPE_ALERT_CSAM = 1;
-constexpr int FILE_TYPE_ALERT_MALWARE = 2;
+constexpr std::uint16_t FILE_TYPE_REGULAR = 0;
+constexpr std::uint16_t FILE_TYPE_ALERT_CSAM = 1;
+constexpr std::uint16_t FILE_TYPE_ALERT_MALWARE = 2;
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// Hash types
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+constexpr std::uint16_t HASH_TYPE_ED2K = 1;
+constexpr std::uint16_t HASH_TYPE_MD5 = 2;
+constexpr std::uint16_t HASH_TYPE_SHA1 = 3;
+constexpr std::uint16_t HASH_TYPE_SHA2_256 = 4;
+constexpr std::uint16_t HASH_TYPE_SHA2_512 = 5;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Prototypes
