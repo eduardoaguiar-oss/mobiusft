@@ -21,6 +21,7 @@
 #include <mobius/core/database/connection_set.hpp>
 #include <mobius/core/database/database.hpp>
 #include <mobius/core/kff/hashset.hpp>
+#include <mobius/core/kff/file.hpp>
 #include <unordered_map>
 #include <utility>
 #include <map>
@@ -51,6 +52,7 @@ constexpr std::uint16_t HASH_TYPE_SHA2_512 = 5;
 mobius::core::database::database get_database ();
 mobius::core::database::transaction new_transaction ();
 bool has_size (uint64_t);
+file lookup (std::uint16_t, const std::string &);
 std::map<std::string, int64_t> get_file_count_by_type ();
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

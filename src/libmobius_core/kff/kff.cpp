@@ -17,10 +17,12 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/application.hpp>
 #include <mobius/core/database/database.hpp>
+#include <mobius/core/decoder/hexstring.hpp>
 #include <mobius/core/exception.inc>
 #include <mobius/core/io/file.hpp>
 #include <mobius/core/io/folder.hpp>
 #include <mobius/core/io/path.hpp>
+#include <mobius/core/kff/file.hpp>
 #include <mobius/core/kff/kff.hpp>
 #include <mobius/core/log.hpp>
 #include <atomic>
@@ -55,13 +57,6 @@ static std::vector<std::string> FILE_TYPES = {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Hash types
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static constexpr std::uint16_t HASH_TYPE_NONE = 0;
-static constexpr std::uint16_t HASH_TYPE_ED2K = 1;
-static constexpr std::uint16_t HASH_TYPE_MD5 = 2;
-static constexpr std::uint16_t HASH_TYPE_SHA1 = 3;
-static constexpr std::uint16_t HASH_TYPE_SHA2_256 = 4;
-static constexpr std::uint16_t HASH_TYPE_SHA2_512 = 5;
-
 static std::vector<std::string> HASH_TYPES = {
     "", // Placeholder for no hash type
     "ed2k",
@@ -310,6 +305,38 @@ get_file_count_by_type ()
 
     return result;
 }
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Lookup a file by its hash in the database
+// @param hash_type The type of hash (e.g., HASH_TYPE_MD5, HASH_TYPE_SHA1)
+// @param hash_value The hash value to look up
+// @return File object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+file
+lookup (std::uint16_t hash_type, const std::string &hash_value)
+{
+    auto db = get_database ();
+
+    auto stmt = db.new_statement ("SELECT file_id FROM hash WHERE type = ? AND value = ?");
+    stmt.bind (1, hash_type);
+    stmt.bind (2, mobius::core::decoder::hexstring (hash_value));
+
+    if (stmt.fetch_row ())
+    {
+        auto file_id = stmt.get_column_int64 (0);
+        return file (file_id);
+    }
+
+    return {};
+}
+
+
+
+
+
+
+
+
 
 namespace
 {
