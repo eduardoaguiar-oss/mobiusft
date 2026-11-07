@@ -81,20 +81,6 @@ _get_file_type_string (std::uint16_t index)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get hash type by index
-// @param index The index of the hash type
-// @return The hash type as a string, or an empty string if the index is invalid
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static std::string
-_get_hash_type_string (std::uint16_t index)
-{
-    if (index < HASH_TYPES.size ())
-        return HASH_TYPES[index];
-
-    return {};
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create DB tables
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
@@ -330,10 +316,37 @@ lookup (std::uint16_t hash_type, const std::string &hash_value)
     return {};
 }
 
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Insert a new file into the database
+// @param db The database connection
+// @param file_id The ID of the new file
+// @param type The type of the new file
+// @param size The size of the new file
+// @return File object representing the newly inserted file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+file
+new_file (std::int64_t file_id, std::uint16_t type, std::uint64_t size)
+{
+    thread_local mobius::core::database::statement stmt;
 
+    if (!stmt)
+    {
+        auto db = mobius::core::kff::get_database ();
 
+        stmt = db.new_statement (
+            "INSERT INTO file (id, type, size) "
+            "VALUES (?,?,?)"
+        );
+    }
 
+    stmt.bind (1, file_id);
+    stmt.bind (2, type);
+    stmt.bind (3, static_cast<int64_t> (size));
+    stmt.execute ();
+    stmt.reset ();
 
+    return file (file_id, type, size);
+}
 
 
 
