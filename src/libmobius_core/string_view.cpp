@@ -17,9 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/string_view.hpp>
 #include <charconv>
-#include <iomanip>
 #include <regex>
-#include <sstream>
 #include <algorithm>
 
 namespace
@@ -412,10 +410,10 @@ to_integer (std::string_view str)
     std::int64_t result;
     auto [_, ec] = std::from_chars (str.data (), str.data () + str.size (), result);
 
-    if (ec == std::errc())
+    if (ec == std::errc ())
         return result;
     else
-        throw std::invalid_argument("Invalid integer string");
+        throw std::invalid_argument ("Invalid integer string");
 }
 
 } // namespace mobius::core::string_view
