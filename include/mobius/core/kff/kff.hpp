@@ -21,13 +21,27 @@
 #include <mobius/core/database/connection_set.hpp>
 #include <mobius/core/database/database.hpp>
 #include <mobius/core/kff/hashset.hpp>
+#include <unordered_map>
 #include <utility>
+#include <map>
 #include <string>
 #include <vector>
 
 namespace mobius::core::kff
 {
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// File types
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+constexpr int FILE_TYPE_REGULAR = 0;
+constexpr int FILE_TYPE_ALERT_CSAM = 1;
+constexpr int FILE_TYPE_ALERT_MALWARE = 2;
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// Prototypes
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::database::database get_database ();
+bool has_size (uint64_t);
+std::map<std::string, int64_t> get_file_count_by_type ();
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief KFF database (singleton)

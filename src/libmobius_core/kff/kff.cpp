@@ -46,9 +46,11 @@ static std::atomic<bool> schema_flag_ {false};
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief File types
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static constexpr int FILE_TYPE_REGULAR = 0;
-static constexpr int FILE_TYPE_ALERT_CSAM = 1;
-static constexpr int FILE_TYPE_ALERT_MALWARE = 2;
+static std::vector<std::string> FILE_TYPES = {
+    "regular",
+    "alert.csam",
+    "alert.malware",
+};
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Hash types
@@ -70,12 +72,26 @@ static std::vector<std::string> HASH_TYPES = {
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get file type by index
+// @param index The index of the file type
+// @return The file type as a string, or an empty string if the index is invalid
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static std::string
+_get_file_type_string (std::uint16_t index)
+{
+    if (index < FILE_TYPES.size ())
+        return FILE_TYPES[index];
+
+    return {};
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get hash type by index
 // @param index The index of the hash type
 // @return The hash type as a string, or an empty string if the index is invalid
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::string
-_get_hash_type (std::uint16_t index)
+_get_hash_type_string (std::uint16_t index)
 {
     if (index < HASH_TYPES.size ())
         return HASH_TYPES[index];
@@ -266,6 +282,44 @@ get_database ()
     }
 
     return db;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if file size exists in the database
+// @param size The file size to check
+// @return True if the size exists, false otherwise
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+has_size (uint64_t size)
+{
+    auto db = get_database ();
+
+    auto stmt = db.new_statement ("SELECT 1 FROM file WHERE size = ? LIMIT 1");
+    stmt.bind (1, static_cast<int64_t> (size));
+
+    return stmt.fetch_row ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get file count by type
+// @return Map of file types to their respective counts
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::map<std::string, int64_t>
+get_file_count_by_type ()
+{
+    auto db = get_database ();
+
+    auto stmt = db.new_statement ("SELECT type, COUNT(*) FROM file GROUP BY type");
+    std::map<std::string, int64_t> result;
+
+    while (stmt.fetch_row ())
+    {
+        auto type = stmt.get_column_int64 (0);
+        auto count = stmt.get_column_int64 (1);
+        result[_get_file_type_string (type)] = count;
+    }
+
+    return result;
 }
 
 namespace
