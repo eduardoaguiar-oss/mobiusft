@@ -63,6 +63,7 @@ Mobius Forensic Toolkit 2.31
 	* libmobius_python: Add function kff.has_size
 	* libmobius_python: Add function kff.get_file_count_by_type
 	* libmobius_python: Add function kff.new_transaction
+	* pymobius: Remove module item_browser.py
 
 Mobius Forensic Toolkit 2.30
 	* app-chromium: Use db.new_statement_with_pattern in file_cookies::_load_cookies
