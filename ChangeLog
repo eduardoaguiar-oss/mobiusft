@@ -46,6 +46,7 @@ Mobius Forensic Toolkit 2.31
 	* libmobius_core: Add function string_view::to_integer
 	* libmobius_core: Add function kff::has_size
 	* libmobius_core: Add function kff::get_file_count_by_type
+	* libmobius_core: Add function kff::new_transaction
 	* libmobius_framework: Use SQLite WAL journal mode in config module
 	* libmobius_framework: Remove thread_guard from config module
 	* libmobius_framework: Use single DB connection shared by all threads in config module
@@ -56,6 +57,9 @@ Mobius Forensic Toolkit 2.31
 	* libmobius_framework: Remove new_config_transaction function
 	* libmobius_python: Remove core.thread_guard class
 	* libmobius_python: Remove framework.new_config_transaction function
+	* libmobius_python: Add function kff.has_size
+	* libmobius_python: Add function kff.get_file_count_by_type
+	* libmobius_python: Add function kff.new_transaction
 
 Mobius Forensic Toolkit 2.30
 	* app-chromium: Use db.new_statement_with_pattern in file_cookies::_load_cookies

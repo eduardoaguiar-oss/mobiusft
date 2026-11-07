@@ -20,13 +20,23 @@
 // @brief  C++ API mobius.core.kff module wrapper
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#include <pymobius.hpp>
 #include "module.hpp"
 #include "hashset.hpp"
 #include "kff.hpp"
-#include <pymobius.hpp>
 
 namespace
 {
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Module methods
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyMethodDef module_methods[] = {
+    {"get_file_count_by_type", func_core_kff_get_file_count_by_type, METH_NOARGS, "Get file count by type"},
+    {"has_size", func_core_kff_has_size, METH_VARARGS, "Check if file has size"},
+    {"new_transaction", func_core_kff_new_transaction, METH_NOARGS, "Create new transaction to KFF database"},
+    {nullptr, nullptr, 0, nullptr} // sentinel
+};
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Module definition structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -35,11 +45,12 @@ static PyModuleDef module_def = {
     "mobius.core.kff",
     "Mobius Forensic Toolkit mobius.core.kff module",
     -1,
+    module_methods,
     nullptr,
     nullptr,
     nullptr,
-    nullptr,
-    nullptr};
+    nullptr
+};
 
 } // namespace
 

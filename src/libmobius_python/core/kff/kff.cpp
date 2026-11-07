@@ -21,13 +21,14 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "kff.hpp"
-#include "core/database/connection_set.hpp"
-#include "core/database/transaction.hpp"
-#include "hashset.hpp"
 #include <mobius/core/exception.inc>
+#include <pydict.hpp>
 #include <pylist.hpp>
 #include <pymobius.hpp>
 #include <stdexcept>
+#include "core/database/connection_set.hpp"
+#include "core/database/transaction.hpp"
+#include "hashset.hpp"
 
 namespace
 {
@@ -50,8 +51,7 @@ tp_f_new_connection (core_kff_kff_o *self, PyObject *)
 
     try
     {
-        ret = pymobius_core_database_connection_set_to_pyobject (
-            self->obj->new_connection ());
+        ret = pymobius_core_database_connection_set_to_pyobject (self->obj->new_connection ());
     }
     catch (const std::exception &e)
     {
@@ -91,8 +91,7 @@ tp_f_new_hashset (core_kff_kff_o *self, PyObject *args)
 
     try
     {
-        ret = pymobius_core_kff_hashset_to_pyobject (
-            self->obj->new_hashset (arg_id, arg_is_alert));
+        ret = pymobius_core_kff_hashset_to_pyobject (self->obj->new_hashset (arg_id, arg_is_alert));
     }
     catch (const std::exception &e)
     {
@@ -152,8 +151,10 @@ tp_f_get_hashsets (core_kff_kff_o *self, PyObject *)
     try
     {
         ret = mobius::py::pylist_from_cpp_pair_container (
-            self->obj->get_hashsets (), mobius::py::pystring_from_std_string,
-            pymobius_core_kff_hashset_to_pyobject);
+            self->obj->get_hashsets (),
+            mobius::py::pystring_from_std_string,
+            pymobius_core_kff_hashset_to_pyobject
+        );
     }
     catch (const std::exception &e)
     {
@@ -193,7 +194,8 @@ tp_f_alert_lookup (core_kff_kff_o *self, PyObject *args)
     {
         ret = mobius::py::pylist_from_cpp_container (
             self->obj->alert_lookup (arg_type, arg_value),
-            mobius::py::pystring_from_std_string);
+            mobius::py::pystring_from_std_string
+        );
     }
     catch (const std::exception &e)
     {
@@ -231,8 +233,7 @@ tp_f_lookup (core_kff_kff_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::to_pyobject (
-            std::string (1, self->obj->lookup (arg_type, arg_value)));
+        ret = mobius::py::to_pyobject (std::string (1, self->obj->lookup (arg_type, arg_value)));
     }
     catch (const std::exception &e)
     {
@@ -246,18 +247,12 @@ tp_f_lookup (core_kff_kff_o *self, PyObject *args)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {"new_connection", (PyCFunction) tp_f_new_connection, METH_VARARGS,
-     "create new connection set to KFF"},
-    {"new_hashset", (PyCFunction) tp_f_new_hashset, METH_VARARGS,
-     "Create hash set"},
-    {"remove_hashset", (PyCFunction) tp_f_remove_hashset, METH_VARARGS,
-     "Remove hash set"},
-    {"get_hashsets", (PyCFunction) tp_f_get_hashsets, METH_VARARGS,
-     "Get hash sets"},
-    {"alert_lookup", (PyCFunction) tp_f_alert_lookup, METH_VARARGS,
-     "Lookup hash in alert hash sets"},
-    {"lookup", (PyCFunction) tp_f_lookup, METH_VARARGS,
-     "Lookup hash in all hash sets"},
+    {"new_connection", (PyCFunction) tp_f_new_connection, METH_VARARGS, "create new connection set to KFF"},
+    {"new_hashset", (PyCFunction) tp_f_new_hashset, METH_VARARGS, "Create hash set"},
+    {"remove_hashset", (PyCFunction) tp_f_remove_hashset, METH_VARARGS, "Remove hash set"},
+    {"get_hashsets", (PyCFunction) tp_f_get_hashsets, METH_VARARGS, "Get hash sets"},
+    {"alert_lookup", (PyCFunction) tp_f_alert_lookup, METH_VARARGS, "Lookup hash in alert hash sets"},
+    {"lookup", (PyCFunction) tp_f_lookup, METH_VARARGS, "Lookup hash in all hash sets"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };
 
@@ -336,9 +331,7 @@ new_core_kff_kff_type ()
         return mobius::py::pytypeobject (core_kff_kff_type);
 
     // Allocate type from spec
-    core_kff_kff_type = reinterpret_cast<PyTypeObject *> (
-        PyType_FromSpec (&core_kff_kff_spec)
-    );
+    core_kff_kff_type = reinterpret_cast<PyTypeObject *> (PyType_FromSpec (&core_kff_kff_spec));
 
     // Create type
     mobius::py::pytypeobject type (core_kff_kff_type);
@@ -356,9 +349,7 @@ bool
 pymobius_core_kff_kff_check (PyObject *value)
 {
     if (!core_kff_kff_type)
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("core.kff.kff type is not initialized")
-        );
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("core.kff.kff type is not initialized"));
 
     return mobius::py::isinstance (value, core_kff_kff_type);
 }
@@ -372,13 +363,9 @@ PyObject *
 pymobius_core_kff_kff_to_pyobject (const mobius::core::kff::kff &obj)
 {
     if (!core_kff_kff_type)
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("core.kff.kff type is not initialized")
-        );
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("core.kff.kff type is not initialized"));
 
-    return mobius::py::to_pyobject<core_kff_kff_o> (
-        obj, core_kff_kff_type
-    );
+    return mobius::py::to_pyobject<core_kff_kff_o> (obj, core_kff_kff_type);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -390,11 +377,90 @@ mobius::core::kff::kff
 pymobius_core_kff_kff_from_pyobject (PyObject *value)
 {
     if (!core_kff_kff_type)
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("core.kff.kff type is not initialized")
-        );
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("core.kff.kff type is not initialized"));
 
-    return mobius::py::from_pyobject<core_kff_kff_o> (
-        value, core_kff_kff_type
-    );
+    return mobius::py::from_pyobject<core_kff_kff_o> (value, core_kff_kff_type);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get file count by type
+// @param self Python self
+// @param args Python arguments
+// @return Dictionary with file count by type
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_core_kff_get_file_count_by_type (PyObject *, PyObject *)
+{
+    // execute C++ function
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = mobius::py::pydict_from_cpp_container (mobius::core::kff::get_file_count_by_type ());
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    // return value
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <b>has_size</b> function implementation
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_core_kff_has_size (PyObject *, PyObject *args)
+{
+    // Parse input args
+    std::uint64_t arg_size;
+
+    try
+    {
+        arg_size = mobius::py::get_arg_as_uint64_t (args, 0);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
+    }
+
+    // Execute C++ function
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = mobius::py::to_pyobject (mobius::core::kff::has_size (arg_size));
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+        return nullptr;
+    }
+
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>new_transaction</i> function implementation
+// @return new transaction object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_core_kff_new_transaction (PyObject *, PyObject *)
+{
+    // execute C++ function
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = pymobius_core_database_transaction_to_pyobject (mobius::core::kff::new_transaction ());
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    // return value
+    return ret;
 }
