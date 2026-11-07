@@ -16,50 +16,10 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/string_functions.hpp>
+#include <mobius/core/string_view.hpp>
 #include <fnmatch.h>
 #include <iomanip>
-#include <regex>
-#include <sstream>
 #include <algorithm>
-
-namespace
-{
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// Constants
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-// @brief Basic email validation regex
-static const std::regex
-    EMAIL_REGEX (R"(^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$)");
-
-// @brief Basic URL validation regex
-static const std::regex
-    URL_REGEX (R"((http|https)://([a-zA-Z0-9.-]+)(:[0-9]+)?(/.*)?)");
-
-// @brief Basic IPv4 validation regex
-static const std::regex IPV4_REGEX (
-    R"((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))"
-);
-
-// @brief Basic IPv6 validation regex
-static const std::regex IPV6_REGEX (
-    R"((^([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$)|(^([0-9a-fA-F]{1,4}:){1,7}:$)|(^:([0-9a-fA-F]{1,4}:){1,6}[0-9a-fA-F]{1,4}$)|(^([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}$)|(^([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}$)|(^([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}$)|(^([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}$)|(^([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}$)|(^[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){6}|:)$)|(^:((:[0-9a-fA-F]{1,4}){7}|:)$))"
-);
-
-// @brief Cell phone (Brazil)
-static const std::regex BRAZIL_MOBILE_REGEX (
-    R"(^(\+?55\s?)?\(?(\d{2})\)?[\s.-]?9\d{4}[\s.-]?\d{4}$)"
-);
-
-// USA
-static const std::regex USA_MOBILE_REGEX (
-    R"(^(\+?1\s?)?\(?(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})$)"
-);
-
-// @brief CNPJ multipliers
-static constexpr int CNPJ_MULTIPLIERS[] = {6, 5, 4, 3, 2, 9, 8,
-                                           7, 6, 5, 4, 3, 2};
-} // namespace
 
 namespace mobius::core::string
 {
@@ -71,12 +31,7 @@ namespace mobius::core::string
 bool
 is_digit (const std::string &str)
 {
-    if (str.empty ())
-        return false;
-
-    return std::all_of (
-        str.begin (), str.end (), [] (char c) { return std::isdigit (c); }
-    );
+    return mobius::core::string_view::is_digit (str);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -87,15 +42,7 @@ is_digit (const std::string &str)
 bool
 is_integer (const std::string &str)
 {
-    if (str.empty ())
-        return false;
-
-    if (str[0] != '-' && str[0] != '+' && !std::isdigit (str[0]))
-        return false;
-
-    return std::all_of (
-        str.begin (), str.end (), [] (char c) { return std::isdigit (c); }
-    );
+    return mobius::core::string_view::is_integer (str);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -106,12 +53,7 @@ is_integer (const std::string &str)
 bool
 is_hex (const std::string &str)
 {
-    if (str.empty ())
-        return false;
-
-    return std::all_of (
-        str.begin (), str.end (), [] (char c) { return std::isxdigit (c); }
-    );
+    return mobius::core::string_view::is_hex (str);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -122,12 +64,7 @@ is_hex (const std::string &str)
 bool
 is_alpha (const std::string &str)
 {
-    if (str.empty ())
-        return false;
-
-    return std::all_of (
-        str.begin (), str.end (), [] (char c) { return std::isalpha (c); }
-    );
+    return mobius::core::string_view::is_alpha (str);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -138,12 +75,7 @@ is_alpha (const std::string &str)
 bool
 is_alnum (const std::string &str)
 {
-    if (str.empty ())
-        return false;
-
-    return std::all_of (
-        str.begin (), str.end (), [] (char c) { return std::isalnum (c); }
-    );
+    return mobius::core::string_view::is_alnum (str);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -154,12 +86,7 @@ is_alnum (const std::string &str)
 bool
 is_lower (const std::string &str)
 {
-    if (str.empty ())
-        return false;
-
-    return std::all_of (
-        str.begin (), str.end (), [] (char c) { return std::islower (c); }
-    );
+    return mobius::core::string_view::is_lower (str);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -170,12 +97,7 @@ is_lower (const std::string &str)
 bool
 is_upper (const std::string &str)
 {
-    if (str.empty ())
-        return false;
-
-    return std::all_of (
-        str.begin (), str.end (), [] (char c) { return std::isupper (c); }
-    );
+    return mobius::core::string_view::is_upper (str);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -186,12 +108,7 @@ is_upper (const std::string &str)
 bool
 is_space (const std::string &str)
 {
-    if (str.empty ())
-        return false;
-
-    return std::all_of (
-        str.begin (), str.end (), [] (char c) { return std::isspace (c); }
-    );
+    return mobius::core::string_view::is_space (str);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -202,17 +119,14 @@ is_space (const std::string &str)
 bool
 is_formatted_cpf (const std::string &str)
 {
-    if (str.length () != 14 || str[3] != '.' || str[7] != '.' ||
-        str[11] != '-' || !isdigit (str[0]) || !isdigit (str[1]) ||
-        !isdigit (str[2]) || !isdigit (str[4]) || !isdigit (str[5]) ||
-        !isdigit (str[6]) || !isdigit (str[8]) || !isdigit (str[9]) ||
-        !isdigit (str[10]) || !isdigit (str[12]) || !isdigit (str[13]))
+    if (str.length () != 14 || str[3] != '.' || str[7] != '.' || str[11] != '-' || !isdigit (str[0]) ||
+        !isdigit (str[1]) || !isdigit (str[2]) || !isdigit (str[4]) || !isdigit (str[5]) || !isdigit (str[6]) ||
+        !isdigit (str[8]) || !isdigit (str[9]) || !isdigit (str[10]) || !isdigit (str[12]) || !isdigit (str[13]))
         return false;
 
-    const std::string digits = str.substr (0, 3) + str.substr (4, 3) +
-                               str.substr (8, 3) + str.substr (12, 2);
+    const std::string digits = str.substr (0, 3) + str.substr (4, 3) + str.substr (8, 3) + str.substr (12, 2);
 
-    return is_numeric_cpf (digits);
+    return mobius::core::string_view::is_numeric_cpf (digits);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -223,33 +137,7 @@ is_formatted_cpf (const std::string &str)
 bool
 is_numeric_cpf (const std::string &str)
 {
-    // CPF must have 11 digits
-    if (str.length () != 11 || !is_digit (str))
-        return false;
-
-    // Calculate first verification digit
-    int sum = 0;
-    for (int i = 0; i < 9; i++)
-        sum += (str[i] - '0') * (10 - i);
-
-    int remainder = sum % 11;
-    int dv1 = remainder < 2 ? 0 : 11 - remainder;
-
-    // Check first verification digit
-    if (dv1 != (str[9] - '0'))
-        return false;
-
-    // Calculate second verification digit
-    sum = 0;
-    for (int i = 0; i < 10; i++)
-    {
-        sum += (str[i] - '0') * (11 - i);
-    }
-    remainder = sum % 11;
-    int dv2 = remainder < 2 ? 0 : 11 - remainder;
-
-    // Check second verification digit
-    return dv2 == (str[10] - '0');
+    return mobius::core::string_view::is_numeric_cpf (str);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -261,20 +149,16 @@ is_numeric_cpf (const std::string &str)
 bool
 is_formatted_cnpj (const std::string &str)
 {
-    if (str.length () != 18 || str[2] != '.' || str[6] != '.' ||
-        str[10] != '/' || str[15] != '-' || !isdigit (str[0]) ||
-        !isdigit (str[1]) || !isdigit (str[3]) || !isdigit (str[4]) ||
-        !isdigit (str[5]) || !isdigit (str[7]) || !isdigit (str[8]) ||
-        !isdigit (str[9]) || !isdigit (str[11]) || !isdigit (str[12]) ||
-        !isdigit (str[13]) || !isdigit (str[14]) || !isdigit (str[16]) ||
-        !isdigit (str[17]))
+    if (str.length () != 18 || str[2] != '.' || str[6] != '.' || str[10] != '/' || str[15] != '-' ||
+        !isdigit (str[0]) || !isdigit (str[1]) || !isdigit (str[3]) || !isdigit (str[4]) || !isdigit (str[5]) ||
+        !isdigit (str[7]) || !isdigit (str[8]) || !isdigit (str[9]) || !isdigit (str[11]) || !isdigit (str[12]) ||
+        !isdigit (str[13]) || !isdigit (str[14]) || !isdigit (str[16]) || !isdigit (str[17]))
         return false;
 
-    const std::string digits = str.substr (0, 2) + str.substr (3, 3) +
-                               str.substr (7, 3) + str.substr (11, 4) +
-                               str.substr (16, 2);
+    const std::string digits =
+        str.substr (0, 2) + str.substr (3, 3) + str.substr (7, 3) + str.substr (11, 4) + str.substr (16, 2);
 
-    return is_numeric_cnpj (digits);
+    return mobius::core::string_view::is_numeric_cnpj (digits);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -285,33 +169,7 @@ is_formatted_cnpj (const std::string &str)
 bool
 is_numeric_cnpj (const std::string &str)
 {
-    // CNPJ must have 14 digits
-    if (str.length () != 14 || !is_digit (str))
-        return false;
-
-    // Calculate first verification digit
-    int sum = 0;
-    for (int i = 0; i < 12; i++)
-        sum += (str[i] - '0') * (CNPJ_MULTIPLIERS[i + 1]);
-
-    int remainder = sum % 11;
-    int dv1 = remainder < 2 ? 0 : 11 - remainder;
-
-    // Check first verification digit
-    if (dv1 != (str[12] - '0'))
-        return false;
-
-    // Calculate second verification digit
-    sum = 0;
-    for (int i = 0; i < 12; i++)
-        sum += (str[i] - '0') * (CNPJ_MULTIPLIERS[i]);
-
-    sum += dv1 * 2;
-    remainder = sum % 11;
-    int dv2 = remainder < 2 ? 0 : 11 - remainder;
-
-    // Check second verification digit
-    return dv2 == (str[13] - '0');
+    return mobius::core::string_view::is_numeric_cnpj (str);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -322,8 +180,7 @@ is_numeric_cnpj (const std::string &str)
 bool
 is_mobile_phone (const std::string &str)
 {
-    return std::regex_match (str, BRAZIL_MOBILE_REGEX) ||
-           std::regex_match (str, USA_MOBILE_REGEX);
+    return mobius::core::string_view::is_mobile_phone (str);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -334,7 +191,7 @@ is_mobile_phone (const std::string &str)
 bool
 is_email (const std::string &str)
 {
-    return std::regex_match (str, EMAIL_REGEX);
+    return mobius::core::string_view::is_email (str);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -345,7 +202,7 @@ is_email (const std::string &str)
 bool
 is_url (const std::string &str)
 {
-    return std::regex_match (str, URL_REGEX);
+    return mobius::core::string_view::is_url (str);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -356,7 +213,7 @@ is_url (const std::string &str)
 bool
 is_ipv4 (const std::string &str)
 {
-    return std::regex_match (str, IPV4_REGEX);
+    return mobius::core::string_view::is_ipv4 (str);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -367,11 +224,11 @@ is_ipv4 (const std::string &str)
 bool
 is_ipv6 (const std::string &str)
 {
-    return std::regex_match (str, IPV6_REGEX);
+    return mobius::core::string_view::is_ipv6 (str);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief replace string's s1 substrings with s2
+// @brief Replace string's s1 substrings with s2
 // @param str string
 // @param s1 string
 // @param s2 string
@@ -470,11 +327,7 @@ c_escape (const std::string &str)
                 if (std::isprint (static_cast<unsigned char> (c)))
                     s += c;
                 else
-                    s +=
-                        "\\x" +
-                        to_hex (
-                            static_cast<int> (static_cast<unsigned char> (c)), 2
-                        );
+                    s += "\\x" + to_hex (static_cast<int> (static_cast<unsigned char> (c)), 2);
                 break;
         }
     }
@@ -522,9 +375,7 @@ c_unescape (const std::string &str)
                     if (i + 3 < str.length ())
                     {
                         std::string hex_str = str.substr (i + 2, 2);
-                        char hex_char = static_cast<char> (
-                            std::stoi (hex_str, nullptr, 16)
-                        );
+                        char hex_char = static_cast<char> (std::stoi (hex_str, nullptr, 16));
                         s += hex_char;
                         i += 4;
                     }
@@ -730,9 +581,7 @@ bool
 endswith (const std::string &str, const std::string &ending)
 {
     return ending.length () > 0 && str.length () >= ending.length () &&
-           str.compare (
-               str.length () - ending.length (), ending.length (), ending
-           ) == 0;
+           str.compare (str.length () - ending.length (), ending.length (), ending) == 0;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -774,8 +623,10 @@ case_insensitive_match (const std::string &a, const std::string &b)
     return (
         a.size () == b.size () &&
         std::equal (
-            a.begin (), a.end (), b.begin (), [] (char c1, char c2)
-            { return (c1 == c2 || std::toupper (c1) == std::toupper (c2)); }
+            a.begin (),
+            a.end (),
+            b.begin (),
+            [] (char c1, char c2) { return (c1 == c2 || std::toupper (c1) == std::toupper (c2)); }
         )
     );
 }
@@ -840,58 +691,6 @@ rstrip (const std::string &str, const std::string &chars)
 
     if (pos == std::string::npos)
         return std::string ();
-
-    return str.substr (0, pos + 1);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Strip chars from both ends of a string
-// @param str string
-// @param chars chars
-// @return a new string
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::string_view
-strip_view (std::string_view str, std::string_view chars)
-{
-    const auto pos1 = str.find_first_not_of (chars);
-    const auto pos2 = str.find_last_not_of (chars);
-
-    if (pos1 == std::string::npos || pos2 == std::string::npos)
-        return {};
-
-    return str.substr (pos1, pos2 - pos1 + 1);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief strip chars from the beginning of a string
-// @param str string
-// @param chars chars
-// @return a new string
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::string_view
-lstrip_view (std::string_view str, std::string_view chars)
-{
-    const auto pos = str.find_first_not_of (chars);
-
-    if (pos == std::string::npos)
-        return {};
-
-    return str.substr (pos);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief strip chars from the end of a string
-// @param str string
-// @param chars chars
-// @return a new string
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::string_view
-rstrip_view (std::string_view str, std::string_view chars)
-{
-    const auto pos = str.find_last_not_of (chars);
-
-    if (pos == std::string::npos)
-        return {};
 
     return str.substr (0, pos + 1);
 }
@@ -967,55 +766,6 @@ join (const std::vector<std::string> &vec, const std::string &sep)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief split string into parts
-// @param str string
-// @param sep separator string
-// @return vector containing parts
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector<std::string_view>
-split_view (std::string_view str, std::string_view sep)
-{
-    std::vector<std::string_view> result;
-    std::string_view::size_type start = 0;
-    std::string_view::size_type end = str.find (sep);
-
-    while (end != std::string_view::npos)
-    {
-        result.push_back (str.substr (start, end - start));
-        start = end + sep.length ();
-        end = str.find (sep, start);
-    }
-
-    result.push_back (str.substr (start));
-    return result;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get n word from string
-// @param str string
-// @param n word index (negative values count from right to left)
-// @param sep separator string
-// @return word
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::string_view
-word_view (std::string_view str, int n, std::string_view sep)
-{
-    std::string_view word;
-
-    // split string
-    auto d = split_view (str, sep);
-
-    if (n < 0)
-        n = d.size () + n;
-
-    // get n word
-    if (n >= 0 && n < static_cast<int> (d.size ()))
-        word = d[n];
-
-    return word;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief remove all occurrences of 'c' in str
 // @param str string
 // @param c char
@@ -1071,8 +821,7 @@ std::string
 to_hex (std::uint64_t value, unsigned int digits)
 {
     std::ostringstream stream;
-    stream << std::hex << std::setw (digits) << std::setfill ('0') << value
-           << std::dec;
+    stream << std::hex << std::setw (digits) << std::setfill ('0') << value << std::dec;
     return stream.str ();
 }
 

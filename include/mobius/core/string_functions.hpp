@@ -66,10 +66,6 @@ std::string rstrip (const std::string&, const std::string& = " \t\r\n");
 std::string strip (const std::string&, const std::string& = " \t\r\n");
 std::string remove_char (const std::string&, char);
 
-std::string_view rstrip_view (std::string_view, std::string_view = " \t\r\n");
-std::string_view lstrip_view (std::string_view, std::string_view = " \t\r\n");
-std::string_view strip_view (std::string_view, std::string_view = " \t\r\n");
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Format functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -83,9 +79,6 @@ std::string replace (const std::string&, const std::string&, const std::string&)
 std::vector <std::string> split (const std::string&, const std::string& = " ");
 std::string word (const std::string&, int, const std::string& = " ");
 std::string join (const std::vector <std::string>&, const std::string& = " ");
-
-std::vector <std::string_view> split_view (std::string_view, std::string_view);
-std::string_view word_view (std::string_view, int, std::string_view = " ");
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Compare functions
