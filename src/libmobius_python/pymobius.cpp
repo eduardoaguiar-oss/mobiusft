@@ -52,39 +52,6 @@ get_arg (PyObject *args, std::uint32_t idx)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get function argument as datetime
-// @param args Argument tuple
-// @param idx Argument index
-// @return Argument
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::core::datetime::datetime
-get_arg_as_datetime (PyObject *args, std::uint32_t idx)
-{
-    PyObject *arg = get_arg (args, idx);
-
-    if (!pydatetime_check (arg))
-        throw std::invalid_argument ("function arg is not datetime");
-
-    return pydatetime_as_datetime (arg);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get function argument as datetime (with default value)
-// @param args Argument tuple
-// @param idx Argument index
-// @param value Default value
-// @return Argument
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::core::datetime::datetime
-get_arg_as_datetime (PyObject *args, std::uint32_t idx, const mobius::core::datetime::datetime &value)
-{
-    if (idx < get_arg_size (args))
-        return get_arg_as_datetime (args, idx);
-
-    return value;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get function argument as char
 // @param args Argument tuple
 // @param idx Argument index

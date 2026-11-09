@@ -101,6 +101,7 @@ Mobius Forensic Toolkit 2.31
 	* libmobius_python: Remove function get_arg_as_bool
 	* libmobius_python: Remove function get_arg_as_std_string
 	* libmobius_python: Remove function get_arg_as_bytearray
+	* libmobius_python: Remove function get_arg_as_datetime
 	* pymobius: Remove module item_browser.py
 
 Mobius Forensic Toolkit 2.30

@@ -37,15 +37,12 @@ namespace mobius::py
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t get_arg_size (PyObject *) noexcept;
 PyObject *get_arg (PyObject *, std::uint32_t);
-mobius::core::datetime::datetime get_arg_as_datetime (PyObject *, std::uint32_t);
 char get_arg_as_char (PyObject *, std::uint32_t);
 int get_arg_as_int (PyObject *, std::uint32_t);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Parse function arguments (with default value)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::core::datetime::datetime
-get_arg_as_datetime (PyObject *, std::uint32_t, const mobius::core::datetime::datetime &);
 char get_arg_as_char (PyObject *, std::uint32_t, char);
 int get_arg_as_int (PyObject *, std::uint32_t, int);
 
