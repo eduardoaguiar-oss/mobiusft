@@ -75,6 +75,16 @@ new_core_kff_module ()
     module.add_type ("kff", new_core_kff_kff_type ());
     module.add_type ("hashset", new_core_kff_hashset_type ());
 
+    // Add constants
+    module.add_constant("FILE_TYPE_REGULAR", mobius::core::kff::FILE_TYPE_REGULAR);
+    module.add_constant("FILE_TYPE_ALERT_CSAM", mobius::core::kff::FILE_TYPE_ALERT_CSAM);
+    module.add_constant("FILE_TYPE_ALERT_MALWARE", mobius::core::kff::FILE_TYPE_ALERT_MALWARE);
+    module.add_constant("HASH_TYPE_ED2K", mobius::core::kff::HASH_TYPE_ED2K);
+    module.add_constant("HASH_TYPE_MD5", mobius::core::kff::HASH_TYPE_MD5);
+    module.add_constant("HASH_TYPE_SHA1", mobius::core::kff::HASH_TYPE_SHA1);
+    module.add_constant("HASH_TYPE_SHA2_256", mobius::core::kff::HASH_TYPE_SHA2_256);
+    module.add_constant("HASH_TYPE_SHA2_512", mobius::core::kff::HASH_TYPE_SHA2_512);
+
     // Return module
     return module;
 }

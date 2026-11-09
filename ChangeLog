@@ -65,15 +65,17 @@ Mobius Forensic Toolkit 2.31
 	* libmobius_framework: Remove new_config_transaction function
 	* libmobius_python: Remove core.thread_guard class
 	* libmobius_python: Remove framework.new_config_transaction function
-	* libmobius_python: Add function kff.has_size
-	* libmobius_python: Add function kff.get_file_count_by_type
-	* libmobius_python: Add function kff.new_transaction
-	* libmobius_python: Add function kff.get_file_count
-	* libmobius_python: Add function kff.get_alert_count
-	* libmobius_python: Add function kff.get_hash_count
-	* libmobius_python: Add function kff.get_thumbnail_count
-	* libmobius_python: Add function kff.get_hash_count_by_type ()
-	* libmobius_python: Add new class kff.file
+	* libmobius_python: Add function core.kff.has_size
+	* libmobius_python: Add function core.kff.get_file_count_by_type
+	* libmobius_python: Add function core.kff.new_transaction
+	* libmobius_python: Add function core.kff.get_file_count
+	* libmobius_python: Add function core.kff.get_alert_count
+	* libmobius_python: Add function core.kff.get_hash_count
+	* libmobius_python: Add function core.kff.get_thumbnail_count
+	* libmobius_python: Add function core.kff.get_hash_count_by_type
+	* libmobius_python: Add new class core.kff.file
+	* libmobius_python: Add function core.kff.lookup
+	* libmobius_python: Add constants to module core.kff
 	* pymobius: Remove module item_browser.py
 
 Mobius Forensic Toolkit 2.30
