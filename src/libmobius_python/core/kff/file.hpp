@@ -37,7 +37,7 @@ typedef struct
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::py::pytypeobject new_core_kff_file_type ();
 bool pymobius_core_kff_file_check (PyObject *);
-PyObject *pymobius_core_kff_file_to_pyobject (const mobius::core::kff::file&);
+PyObject *to_pyobject (const mobius::core::kff::file&);
 mobius::core::kff::file pymobius_core_kff_file_from_pyobject (PyObject *);
 
 #endif

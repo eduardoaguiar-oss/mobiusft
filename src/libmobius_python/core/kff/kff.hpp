@@ -48,6 +48,7 @@ PyObject *func_core_kff_get_hash_count_by_type (PyObject *, PyObject *);
 PyObject *func_core_kff_get_alert_count (PyObject *, PyObject *);
 PyObject *func_core_kff_get_thumbnail_count (PyObject *, PyObject *);
 PyObject *func_core_kff_has_size (PyObject *, PyObject *);
+PyObject *func_core_kff_lookup (PyObject *, PyObject *);
 PyObject *func_core_kff_new_transaction (PyObject *, PyObject *);
 
 

@@ -363,7 +363,7 @@ pymobius_core_kff_file_check (PyObject *value)
 // @return New file object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_core_kff_file_to_pyobject (const mobius::core::kff::file &obj)
+to_pyobject (const mobius::core::kff::file &obj)
 {
     if (!core_kff_file_type)
         throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("mobius.core.kff.file type is not initialized"));

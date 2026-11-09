@@ -28,6 +28,7 @@
 #include <stdexcept>
 #include "core/database/connection_set.hpp"
 #include "core/database/transaction.hpp"
+#include "file.hpp"
 #include "hashset.hpp"
 
 namespace
@@ -559,6 +560,45 @@ func_core_kff_has_size (PyObject *, PyObject *args)
     return ret;
 }
 
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>lookup</i> function implementation
+// @param self Python self
+// @param args Python arguments
+// @return Lookup result
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_core_kff_lookup (PyObject *, PyObject *args)
+{
+    // Parse input args
+    std::uint16_t arg_hash_type;
+    std::string arg_value;
+
+    try
+    {
+        arg_hash_type = mobius::py::get_arg_as_uint16_t (args, 0);
+        arg_value = mobius::py::get_arg_as_std_string (args, 1);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
+    }
+
+    // Execute C++ function
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = to_pyobject (mobius::core::kff::lookup (arg_hash_type, arg_value));
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+        return nullptr;
+    }
+
+    return ret;
+}
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>new_transaction</i> function implementation
 // @return new transaction object
