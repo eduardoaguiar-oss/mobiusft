@@ -92,6 +92,7 @@ Mobius Forensic Toolkit 2.31
 	* libmobius_python: Add template specialization from_pyobject<mobius::core::datetime::datetime> (PyObject *)
 	* libmobius_python: Add template function get_arg<T>(args, idx)
 	* libmobius_python: Add template function get_arg<T>(args, idx, dvalue)
+	* libmobius_python: Remove function get_arg_as_int32_t
 	* pymobius: Remove module item_browser.py
 
 Mobius Forensic Toolkit 2.30

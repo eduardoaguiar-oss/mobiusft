@@ -43,7 +43,6 @@ mobius::core::datetime::datetime get_arg_as_datetime (PyObject *, std::uint32_t)
 bool get_arg_as_bool (PyObject *, std::uint32_t);
 char get_arg_as_char (PyObject *, std::uint32_t);
 int get_arg_as_int (PyObject *, std::uint32_t);
-std::int32_t get_arg_as_int32_t (PyObject *, std::uint32_t);
 std::int64_t get_arg_as_int64_t (PyObject *, std::uint32_t);
 std::uint8_t get_arg_as_uint8_t (PyObject *, std::uint32_t);
 std::uint16_t get_arg_as_uint16_t (PyObject *, std::uint32_t);
@@ -60,7 +59,6 @@ get_arg_as_datetime (PyObject *, std::uint32_t, const mobius::core::datetime::da
 bool get_arg_as_bool (PyObject *, std::uint32_t, bool);
 char get_arg_as_char (PyObject *, std::uint32_t, char);
 int get_arg_as_int (PyObject *, std::uint32_t, int);
-std::int32_t get_arg_as_int32_t (PyObject *, std::uint32_t, std::int32_t);
 std::int64_t get_arg_as_int64_t (PyObject *, std::uint32_t, std::int64_t);
 std::uint8_t get_arg_as_uint8_t (PyObject *, std::uint32_t, std::uint8_t);
 std::uint16_t get_arg_as_uint16_t (PyObject *, std::uint32_t, std::uint16_t);
