@@ -260,7 +260,7 @@ tp_f_get_attribute (framework_category_o *self, PyObject *args)
 
     try
     {
-        arg_id = mobius::py::get_arg_as_std_string (args, 0);
+        arg_id = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -299,7 +299,7 @@ tp_f_new_attribute (framework_category_o *self, PyObject *args)
 
     try
     {
-        arg_id = mobius::py::get_arg_as_std_string (args, 0);
+        arg_id = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -337,7 +337,7 @@ tp_f_remove_attribute (framework_category_o *self, PyObject *args)
 
     try
     {
-        arg_id = mobius::py::get_arg_as_std_string (args, 0);
+        arg_id = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -521,7 +521,7 @@ func_framework_get_category (PyObject *, PyObject *args)
 
     try
     {
-        arg_id = mobius::py::get_arg_as_std_string (args, 0);
+        arg_id = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -558,7 +558,7 @@ func_framework_new_category (PyObject *, PyObject *args)
 
     try
     {
-        arg_id = mobius::py::get_arg_as_std_string (args, 0);
+        arg_id = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -593,7 +593,7 @@ func_framework_remove_category (PyObject *, PyObject *args)
 
     try
     {
-        arg_id = mobius::py::get_arg_as_std_string (args, 0);
+        arg_id = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {

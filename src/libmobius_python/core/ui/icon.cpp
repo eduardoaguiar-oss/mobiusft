@@ -46,7 +46,7 @@ tp_f_set_icon_by_name (core_ui_icon_o *self, PyObject *args)
 
     try
     {
-        arg_name = mobius::py::get_arg_as_std_string (args, 0);
+        arg_name = mobius::py::get_arg<std::string> (args, 0);
 
         if (mobius::py::get_arg_size (args) > 1)
             arg_size = static_cast<mobius::core::ui::icon::size_type> (mobius::py::get_arg_as_int (args, 1));
@@ -86,7 +86,7 @@ tp_f_set_icon_by_path (core_ui_icon_o *self, PyObject *args)
 
     try
     {
-        arg_path = mobius::py::get_arg_as_std_string (args, 0);
+        arg_path = mobius::py::get_arg<std::string> (args, 0);
 
         if (mobius::py::get_arg_size (args) > 1)
             arg_size = static_cast<mobius::core::ui::icon::size_type> (mobius::py::get_arg_as_int (args, 1));
@@ -126,7 +126,7 @@ tp_f_set_icon_by_url (core_ui_icon_o *self, PyObject *args)
 
     try
     {
-        arg_url = mobius::py::get_arg_as_std_string (args, 0);
+        arg_url = mobius::py::get_arg<std::string> (args, 0);
 
         if (mobius::py::get_arg_size (args) > 1)
             arg_size = static_cast<mobius::core::ui::icon::size_type> (mobius::py::get_arg_as_int (args, 1));
@@ -166,7 +166,7 @@ tp_f_set_icon_from_data (core_ui_icon_o *self, PyObject *args)
 
     try
     {
-        arg_data = mobius::py::get_arg_as_bytearray (args, 0);
+        arg_data = mobius::py::get_arg<mobius::core::bytearray> (args, 0);
 
         if (mobius::py::get_arg_size (args) > 1)
             arg_size = static_cast<mobius::core::ui::icon::size_type> (mobius::py::get_arg_as_int (args, 1));
@@ -321,7 +321,7 @@ func_ui_set_icon_path (PyObject *, PyObject *args)
 
     try
     {
-        arg_path = mobius::py::get_arg_as_std_string (args, 0);
+        arg_path = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -359,7 +359,7 @@ func_ui_new_icon_by_name (PyObject *, PyObject *args)
 
     try
     {
-        arg_name = mobius::py::get_arg_as_std_string (args, 0);
+        arg_name = mobius::py::get_arg<std::string> (args, 0);
 
         if (mobius::py::get_arg_size (args) > 1)
             arg_size = static_cast<mobius::core::ui::icon::size_type> (mobius::py::get_arg_as_int (args, 1));
@@ -401,7 +401,7 @@ func_ui_new_icon_by_path (PyObject *, PyObject *args)
 
     try
     {
-        arg_path = mobius::py::get_arg_as_std_string (args, 0);
+        arg_path = mobius::py::get_arg<std::string> (args, 0);
 
         if (mobius::py::get_arg_size (args) > 1)
             arg_size = static_cast<mobius::core::ui::icon::size_type> (mobius::py::get_arg_as_int (args, 1));
@@ -443,7 +443,7 @@ func_ui_new_icon_by_url (PyObject *, PyObject *args)
 
     try
     {
-        arg_url = mobius::py::get_arg_as_std_string (args, 0);
+        arg_url = mobius::py::get_arg<std::string> (args, 0);
 
         if (mobius::py::get_arg_size (args) > 1)
             arg_size = static_cast<mobius::core::ui::icon::size_type> (mobius::py::get_arg_as_int (args, 1));
@@ -485,7 +485,7 @@ func_ui_new_icon_from_data (PyObject *, PyObject *args)
 
     try
     {
-        arg_data = mobius::py::get_arg_as_bytearray (args, 0);
+        arg_data = mobius::py::get_arg<mobius::core::bytearray> (args, 0);
 
         if (mobius::py::get_arg_size (args) > 1)
             arg_size = static_cast<mobius::core::ui::icon::size_type> (mobius::py::get_arg_as_int (args, 1));

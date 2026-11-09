@@ -359,7 +359,7 @@ tp_f_decrypt_with_key (core_os_win_dpapi_credhist_entry_o *self, PyObject *args)
 
     try
     {
-        arg_key = mobius::py::get_arg_as_bytearray (args, 0);
+        arg_key = mobius::py::get_arg<mobius::core::bytearray> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -397,7 +397,7 @@ tp_f_decrypt_with_password_hash (core_os_win_dpapi_credhist_entry_o *self,
 
     try
     {
-        arg_password_hash = mobius::py::get_arg_as_bytearray (args, 0);
+        arg_password_hash = mobius::py::get_arg<mobius::core::bytearray> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -437,7 +437,7 @@ tp_f_decrypt_with_password (core_os_win_dpapi_credhist_entry_o *self,
 
     try
     {
-        arg_password = mobius::py::get_arg_as_std_string (args, 0);
+        arg_password = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {

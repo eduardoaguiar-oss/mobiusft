@@ -90,7 +90,7 @@ tp_f_set_text (core_ui_button_o *self, PyObject *args)
 
     try
     {
-        arg_text = mobius::py::get_arg_as_std_string (args, 0);
+        arg_text = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -162,7 +162,7 @@ tp_f_set_icon_by_name (core_ui_button_o *self, PyObject *args)
 
     try
     {
-        arg_name = mobius::py::get_arg_as_std_string (args, 0);
+        arg_name = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -199,7 +199,7 @@ tp_f_set_callback (core_ui_button_o *self, PyObject *args)
 
     try
     {
-        arg_event_id = mobius::py::get_arg_as_std_string (args, 0);
+        arg_event_id = mobius::py::get_arg<std::string> (args, 0);
         arg_f = mobius::py::get_arg (args, 1);
     }
     catch (const std::exception &e)
@@ -243,7 +243,7 @@ tp_f_reset_callback (core_ui_button_o *self, PyObject *args)
 
     try
     {
-        arg_event_id = mobius::py::get_arg_as_std_string (args, 0);
+        arg_event_id = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {

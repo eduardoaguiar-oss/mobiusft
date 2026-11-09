@@ -38,7 +38,7 @@ encoder_func_base32 (PyObject *, PyObject *args)
 
     try
     {
-        arg_data = mobius::py::get_arg_as_bytearray (args, 0);
+        arg_data = mobius::py::get_arg<mobius::core::bytearray> (args, 0);
     }
     catch (const std::exception &e)
     {

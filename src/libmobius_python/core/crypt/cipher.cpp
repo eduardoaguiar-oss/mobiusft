@@ -143,7 +143,7 @@ tp_f_encrypt (core_crypt_cipher_o *self, PyObject *args)
 
     try
     {
-        arg_data = mobius::py::get_arg_as_bytearray (args, 0);
+        arg_data = mobius::py::get_arg<mobius::core::bytearray> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -182,7 +182,7 @@ tp_f_decrypt (core_crypt_cipher_o *self, PyObject *args)
 
     try
     {
-        arg_data = mobius::py::get_arg_as_bytearray (args, 0);
+        arg_data = mobius::py::get_arg<mobius::core::bytearray> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -245,7 +245,7 @@ tp_f_authenticate (core_crypt_cipher_o *self, PyObject *args)
 
     try
     {
-        arg_data = mobius::py::get_arg_as_bytearray (args, 0);
+        arg_data = mobius::py::get_arg<mobius::core::bytearray> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -307,7 +307,7 @@ tp_f_check_tag (core_crypt_cipher_o *self, PyObject *args)
 
     try
     {
-        arg_tag = mobius::py::get_arg_as_bytearray (args, 0);
+        arg_tag = mobius::py::get_arg<mobius::core::bytearray> (args, 0);
     }
     catch (const std::exception &e)
     {

@@ -734,7 +734,7 @@ tp_f_new_sibling_by_name (core_io_file_o *self, PyObject *args)
 
     try
     {
-        arg_name = mobius::py::get_arg_as_std_string (args, 0);
+        arg_name = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -768,7 +768,7 @@ tp_f_new_sibling_by_extension (core_io_file_o *self, PyObject *args)
 
     try
     {
-        arg_ext = mobius::py::get_arg_as_std_string (args, 0);
+        arg_ext = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -936,7 +936,7 @@ tp_f_rename (core_io_file_o *self, PyObject *args)
 
     try
     {
-        arg_name = mobius::py::get_arg_as_std_string (args, 0);
+        arg_name = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -991,7 +991,7 @@ tp_f_new_writer (core_io_file_o *self, PyObject *args)
 
     try
     {
-        arg_overwrite = mobius::py::get_arg_as_bool (args, 0, true);
+        arg_overwrite = mobius::py::get_arg<bool> (args, 0, true);
     }
     catch (const std::exception &e)
     {
@@ -1180,7 +1180,7 @@ func_new_file_by_path (PyObject *, PyObject *args)
 
     try
     {
-        arg_path = mobius::py::get_arg_as_std_string (args, 0);
+        arg_path = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -1214,7 +1214,7 @@ func_new_file_by_url (PyObject *, PyObject *args)
 
     try
     {
-        arg_url = mobius::py::get_arg_as_std_string (args, 0);
+        arg_url = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {

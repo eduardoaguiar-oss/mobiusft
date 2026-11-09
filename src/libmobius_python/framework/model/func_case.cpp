@@ -39,7 +39,7 @@ func_model_new_case (PyObject *, PyObject *args)
 
     try
     {
-        arg_path = mobius::py::get_arg_as_std_string (args, 0);
+        arg_path = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -77,7 +77,7 @@ func_model_open_case (PyObject *, PyObject *args)
 
     try
     {
-        arg_path = mobius::py::get_arg_as_std_string (args, 0);
+        arg_path = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {

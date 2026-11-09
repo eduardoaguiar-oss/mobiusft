@@ -35,7 +35,7 @@ func_logf (PyObject *, PyObject *args)
 
   try
     {
-      arg_text = mobius::py::get_arg_as_std_string (args, 0);
+      arg_text = mobius::py::get_arg<std::string> (args, 0);
     }
   catch (const std::exception& e)
     {

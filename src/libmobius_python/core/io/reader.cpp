@@ -123,7 +123,7 @@ tp_f_read (core_io_reader_o *self, PyObject *args)
     // parse input args
     try
     {
-        arg_size = mobius::py::get_arg_as_uint64_t (args, 0, self->obj->get_size () - self->obj->tell ());
+        arg_size = mobius::py::get_arg<std::uint64_t> (args, 0, self->obj->get_size () - self->obj->tell ());
     }
     catch (const std::exception &e)
     {
@@ -178,8 +178,8 @@ tp_f_seek (core_io_reader_o *self, PyObject *args)
 
     try
     {
-        arg_offset = mobius::py::get_arg_as_int64_t (args, 0);
-        arg_whence = mobius::py::get_arg_as_uint32_t (args, 1, 0);
+        arg_offset = mobius::py::get_arg<std::int64_t> (args, 0);
+        arg_whence = mobius::py::get_arg<std::uint32_t> (args, 1, 0);
     }
     catch (const std::exception &e)
     {
@@ -253,7 +253,7 @@ tp_f_skip (core_io_reader_o *self, PyObject *args)
 
     try
     {
-        arg_size = mobius::py::get_arg_as_uint64_t (args, 0);
+        arg_size = mobius::py::get_arg<std::uint64_t> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -443,8 +443,8 @@ func_io_new_slice_reader (PyObject *, PyObject *args)
     try
     {
         arg_reader = mobius::py::get_arg_as_cpp (args, 0, pymobius_core_io_reader_from_pyobject);
-        arg_pos = mobius::py::get_arg_as_int64_t (args, 1);
-        arg_end = mobius::py::get_arg_as_int64_t (args, 2, -1);
+        arg_pos = mobius::py::get_arg<std::int64_t> (args, 1);
+        arg_end = mobius::py::get_arg<std::int64_t> (args, 2, -1);
     }
     catch (const std::exception &e)
     {

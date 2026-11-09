@@ -266,8 +266,8 @@ tp_f_add (core_kff_hashset_o *self, PyObject *args)
 
     try
     {
-        arg_type = mobius::py::get_arg_as_std_string (args, 0);
-        arg_value = mobius::py::get_arg_as_std_string (args, 1);
+        arg_type = mobius::py::get_arg<std::string> (args, 0);
+        arg_value = mobius::py::get_arg<std::string> (args, 1);
     }
     catch (const std::exception &e)
     {
@@ -304,8 +304,8 @@ tp_f_remove (core_kff_hashset_o *self, PyObject *args)
 
     try
     {
-        arg_type = mobius::py::get_arg_as_std_string (args, 0);
-        arg_value = mobius::py::get_arg_as_std_string (args, 1);
+        arg_type = mobius::py::get_arg<std::string> (args, 0);
+        arg_value = mobius::py::get_arg<std::string> (args, 1);
     }
     catch (const std::exception &e)
     {

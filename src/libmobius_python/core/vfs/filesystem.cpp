@@ -196,7 +196,7 @@ tp_f_get_metadata (core_vfs_filesystem_o *self, PyObject *args)
 
     try
     {
-        arg_name = mobius::py::get_arg_as_std_string (args, 0);
+        arg_name = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -272,8 +272,8 @@ tp_new (PyTypeObject *, PyObject *args, PyObject *)
     try
     {
         arg_reader = mobius::py::get_arg_as_cpp (args, 0, pymobius_core_io_reader_from_pyobject);
-        arg_offset = mobius::py::get_arg_as_uint64_t (args, 1);
-        arg_type = mobius::py::get_arg_as_std_string (args, 2, "autodetect");
+        arg_offset = mobius::py::get_arg<std::uint64_t> (args, 1);
+        arg_type = mobius::py::get_arg<std::string> (args, 2, "autodetect");
     }
     catch (const std::exception &e)
     {

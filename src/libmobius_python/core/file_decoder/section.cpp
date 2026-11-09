@@ -128,7 +128,7 @@ tp_f_new_child (core_file_decoder_section_o *self, PyObject *args)
 
     try
     {
-        arg_name = mobius::py::get_arg_as_std_string (args, 0);
+        arg_name = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -220,7 +220,7 @@ tp_f_set_data (core_file_decoder_section_o *self, PyObject *args)
 
     try
     {
-        arg_data = mobius::py::get_arg_as_bytearray (args, 0);
+        arg_data = mobius::py::get_arg<mobius::core::bytearray> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -301,7 +301,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
         arg_reader = mobius::py::get_arg_as_cpp (
             args, 0, pymobius_core_io_reader_from_pyobject
         );
-        arg_name = mobius::py::get_arg_as_std_string (args, 1);
+        arg_name = mobius::py::get_arg<std::string> (args, 1);
     }
     catch (const std::exception &e)
     {

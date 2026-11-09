@@ -48,7 +48,7 @@ tp_f_set_case_sensitive (core_decoder_inifile_o *self, PyObject *args)
 
     try
     {
-        arg_flag = mobius::py::get_arg_as_bool (args, 0);
+        arg_flag = mobius::py::get_arg<bool> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -157,7 +157,7 @@ tp_f_has_group (core_decoder_inifile_o *self, PyObject *args)
 
     try
     {
-        arg_group = mobius::py::get_arg_as_std_string (args, 0);
+        arg_group = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -196,8 +196,8 @@ tp_f_has_value (core_decoder_inifile_o *self, PyObject *args)
 
     try
     {
-        arg_group = mobius::py::get_arg_as_std_string (args, 0);
-        arg_name = mobius::py::get_arg_as_std_string (args, 1);
+        arg_group = mobius::py::get_arg<std::string> (args, 0);
+        arg_name = mobius::py::get_arg<std::string> (args, 1);
     }
     catch (const std::exception &e)
     {
@@ -236,8 +236,8 @@ tp_f_get_value (core_decoder_inifile_o *self, PyObject *args)
 
     try
     {
-        arg_group = mobius::py::get_arg_as_std_string (args, 0);
-        arg_name = mobius::py::get_arg_as_std_string (args, 1);
+        arg_group = mobius::py::get_arg<std::string> (args, 0);
+        arg_name = mobius::py::get_arg<std::string> (args, 1);
     }
     catch (const std::exception &e)
     {
@@ -275,7 +275,7 @@ tp_f_get_values (core_decoder_inifile_o *self, PyObject *args)
 
     try
     {
-        arg_group = mobius::py::get_arg_as_std_string (args, 0);
+        arg_group = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -334,8 +334,8 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     try
     {
         arg_reader = mobius::py::get_arg_as_cpp (args, 0, pymobius_core_io_reader_from_pyobject);
-        arg_encoding = mobius::py::get_arg_as_std_string (args, 1, "UTF-8");
-        arg_separator = mobius::py::get_arg_as_std_string (args, 2, {});
+        arg_encoding = mobius::py::get_arg<std::string> (args, 1, "UTF-8");
+        arg_separator = mobius::py::get_arg<std::string> (args, 2, {});
     }
     catch (const std::exception &e)
     {

@@ -89,7 +89,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
         arg_reader = mobius::py::get_arg_as_cpp (
             args, 0, pymobius_core_io_reader_from_pyobject
         );
-        arg_encoding = mobius::py::get_arg_as_std_string (args, 1, {});
+        arg_encoding = mobius::py::get_arg<std::string> (args, 1, {});
     }
     catch (const std::exception &e)
     {

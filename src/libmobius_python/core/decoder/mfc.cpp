@@ -47,7 +47,7 @@ tp_f_skip (core_decoder_mfc_o *self, PyObject *args)
 
     try
     {
-        arg_size = mobius::py::get_arg_as_uint64_t (args, 0);
+        arg_size = mobius::py::get_arg<std::uint64_t> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -286,7 +286,7 @@ tp_f_get_hex_string (core_decoder_mfc_o *self, PyObject *args)
 
     try
     {
-        arg_size = mobius::py::get_arg_as_uint64_t (args, 0);
+        arg_size = mobius::py::get_arg<std::uint64_t> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -350,7 +350,7 @@ tp_f_get_data (core_decoder_mfc_o *self, PyObject *args)
 
     try
     {
-        arg_size = mobius::py::get_arg_as_uint64_t (args, 0);
+        arg_size = mobius::py::get_arg<std::uint64_t> (args, 0);
     }
     catch (const std::exception &e)
     {

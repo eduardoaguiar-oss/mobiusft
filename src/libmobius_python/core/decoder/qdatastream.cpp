@@ -386,7 +386,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
         arg_reader = mobius::py::get_arg_as_cpp (
             args, 0, pymobius_core_io_reader_from_pyobject
         );
-        version = mobius::py::get_arg_as_uint32_t (
+        version = mobius::py::get_arg<std::uint32_t> (
             args, 1, mobius::core::decoder::qdatastream::QT_NEWEST
         );
     }

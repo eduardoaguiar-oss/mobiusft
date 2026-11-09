@@ -82,7 +82,7 @@ tp_f_peek (core_io_sequential_reader_adaptor_o *self, PyObject *args)
 
     try
     {
-        arg_size = mobius::py::get_arg_as_uint64_t (args, 0, 1);
+        arg_size = mobius::py::get_arg<std::uint64_t> (args, 0, 1);
     }
     catch (const std::exception &e)
     {
@@ -124,7 +124,7 @@ tp_f_get (core_io_sequential_reader_adaptor_o *self, PyObject *args)
 
     try
     {
-        arg_size = mobius::py::get_arg_as_uint64_t (args, 0, 1);
+        arg_size = mobius::py::get_arg<std::uint64_t> (args, 0, 1);
     }
     catch (const std::exception &e)
     {
@@ -165,7 +165,7 @@ tp_f_skip (core_io_sequential_reader_adaptor_o *self, PyObject *args)
 
     try
     {
-        arg_size = mobius::py::get_arg_as_uint64_t (args, 0);
+        arg_size = mobius::py::get_arg<std::uint64_t> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -270,7 +270,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     try
     {
         arg_reader = mobius::py::get_arg_as_cpp (args, 0, pymobius_core_io_reader_from_pyobject);
-        arg_block_size = mobius::py::get_arg_as_uint64_t (args, 1, 65536);
+        arg_block_size = mobius::py::get_arg<std::uint64_t> (args, 1, 65536);
     }
     catch (const std::exception &e)
     {

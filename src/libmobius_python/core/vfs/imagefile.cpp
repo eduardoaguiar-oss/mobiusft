@@ -177,7 +177,7 @@ tp_f_get_attribute (core_vfs_imagefile_o *self, PyObject *args)
 
     try
     {
-        arg_id = mobius::py::get_arg_as_std_string (args, 0);
+        arg_id = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -214,7 +214,7 @@ tp_f_set_attribute (core_vfs_imagefile_o *self, PyObject *args)
 
     try
     {
-        arg_id = mobius::py::get_arg_as_std_string (args, 0);
+        arg_id = mobius::py::get_arg<std::string> (args, 0);
         arg_value = mobius::py::get_arg_as_cpp (args, 1, pymobius_core_pod_data_from_pyobject);
     }
     catch (const std::exception &e)
@@ -578,10 +578,10 @@ func_vfs_new_imagefile_by_path (PyObject *, PyObject *args)
 
     try
     {
-        arg_path = mobius::py::get_arg_as_std_string (args, 0);
+        arg_path = mobius::py::get_arg<std::string> (args, 0);
 
         if (mobius::py::get_arg_size (args) > 1)
-            arg_type = mobius::py::get_arg_as_std_string (args, 1);
+            arg_type = mobius::py::get_arg<std::string> (args, 1);
     }
     catch (const std::exception &e)
     {
@@ -618,10 +618,10 @@ func_vfs_new_imagefile_by_url (PyObject *, PyObject *args)
 
     try
     {
-        arg_url = mobius::py::get_arg_as_std_string (args, 0);
+        arg_url = mobius::py::get_arg<std::string> (args, 0);
 
         if (mobius::py::get_arg_size (args) > 1)
-            arg_type = mobius::py::get_arg_as_std_string (args, 1);
+            arg_type = mobius::py::get_arg<std::string> (args, 1);
     }
     catch (const std::exception &e)
     {
@@ -659,7 +659,7 @@ func_vfs_new_imagefile_from_file (PyObject *, PyObject *args)
     try
     {
         arg_file = mobius::py::get_arg_as_cpp (args, 0, pymobius_core_io_file_from_pyobject);
-        arg_type = mobius::py::get_arg_as_std_string (args, 1, "autodetect");
+        arg_type = mobius::py::get_arg<std::string> (args, 1, "autodetect");
     }
     catch (const std::exception &e)
     {

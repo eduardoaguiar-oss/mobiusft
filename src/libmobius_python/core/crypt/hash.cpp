@@ -121,7 +121,7 @@ tp_f_update (core_crypt_hash_o *self, PyObject *args)
 
     try
     {
-        arg_data = mobius::py::get_arg_as_bytearray (args, 0);
+        arg_data = mobius::py::get_arg<mobius::core::bytearray> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -275,7 +275,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 
     try
     {
-        arg_type = mobius::py::get_arg_as_std_string (args, 0);
+        arg_type = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {

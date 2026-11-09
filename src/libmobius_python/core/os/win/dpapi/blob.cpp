@@ -509,8 +509,8 @@ tp_f_test_key (core_os_win_dpapi_blob_o *self, PyObject *args)
 
     try
     {
-        arg_key = mobius::py::get_arg_as_bytearray (args, 0);
-        arg_entropy = mobius::py::get_arg_as_bytearray (
+        arg_key = mobius::py::get_arg<mobius::core::bytearray> (args, 0);
+        arg_entropy = mobius::py::get_arg<mobius::core::bytearray> (
             args, 1, mobius::core::bytearray ());
     }
     catch (const std::exception &e)
@@ -552,8 +552,8 @@ tp_f_decrypt (core_os_win_dpapi_blob_o *self, PyObject *args)
 
     try
     {
-        arg_key = mobius::py::get_arg_as_bytearray (args, 0);
-        arg_entropy = mobius::py::get_arg_as_bytearray (
+        arg_key = mobius::py::get_arg<mobius::core::bytearray> (args, 0);
+        arg_entropy = mobius::py::get_arg<mobius::core::bytearray> (
             args, 1, mobius::core::bytearray ());
     }
     catch (const std::exception &e)

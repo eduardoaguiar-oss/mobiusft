@@ -37,33 +37,17 @@ namespace mobius::py
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t get_arg_size (PyObject *) noexcept;
 PyObject *get_arg (PyObject *, std::uint32_t);
-std::string get_arg_as_std_string (PyObject *, std::uint32_t);
-mobius::core::bytearray get_arg_as_bytearray (PyObject *, std::uint32_t);
 mobius::core::datetime::datetime get_arg_as_datetime (PyObject *, std::uint32_t);
-bool get_arg_as_bool (PyObject *, std::uint32_t);
 char get_arg_as_char (PyObject *, std::uint32_t);
 int get_arg_as_int (PyObject *, std::uint32_t);
-std::int64_t get_arg_as_int64_t (PyObject *, std::uint32_t);
-std::uint8_t get_arg_as_uint8_t (PyObject *, std::uint32_t);
-std::uint16_t get_arg_as_uint16_t (PyObject *, std::uint32_t);
-std::uint32_t get_arg_as_uint32_t (PyObject *, std::uint32_t);
-std::uint64_t get_arg_as_uint64_t (PyObject *, std::uint32_t);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Parse function arguments (with default value)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::string get_arg_as_std_string (PyObject *, std::uint32_t, const std::string &);
-mobius::core::bytearray get_arg_as_bytearray (PyObject *, std::uint32_t, const mobius::core::bytearray &);
 mobius::core::datetime::datetime
 get_arg_as_datetime (PyObject *, std::uint32_t, const mobius::core::datetime::datetime &);
-bool get_arg_as_bool (PyObject *, std::uint32_t, bool);
 char get_arg_as_char (PyObject *, std::uint32_t, char);
 int get_arg_as_int (PyObject *, std::uint32_t, int);
-std::int64_t get_arg_as_int64_t (PyObject *, std::uint32_t, std::int64_t);
-std::uint8_t get_arg_as_uint8_t (PyObject *, std::uint32_t, std::uint8_t);
-std::uint16_t get_arg_as_uint16_t (PyObject *, std::uint32_t, std::uint16_t);
-std::uint32_t get_arg_as_uint32_t (PyObject *, std::uint32_t, std::uint32_t);
-std::uint64_t get_arg_as_uint64_t (PyObject *, std::uint32_t, std::uint64_t);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Check argument type

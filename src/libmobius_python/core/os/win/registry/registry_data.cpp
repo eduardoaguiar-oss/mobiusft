@@ -194,7 +194,7 @@ tp_f_get_data_as_string (core_os_win_registry_registry_data_o *self,
 
     try
     {
-        arg_encoding = mobius::py::get_arg_as_std_string (args, 0);
+        arg_encoding = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {

@@ -665,8 +665,8 @@ tp_f_get_child_by_name (core_io_folder_o *self, PyObject *args)
 
     try
     {
-        arg_name = mobius::py::get_arg_as_std_string (args, 0);
-        arg_case_sensitive = mobius::py::get_arg_as_bool (args, 1, true);
+        arg_name = mobius::py::get_arg<std::string> (args, 0);
+        arg_case_sensitive = mobius::py::get_arg<bool> (args, 1, true);
     }
     catch (const std::exception &e)
     {
@@ -703,8 +703,8 @@ tp_f_get_child_by_path (core_io_folder_o *self, PyObject *args)
 
     try
     {
-        arg_name = mobius::py::get_arg_as_std_string (args, 0);
-        arg_case_sensitive = mobius::py::get_arg_as_bool (args, 1, true);
+        arg_name = mobius::py::get_arg<std::string> (args, 0);
+        arg_case_sensitive = mobius::py::get_arg<bool> (args, 1, true);
     }
     catch (const std::exception &e)
     {
@@ -741,8 +741,8 @@ tp_f_get_children_by_name (core_io_folder_o *self, PyObject *args)
 
     try
     {
-        arg_name = mobius::py::get_arg_as_std_string (args, 0);
-        arg_case_sensitive = mobius::py::get_arg_as_bool (args, 1, true);
+        arg_name = mobius::py::get_arg<std::string> (args, 0);
+        arg_case_sensitive = mobius::py::get_arg<bool> (args, 1, true);
     }
     catch (const std::exception &e)
     {
@@ -779,7 +779,7 @@ tp_f_new_file (core_io_folder_o *self, PyObject *args)
 
     try
     {
-        arg_name = mobius::py::get_arg_as_std_string (args, 0);
+        arg_name = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -813,7 +813,7 @@ tp_f_new_folder (core_io_folder_o *self, PyObject *args)
 
     try
     {
-        arg_name = mobius::py::get_arg_as_std_string (args, 0);
+        arg_name = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -1010,7 +1010,7 @@ tp_f_rename (core_io_folder_o *self, PyObject *args)
 
     try
     {
-        arg_name = mobius::py::get_arg_as_std_string (args, 0);
+        arg_name = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -1200,7 +1200,7 @@ func_new_folder_by_path (PyObject *, PyObject *args)
 
     try
     {
-        arg_path = mobius::py::get_arg_as_std_string (args, 0);
+        arg_path = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -1234,7 +1234,7 @@ func_new_folder_by_url (PyObject *, PyObject *args)
 
     try
     {
-        arg_url = mobius::py::get_arg_as_std_string (args, 0);
+        arg_url = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {

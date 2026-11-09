@@ -50,8 +50,8 @@ tp_f_set_value (core_file_decoder_metadata_o *self, PyObject *args)
 
     try
     {
-        arg_group = mobius::py::get_arg_as_std_string (args, 0);
-        arg_name = mobius::py::get_arg_as_std_string (args, 1);
+        arg_group = mobius::py::get_arg<std::string> (args, 0);
+        arg_name = mobius::py::get_arg<std::string> (args, 1);
         arg_value = mobius::py::get_arg_as_cpp (
             args, 2, pymobius_core_pod_data_from_pyobject
         );
@@ -92,8 +92,8 @@ tp_f_get_value (core_file_decoder_metadata_o *self, PyObject *args)
 
     try
     {
-        arg_group = mobius::py::get_arg_as_std_string (args, 0);
-        arg_name = mobius::py::get_arg_as_std_string (args, 1);
+        arg_group = mobius::py::get_arg<std::string> (args, 0);
+        arg_name = mobius::py::get_arg<std::string> (args, 1);
     }
     catch (const std::exception &e)
     {
@@ -160,7 +160,7 @@ tp_f_get_group (core_file_decoder_metadata_o *self, PyObject *args)
 
     try
     {
-        arg_group = mobius::py::get_arg_as_std_string (args, 0);
+        arg_group = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {

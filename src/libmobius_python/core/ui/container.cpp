@@ -45,7 +45,7 @@ tp_f_set_message (core_ui_container_o *self, PyObject *args)
 
     try
     {
-        arg_message = mobius::py::get_arg_as_std_string (args, 0);
+        arg_message = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {

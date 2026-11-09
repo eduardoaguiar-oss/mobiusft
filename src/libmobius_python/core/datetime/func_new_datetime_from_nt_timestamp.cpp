@@ -41,7 +41,7 @@ func_new_datetime_from_cocoa_timestamp (PyObject *, PyObject *args)
 
     try
     {
-        arg_timestamp = mobius::py::get_arg_as_uint64_t (args, 0);
+        arg_timestamp = mobius::py::get_arg<std::uint64_t> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -79,7 +79,7 @@ func_new_datetime_from_dot_net_timestamp (PyObject *, PyObject *args)
 
     try
     {
-        arg_timestamp = mobius::py::get_arg_as_uint64_t (args, 0);
+        arg_timestamp = mobius::py::get_arg<std::uint64_t> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -117,7 +117,7 @@ func_new_datetime_from_nt_timestamp (PyObject *, PyObject *args)
 
     try
     {
-        arg_timestamp = mobius::py::get_arg_as_uint64_t (args, 0);
+        arg_timestamp = mobius::py::get_arg<std::uint64_t> (args, 0);
     }
     catch (const std::exception &e)
     {

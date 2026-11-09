@@ -220,7 +220,7 @@ tp_f_new_child (framework_model_item_o *self, PyObject *args)
 
     try
     {
-        arg_category = mobius::py::get_arg_as_std_string (args, 0);
+        arg_category = mobius::py::get_arg<std::string> (args, 0);
         arg_idx = mobius::py::get_arg_as_int (args, 1, -1);
     }
     catch (const std::exception &e)
@@ -347,7 +347,7 @@ tp_f_get_data_path (framework_model_item_o *self, PyObject *args)
 
     try
     {
-        arg_rpath = mobius::py::get_arg_as_std_string (args, 0);
+        arg_rpath = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -387,7 +387,7 @@ tp_f_create_data_path (framework_model_item_o *self, PyObject *args)
 
     try
     {
-        arg_rpath = mobius::py::get_arg_as_std_string (args, 0);
+        arg_rpath = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -427,7 +427,7 @@ tp_f_has_attribute (framework_model_item_o *self, PyObject *args)
 
     try
     {
-        arg_id = mobius::py::get_arg_as_std_string (args, 0);
+        arg_id = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -464,7 +464,7 @@ tp_f_get_attribute (framework_model_item_o *self, PyObject *args)
 
     try
     {
-        arg_id = mobius::py::get_arg_as_std_string (args, 0);
+        arg_id = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -503,7 +503,7 @@ tp_f_set_attribute (framework_model_item_o *self, PyObject *args)
 
     try
     {
-        arg_id = mobius::py::get_arg_as_std_string (args, 0);
+        arg_id = mobius::py::get_arg<std::string> (args, 0);
         arg_value = mobius::py::get_arg_as_cpp (
             args, 1, pymobius_core_pod_data_from_pyobject
         );
@@ -543,7 +543,7 @@ tp_f_remove_attribute (framework_model_item_o *self, PyObject *args)
 
     try
     {
-        arg_id = mobius::py::get_arg_as_std_string (args, 0);
+        arg_id = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -721,7 +721,7 @@ tp_f_has_ant (framework_model_item_o *self, PyObject *args)
 
     try
     {
-        arg_id = mobius::py::get_arg_as_std_string (args, 0);
+        arg_id = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -760,9 +760,9 @@ tp_f_set_ant (framework_model_item_o *self, PyObject *args)
 
     try
     {
-        arg_id = mobius::py::get_arg_as_std_string (args, 0);
-        arg_name = mobius::py::get_arg_as_std_string (args, 1);
-        arg_version = mobius::py::get_arg_as_std_string (args, 2);
+        arg_id = mobius::py::get_arg<std::string> (args, 0);
+        arg_name = mobius::py::get_arg<std::string> (args, 1);
+        arg_version = mobius::py::get_arg<std::string> (args, 2);
     }
     catch (const std::exception &e)
     {
@@ -799,7 +799,7 @@ tp_f_reset_ant (framework_model_item_o *self, PyObject *args)
 
     try
     {
-        arg_id = mobius::py::get_arg_as_std_string (args, 0);
+        arg_id = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -886,7 +886,7 @@ tp_f_new_evidence (framework_model_item_o *self, PyObject *args)
 
     try
     {
-        arg_type = mobius::py::get_arg_as_std_string (args, 0);
+        arg_type = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -967,7 +967,7 @@ tp_f_get_evidences (framework_model_item_o *self, PyObject *args)
 
     try
     {
-        arg_type = mobius::py::get_arg_as_std_string (args, 0, std::string ());
+        arg_type = mobius::py::get_arg<std::string> (args, 0, std::string ());
     }
     catch (const std::exception &e)
     {
@@ -1011,7 +1011,7 @@ tp_f_remove_evidences (framework_model_item_o *self, PyObject *args)
 
     try
     {
-        arg_type = mobius::py::get_arg_as_std_string (args, 0, std::string ());
+        arg_type = mobius::py::get_arg<std::string> (args, 0, std::string ());
     }
     catch (const std::exception &e)
     {
@@ -1052,7 +1052,7 @@ tp_f_count_evidences (framework_model_item_o *self, PyObject *args)
 
     try
     {
-        arg_type = mobius::py::get_arg_as_std_string (args, 0, std::string ());
+        arg_type = mobius::py::get_arg<std::string> (args, 0, std::string ());
     }
     catch (const std::exception &e)
     {
@@ -1118,7 +1118,7 @@ tp_f_add_event (framework_model_item_o *self, PyObject *args)
 
     try
     {
-        arg_text = mobius::py::get_arg_as_std_string (args, 0);
+        arg_text = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {

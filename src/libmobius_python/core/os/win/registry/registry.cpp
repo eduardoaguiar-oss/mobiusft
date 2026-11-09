@@ -145,9 +145,9 @@ tp_f_add_file_by_path (core_os_win_registry_registry_o *self, PyObject *args)
 
     try
     {
-        arg_role = mobius::py::get_arg_as_std_string (args, 0);
-        arg_path = mobius::py::get_arg_as_std_string (args, 1);
-        arg_localpath = mobius::py::get_arg_as_std_string (args, 2);
+        arg_role = mobius::py::get_arg<std::string> (args, 0);
+        arg_path = mobius::py::get_arg<std::string> (args, 1);
+        arg_localpath = mobius::py::get_arg<std::string> (args, 2);
     }
     catch (const std::exception &e)
     {
@@ -185,9 +185,9 @@ tp_f_add_file_by_url (core_os_win_registry_registry_o *self, PyObject *args)
 
     try
     {
-        arg_role = mobius::py::get_arg_as_std_string (args, 0);
-        arg_path = mobius::py::get_arg_as_std_string (args, 1);
-        arg_url = mobius::py::get_arg_as_std_string (args, 2);
+        arg_role = mobius::py::get_arg<std::string> (args, 0);
+        arg_path = mobius::py::get_arg<std::string> (args, 1);
+        arg_url = mobius::py::get_arg<std::string> (args, 2);
     }
     catch (const std::exception &e)
     {
@@ -223,7 +223,7 @@ tp_f_remove_file (core_os_win_registry_registry_o *self, PyObject *args)
 
     try
     {
-        arg_uid = mobius::py::get_arg_as_uint32_t (args, 0);
+        arg_uid = mobius::py::get_arg<std::uint32_t> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -258,7 +258,7 @@ tp_f_get_key_by_path (core_os_win_registry_registry_o *self, PyObject *args)
 
     try
     {
-        arg_path = mobius::py::get_arg_as_std_string (args, 0);
+        arg_path = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -294,7 +294,7 @@ tp_f_get_key_by_mask (core_os_win_registry_registry_o *self, PyObject *args)
 
     try
     {
-        arg_mask = mobius::py::get_arg_as_std_string (args, 0);
+        arg_mask = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -330,7 +330,7 @@ tp_f_get_value_by_path (core_os_win_registry_registry_o *self, PyObject *args)
 
     try
     {
-        arg_path = mobius::py::get_arg_as_std_string (args, 0);
+        arg_path = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -366,7 +366,7 @@ tp_f_get_value_by_mask (core_os_win_registry_registry_o *self, PyObject *args)
 
     try
     {
-        arg_mask = mobius::py::get_arg_as_std_string (args, 0);
+        arg_mask = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -402,7 +402,7 @@ tp_f_get_data_by_path (core_os_win_registry_registry_o *self, PyObject *args)
 
     try
     {
-        arg_path = mobius::py::get_arg_as_std_string (args, 0);
+        arg_path = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -438,7 +438,7 @@ tp_f_get_data_by_mask (core_os_win_registry_registry_o *self, PyObject *args)
 
     try
     {
-        arg_mask = mobius::py::get_arg_as_std_string (args, 0);
+        arg_mask = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {

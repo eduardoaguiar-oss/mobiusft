@@ -173,7 +173,7 @@ tp_f_begin_link (core_richtext_o *self, PyObject *args)
 
     try
     {
-        arg_url = mobius::py::get_arg_as_std_string (args, 0);
+        arg_url = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -210,8 +210,8 @@ tp_f_begin_message_bubble (core_richtext_o *self, PyObject *args)
 
     try
     {
-        arg_timestamp = mobius::py::get_arg_as_std_string (args, 0);
-        arg_author = mobius::py::get_arg_as_std_string (args, 1);
+        arg_timestamp = mobius::py::get_arg<std::string> (args, 0);
+        arg_author = mobius::py::get_arg<std::string> (args, 1);
     }
     catch (const std::exception &e)
     {
@@ -431,7 +431,7 @@ tp_f_add_text (core_richtext_o *self, PyObject *args)
 
     try
     {
-        arg_text = mobius::py::get_arg_as_std_string (args, 0);
+        arg_text = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -467,7 +467,7 @@ tp_f_add_system_text (core_richtext_o *self, PyObject *args)
 
     try
     {
-        arg_text = mobius::py::get_arg_as_std_string (args, 0);
+        arg_text = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -526,7 +526,7 @@ tp_f_add_emoji (core_richtext_o *self, PyObject *args)
 
     try
     {
-        arg_id = mobius::py::get_arg_as_std_string (args, 0);
+        arg_id = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -562,7 +562,7 @@ tp_f_add_flag (core_richtext_o *self, PyObject *args)
 
     try
     {
-        arg_id = mobius::py::get_arg_as_std_string (args, 0);
+        arg_id = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {

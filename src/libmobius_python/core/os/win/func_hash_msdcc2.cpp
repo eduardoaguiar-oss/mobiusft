@@ -40,9 +40,9 @@ func_hash_msdcc2 (PyObject *, PyObject *args)
 
     try
     {
-        arg_password = mobius::py::get_arg_as_std_string (args, 0);
-        arg_username = mobius::py::get_arg_as_std_string (args, 1);
-        arg_iterations = mobius::py::get_arg_as_uint32_t (args, 2, 10240);
+        arg_password = mobius::py::get_arg<std::string> (args, 0);
+        arg_username = mobius::py::get_arg<std::string> (args, 1);
+        arg_iterations = mobius::py::get_arg<std::uint32_t> (args, 2, 10240);
     }
     catch (const std::exception &e)
     {

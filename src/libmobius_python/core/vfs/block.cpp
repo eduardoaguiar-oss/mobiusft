@@ -305,7 +305,7 @@ tp_f_has_attribute (core_vfs_block_o *self, PyObject *args)
 
     try
     {
-        arg_name = mobius::py::get_arg_as_std_string (args, 0);
+        arg_name = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -343,7 +343,7 @@ tp_f_get_attribute (core_vfs_block_o *self, PyObject *args)
 
     try
     {
-        arg_name = mobius::py::get_arg_as_std_string (args, 0);
+        arg_name = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -381,7 +381,7 @@ tp_f_set_attribute (core_vfs_block_o *self, PyObject *args)
 
     try
     {
-        arg_name = mobius::py::get_arg_as_std_string (args, 0);
+        arg_name = mobius::py::get_arg<std::string> (args, 0);
         arg_value = mobius::py::get_arg_as_cpp (args, 1, pymobius_core_pod_data_from_pyobject);
     }
     catch (const std::exception &e)
@@ -468,7 +468,7 @@ tp_f_set_handled (core_vfs_block_o *self, PyObject *args)
 
     try
     {
-        arg_flag = mobius::py::get_arg_as_bool (args, 0);
+        arg_flag = mobius::py::get_arg<bool> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -529,7 +529,7 @@ tp_f_set_complete (core_vfs_block_o *self, PyObject *args)
 
     try
     {
-        arg_flag = mobius::py::get_arg_as_bool (args, 0);
+        arg_flag = mobius::py::get_arg<bool> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -590,7 +590,7 @@ tp_f_set_available (core_vfs_block_o *self, PyObject *args)
 
     try
     {
-        arg_flag = mobius::py::get_arg_as_bool (args, 0);
+        arg_flag = mobius::py::get_arg<bool> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -654,9 +654,9 @@ tp_f_new_slice_block (core_vfs_block_o *self, PyObject *args)
 
     try
     {
-        arg_type = mobius::py::get_arg_as_std_string (args, 0);
-        arg_start = mobius::py::get_arg_as_int64_t (args, 1, 0);
-        arg_end = mobius::py::get_arg_as_int64_t (args, 2, -1);
+        arg_type = mobius::py::get_arg<std::string> (args, 0);
+        arg_start = mobius::py::get_arg<std::int64_t> (args, 1, 0);
+        arg_end = mobius::py::get_arg<std::int64_t> (args, 2, -1);
     }
     catch (const std::exception &e)
     {

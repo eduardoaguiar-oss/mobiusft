@@ -195,7 +195,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
         arg_item = mobius::py::get_arg_as_cpp (
             args, 0, pymobius_framework_model_item_from_pyobject
         );
-        arg_profile_id = mobius::py::get_arg_as_std_string (args, 1);
+        arg_profile_id = mobius::py::get_arg<std::string> (args, 1);
     }
     catch (const std::exception &e)
     {

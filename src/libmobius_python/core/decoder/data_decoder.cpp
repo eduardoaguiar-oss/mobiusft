@@ -48,7 +48,7 @@ tp_f_skip (core_decoder_data_decoder_o *self, PyObject *args)
 
     try
     {
-        arg_size = mobius::py::get_arg_as_uint64_t (args, 0);
+        arg_size = mobius::py::get_arg<std::uint64_t> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -86,7 +86,7 @@ tp_f_seek (core_decoder_data_decoder_o *self, PyObject *args)
 
     try
     {
-        arg_size = mobius::py::get_arg_as_uint64_t (args, 0);
+        arg_size = mobius::py::get_arg<std::uint64_t> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -650,7 +650,7 @@ tp_f_get_bytearray_by_size (core_decoder_data_decoder_o *self, PyObject *args)
 
     try
     {
-        arg_size = mobius::py::get_arg_as_uint64_t (args, 0);
+        arg_size = mobius::py::get_arg<std::uint64_t> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -689,8 +689,8 @@ tp_f_get_string_by_size (core_decoder_data_decoder_o *self, PyObject *args)
 
     try
     {
-        arg_size = mobius::py::get_arg_as_uint64_t (args, 0);
-        arg_encode = mobius::py::get_arg_as_std_string (args, 1, "ASCII");
+        arg_size = mobius::py::get_arg<std::uint64_t> (args, 0);
+        arg_encode = mobius::py::get_arg<std::string> (args, 1, "ASCII");
     }
     catch (const std::exception &e)
     {
@@ -728,7 +728,7 @@ tp_f_get_c_string (core_decoder_data_decoder_o *self, PyObject *args)
 
     try
     {
-        arg_encode = mobius::py::get_arg_as_std_string (args, 0, "ASCII");
+        arg_encode = mobius::py::get_arg<std::string> (args, 0, "ASCII");
     }
     catch (const std::exception &e)
     {
@@ -766,7 +766,7 @@ tp_f_get_hex_string_by_size (core_decoder_data_decoder_o *self, PyObject *args)
 
     try
     {
-        arg_size = mobius::py::get_arg_as_uint64_t (args, 0);
+        arg_size = mobius::py::get_arg<std::uint64_t> (args, 0);
     }
     catch (const std::exception &e)
     {

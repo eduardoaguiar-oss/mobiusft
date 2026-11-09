@@ -45,7 +45,7 @@ tp_f_set_text (core_ui_label_o *self, PyObject *args)
 
     try
     {
-        arg_text = mobius::py::get_arg_as_std_string (args, 0);
+        arg_text = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -81,7 +81,7 @@ tp_f_set_markup (core_ui_label_o *self, PyObject *args)
 
     try
     {
-        arg_text = mobius::py::get_arg_as_std_string (args, 0);
+        arg_text = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -117,7 +117,7 @@ tp_f_set_selectable (core_ui_label_o *self, PyObject *args)
 
     try
     {
-        arg_flag = mobius::py::get_arg_as_bool (args, 0);
+        arg_flag = mobius::py::get_arg<bool> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -276,7 +276,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 
     try
     {
-        arg_text = mobius::py::get_arg_as_std_string (args, 0, std::string ());
+        arg_text = mobius::py::get_arg<std::string> (args, 0, std::string ());
     }
     catch (const std::exception &e)
     {

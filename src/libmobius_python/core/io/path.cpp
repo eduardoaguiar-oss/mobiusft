@@ -197,7 +197,7 @@ tp_f_get_sibling_by_name (core_io_path_o *self, PyObject *args)
 
     try
     {
-        arg_filename = mobius::py::get_arg_as_std_string (args, 0);
+        arg_filename = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -235,7 +235,7 @@ tp_f_get_sibling_by_extension (core_io_path_o *self, PyObject *args)
 
     try
     {
-        arg_ext = mobius::py::get_arg_as_std_string (args, 0);
+        arg_ext = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -273,7 +273,7 @@ tp_f_get_child_by_name (core_io_path_o *self, PyObject *args)
 
     try
     {
-        arg_name = mobius::py::get_arg_as_std_string (args, 0);
+        arg_name = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -311,7 +311,7 @@ tp_f_get_child_by_path (core_io_path_o *self, PyObject *args)
 
     try
     {
-        arg_path = mobius::py::get_arg_as_std_string (args, 0);
+        arg_path = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -374,7 +374,7 @@ tp_f_filename_match (core_io_path_o *self, PyObject *args)
 
     try
     {
-        arg_pattern = mobius::py::get_arg_as_std_string (args, 0);
+        arg_pattern = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -434,7 +434,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     std::string arg_value;
     try
     {
-        arg_value = mobius::py::get_arg_as_std_string (args, 0);
+        arg_value = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -615,7 +615,7 @@ func_new_path_from_win (PyObject *, PyObject *args)
 
     try
     {
-        arg_value = mobius::py::get_arg_as_std_string (args, 0);
+        arg_value = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {

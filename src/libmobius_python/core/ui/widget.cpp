@@ -119,7 +119,7 @@ tp_f_set_visible (core_ui_widget_o *self, PyObject *args)
 
     try
     {
-        arg_flag = mobius::py::get_arg_as_bool (args, 0);
+        arg_flag = mobius::py::get_arg<bool> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -155,7 +155,7 @@ tp_f_set_sensitive (core_ui_widget_o *self, PyObject *args)
 
     try
     {
-        arg_flag = mobius::py::get_arg_as_bool (args, 0);
+        arg_flag = mobius::py::get_arg<bool> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -210,7 +210,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
         if (mobius::py::get_arg_size (args) > 0)
             arg_w = mobius::py::get_arg_as_cpp (args, 0, pymobius_core_ui_widget_from_pyobject);
 
-        // arg_is_owner = mobius::py::get_arg_as_bool (args, 1, false);
+        // arg_is_owner = mobius::py::get_arg<bool> (args, 1, false);
     }
     catch (const std::exception &e)
     {

@@ -132,8 +132,8 @@ tp_f_get_metadata (core_file_decoder_decoder_o *self, PyObject *args)
 
     try
     {
-        arg_group = mobius::py::get_arg_as_std_string (args, 0);
-        arg_name = mobius::py::get_arg_as_std_string (args, 1);
+        arg_group = mobius::py::get_arg<std::string> (args, 0);
+        arg_name = mobius::py::get_arg<std::string> (args, 1);
     }
     catch (const std::exception &e)
     {
@@ -173,7 +173,7 @@ tp_f_get_metadata_group (core_file_decoder_decoder_o *self, PyObject *args)
 
     try
     {
-        arg_group = mobius::py::get_arg_as_std_string (args, 0);
+        arg_group = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -403,7 +403,7 @@ pymobius_core_file_decoder_new_decoder_by_uid (PyObject *, PyObject *args)
 
     try
     {
-        arg_type = mobius::py::get_arg_as_std_string (args, 0);
+        arg_type = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {

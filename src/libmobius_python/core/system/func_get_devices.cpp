@@ -39,8 +39,8 @@ func_get_devices (PyObject *, PyObject *args)
     try
     {
         arg_subsystem =
-            mobius::py::get_arg_as_std_string (args, 0, std::string ());
-        arg_type = mobius::py::get_arg_as_std_string (args, 1, std::string ());
+            mobius::py::get_arg<std::string> (args, 0, std::string ());
+        arg_type = mobius::py::get_arg<std::string> (args, 1, std::string ());
     }
     catch (const std::exception &e)
     {

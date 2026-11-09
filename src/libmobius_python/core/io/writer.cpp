@@ -91,7 +91,7 @@ tp_f_write (core_io_writer_o *self, PyObject *args)
 
     try
     {
-        arg_data = mobius::py::get_arg_as_bytearray (args, 0);
+        arg_data = mobius::py::get_arg<mobius::core::bytearray> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -151,8 +151,8 @@ tp_f_seek (core_io_writer_o *self, PyObject *args)
 
     try
     {
-        arg_offset = mobius::py::get_arg_as_int64_t (args, 0);
-        arg_whence = mobius::py::get_arg_as_uint32_t (args, 1, 0);
+        arg_offset = mobius::py::get_arg<std::int64_t> (args, 0);
+        arg_whence = mobius::py::get_arg<std::uint32_t> (args, 1, 0);
     }
     catch (const std::exception &e)
     {
@@ -226,7 +226,7 @@ tp_f_skip (core_io_writer_o *self, PyObject *args)
 
     try
     {
-        arg_size = mobius::py::get_arg_as_uint64_t (args, 0);
+        arg_size = mobius::py::get_arg<std::uint64_t> (args, 0);
     }
     catch (const std::exception &e)
     {

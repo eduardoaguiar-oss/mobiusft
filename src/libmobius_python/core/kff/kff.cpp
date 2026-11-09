@@ -78,8 +78,8 @@ tp_f_new_hashset (core_kff_kff_o *self, PyObject *args)
 
     try
     {
-        arg_id = mobius::py::get_arg_as_std_string (args, 0);
-        arg_is_alert = mobius::py::get_arg_as_bool (args, 1);
+        arg_id = mobius::py::get_arg<std::string> (args, 0);
+        arg_is_alert = mobius::py::get_arg<bool> (args, 1);
     }
     catch (const std::exception &e)
     {
@@ -116,7 +116,7 @@ tp_f_remove_hashset (core_kff_kff_o *self, PyObject *args)
 
     try
     {
-        arg_id = mobius::py::get_arg_as_std_string (args, 0);
+        arg_id = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -180,8 +180,8 @@ tp_f_alert_lookup (core_kff_kff_o *self, PyObject *args)
 
     try
     {
-        arg_type = mobius::py::get_arg_as_std_string (args, 0);
-        arg_value = mobius::py::get_arg_as_std_string (args, 1);
+        arg_type = mobius::py::get_arg<std::string> (args, 0);
+        arg_value = mobius::py::get_arg<std::string> (args, 1);
     }
     catch (const std::exception &e)
     {
@@ -221,8 +221,8 @@ tp_f_lookup (core_kff_kff_o *self, PyObject *args)
 
     try
     {
-        arg_type = mobius::py::get_arg_as_std_string (args, 0);
-        arg_value = mobius::py::get_arg_as_std_string (args, 1);
+        arg_type = mobius::py::get_arg<std::string> (args, 0);
+        arg_value = mobius::py::get_arg<std::string> (args, 1);
     }
     catch (const std::exception &e)
     {
@@ -536,7 +536,7 @@ func_core_kff_has_size (PyObject *, PyObject *args)
 
     try
     {
-        arg_size = mobius::py::get_arg_as_uint64_t (args, 0);
+        arg_size = mobius::py::get_arg<std::uint64_t> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -575,8 +575,8 @@ func_core_kff_lookup (PyObject *, PyObject *args)
 
     try
     {
-        arg_hash_type = mobius::py::get_arg_as_uint16_t (args, 0);
-        arg_value = mobius::py::get_arg_as_std_string (args, 1);
+        arg_hash_type = mobius::py::get_arg<std::uint16_t> (args, 0);
+        arg_value = mobius::py::get_arg<std::string> (args, 1);
     }
     catch (const std::exception &e)
     {

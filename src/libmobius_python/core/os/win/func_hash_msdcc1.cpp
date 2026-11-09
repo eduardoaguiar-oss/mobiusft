@@ -39,8 +39,8 @@ func_hash_msdcc1 (PyObject *, PyObject *args)
 
     try
     {
-        arg_password = mobius::py::get_arg_as_std_string (args, 0);
-        arg_username = mobius::py::get_arg_as_std_string (args, 1);
+        arg_password = mobius::py::get_arg<std::string> (args, 0);
+        arg_username = mobius::py::get_arg<std::string> (args, 1);
     }
     catch (const std::exception &e)
     {

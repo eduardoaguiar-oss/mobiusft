@@ -47,7 +47,7 @@ tp_f_add_child (core_ui_stacked_container_o *self, PyObject *args)
 
     try
     {
-        arg_widget_id = mobius::py::get_arg_as_std_string (args, 0);
+        arg_widget_id = mobius::py::get_arg<std::string> (args, 0);
         arg_w = mobius::py::get_arg_as_cpp (
             args, 1, pymobius_core_ui_widget_from_pyobject);
     }
@@ -85,7 +85,7 @@ tp_f_remove_child (core_ui_stacked_container_o *self, PyObject *args)
 
     try
     {
-        arg_widget_id = mobius::py::get_arg_as_std_string (args, 0);
+        arg_widget_id = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -122,7 +122,7 @@ tp_f_get_child (core_ui_stacked_container_o *self, PyObject *args)
 
     try
     {
-        arg_widget_id = mobius::py::get_arg_as_std_string (args, 0);
+        arg_widget_id = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -160,7 +160,7 @@ tp_f_select_child (core_ui_stacked_container_o *self, PyObject *args)
 
     try
     {
-        arg_widget_id = mobius::py::get_arg_as_std_string (args, 0);
+        arg_widget_id = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {

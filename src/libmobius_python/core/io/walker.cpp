@@ -52,7 +52,7 @@ tp_f_set_ignore_reallocated (core_io_walker_o *self, PyObject *args)
 
     try
     {
-        arg_flag = mobius::py::get_arg_as_bool (args, 0);
+        arg_flag = mobius::py::get_arg<bool> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -88,7 +88,7 @@ tp_f_set_case_sensitive (core_io_walker_o *self, PyObject *args)
 
     try
     {
-        arg_flag = mobius::py::get_arg_as_bool (args, 0);
+        arg_flag = mobius::py::get_arg<bool> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -149,7 +149,7 @@ tp_f_get_entries_by_name (core_io_walker_o *self, PyObject *args)
 
     try
     {
-        arg_name = mobius::py::get_arg_as_std_string (args, 0);
+        arg_name = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -187,7 +187,7 @@ tp_f_get_entries_by_path (core_io_walker_o *self, PyObject *args)
 
     try
     {
-        arg_path = mobius::py::get_arg_as_std_string (args, 0);
+        arg_path = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -225,7 +225,7 @@ tp_f_get_entries_by_pattern (core_io_walker_o *self, PyObject *args)
 
     try
     {
-        arg_pattern = mobius::py::get_arg_as_std_string (args, 0);
+        arg_pattern = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -365,7 +365,7 @@ tp_f_get_files_by_name (core_io_walker_o *self, PyObject *args)
 
     try
     {
-        arg_name = mobius::py::get_arg_as_std_string (args, 0);
+        arg_name = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -403,7 +403,7 @@ tp_f_get_files_by_path (core_io_walker_o *self, PyObject *args)
 
     try
     {
-        arg_path = mobius::py::get_arg_as_std_string (args, 0);
+        arg_path = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -441,7 +441,7 @@ tp_f_get_files_by_pattern (core_io_walker_o *self, PyObject *args)
 
     try
     {
-        arg_pattern = mobius::py::get_arg_as_std_string (args, 0);
+        arg_pattern = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -580,7 +580,7 @@ tp_f_get_folders_by_name (core_io_walker_o *self, PyObject *args)
 
     try
     {
-        arg_name = mobius::py::get_arg_as_std_string (args, 0);
+        arg_name = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -618,7 +618,7 @@ tp_f_get_folders_by_path (core_io_walker_o *self, PyObject *args)
 
     try
     {
-        arg_path = mobius::py::get_arg_as_std_string (args, 0);
+        arg_path = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -656,7 +656,7 @@ tp_f_get_folders_by_pattern (core_io_walker_o *self, PyObject *args)
 
     try
     {
-        arg_pattern = mobius::py::get_arg_as_std_string (args, 0);
+        arg_pattern = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {

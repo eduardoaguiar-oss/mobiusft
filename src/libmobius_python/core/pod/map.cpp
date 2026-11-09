@@ -125,7 +125,7 @@ tp_f_contains (core_pod_map_o *self, PyObject *args)
 
     try
     {
-        arg_key = mobius::py::get_arg_as_std_string (args, 0);
+        arg_key = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -164,7 +164,7 @@ tp_f_get (core_pod_map_o *self, PyObject *args)
 
     try
     {
-        arg_key = mobius::py::get_arg_as_std_string (args, 0);
+        arg_key = mobius::py::get_arg<std::string> (args, 0);
         arg_varg = mobius::py::get_arg_as_cpp (
             args, 1, pymobius_core_pod_data_from_pyobject,
             mobius::core::pod::data ()
@@ -209,7 +209,7 @@ tp_f_set (core_pod_map_o *self, PyObject *args)
 
     try
     {
-        arg_key = mobius::py::get_arg_as_std_string (args, 0);
+        arg_key = mobius::py::get_arg<std::string> (args, 0);
         arg_value = mobius::py::get_arg_as_cpp (
             args, 1, pymobius_core_pod_data_from_pyobject
         );
@@ -247,7 +247,7 @@ tp_f_remove (core_pod_map_o *self, PyObject *args)
 
     try
     {
-        arg_key = mobius::py::get_arg_as_std_string (args, 0);
+        arg_key = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {

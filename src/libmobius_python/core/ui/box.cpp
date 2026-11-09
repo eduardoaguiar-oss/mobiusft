@@ -45,7 +45,7 @@ tp_f_set_spacing (core_ui_box_o *self, PyObject *args)
 
     try
     {
-        arg_siz = mobius::py::get_arg_as_uint32_t (args, 0);
+        arg_siz = mobius::py::get_arg<std::uint32_t> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -81,7 +81,7 @@ tp_f_set_border_width (core_ui_box_o *self, PyObject *args)
 
     try
     {
-        arg_siz = mobius::py::get_arg_as_uint32_t (args, 0);
+        arg_siz = mobius::py::get_arg<std::uint32_t> (args, 0);
     }
     catch (const std::exception &e)
     {

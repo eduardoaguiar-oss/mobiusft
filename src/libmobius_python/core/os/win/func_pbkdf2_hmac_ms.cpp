@@ -41,11 +41,11 @@ func_pbkdf2_hmac_ms (PyObject *, PyObject *args)
 
     try
     {
-        arg_hash_id = mobius::py::get_arg_as_std_string (args, 0);
-        arg_key = mobius::py::get_arg_as_bytearray (args, 1);
-        arg_salt = mobius::py::get_arg_as_bytearray (args, 2);
-        arg_iterations = mobius::py::get_arg_as_uint32_t (args, 3);
-        arg_dklen = mobius::py::get_arg_as_uint16_t (args, 4);
+        arg_hash_id = mobius::py::get_arg<std::string> (args, 0);
+        arg_key = mobius::py::get_arg<mobius::core::bytearray> (args, 1);
+        arg_salt = mobius::py::get_arg<mobius::core::bytearray> (args, 2);
+        arg_iterations = mobius::py::get_arg<std::uint32_t> (args, 3);
+        arg_dklen = mobius::py::get_arg<std::uint16_t> (args, 4);
     }
     catch (const std::exception &e)
     {

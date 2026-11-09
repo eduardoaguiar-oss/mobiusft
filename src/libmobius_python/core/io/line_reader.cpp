@@ -104,17 +104,17 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
         if (mobius::py::check_arg (args, 0, pymobius_core_io_text_reader_check))
         {
             arg_text_reader = mobius::py::get_arg_as_cpp (args, 0, pymobius_core_io_text_reader_from_pyobject);
-            arg_separator = mobius::py::get_arg_as_std_string (args, 1, "");
+            arg_separator = mobius::py::get_arg<std::string> (args, 1, "");
         }
 
         // line_reader (reader, encoding, separator)
         else
         {
             auto arg_reader = mobius::py::get_arg_as_cpp (args, 0, pymobius_core_io_reader_from_pyobject);
-            auto arg_encoding = mobius::py::get_arg_as_std_string (args, 1, "UTF-8");
+            auto arg_encoding = mobius::py::get_arg<std::string> (args, 1, "UTF-8");
 
             arg_text_reader = mobius::core::io::text_reader (arg_reader, arg_encoding);
-            arg_separator = mobius::py::get_arg_as_std_string (args, 2, "");
+            arg_separator = mobius::py::get_arg<std::string> (args, 2, "");
         }
     }
     catch (const std::exception &e)

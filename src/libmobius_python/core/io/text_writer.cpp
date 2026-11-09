@@ -43,7 +43,7 @@ tp_f_write (core_io_text_writer_o *self, PyObject *args)
 
     try
     {
-        arg_text = mobius::py::get_arg_as_std_string (args, 0);
+        arg_text = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -130,7 +130,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     try
     {
         arg_writer = mobius::py::get_arg_as_cpp (args, 0, pymobius_core_io_writer_from_pyobject);
-        arg_encoding = mobius::py::get_arg_as_std_string (args, 1, "UTF-8");
+        arg_encoding = mobius::py::get_arg<std::string> (args, 1, "UTF-8");
     }
     catch (const std::exception &e)
     {

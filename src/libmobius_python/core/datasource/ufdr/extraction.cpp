@@ -271,8 +271,8 @@ tp_f_add_metadata (core_datasource_ufdr_extraction_o *self, PyObject *args)
 
     try
     {
-        arg_key = mobius::py::get_arg_as_std_string (args, 0);
-        arg_value = mobius::py::get_arg_as_std_string (args, 1);
+        arg_key = mobius::py::get_arg<std::string> (args, 0);
+        arg_value = mobius::py::get_arg<std::string> (args, 1);
     }
     catch (const std::exception &e)
     {

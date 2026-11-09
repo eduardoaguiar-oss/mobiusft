@@ -39,8 +39,8 @@ func_add_resource (PyObject *, PyObject *args)
 
     try
     {
-        arg_id = mobius::py::get_arg_as_std_string (args, 0);
-        arg_description = mobius::py::get_arg_as_std_string (args, 1);
+        arg_id = mobius::py::get_arg<std::string> (args, 0);
+        arg_description = mobius::py::get_arg<std::string> (args, 1);
         arg_value = mobius::py::pyobject (mobius::py::get_arg (args, 2), true);
     }
     catch (const std::exception &e)
@@ -75,7 +75,7 @@ func_remove_resource (PyObject *, PyObject *args)
 
     try
     {
-        arg_id = mobius::py::get_arg_as_std_string (args, 0);
+        arg_id = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -109,7 +109,7 @@ func_has_resource (PyObject *, PyObject *args)
 
     try
     {
-        arg_id = mobius::py::get_arg_as_std_string (args, 0);
+        arg_id = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -145,7 +145,7 @@ func_get_resource (PyObject *, PyObject *args)
 
     try
     {
-        arg_id = mobius::py::get_arg_as_std_string (args, 0);
+        arg_id = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -182,7 +182,7 @@ func_get_resources (PyObject *, PyObject *args)
 
     try
     {
-        arg_group_id = mobius::py::get_arg_as_std_string (args, 0);
+        arg_group_id = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -220,7 +220,7 @@ func_get_resource_value (PyObject *, PyObject *args)
 
     try
     {
-        arg_id = mobius::py::get_arg_as_std_string (args, 0);
+        arg_id = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {

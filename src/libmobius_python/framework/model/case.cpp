@@ -106,7 +106,7 @@ tp_f_get_path (framework_model_case_o *self, PyObject *args)
 
     try
     {
-        arg_rpath = mobius::py::get_arg_as_std_string (args, 0);
+        arg_rpath = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -145,7 +145,7 @@ tp_f_create_path (framework_model_case_o *self, PyObject *args)
 
     try
     {
-        arg_rpath = mobius::py::get_arg_as_std_string (args, 0);
+        arg_rpath = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -236,7 +236,7 @@ tp_f_get_item_by_uid (framework_model_case_o *self, PyObject *args)
 
     try
     {
-        arg_uid = mobius::py::get_arg_as_int64_t (args, 0);
+        arg_uid = mobius::py::get_arg<std::int64_t> (args, 0);
     }
     catch (const std::exception &e)
     {

@@ -150,7 +150,7 @@ tp_f_has_attribute (core_vfs_disk_o *self, PyObject *args)
 
     try
     {
-        arg_id = mobius::py::get_arg_as_std_string (args, 0);
+        arg_id = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -188,7 +188,7 @@ tp_f_set_attribute (core_vfs_disk_o *self, PyObject *args)
 
     try
     {
-        arg_id = mobius::py::get_arg_as_std_string (args, 0);
+        arg_id = mobius::py::get_arg<std::string> (args, 0);
         arg_value = mobius::py::get_arg_as_cpp (args, 1, pymobius_core_pod_data_from_pyobject);
     }
     catch (const std::exception &e)
@@ -226,7 +226,7 @@ tp_f_get_attribute (core_vfs_disk_o *self, PyObject *args)
 
     try
     {
-        arg_id = mobius::py::get_arg_as_std_string (args, 0);
+        arg_id = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -473,7 +473,7 @@ func_vfs_new_disk_by_device_uid (PyObject *, PyObject *args)
 
     try
     {
-        arg_uid = mobius::py::get_arg_as_std_string (args, 0);
+        arg_uid = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -509,7 +509,7 @@ func_vfs_new_disk_by_path (PyObject *, PyObject *args)
 
     try
     {
-        arg_path = mobius::py::get_arg_as_std_string (args, 0);
+        arg_path = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -545,7 +545,7 @@ func_vfs_new_disk_by_url (PyObject *, PyObject *args)
 
     try
     {
-        arg_url = mobius::py::get_arg_as_std_string (args, 0);
+        arg_url = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {

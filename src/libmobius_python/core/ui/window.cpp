@@ -80,7 +80,7 @@ tp_f_set_sensitive (core_ui_window_o *self, PyObject *args)
 
     try
     {
-        arg_flag = mobius::py::get_arg_as_bool (args, 0);
+        arg_flag = mobius::py::get_arg<bool> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -116,7 +116,7 @@ tp_f_set_visible (core_ui_window_o *self, PyObject *args)
 
     try
     {
-        arg_flag = mobius::py::get_arg_as_bool (args, 0);
+        arg_flag = mobius::py::get_arg<bool> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -198,7 +198,7 @@ tp_f_set_title (core_ui_window_o *self, PyObject *args)
 
     try
     {
-        arg_title = mobius::py::get_arg_as_std_string (args, 0);
+        arg_title = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -297,7 +297,7 @@ tp_f_set_border_width (core_ui_window_o *self, PyObject *args)
 
     try
     {
-        arg_width = mobius::py::get_arg_as_uint32_t (args, 0);
+        arg_width = mobius::py::get_arg<std::uint32_t> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -420,8 +420,8 @@ tp_f_set_position (core_ui_window_o *self, PyObject *args)
 
     try
     {
-        arg_x = mobius::py::get_arg_as_uint32_t (args, 0);
-        arg_y = mobius::py::get_arg_as_uint32_t (args, 1);
+        arg_x = mobius::py::get_arg<std::uint32_t> (args, 0);
+        arg_y = mobius::py::get_arg<std::uint32_t> (args, 1);
     }
     catch (const std::exception &e)
     {
@@ -486,8 +486,8 @@ tp_f_set_size (core_ui_window_o *self, PyObject *args)
 
     try
     {
-        arg_width = mobius::py::get_arg_as_uint32_t (args, 0);
-        arg_height = mobius::py::get_arg_as_uint32_t (args, 1);
+        arg_width = mobius::py::get_arg<std::uint32_t> (args, 0);
+        arg_height = mobius::py::get_arg<std::uint32_t> (args, 1);
     }
     catch (const std::exception &e)
     {
@@ -552,7 +552,7 @@ tp_f_set_callback (core_ui_window_o *self, PyObject *args)
 
     try
     {
-        arg_event_id = mobius::py::get_arg_as_std_string (args, 0);
+        arg_event_id = mobius::py::get_arg<std::string> (args, 0);
         arg_f = mobius::py::get_arg (args, 1);
     }
     catch (const std::exception &e)
@@ -598,7 +598,7 @@ tp_f_reset_callback (core_ui_window_o *self, PyObject *args)
 
     try
     {
-        arg_event_id = mobius::py::get_arg_as_std_string (args, 0);
+        arg_event_id = mobius::py::get_arg<std::string> (args, 0);
     }
     catch (const std::exception &e)
     {

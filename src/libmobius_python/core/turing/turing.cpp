@@ -69,8 +69,8 @@ tp_f_has_hash (core_turing_turing_o *self, PyObject *args)
 
     try
     {
-        arg_type = mobius::py::get_arg_as_std_string (args, 0);
-        arg_value = mobius::py::get_arg_as_std_string (args, 1);
+        arg_type = mobius::py::get_arg<std::string> (args, 0);
+        arg_value = mobius::py::get_arg<std::string> (args, 1);
     }
     catch (const std::exception &e)
     {
@@ -111,9 +111,9 @@ tp_f_set_hash (core_turing_turing_o *self, PyObject *args)
 
     try
     {
-        arg_type = mobius::py::get_arg_as_std_string (args, 0);
-        arg_value = mobius::py::get_arg_as_std_string (args, 1);
-        arg_password = mobius::py::get_arg_as_std_string (args, 2);
+        arg_type = mobius::py::get_arg<std::string> (args, 0);
+        arg_value = mobius::py::get_arg<std::string> (args, 1);
+        arg_password = mobius::py::get_arg<std::string> (args, 2);
     }
     catch (const std::exception &e)
     {
@@ -158,8 +158,8 @@ tp_f_get_hash_password (core_turing_turing_o *self, PyObject *args)
 
     try
     {
-        arg_type = mobius::py::get_arg_as_std_string (args, 0);
-        arg_value = mobius::py::get_arg_as_std_string (args, 1);
+        arg_type = mobius::py::get_arg<std::string> (args, 0);
+        arg_value = mobius::py::get_arg<std::string> (args, 1);
     }
     catch (const std::exception &e)
     {

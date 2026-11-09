@@ -187,7 +187,7 @@ tp_f_remove_disk (core_vfs_vfs_o *self, PyObject *args)
 
     try
     {
-        arg_idx = mobius::py::get_arg_as_uint64_t (args, 0);
+        arg_idx = mobius::py::get_arg<std::uint64_t> (args, 0);
     }
     catch (const std::exception &e)
     {

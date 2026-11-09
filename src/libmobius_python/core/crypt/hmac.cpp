@@ -144,7 +144,7 @@ tp_f_update (core_crypt_hmac_o *self, PyObject *args)
 
     try
     {
-        arg_data = mobius::py::get_arg_as_bytearray (args, 0);
+        arg_data = mobius::py::get_arg<mobius::core::bytearray> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -279,8 +279,8 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 
     try
     {
-        arg_hash_id = mobius::py::get_arg_as_std_string (args, 0);
-        arg_key = mobius::py::get_arg_as_bytearray (args, 1);
+        arg_hash_id = mobius::py::get_arg<std::string> (args, 0);
+        arg_key = mobius::py::get_arg<mobius::core::bytearray> (args, 1);
     }
     catch (const std::exception &e)
     {

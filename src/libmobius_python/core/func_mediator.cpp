@@ -36,7 +36,7 @@ func_subscribe (PyObject *, PyObject *args)
 
     try
     {
-        arg_id = mobius::py::get_arg_as_std_string (args, 0);
+        arg_id = mobius::py::get_arg<std::string> (args, 0);
         arg_f = mobius::py::get_arg (args, 1);
     }
     catch (const std::exception &e)
@@ -76,7 +76,7 @@ func_unsubscribe (PyObject *, PyObject *args)
 
     try
     {
-        arg_uid = mobius::py::get_arg_as_uint64_t (args, 0);
+        arg_uid = mobius::py::get_arg<std::uint64_t> (args, 0);
     }
     catch (const std::exception &e)
     {

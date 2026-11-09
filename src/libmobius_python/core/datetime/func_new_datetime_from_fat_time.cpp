@@ -35,8 +35,8 @@ func_new_datetime_from_fat_time (PyObject *, PyObject *args)
 
     try
     {
-        arg_d = mobius::py::get_arg_as_uint16_t (args, 0);
-        arg_t = mobius::py::get_arg_as_uint16_t (args, 1);
+        arg_d = mobius::py::get_arg<std::uint16_t> (args, 0);
+        arg_t = mobius::py::get_arg<std::uint16_t> (args, 1);
     }
     catch (const std::exception &e)
     {
