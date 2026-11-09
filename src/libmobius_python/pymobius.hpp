@@ -316,6 +316,18 @@ template <> inline mobius::core::bytearray from_pyobject<mobius::core::bytearray
     return mobius::core::bytearray (reinterpret_cast<const std::uint8_t *> (buffer), length);
 }
 
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create mobius::core::datetime::datetime from PyDatetime
+// @param value Python Object
+// @return Datetime object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::datetime::datetime pydatetime_as_datetime (PyObject *);
+
+template <> inline mobius::core::datetime::datetime from_pyobject<mobius::core::datetime::datetime> (PyObject *value)
+{
+    return pydatetime_as_datetime (value);
+}
+
 
 
 
@@ -326,8 +338,6 @@ std::string pystring_as_std_string (PyObject *);
 
 PyObject *pybytes_from_char (char);
 mobius::core::bytearray pybytes_as_bytearray (PyObject *);
-
-mobius::core::datetime::datetime pydatetime_as_datetime (PyObject *);
 
 PyObject *pybool_from_bool (bool);
 bool pybool_as_bool (PyObject *);
