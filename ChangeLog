@@ -73,6 +73,7 @@ Mobius Forensic Toolkit 2.31
 	* libmobius_python: Add function kff.get_hash_count
 	* libmobius_python: Add function kff.get_thumbnail_count
 	* libmobius_python: Add function kff.get_hash_count_by_type ()
+	* libmobius_python: Add new class kff.file
 	* pymobius: Remove module item_browser.py
 
 Mobius Forensic Toolkit 2.30

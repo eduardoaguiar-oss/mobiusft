@@ -27,6 +27,7 @@ project(libmobius_python_core_kff LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_library(libmobius_python_core_kff STATIC
     module.cpp
+    file.cpp
     hashset.cpp
     kff.cpp
 )
