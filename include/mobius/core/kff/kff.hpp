@@ -57,6 +57,7 @@ file new_file (std::int64_t, std::uint16_t, std::uint64_t);
 std::uint64_t get_file_count ();
 std::uint64_t get_hash_count ();
 std::uint64_t get_alert_count ();
+std::uint64_t get_thumbnail_count ();
 std::map<std::string, int64_t> get_file_count_by_type ();
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
