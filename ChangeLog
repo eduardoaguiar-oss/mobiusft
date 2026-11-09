@@ -76,6 +76,7 @@ Mobius Forensic Toolkit 2.31
 	* libmobius_python: Add new class core.kff.file
 	* libmobius_python: Add function core.kff.lookup
 	* libmobius_python: Add constants to module core.kff
+	* libmobius_python: Add deleted template function from_pyobject (PyObject *)
 	* pymobius: Remove module item_browser.py
 
 Mobius Forensic Toolkit 2.30

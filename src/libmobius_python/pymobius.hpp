@@ -174,6 +174,8 @@ PyObject *to_pyobject (const mobius::core::datetime::datetime &);
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Python -> C++ Python concrete types conversion
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+template <typename T> T from_pyobject (PyObject *) = delete;
+
 PyObject *pystring_from_std_string (const std::string &);
 std::string pystring_as_std_string (PyObject *);
 
