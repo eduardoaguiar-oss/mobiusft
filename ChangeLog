@@ -54,6 +54,7 @@ Mobius Forensic Toolkit 2.31
 	* libmobius_core: Add function kff::get_hash_count
 	* libmobius_core: Add function kff::get_alert_count
 	* libmobius_core: Add function kff::get_thumbnail_count
+	* libmobius_core: Add function kff::get_hash_count_by_type
 	* libmobius_framework: Use SQLite WAL journal mode in config module
 	* libmobius_framework: Remove thread_guard from config module
 	* libmobius_framework: Use single DB connection shared by all threads in config module
