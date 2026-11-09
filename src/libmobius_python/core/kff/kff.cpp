@@ -589,7 +589,7 @@ func_core_kff_lookup (PyObject *, PyObject *args)
 
     try
     {
-        ret = to_pyobject (mobius::core::kff::lookup (arg_hash_type, arg_value));
+        ret = mobius::py::to_pyobject (mobius::core::kff::lookup (arg_hash_type, arg_value));
     }
     catch (const std::exception &e)
     {

@@ -71,7 +71,7 @@ new_core_kff_module ()
     mobius::py::pymodule module (&module_def);
 
     // Add types
-    module.add_type ("file", new_core_kff_file_type ());
+    module.add_type ("file", mobius::py::new_core_kff_file_type ());
     module.add_type ("kff", new_core_kff_kff_type ());
     module.add_type ("hashset", new_core_kff_hashset_type ());
 
