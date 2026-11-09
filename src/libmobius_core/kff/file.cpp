@@ -66,7 +66,7 @@ class file::impl
     // @brief Get file type
     // @return The type of the file
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    int
+    std::uint16_t
     get_type () const
     {
         _load_metadata ();
@@ -111,10 +111,10 @@ class file::impl
     int64_t id_ = 0;
 
     // @brief Type
-    mutable int64_t type_ = 0;
+    mutable std::uint16_t type_ = 0;
 
     // @brief Size in bytes or -1 if unknown
-    mutable int64_t size_ = 0;
+    mutable std::int64_t size_ = -1;
 
     // @brief Is loaded flag
     mutable bool is_loaded_ = false;
@@ -313,7 +313,7 @@ file::is_alert () const
 // @brief Get file type
 // @return The type of the file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-int
+std::uint16_t
 file::get_type () const
 {
     if (!impl_)
@@ -339,7 +339,7 @@ file::has_size () const
 // @brief Get file size
 // @return The size of the file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-int64_t
+std::int64_t
 file::get_size () const
 {
     if (!impl_)

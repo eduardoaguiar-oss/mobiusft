@@ -40,7 +40,7 @@ class file
     file (std::int64_t, std::uint16_t, std::uint64_t);
 
     bool is_alert () const;
-    int get_type () const;
+    std::uint16_t get_type () const;
 
     bool has_size () const;
     std::int64_t get_size () const;
