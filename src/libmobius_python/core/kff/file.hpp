@@ -19,9 +19,9 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
+#include <mobius/core/kff/file.hpp>
 #include <pymobius.hpp>
 #include <pytypeobject.hpp>
-#include <mobius/core/kff/file.hpp>
 
 namespace mobius::py
 {
@@ -30,8 +30,7 @@ namespace mobius::py
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
-    PyObject_HEAD
-    mobius::core::kff::file *obj;
+    PyObject_HEAD mobius::core::kff::file *obj;
 } core_kff_file_o;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -40,14 +39,16 @@ typedef struct
 mobius::py::pytypeobject new_core_kff_file_type ();
 bool pymobius_core_kff_file_check (PyObject *);
 mobius::core::kff::file pymobius_core_kff_file_from_pyobject (PyObject *);
-PyObject *to_pyobject (const mobius::core::kff::file&);
+PyObject *to_pyobject (const mobius::core::kff::file &);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create mobius::core::kff::file from PyObject
 // @param value Python Object
 // @return mobius::core::kff::file object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-template <> inline mobius::core::kff::file from_pyobject<mobius::core::kff::file> (PyObject *value)
+template <>
+inline mobius::core::kff::file
+from_pyobject<mobius::core::kff::file> (PyObject *value)
 {
     return pymobius_core_kff_file_from_pyobject (value);
 }

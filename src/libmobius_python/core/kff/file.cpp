@@ -26,6 +26,8 @@
 #include <pymobius.hpp>
 #include <stdexcept>
 
+namespace mobius::py
+{
 namespace
 {
 // @brief Global pointer to hold the heap-allocated type
@@ -38,7 +40,7 @@ static PyTypeObject *core_kff_file_type = nullptr;
 // @return True/False
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_is_alert (mobius::py::core_kff_file_o *self, PyObject *)
+tp_f_is_alert (core_kff_file_o *self, PyObject *)
 {
     return mobius::py::call_method (self->obj, &mobius::core::kff::file::is_alert);
 }
@@ -50,7 +52,7 @@ tp_f_is_alert (mobius::py::core_kff_file_o *self, PyObject *)
 // @return File type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_get_type (mobius::py::core_kff_file_o *self, PyObject *)
+tp_f_get_type (core_kff_file_o *self, PyObject *)
 {
     return mobius::py::call_method (self->obj, &mobius::core::kff::file::get_type);
 }
@@ -62,7 +64,7 @@ tp_f_get_type (mobius::py::core_kff_file_o *self, PyObject *)
 // @return True/False
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_has_size (mobius::py::core_kff_file_o *self, PyObject *)
+tp_f_has_size (core_kff_file_o *self, PyObject *)
 {
     return mobius::py::call_method (self->obj, &mobius::core::kff::file::has_size);
 }
@@ -74,7 +76,7 @@ tp_f_has_size (mobius::py::core_kff_file_o *self, PyObject *)
 // @return File size
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_get_size (mobius::py::core_kff_file_o *self, PyObject *)
+tp_f_get_size (core_kff_file_o *self, PyObject *)
 {
     return mobius::py::call_method (self->obj, &mobius::core::kff::file::get_size);
 }
@@ -85,14 +87,14 @@ tp_f_get_size (mobius::py::core_kff_file_o *self, PyObject *)
 // @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_set_size (mobius::py::core_kff_file_o *self, PyObject *arg)
+tp_f_set_size (core_kff_file_o *self, PyObject *arg)
 {
     // Parse input args
     std::uint64_t arg_size;
 
     try
     {
-        arg_size = mobius::py::pylong_as_std_uint64_t (arg);
+        arg_size = mobius::py::from_pyobject<std::uint64_t> (arg);
     }
     catch (const std::exception &e)
     {
@@ -111,14 +113,14 @@ tp_f_set_size (mobius::py::core_kff_file_o *self, PyObject *arg)
 // @return True/False
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_has_hash (mobius::py::core_kff_file_o *self, PyObject *arg)
+tp_f_has_hash (core_kff_file_o *self, PyObject *arg)
 {
     // Parse input args
     std::uint16_t arg_hash_type;
 
     try
     {
-        arg_hash_type = mobius::py::pylong_as_std_uint16_t (arg);
+        arg_hash_type = mobius::py::from_pyobject<std::uint16_t> (arg);
     }
     catch (const std::exception &e)
     {
@@ -137,14 +139,14 @@ tp_f_has_hash (mobius::py::core_kff_file_o *self, PyObject *arg)
 // @return Hash value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_get_hash (mobius::py::core_kff_file_o *self, PyObject *arg)
+tp_f_get_hash (core_kff_file_o *self, PyObject *arg)
 {
     // Parse input args
     std::uint16_t arg_hash_type;
 
     try
     {
-        arg_hash_type = mobius::py::pylong_as_std_uint16_t (arg);
+        arg_hash_type = mobius::py::from_pyobject<std::uint16_t> (arg);
     }
     catch (const std::exception &e)
     {
@@ -162,7 +164,7 @@ tp_f_get_hash (mobius::py::core_kff_file_o *self, PyObject *arg)
 // @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_set_hash (mobius::py::core_kff_file_o *self, PyObject *args)
+tp_f_set_hash (core_kff_file_o *self, PyObject *args)
 {
     // Parse input args
     std::uint16_t arg_hash_type;
@@ -170,8 +172,8 @@ tp_f_set_hash (mobius::py::core_kff_file_o *self, PyObject *args)
 
     try
     {
-        arg_hash_type = mobius::py::get_arg_as_uint16_t (args, 0);
-        arg_value = mobius::py::get_arg_as_std_string (args, 1);
+        arg_hash_type = mobius::py::get_arg<std::uint16_t> (args, 0);
+        arg_value = mobius::py::get_arg<std::string> (args, 1);
     }
     catch (const std::exception &e)
     {
@@ -189,14 +191,14 @@ tp_f_set_hash (mobius::py::core_kff_file_o *self, PyObject *args)
 // @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_remove_hash (mobius::py::core_kff_file_o *self, PyObject *arg)
+tp_f_remove_hash (core_kff_file_o *self, PyObject *arg)
 {
     // Parse input args
     std::uint16_t arg_hash_type;
 
     try
     {
-        arg_hash_type = mobius::py::pylong_as_std_uint16_t (arg);
+        arg_hash_type = mobius::py::from_pyobject<std::uint16_t> (arg);
     }
     catch (const std::exception &e)
     {
@@ -215,7 +217,7 @@ tp_f_remove_hash (mobius::py::core_kff_file_o *self, PyObject *arg)
 // @return Thumbnail data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_get_thumbnail (mobius::py::core_kff_file_o *self, PyObject *)
+tp_f_get_thumbnail (core_kff_file_o *self, PyObject *)
 {
     return mobius::py::call_method (self->obj, &mobius::core::kff::file::get_thumbnail);
 }
@@ -226,14 +228,14 @@ tp_f_get_thumbnail (mobius::py::core_kff_file_o *self, PyObject *)
 // @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_set_thumbnail (mobius::py::core_kff_file_o *self, PyObject *arg)
+tp_f_set_thumbnail (core_kff_file_o *self, PyObject *arg)
 {
     // Parse input args
     mobius::core::bytearray arg_thumbnail;
 
     try
     {
-        arg_thumbnail = mobius::py::pybytes_as_bytearray (arg);
+        arg_thumbnail = mobius::py::from_pyobject<mobius::core::bytearray> (arg);
     }
     catch (const std::exception &e)
     {
@@ -289,7 +291,7 @@ static PyMethodDef tp_methods[] = {
 // @param self Object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
-tp_dealloc (mobius::py::core_kff_file_o *self)
+tp_dealloc (core_kff_file_o *self)
 {
     PyTypeObject *tp = Py_TYPE (self);
     delete self->obj;
@@ -312,7 +314,7 @@ static PyType_Slot core_kff_file_slots[] = {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyType_Spec core_kff_file_spec = {
     .name = "mobius.core.kff.file",
-    .basicsize = sizeof (mobius::py::core_kff_file_o),
+    .basicsize = sizeof (core_kff_file_o),
     .itemsize = 0,
     .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE | Py_TPFLAGS_IMMUTABLETYPE | Py_TPFLAGS_DISALLOW_INSTANTIATION,
     .slots = core_kff_file_slots,
@@ -320,8 +322,6 @@ static PyType_Spec core_kff_file_spec = {
 
 } // namespace
 
-namespace mobius::py
-{
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create <i>mobius.core.kff.file</i> type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -370,7 +370,7 @@ to_pyobject (const mobius::core::kff::file &obj)
     if (!core_kff_file_type)
         throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("mobius.core.kff.file type is not initialized"));
 
-    return mobius::py::to_pyobject_nullable<mobius::py::core_kff_file_o> (obj, core_kff_file_type);
+    return mobius::py::to_pyobject_nullable<core_kff_file_o> (obj, core_kff_file_type);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -384,7 +384,7 @@ pymobius_core_kff_file_from_pyobject (PyObject *value)
     if (!core_kff_file_type)
         throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("mobius.core.kff.file type is not initialized"));
 
-    return mobius::py::from_pyobject<mobius::py::core_kff_file_o> (value, core_kff_file_type);
+    return mobius::py::from_pyobject<core_kff_file_o> (value, core_kff_file_type);
 }
 
 } // namespace mobius::py
