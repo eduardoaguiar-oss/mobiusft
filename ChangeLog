@@ -68,6 +68,11 @@ Mobius Forensic Toolkit 2.31
 	* libmobius_python: Add function kff.has_size
 	* libmobius_python: Add function kff.get_file_count_by_type
 	* libmobius_python: Add function kff.new_transaction
+	* libmobius_python: Add function kff.get_file_count
+	* libmobius_python: Add function kff.get_alert_count
+	* libmobius_python: Add function kff.get_hash_count
+	* libmobius_python: Add function kff.get_thumbnail_count
+	* libmobius_python: Add function kff.get_hash_count_by_type ()
 	* pymobius: Remove module item_browser.py
 
 Mobius Forensic Toolkit 2.30

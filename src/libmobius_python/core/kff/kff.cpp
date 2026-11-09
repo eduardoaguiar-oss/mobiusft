@@ -383,6 +383,98 @@ pymobius_core_kff_kff_from_pyobject (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get file count
+// @param self Python self
+// @param args Python arguments
+// @return File count
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_core_kff_get_file_count (PyObject *, PyObject *)
+{
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = mobius::py::to_pyobject (mobius::core::kff::get_file_count ());
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get hash count
+// @param self Python self
+// @param args Python arguments
+// @return Hash count
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_core_kff_get_hash_count (PyObject *, PyObject *)
+{
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = mobius::py::to_pyobject (mobius::core::kff::get_hash_count ());
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get alert count
+// @param self Python self
+// @param args Python arguments
+// @return Alert count
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_core_kff_get_alert_count (PyObject *, PyObject *)
+{
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = mobius::py::to_pyobject (mobius::core::kff::get_alert_count ());
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get thumbnail count
+// @param self Python self
+// @param args Python arguments
+// @return Thumbnail count
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_core_kff_get_thumbnail_count (PyObject *, PyObject *)
+{
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = mobius::py::to_pyobject (mobius::core::kff::get_thumbnail_count ());
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get file count by type
 // @param self Python self
 // @param args Python arguments
@@ -397,6 +489,31 @@ func_core_kff_get_file_count_by_type (PyObject *, PyObject *)
     try
     {
         ret = mobius::py::pydict_from_cpp_container (mobius::core::kff::get_file_count_by_type ());
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    // return value
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get hash count by type
+// @param self Python self
+// @param args Python arguments
+// @return Dictionary with hash count by type
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_core_kff_get_hash_count_by_type (PyObject *, PyObject *)
+{
+    // execute C++ function
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = mobius::py::pydict_from_cpp_container (mobius::core::kff::get_hash_count_by_type ());
     }
     catch (const std::exception &e)
     {
