@@ -303,6 +303,22 @@ get_hash_count ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get total alert count in the database
+// @return Total number of alerts
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::uint64_t
+get_alert_count ()
+{
+    auto db = get_database ();
+    auto stmt = db.new_statement ("SELECT COUNT(*) FROM file where type > 0");
+
+    if (stmt.fetch_row ())
+        return stmt.get_column_int64 (0);
+
+    return 0;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get file count by type
 // @return Map of file types to their respective counts
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
