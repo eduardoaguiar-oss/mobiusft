@@ -328,8 +328,31 @@ template <> inline mobius::core::datetime::datetime from_pyobject<mobius::core::
     return pydatetime_as_datetime (value);
 }
 
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Parse function argument
+// @param args Argument list
+// @param idx Argument index, starting from 0
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+template <typename T> T
+get_arg (PyObject *args, std::uint32_t idx)
+{
+    return mobius::py::from_pyobject<T> (mobius::py::get_arg (args, idx));
+}
 
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Parse function argument
+// @param args Argument list
+// @param idx Argument index, starting from 0
+// @param dvalue Default value
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+template <typename T> T
+get_arg (PyObject *args, std::uint32_t idx, T dvalue)
+{
+    if (idx < get_arg_size (args))
+        return mobius::py::from_pyobject<T> (mobius::py::get_arg (args, idx));
 
+    return dvalue;
+}
 
 
 
