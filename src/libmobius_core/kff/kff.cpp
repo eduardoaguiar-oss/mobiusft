@@ -271,6 +271,22 @@ has_size (uint64_t size)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get total file count in the database
+// @return Total number of files
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::uint64_t
+get_file_count ()
+{
+    auto db = get_database ();
+    auto stmt = db.new_statement ("SELECT COUNT(*) FROM file");
+
+    if (stmt.fetch_row ())
+        return stmt.get_column_int64 (0);
+
+    return 0;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get file count by type
 // @return Map of file types to their respective counts
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
