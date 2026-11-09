@@ -77,6 +77,18 @@ Mobius Forensic Toolkit 2.31
 	* libmobius_python: Add function core.kff.lookup
 	* libmobius_python: Add constants to module core.kff
 	* libmobius_python: Add deleted template function from_pyobject (PyObject *)
+	* libmobius_python: Add template function from_pyobject<bool> (PyObject *)
+	* libmobius_python: Add template function from_pyobject<int8_t> (PyObject *)
+	* libmobius_python: Add template function from_pyobject<int16_t> (PyObject *)
+	* libmobius_python: Add template function from_pyobject<int32_t> (PyObject *)
+	* libmobius_python: Add template function from_pyobject<int64_t> (PyObject *)
+	* libmobius_python: Add template function from_pyobject<uint8_t> (PyObject *)
+	* libmobius_python: Add template function from_pyobject<uint16_t> (PyObject *)
+	* libmobius_python: Add template function from_pyobject<uint32_t> (PyObject *)
+	* libmobius_python: Add template function from_pyobject<uint64_t> (PyObject *)
+	* libmobius_python: Add template function from_pyobject<double> (PyObject *)
+	* libmobius_python: Add template function from_pyobject<std::string> (PyObject *)
+	* libmobius_python: Add template function from_pyobject<mobius::core::bytearray> (PyObject *)
 	* pymobius: Remove module item_browser.py
 
 Mobius Forensic Toolkit 2.30

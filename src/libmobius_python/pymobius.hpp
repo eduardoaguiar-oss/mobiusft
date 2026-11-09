@@ -153,7 +153,7 @@ bool pystring_check (PyObject *);
 bool pyfloat_check (PyObject *);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// C++ -> Python concrete types conversion
+// C++ -> Python types conversion
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *to_pyobject (bool);
 PyObject *to_pyobject (std::int8_t);
@@ -172,9 +172,154 @@ PyObject *to_pyobject (const mobius::core::bytearray &);
 PyObject *to_pyobject (const mobius::core::datetime::datetime &);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// Python -> C++ Python concrete types conversion
+// Python -> C++ types conversion
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 template <typename T> T from_pyobject (PyObject *) = delete;
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create bool from PyBool
+// @param value Python Object
+// @return bool value
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+template <> inline bool from_pyobject<bool> (PyObject *value)
+{
+    return value == Py_True;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create std::int8_t from PyLong
+// @param value Python Object
+// @return std::int8_t
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+template <> inline std::int8_t from_pyobject<std::int8_t> (PyObject *value)
+{
+    return PyLong_AsLong (value);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create std::uint16_t from PyLong
+// @param value Python Object
+// @return std::uint16_t
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+template <> inline std::int16_t from_pyobject<std::int16_t> (PyObject *value)
+{
+    return PyLong_AsLong (value);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create std::uint32_t from PyLong
+// @param value Python Object
+// @return std::uint32_t
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+template <> inline std::int32_t from_pyobject<std::int32_t> (PyObject *value)
+{
+    return PyLong_AsLong (value);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create std::uint64_t from PyLong
+// @param value Python Object
+// @return std::uint64_t
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+template <> inline std::int64_t from_pyobject<std::int64_t> (PyObject *value)
+{
+    return PyLong_AsLongLong (value);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create std::uint8_t from PyLong
+// @param value Python Object
+// @return std::uint8_t
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+template <> inline std::uint8_t from_pyobject<std::uint8_t> (PyObject *value)
+{
+    return PyLong_AsUnsignedLong (value);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create std::uint16_t from PyLong
+// @param value Python Object
+// @return std::uint16_t
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+template <> inline std::uint16_t from_pyobject<std::uint16_t> (PyObject *value)
+{
+    return PyLong_AsUnsignedLong (value);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create std::uint32_t from PyLong
+// @param value Python Object
+// @return std::uint32_t
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+template <> inline std::uint32_t from_pyobject<std::uint32_t> (PyObject *value)
+{
+    return PyLong_AsUnsignedLong (value);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create std::uint64_t from PyLong
+// @param value Python Object
+// @return std::uint64_t
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+template <> inline std::uint64_t from_pyobject<std::uint64_t> (PyObject *value)
+{
+    std::uint64_t v = PyLong_AsUnsignedLongLong (value);
+
+    if (PyErr_Occurred ())
+        throw std::runtime_error (get_error_message ());
+
+    return v;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create double value from PyFloat
+// @param value Python Object
+// @return double value
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+template <> inline double from_pyobject<double> (PyObject *value)
+{
+    return PyFloat_AS_DOUBLE (value);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create std::string from PyUnicode
+// @param value Python String
+// @return C++ string
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+template <> inline std::string from_pyobject<std::string> (PyObject *value)
+{
+    const char *buffer = PyUnicode_AsUTF8 (value);
+    std::string str;
+
+    if (buffer)
+        str = buffer;
+
+    else
+        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid Python string"));
+
+    return str;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create mobius::core::bytearray from PyBytes
+// @param value Python Object
+// @return Bytearray
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+template <> inline mobius::core::bytearray from_pyobject<mobius::core::bytearray> (PyObject *value)
+{
+    char *buffer;
+    Py_ssize_t length;
+
+    if (PyBytes_AsStringAndSize (value, &buffer, &length) == -1)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid bytes"));
+
+    return mobius::core::bytearray (reinterpret_cast<const std::uint8_t *> (buffer), length);
+}
+
+
+
+
+
 
 PyObject *pystring_from_std_string (const std::string &);
 std::string pystring_as_std_string (PyObject *);
@@ -309,15 +454,6 @@ pytuple_from_cpp_pair (const T &p, F1 pyf1, F2 pyf2)
 
     return ret;
 }
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Primary template for converting Python object to C++ object
-// @tparam T C++ type
-// @param value Python object
-// @return C++ object of type T
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-template <typename T>
-T to_cpp (PyObject *value) = delete;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Call C++ object member function with arguments, handling exceptions
