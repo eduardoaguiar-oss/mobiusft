@@ -133,6 +133,10 @@ Mobius Forensic Toolkit 2.31
 	* libmobius_python: Add function to_pyobject (char)
 	* libmobius_python: Remove function get_arg_as_char
 	* libmobius_python: Remove function pybytes_from_char
+	* libmobius_python: Add new module pycall.hpp
+	* libmobius_python: Add template function call_function
+	* libmobius_python: Add template function generic_getter
+	* libmobius_python: Add template function generic_setter
 	* pymobius: Remove module item_browser.py
 
 Mobius Forensic Toolkit 2.30

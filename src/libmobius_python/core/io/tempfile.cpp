@@ -23,6 +23,7 @@
 #include "tempfile.hpp"
 #include <mobius/core/exception.inc>
 #include <pymobius.hpp>
+#include <pycall.hpp>
 #include <stdexcept>
 #include "core/io/reader.hpp"
 #include "core/io/writer.hpp"

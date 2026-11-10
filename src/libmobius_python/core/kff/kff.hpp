@@ -38,6 +38,8 @@ bool pymobius_core_kff_kff_check (PyObject *);
 PyObject *pymobius_core_kff_kff_to_pyobject (const mobius::core::kff::kff &);
 mobius::core::kff::kff pymobius_core_kff_kff_from_pyobject (PyObject *);
 
+namespace mobius::py
+{
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Functions prototypes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -51,6 +53,6 @@ PyObject *func_core_kff_has_size (PyObject *, PyObject *);
 PyObject *func_core_kff_lookup (PyObject *, PyObject *);
 PyObject *func_core_kff_new_transaction (PyObject *, PyObject *);
 
-
+} // namespace mobius::py
 
 #endif

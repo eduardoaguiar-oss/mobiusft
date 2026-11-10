@@ -22,12 +22,13 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "block.hpp"
 #include <mobius/core/exception.inc>
-#include <pylist.hpp>
-#include <pymobius.hpp>
 #include <stdexcept>
 #include "core/io/reader.hpp"
 #include "core/pod/data.hpp"
 #include "core/pod/map.hpp"
+#include <pylist.hpp>
+#include <pymobius.hpp>
+#include <pycall.hpp>
 
 namespace
 {
@@ -42,20 +43,34 @@ static PyTypeObject *core_vfs_block_type = nullptr;
 // @return <i>uid</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_uid (core_vfs_block_o *self, void *)
+tp_getter_uid (PyObject *self, void *)
 {
-    PyObject *ret = nullptr;
+    auto obj = reinterpret_cast<core_vfs_block_o *> (self)->obj;
+    return mobius::py::generic_getter (obj, &mobius::core::vfs::block::get_uid);
+}
 
-    try
-    {
-        ret = mobius::py::to_pyobject (self->obj->get_uid ());
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-    }
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>type</i> Attribute getter
+// @param self Object
+// @return <i>type</i> attribute
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_getter_type (PyObject *self, void *)
+{
+    auto obj = reinterpret_cast<core_vfs_block_o *> (self)->obj;
+    return mobius::py::generic_getter (obj, &mobius::core::vfs::block::get_type);
+}
 
-    return ret;
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>size</i> Attribute getter
+// @param self Object
+// @return <i>size</i> attribute
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_getter_size (PyObject *self, void *)
+{
+    auto obj = reinterpret_cast<core_vfs_block_o *> (self)->obj;
+    return mobius::py::generic_getter (obj, &mobius::core::vfs::block::get_size);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -65,85 +80,25 @@ tp_getter_uid (core_vfs_block_o *self, void *)
 // @return 0 on success, -1 on error
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static int
-tp_setter_uid (core_vfs_block_o *self, PyObject *value, void *)
+tp_setter_uid (PyObject *self, PyObject *value, void *)
 {
-    // Check value
-    try
-    {
-        mobius::py::check_setter_value (value, "uid", mobius::py::pylong_check);
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_invalid_type_error (e.what ());
-        return -1;
-    }
+    auto obj = reinterpret_cast<core_vfs_block_o *> (self)->obj;
 
-    // Set uid attribute
-    try
-    {
-        self->obj->set_uid (mobius::py::from_pyobject<std::uint32_t> (value));
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-        return -1;
-    }
-
-    // Return success
-    return 0;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>type</i> Attribute getter
-// @param self Object
-// @return <i>type</i> attribute
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyObject *
-tp_getter_type (core_vfs_block_o *self, void *)
-{
-    PyObject *ret = nullptr;
-
-    try
-    {
-        ret = mobius::py::to_pyobject (self->obj->get_type ());
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-    }
-
-    return ret;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>size</i> Attribute getter
-// @param self Object
-// @return <i>size</i> attribute
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyObject *
-tp_getter_size (core_vfs_block_o *self, void *)
-{
-    PyObject *ret = nullptr;
-
-    try
-    {
-        ret = mobius::py::to_pyobject (self->obj->get_size ());
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-    }
-
-    return ret;
+    return mobius::py::generic_setter<std::uint32_t> (
+        obj,
+        &mobius::core::vfs::block::set_uid,
+        value,
+        mobius::py::pylong_check
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {"uid", (getter) tp_getter_uid, (setter) tp_setter_uid, "Block UID", nullptr},
-    {"type", (getter) tp_getter_type, (setter) 0, "Type", nullptr},
-    {"size", (getter) tp_getter_size, (setter) 0, "Size in bytes", nullptr},
+    {"uid", tp_getter_uid, tp_setter_uid, "Block UID", nullptr},
+    {"type", tp_getter_type, nullptr, "Type", nullptr},
+    {"size", tp_getter_size, nullptr, "Size in bytes", nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
 
@@ -194,18 +149,7 @@ tp_f_add_parent (core_vfs_block_o *self, PyObject *args)
     }
 
     // Execute C++ function
-    try
-    {
-        self->obj->add_parent (arg_parent);
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-        return nullptr;
-    }
-
-    // return None
-    return mobius::py::pynone ();
+    return mobius::py::call_method (self->obj, &mobius::core::vfs::block::add_parent, arg_parent);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -252,18 +196,7 @@ tp_f_add_child (core_vfs_block_o *self, PyObject *args)
     }
 
     // Execute C++ function
-    try
-    {
-        self->obj->add_child (arg_parent);
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-        return nullptr;
-    }
-
-    // return None
-    return mobius::py::pynone ();
+    return mobius::py::call_method (self->obj, &mobius::core::vfs::block::add_child, arg_parent);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -314,19 +247,7 @@ tp_f_has_attribute (core_vfs_block_o *self, PyObject *args)
     }
 
     // Execute C++ function
-    PyObject *ret = nullptr;
-
-    try
-    {
-        ret = mobius::py::to_pyobject (self->obj->has_attribute (arg_name));
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-    }
-
-    // Return value
-    return ret;
+    return mobius::py::call_method (self->obj, &mobius::core::vfs::block::has_attribute, arg_name);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -391,18 +312,7 @@ tp_f_set_attribute (core_vfs_block_o *self, PyObject *args)
     }
 
     // Execute C++ function
-    try
-    {
-        self->obj->set_attribute (arg_name, arg_value);
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-        return nullptr;
-    }
-
-    // return None
-    return mobius::py::pynone ();
+    return mobius::py::call_method (self->obj, &mobius::core::vfs::block::set_attribute, arg_name, arg_value);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -439,20 +349,7 @@ tp_f_get_attributes (core_vfs_block_o *self, PyObject *)
 static PyObject *
 tp_f_is_handled (core_vfs_block_o *self, PyObject *)
 {
-    // Execute C++ function
-    PyObject *ret = nullptr;
-
-    try
-    {
-        ret = mobius::py::to_pyobject (self->obj->is_handled ());
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-    }
-
-    // Return value
-    return ret;
+    return mobius::py::call_method (self->obj, &mobius::core::vfs::block::is_handled);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -477,18 +374,7 @@ tp_f_set_handled (core_vfs_block_o *self, PyObject *args)
     }
 
     // Execute C++ function
-    try
-    {
-        self->obj->set_handled (arg_flag);
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-        return nullptr;
-    }
-
-    // return None
-    return mobius::py::pynone ();
+    return mobius::py::call_method (self->obj, &mobius::core::vfs::block::set_handled, arg_flag);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -500,20 +386,7 @@ tp_f_set_handled (core_vfs_block_o *self, PyObject *args)
 static PyObject *
 tp_f_is_complete (core_vfs_block_o *self, PyObject *)
 {
-    // Execute C++ function
-    PyObject *ret = nullptr;
-
-    try
-    {
-        ret = mobius::py::to_pyobject (self->obj->is_complete ());
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-    }
-
-    // Return value
-    return ret;
+    return mobius::py::call_method (self->obj, &mobius::core::vfs::block::is_complete);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -538,18 +411,7 @@ tp_f_set_complete (core_vfs_block_o *self, PyObject *args)
     }
 
     // Execute C++ function
-    try
-    {
-        self->obj->set_complete (arg_flag);
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-        return nullptr;
-    }
-
-    // return None
-    return mobius::py::pynone ();
+    return mobius::py::call_method (self->obj, &mobius::core::vfs::block::set_complete, arg_flag);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -561,20 +423,7 @@ tp_f_set_complete (core_vfs_block_o *self, PyObject *args)
 static PyObject *
 tp_f_is_available (core_vfs_block_o *self, PyObject *)
 {
-    // Execute C++ function
-    PyObject *ret = nullptr;
-
-    try
-    {
-        ret = mobius::py::to_pyobject (self->obj->is_available ());
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-    }
-
-    // Return value
-    return ret;
+    return mobius::py::call_method (self->obj, &mobius::core::vfs::block::is_available);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -599,18 +448,7 @@ tp_f_set_available (core_vfs_block_o *self, PyObject *args)
     }
 
     // Execute C++ function
-    try
-    {
-        self->obj->set_available (arg_flag);
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-        return nullptr;
-    }
-
-    // return None
-    return mobius::py::pynone ();
+    return mobius::py::call_method (self->obj, &mobius::core::vfs::block::set_available, arg_flag);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

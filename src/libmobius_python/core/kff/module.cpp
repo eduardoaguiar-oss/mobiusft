@@ -32,15 +32,15 @@ namespace
 // @brief Module methods
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef module_methods[] = {
-    {"get_alert_count", func_core_kff_get_alert_count, METH_NOARGS, "Get alert count"},
-    {"get_file_count", func_core_kff_get_file_count, METH_NOARGS, "Get file count"},
-    {"get_file_count_by_type", func_core_kff_get_file_count_by_type, METH_NOARGS, "Get file count by type"},
-    {"get_hash_count", func_core_kff_get_hash_count, METH_NOARGS, "Get hash count"},
-    {"get_hash_count_by_type", func_core_kff_get_hash_count_by_type, METH_NOARGS, "Get hash count by type"},
-    {"get_thumbnail_count", func_core_kff_get_thumbnail_count, METH_NOARGS, "Get thumbnail count"},
-    {"has_size", func_core_kff_has_size, METH_VARARGS, "Check if file has size"},
-    {"lookup", func_core_kff_lookup, METH_VARARGS, "Lookup file by hash type and value"},
-    {"new_transaction", func_core_kff_new_transaction, METH_NOARGS, "Create new transaction to KFF database"},
+    {"get_alert_count", mobius::py::func_core_kff_get_alert_count, METH_NOARGS, "Get alert count"},
+    {"get_file_count", mobius::py::func_core_kff_get_file_count, METH_NOARGS, "Get file count"},
+    {"get_file_count_by_type", mobius::py::func_core_kff_get_file_count_by_type, METH_NOARGS, "Get file count by type"},
+    {"get_hash_count", mobius::py::func_core_kff_get_hash_count, METH_NOARGS, "Get hash count"},
+    {"get_hash_count_by_type", mobius::py::func_core_kff_get_hash_count_by_type, METH_NOARGS, "Get hash count by type"},
+    {"get_thumbnail_count", mobius::py::func_core_kff_get_thumbnail_count, METH_NOARGS, "Get thumbnail count"},
+    {"has_size", mobius::py::func_core_kff_has_size, METH_VARARGS, "Check if file has size"},
+    {"lookup", mobius::py::func_core_kff_lookup, METH_VARARGS, "Lookup file by hash type and value"},
+    {"new_transaction", mobius::py::func_core_kff_new_transaction, METH_NOARGS, "Create new transaction to KFF database"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };
 

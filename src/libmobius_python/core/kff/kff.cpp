@@ -22,14 +22,15 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "kff.hpp"
 #include <mobius/core/exception.inc>
-#include <pydict.hpp>
-#include <pylist.hpp>
-#include <pymobius.hpp>
 #include <stdexcept>
 #include "core/database/connection_set.hpp"
 #include "core/database/transaction.hpp"
 #include "file.hpp"
 #include "hashset.hpp"
+#include <pydict.hpp>
+#include <pylist.hpp>
+#include <pymobius.hpp>
+#include <pycall.hpp>
 
 namespace
 {
@@ -344,6 +345,8 @@ pymobius_core_kff_kff_from_pyobject (PyObject *value)
     return mobius::py::from_pyobject<core_kff_kff_o> (value, core_kff_kff_type);
 }
 
+namespace mobius::py
+{
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get file count
 // @param self Python self
@@ -353,18 +356,7 @@ pymobius_core_kff_kff_from_pyobject (PyObject *value)
 PyObject *
 func_core_kff_get_file_count (PyObject *, PyObject *)
 {
-    PyObject *ret = nullptr;
-
-    try
-    {
-        ret = mobius::py::to_pyobject (mobius::core::kff::get_file_count ());
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-    }
-
-    return ret;
+    return mobius::py::call_function (mobius::core::kff::get_file_count);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -376,18 +368,7 @@ func_core_kff_get_file_count (PyObject *, PyObject *)
 PyObject *
 func_core_kff_get_hash_count (PyObject *, PyObject *)
 {
-    PyObject *ret = nullptr;
-
-    try
-    {
-        ret = mobius::py::to_pyobject (mobius::core::kff::get_hash_count ());
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-    }
-
-    return ret;
+    return mobius::py::call_function (mobius::core::kff::get_hash_count);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -399,18 +380,7 @@ func_core_kff_get_hash_count (PyObject *, PyObject *)
 PyObject *
 func_core_kff_get_alert_count (PyObject *, PyObject *)
 {
-    PyObject *ret = nullptr;
-
-    try
-    {
-        ret = mobius::py::to_pyobject (mobius::core::kff::get_alert_count ());
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-    }
-
-    return ret;
+    return mobius::py::call_function (mobius::core::kff::get_alert_count);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -422,18 +392,7 @@ func_core_kff_get_alert_count (PyObject *, PyObject *)
 PyObject *
 func_core_kff_get_thumbnail_count (PyObject *, PyObject *)
 {
-    PyObject *ret = nullptr;
-
-    try
-    {
-        ret = mobius::py::to_pyobject (mobius::core::kff::get_thumbnail_count ());
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-    }
-
-    return ret;
+    return mobius::py::call_function (mobius::core::kff::get_thumbnail_count);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -506,19 +465,7 @@ func_core_kff_has_size (PyObject *, PyObject *args)
     }
 
     // Execute C++ function
-    PyObject *ret = nullptr;
-
-    try
-    {
-        ret = mobius::py::to_pyobject (mobius::core::kff::has_size (arg_size));
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-        return nullptr;
-    }
-
-    return ret;
+    return mobius::py::call_function (mobius::core::kff::has_size, arg_size);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -546,19 +493,7 @@ func_core_kff_lookup (PyObject *, PyObject *args)
     }
 
     // Execute C++ function
-    PyObject *ret = nullptr;
-
-    try
-    {
-        ret = mobius::py::to_pyobject (mobius::core::kff::lookup (arg_hash_type, arg_value));
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-        return nullptr;
-    }
-
-    return ret;
+    return mobius::py::call_function (mobius::core::kff::lookup, arg_hash_type, arg_value);
 }
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>new_transaction</i> function implementation
@@ -582,3 +517,5 @@ func_core_kff_new_transaction (PyObject *, PyObject *)
     // return value
     return ret;
 }
+
+} // namespace mobius::py
