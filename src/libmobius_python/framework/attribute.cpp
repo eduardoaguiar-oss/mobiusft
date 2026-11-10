@@ -300,7 +300,7 @@ tp_getter_index (framework_attribute_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint32_t (self->obj->get_index ());
+        ret = mobius::py::to_pyobject (self->obj->get_index ());
     }
     catch (const std::exception &e)
     {

@@ -564,50 +564,6 @@ pylong_check (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create PyLong from std::uint8_t
-// @param value Value
-// @return Python Long object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-pylong_from_std_uint8_t (std::uint8_t value)
-{
-    return PyLong_FromUnsignedLong (value);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create PyLong from std::uint16_t
-// @param value Value
-// @return Python Long object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-pylong_from_std_uint16_t (std::uint16_t value)
-{
-    return PyLong_FromUnsignedLong (value);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create PyLong from std::uint32_t
-// @param value Value
-// @return Python Long object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-pylong_from_std_uint32_t (std::uint32_t value)
-{
-    return PyLong_FromUnsignedLong (value);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create PyLong from std::uint64_t
-// @param value Value
-// @return Python Long object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-pylong_from_std_uint64_t (std::uint64_t value)
-{
-    return PyLong_FromUnsignedLongLong (value);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create PyLong from int
 // @param value Value
 // @return Python object
@@ -627,17 +583,6 @@ bool
 pyfloat_check (PyObject *value)
 {
     return PyFloat_Check (value);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create double value from PyFloat
-// @param value Python Object
-// @return double value
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-double
-pyfloat_as_cpp (PyObject *value)
-{
-    return PyFloat_AS_DOUBLE (value);
 }
 
 } // namespace mobius::py

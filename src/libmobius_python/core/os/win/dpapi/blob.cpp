@@ -83,7 +83,7 @@ tp_getter_revision (core_os_win_dpapi_blob_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint32_t (self->obj->get_revision ());
+        ret = mobius::py::to_pyobject (self->obj->get_revision ());
     }
     catch (const std::exception &e)
     {
@@ -128,7 +128,7 @@ tp_getter_master_key_revision (core_os_win_dpapi_blob_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint32_t (
+        ret = mobius::py::to_pyobject (
             self->obj->get_master_key_revision ());
     }
     catch (const std::exception &e)
@@ -174,7 +174,7 @@ tp_getter_flags (core_os_win_dpapi_blob_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint32_t (self->obj->get_flags ());
+        ret = mobius::py::to_pyobject (self->obj->get_flags ());
     }
     catch (const std::exception &e)
     {
@@ -220,7 +220,7 @@ tp_getter_cipher_id (core_os_win_dpapi_blob_o *self, void *)
     try
     {
         ret =
-            mobius::py::pylong_from_std_uint32_t (self->obj->get_cipher_id ());
+            mobius::py::to_pyobject (self->obj->get_cipher_id ());
     }
     catch (const std::exception &e)
     {
@@ -243,7 +243,7 @@ tp_getter_key_length (core_os_win_dpapi_blob_o *self, void *)
     try
     {
         ret =
-            mobius::py::pylong_from_std_uint32_t (self->obj->get_key_length ());
+            mobius::py::to_pyobject (self->obj->get_key_length ());
     }
     catch (const std::exception &e)
     {
@@ -309,7 +309,7 @@ tp_getter_hash_id (core_os_win_dpapi_blob_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint32_t (self->obj->get_hash_id ());
+        ret = mobius::py::to_pyobject (self->obj->get_hash_id ());
     }
     catch (const std::exception &e)
     {
@@ -331,7 +331,7 @@ tp_getter_hash_length (core_os_win_dpapi_blob_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint32_t (
+        ret = mobius::py::to_pyobject (
             self->obj->get_hash_length ());
     }
     catch (const std::exception &e)

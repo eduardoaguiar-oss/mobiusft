@@ -111,7 +111,7 @@ tp_f_get_word (core_decoder_mfc_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint16_t (self->obj->get_word ());
+        ret = mobius::py::to_pyobject (self->obj->get_word ());
     }
     catch (const std::exception &e)
     {
@@ -136,7 +136,7 @@ tp_f_get_dword (core_decoder_mfc_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint32_t (self->obj->get_dword ());
+        ret = mobius::py::to_pyobject (self->obj->get_dword ());
     }
     catch (const std::exception &e)
     {
@@ -211,7 +211,7 @@ tp_f_get_count (core_decoder_mfc_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint32_t (self->obj->get_count ());
+        ret = mobius::py::to_pyobject (self->obj->get_count ());
     }
     catch (const std::exception &e)
     {

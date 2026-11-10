@@ -458,10 +458,7 @@ tp_f_get_position (core_ui_window_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pytuple_from_cpp_pair (
-            self->obj->get_position (), mobius::py::pylong_from_std_uint32_t,
-            mobius::py::pylong_from_std_uint32_t
-        );
+        ret = mobius::py::pytuple_from_cpp_pair (self->obj->get_position ());
     }
     catch (const std::exception &e)
     {
@@ -524,10 +521,7 @@ tp_f_get_size (core_ui_window_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pytuple_from_cpp_pair (
-            self->obj->get_size (), mobius::py::pylong_from_std_uint32_t,
-            mobius::py::pylong_from_std_uint32_t
-        );
+        ret = mobius::py::pytuple_from_cpp_pair (self->obj->get_size ());
     }
     catch (const std::exception &e)
     {

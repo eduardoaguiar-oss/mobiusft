@@ -175,7 +175,7 @@ tp_f_get_quint8 (core_decoder_qdatastream_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint8_t (self->obj->get_quint8 ());
+        ret = mobius::py::to_pyobject (self->obj->get_quint8 ());
     }
     catch (const std::exception &e)
     {

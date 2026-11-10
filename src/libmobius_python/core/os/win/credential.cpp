@@ -169,7 +169,7 @@ tp_getter_flags (core_os_win_credential_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint32_t (self->obj->get_flags ());
+        ret = mobius::py::to_pyobject (self->obj->get_flags ());
     }
     catch (const std::exception &e)
     {

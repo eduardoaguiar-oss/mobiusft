@@ -338,13 +338,6 @@ get_arg (PyObject *args, std::uint32_t idx, T dvalue)
 PyObject *pybytes_from_char (char);
 PyObject *pylong_from_int (int);
 
-PyObject *pylong_from_std_uint8_t (std::uint8_t);
-PyObject *pylong_from_std_uint16_t (std::uint16_t);
-PyObject *pylong_from_std_uint32_t (std::uint32_t);
-PyObject *pylong_from_std_uint64_t (std::uint64_t);
-
-double pyfloat_as_cpp (PyObject *);
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // C++ <-> Python type conversion
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

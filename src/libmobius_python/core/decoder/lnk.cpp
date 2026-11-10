@@ -45,7 +45,7 @@ tp_getter_header_size (core_decoder_lnk_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint32_t (
+        ret = mobius::py::to_pyobject (
             self->obj->get_header_size ()
         );
     }
@@ -91,7 +91,7 @@ tp_getter_flags (core_decoder_lnk_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint32_t (self->obj->get_flags ());
+        ret = mobius::py::to_pyobject (self->obj->get_flags ());
     }
     catch (const std::exception &e)
     {
@@ -113,7 +113,7 @@ tp_getter_file_attributes (core_decoder_lnk_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint32_t (
+        ret = mobius::py::to_pyobject (
             self->obj->get_file_attributes ()
         );
     }

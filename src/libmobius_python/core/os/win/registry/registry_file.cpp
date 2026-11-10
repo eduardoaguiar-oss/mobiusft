@@ -66,7 +66,7 @@ tp_getter_uid (core_os_win_registry_registry_file_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint32_t (self->obj->get_uid ());
+        ret = mobius::py::to_pyobject (self->obj->get_uid ());
     }
     catch (const std::exception &e)
     {

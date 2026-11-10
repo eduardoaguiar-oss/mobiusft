@@ -129,7 +129,7 @@ tp_getter_drive_number (os_win_trashbin_info2_entry_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint32_t (
+        ret = mobius::py::to_pyobject (
             self->obj->get_drive_number ());
     }
     catch (const std::exception &e)
@@ -197,7 +197,7 @@ tp_getter_size (os_win_trashbin_info2_entry_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint32_t (self->obj->get_size ());
+        ret = mobius::py::to_pyobject (self->obj->get_size ());
     }
     catch (const std::exception &e)
     {

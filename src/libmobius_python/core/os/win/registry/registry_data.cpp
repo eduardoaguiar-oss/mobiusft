@@ -72,7 +72,7 @@ tp_getter_size (core_os_win_registry_registry_data_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint32_t (self->obj->get_size ());
+        ret = mobius::py::to_pyobject (self->obj->get_size ());
     }
     catch (const std::exception &e)
     {
@@ -147,7 +147,7 @@ tp_f_get_data_as_dword (core_os_win_registry_registry_data_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint32_t (
+        ret = mobius::py::to_pyobject (
             self->obj->get_data_as_dword ());
     }
     catch (const std::exception &e)

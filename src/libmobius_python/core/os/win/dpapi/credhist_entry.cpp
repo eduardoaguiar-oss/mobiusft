@@ -85,7 +85,7 @@ tp_getter_revision (core_os_win_dpapi_credhist_entry_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint32_t (self->obj->get_revision ());
+        ret = mobius::py::to_pyobject (self->obj->get_revision ());
     }
     catch (const std::exception &e)
     {
@@ -129,7 +129,7 @@ tp_getter_type (core_os_win_dpapi_credhist_entry_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint32_t (self->obj->get_type ());
+        ret = mobius::py::to_pyobject (self->obj->get_type ());
     }
     catch (const std::exception &e)
     {
@@ -151,7 +151,7 @@ tp_getter_hash_id (core_os_win_dpapi_credhist_entry_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint32_t (self->obj->get_hash_id ());
+        ret = mobius::py::to_pyobject (self->obj->get_hash_id ());
     }
     catch (const std::exception &e)
     {
@@ -174,7 +174,7 @@ tp_getter_iterations (core_os_win_dpapi_credhist_entry_o *self, void *)
     try
     {
         ret =
-            mobius::py::pylong_from_std_uint32_t (self->obj->get_iterations ());
+            mobius::py::to_pyobject (self->obj->get_iterations ());
     }
     catch (const std::exception &e)
     {
@@ -197,7 +197,7 @@ tp_getter_cipher_id (core_os_win_dpapi_credhist_entry_o *self, void *)
     try
     {
         ret =
-            mobius::py::pylong_from_std_uint32_t (self->obj->get_cipher_id ());
+            mobius::py::to_pyobject (self->obj->get_cipher_id ());
     }
     catch (const std::exception &e)
     {

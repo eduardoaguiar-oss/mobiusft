@@ -45,7 +45,7 @@ tp_getter_version (core_decoder_tdf_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint32_t (self->obj->get_version ());
+        ret = mobius::py::to_pyobject (self->obj->get_version ());
     }
     catch (const std::exception &e)
     {
@@ -67,7 +67,7 @@ tp_getter_major_version (core_decoder_tdf_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint32_t (
+        ret = mobius::py::to_pyobject (
             self->obj->get_major_version ());
     }
     catch (const std::exception &e)
@@ -90,7 +90,7 @@ tp_getter_minor_version (core_decoder_tdf_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint32_t (
+        ret = mobius::py::to_pyobject (
             self->obj->get_minor_version ());
     }
     catch (const std::exception &e)
@@ -113,7 +113,7 @@ tp_getter_revision (core_decoder_tdf_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_uint32_t (self->obj->get_revision ());
+        ret = mobius::py::to_pyobject (self->obj->get_revision ());
     }
     catch (const std::exception &e)
     {
