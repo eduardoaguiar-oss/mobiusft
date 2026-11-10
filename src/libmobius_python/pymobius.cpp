@@ -52,46 +52,6 @@ get_arg (PyObject *args, std::uint32_t idx)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get function argument as char
-// @param args Argument tuple
-// @param idx Argument index
-// @return Argument
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-char
-get_arg_as_char (PyObject *args, std::uint32_t idx)
-{
-    Py_ssize_t siz = 0;
-    const char *buffer = PyUnicode_AsUTF8AndSize (get_arg (args, idx), &siz);
-
-    if (buffer)
-    {
-        if (siz != 1)
-            throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid char"));
-
-        return buffer[0];
-    }
-
-    else
-        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid Python string"));
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get function argument as char
-// @param args Argument tuple
-// @param idx Argument index
-// @param c Default value
-// @return Argument
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-char
-get_arg_as_char (PyObject *args, std::uint32_t idx, char c)
-{
-    if (idx < get_arg_size (args))
-        return get_arg_as_char (args, idx);
-
-    return c;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Reset error
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void

@@ -84,7 +84,7 @@ tp_f_set_comment_char (core_decoder_inifile_o *self, PyObject *args)
 
     try
     {
-        arg_c = mobius::py::get_arg_as_char (args, 0);
+        arg_c = mobius::py::get_arg<char> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -120,7 +120,7 @@ tp_f_set_value_char (core_decoder_inifile_o *self, PyObject *args)
 
     try
     {
-        arg_c = mobius::py::get_arg_as_char (args, 0);
+        arg_c = mobius::py::get_arg<char> (args, 0);
     }
     catch (const std::exception &e)
     {

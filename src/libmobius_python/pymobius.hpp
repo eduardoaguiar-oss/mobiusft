@@ -37,12 +37,6 @@ namespace mobius::py
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t get_arg_size (PyObject *) noexcept;
 PyObject *get_arg (PyObject *, std::uint32_t);
-char get_arg_as_char (PyObject *, std::uint32_t);
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// Parse function arguments (with default value)
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-char get_arg_as_char (PyObject *, std::uint32_t, char);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Check argument type
@@ -271,6 +265,33 @@ template <> inline std::uint64_t from_pyobject<std::uint64_t> (PyObject *value)
 template <> inline double from_pyobject<double> (PyObject *value)
 {
     return PyFloat_AS_DOUBLE (value);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create char from PyUnicode
+// @param value Python String
+// @return char
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static_assert (!std::is_same_v <char, std::int8_t> && !std::is_same_v <char, std::uint8_t>);
+  
+template <> inline char from_pyobject<char> (PyObject *value)
+{
+    if (!PyUnicode_Check (value))
+        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid Python string"));
+
+    Py_ssize_t siz = 0;
+    const char *buffer = PyUnicode_AsUTF8AndSize (value, &siz);
+
+    if (!buffer)
+    {
+        PyErr_Clear ();
+        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid Python string"));
+    }
+
+    if (siz != 1)
+        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid char"));
+
+    return buffer[0];
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
