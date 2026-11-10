@@ -221,7 +221,7 @@ tp_f_new_child (framework_model_item_o *self, PyObject *args)
     try
     {
         arg_category = mobius::py::get_arg<std::string> (args, 0);
-        arg_idx = mobius::py::get_arg_as_int (args, 1, -1);
+        arg_idx = mobius::py::get_arg<std::int32_t> (args, 1, -1);
     }
     catch (const std::exception &e)
     {
@@ -283,7 +283,7 @@ tp_f_move (framework_model_item_o *self, PyObject *args)
 
     try
     {
-        arg_idx = mobius::py::get_arg_as_int (args, 0);
+        arg_idx = mobius::py::get_arg<std::int32_t> (args, 0);
         arg_parent = mobius::py::get_arg_as_cpp (
             args, 1, pymobius_framework_model_item_from_pyobject
         );

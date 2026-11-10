@@ -373,7 +373,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 
     try
     {
-        arg_id = mobius::py::get_arg_as_int (args, 0);
+        arg_id = mobius::py::get_arg<std::int32_t> (args, 0);
     }
     catch (const std::exception &e)
     {

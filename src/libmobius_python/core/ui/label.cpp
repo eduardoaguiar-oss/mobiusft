@@ -153,7 +153,7 @@ tp_f_set_halign (core_ui_label_o *self, PyObject *args)
 
     try
     {
-        arg_halign = static_cast<mobius::core::ui::label::halign_type> (mobius::py::get_arg_as_int (args, 0));
+        arg_halign = static_cast<mobius::core::ui::label::halign_type> (mobius::py::get_arg<std::int32_t> (args, 0));
     }
     catch (const std::exception &e)
     {
@@ -189,7 +189,7 @@ tp_f_set_valign (core_ui_label_o *self, PyObject *args)
 
     try
     {
-        arg_valign = static_cast<mobius::core::ui::label::valign_type> (mobius::py::get_arg_as_int (args, 0));
+        arg_valign = static_cast<mobius::core::ui::label::valign_type> (mobius::py::get_arg<std::int32_t> (args, 0));
     }
     catch (const std::exception &e)
     {
@@ -225,7 +225,7 @@ tp_f_set_elide_mode (core_ui_label_o *self, PyObject *args)
 
     try
     {
-        arg_mode = static_cast<mobius::core::ui::label::elide_type> (mobius::py::get_arg_as_int (args, 0));
+        arg_mode = static_cast<mobius::core::ui::label::elide_type> (mobius::py::get_arg<std::int32_t> (args, 0));
     }
     catch (const std::exception &e)
     {

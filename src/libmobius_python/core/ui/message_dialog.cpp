@@ -315,7 +315,7 @@ tp_f_set_default_response (core_ui_message_dialog_o *self, PyObject *args)
     {
         arg_response_id =
             static_cast<mobius::core::ui::message_dialog::response_type> (
-                mobius::py::get_arg_as_int (args, 0));
+                mobius::py::get_arg<std::int32_t> (args, 0));
     }
     catch (const std::exception &e)
     {
@@ -391,7 +391,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     try
     {
         arg_type = static_cast<mobius::core::ui::message_dialog::type> (
-            mobius::py::get_arg_as_int (args, 0));
+            mobius::py::get_arg<std::int32_t> (args, 0));
     }
     catch (const std::exception &e)
     {

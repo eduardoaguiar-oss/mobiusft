@@ -92,34 +92,6 @@ get_arg_as_char (PyObject *args, std::uint32_t idx, char c)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get function argument as int
-// @param args Argument tuple
-// @param idx Argument index
-// @return Argument
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-int
-get_arg_as_int (PyObject *args, std::uint32_t idx)
-{
-    return PyLong_AsLong (get_arg (args, idx));
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get function argument as int (with default value)
-// @param args Argument tuple
-// @param idx Argument index
-// @param value Default value
-// @return Argument
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-int
-get_arg_as_int (PyObject *args, std::uint32_t idx, int value)
-{
-    if (idx < get_arg_size (args))
-        return PyLong_AsLong (get_arg (args, idx));
-
-    return value;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Reset error
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
