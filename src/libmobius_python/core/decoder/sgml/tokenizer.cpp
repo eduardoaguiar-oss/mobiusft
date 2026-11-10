@@ -47,16 +47,7 @@ tp_f_get_token (core_decoder_sgml_tokenizer_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pytuple_from_cpp_pair (self->obj->get_token (),
-            [] (auto f)
-            {
-                return mobius::py::to_pyobject (static_cast<int> (f));
-            },
-            [] (auto f)
-            {
-                return mobius::py::to_pyobject (f);
-            }
-        );
+        ret = mobius::py::pytuple_from_cpp_pair (self->obj->get_token ());
     }
     catch (const std::exception &e)
     {

@@ -42,14 +42,12 @@ tp_f_set_icon_by_name (core_ui_icon_o *self, PyObject *args)
 {
     // Parse input args
     std::string arg_name;
-    mobius::core::ui::icon::size_type arg_size = mobius::core::ui::icon::size_type::toolbar;
+    mobius::core::ui::icon::size_type arg_size;
 
     try
     {
         arg_name = mobius::py::get_arg<std::string> (args, 0);
-
-        if (mobius::py::get_arg_size (args) > 1)
-            arg_size = static_cast<mobius::core::ui::icon::size_type> (mobius::py::get_arg<std::int32_t> (args, 1));
+        arg_size = mobius::py::get_arg<mobius::core::ui::icon::size_type> (args, 1, mobius::core::ui::icon::size_type::toolbar);
     }
     catch (const std::exception &e)
     {
@@ -82,14 +80,12 @@ tp_f_set_icon_by_path (core_ui_icon_o *self, PyObject *args)
 {
     // Parse input args
     std::string arg_path;
-    mobius::core::ui::icon::size_type arg_size = mobius::core::ui::icon::size_type::toolbar;
+    mobius::core::ui::icon::size_type arg_size;
 
     try
     {
         arg_path = mobius::py::get_arg<std::string> (args, 0);
-
-        if (mobius::py::get_arg_size (args) > 1)
-            arg_size = static_cast<mobius::core::ui::icon::size_type> (mobius::py::get_arg<std::int32_t> (args, 1));
+        arg_size = mobius::py::get_arg<mobius::core::ui::icon::size_type> (args, 1, mobius::core::ui::icon::size_type::toolbar);
     }
     catch (const std::exception &e)
     {
@@ -122,14 +118,12 @@ tp_f_set_icon_by_url (core_ui_icon_o *self, PyObject *args)
 {
     // Parse input args
     std::string arg_url;
-    mobius::core::ui::icon::size_type arg_size = mobius::core::ui::icon::size_type::toolbar;
+    mobius::core::ui::icon::size_type arg_size;
 
     try
     {
         arg_url = mobius::py::get_arg<std::string> (args, 0);
-
-        if (mobius::py::get_arg_size (args) > 1)
-            arg_size = static_cast<mobius::core::ui::icon::size_type> (mobius::py::get_arg<std::int32_t> (args, 1));
+        arg_size = mobius::py::get_arg<mobius::core::ui::icon::size_type> (args, 1, mobius::core::ui::icon::size_type::toolbar);
     }
     catch (const std::exception &e)
     {
@@ -162,14 +156,12 @@ tp_f_set_icon_from_data (core_ui_icon_o *self, PyObject *args)
 {
     // Parse input args
     mobius::core::bytearray arg_data;
-    mobius::core::ui::icon::size_type arg_size = mobius::core::ui::icon::size_type::toolbar;
+    mobius::core::ui::icon::size_type arg_size; 
 
     try
     {
         arg_data = mobius::py::get_arg<mobius::core::bytearray> (args, 0);
-
-        if (mobius::py::get_arg_size (args) > 1)
-            arg_size = static_cast<mobius::core::ui::icon::size_type> (mobius::py::get_arg<std::int32_t> (args, 1));
+        arg_size = mobius::py::get_arg<mobius::core::ui::icon::size_type> (args, 1, mobius::core::ui::icon::size_type::toolbar);
     }
     catch (const std::exception &e)
     {
@@ -355,14 +347,12 @@ func_ui_new_icon_by_name (PyObject *, PyObject *args)
 {
     // parse input args
     std::string arg_name;
-    mobius::core::ui::icon::size_type arg_size = mobius::core::ui::icon::size_type::toolbar;
+    mobius::core::ui::icon::size_type arg_size;
 
     try
     {
         arg_name = mobius::py::get_arg<std::string> (args, 0);
-
-        if (mobius::py::get_arg_size (args) > 1)
-            arg_size = static_cast<mobius::core::ui::icon::size_type> (mobius::py::get_arg<std::int32_t> (args, 1));
+        arg_size = mobius::py::get_arg<mobius::core::ui::icon::size_type> (args, 1, mobius::core::ui::icon::size_type::toolbar);
     }
     catch (const std::exception &e)
     {
@@ -397,14 +387,12 @@ func_ui_new_icon_by_path (PyObject *, PyObject *args)
 {
     // parse input args
     std::string arg_path;
-    mobius::core::ui::icon::size_type arg_size = mobius::core::ui::icon::size_type::toolbar;
+    mobius::core::ui::icon::size_type arg_size;
 
     try
     {
         arg_path = mobius::py::get_arg<std::string> (args, 0);
-
-        if (mobius::py::get_arg_size (args) > 1)
-            arg_size = static_cast<mobius::core::ui::icon::size_type> (mobius::py::get_arg<std::int32_t> (args, 1));
+        arg_size = mobius::py::get_arg<mobius::core::ui::icon::size_type> (args, 1, mobius::core::ui::icon::size_type::toolbar);
     }
     catch (const std::exception &e)
     {
@@ -439,14 +427,12 @@ func_ui_new_icon_by_url (PyObject *, PyObject *args)
 {
     // parse input args
     std::string arg_url;
-    mobius::core::ui::icon::size_type arg_size = mobius::core::ui::icon::size_type::toolbar;
+    mobius::core::ui::icon::size_type arg_size;
 
     try
     {
         arg_url = mobius::py::get_arg<std::string> (args, 0);
-
-        if (mobius::py::get_arg_size (args) > 1)
-            arg_size = static_cast<mobius::core::ui::icon::size_type> (mobius::py::get_arg<std::int32_t> (args, 1));
+        arg_size = mobius::py::get_arg<mobius::core::ui::icon::size_type> (args, 1, mobius::core::ui::icon::size_type::toolbar);
     }
     catch (const std::exception &e)
     {
@@ -481,14 +467,12 @@ func_ui_new_icon_from_data (PyObject *, PyObject *args)
 {
     // parse input args
     mobius::core::bytearray arg_data;
-    mobius::core::ui::icon::size_type arg_size = mobius::core::ui::icon::size_type::toolbar;
+    mobius::core::ui::icon::size_type arg_size;
 
     try
     {
         arg_data = mobius::py::get_arg<mobius::core::bytearray> (args, 0);
-
-        if (mobius::py::get_arg_size (args) > 1)
-            arg_size = static_cast<mobius::core::ui::icon::size_type> (mobius::py::get_arg<std::int32_t> (args, 1));
+        arg_size = mobius::py::get_arg<mobius::core::ui::icon::size_type> (args, 1, mobius::core::ui::icon::size_type::toolbar);
     }
     catch (const std::exception &e)
     {

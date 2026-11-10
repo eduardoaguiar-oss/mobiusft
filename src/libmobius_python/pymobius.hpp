@@ -149,6 +149,21 @@ PyObject *to_pyobject (const mobius::core::bytearray &);
 PyObject *to_pyobject (const mobius::core::datetime::datetime &);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Convert enum class values to PyObject
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+template <typename T> requires std::is_enum_v <T>
+PyObject *to_pyobject (T t)
+{
+  using U = std::underlying_type_t <T>;
+
+  if constexpr (std::is_signed_v <U>)
+    return to_pyobject (static_cast <std::int64_t> (t));
+
+  else
+    return to_pyobject (static_cast <std::uint64_t> (t));
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Python -> C++ types conversion
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 template <typename T> T from_pyobject (PyObject *) = delete;
@@ -306,6 +321,17 @@ template <> inline mobius::core::datetime::datetime from_pyobject<mobius::core::
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create enum class instance from PyObject
+// @param value Python Object
+// @return Enum class instance
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+template <typename T> requires std::is_enum_v <T>
+T from_pyobject (PyObject *o)
+{
+    return static_cast <T> (from_pyobject <std::underlying_type_t <T>> (o));
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Parse function argument
 // @param args Argument list
 // @param idx Argument index, starting from 0
@@ -428,28 +454,6 @@ pytuple_from_cpp_pair (const T &p)
     {
         PyTuple_SetItem (ret, 0, to_pyobject (p.first));
         PyTuple_SetItem (ret, 1, to_pyobject (p.second));
-    }
-
-    return ret;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create new Python Tuple from C++ pair
-// @param p C++ pair
-// @param pyf1 Function to convert first value
-// @param pyf2 Function to convert second value
-// @return Python Tuple
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-template <typename T, typename F1, typename F2>
-PyObject *
-pytuple_from_cpp_pair (const T &p, F1 pyf1, F2 pyf2)
-{
-    PyObject *ret = PyTuple_New (2);
-
-    if (ret)
-    {
-        PyTuple_SetItem (ret, 0, pyf1 (p.first));
-        PyTuple_SetItem (ret, 1, pyf2 (p.second));
     }
 
     return ret;

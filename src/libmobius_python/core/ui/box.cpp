@@ -119,7 +119,7 @@ tp_f_add_child (core_ui_box_o *self, PyObject *args)
     try
     {
         arg_w = mobius::py::get_arg_as_cpp (args, 0, pymobius_core_ui_widget_from_pyobject);
-        arg_filling = static_cast<mobius::core::ui::box::fill_type> (mobius::py::get_arg<std::int32_t> (args, 1));
+        arg_filling = mobius::py::get_arg<mobius::core::ui::box::fill_type> (args, 1);
     }
     catch (const std::exception &e)
     {
@@ -252,7 +252,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 
     try
     {
-        arg_orientation = static_cast<mobius::core::ui::box::orientation_type> (mobius::py::get_arg<std::int32_t> (args, 0));
+        arg_orientation = mobius::py::get_arg<mobius::core::ui::box::orientation_type> (args, 0);
     }
     catch (const std::exception &e)
     {

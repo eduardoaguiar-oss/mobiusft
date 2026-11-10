@@ -127,6 +127,8 @@ Mobius Forensic Toolkit 2.31
 	* libmobius_python: Remove function pyfloat_as_cpp
 	* libmobius_python: Remove function pylong_from_int
 	* libmobius_python: Remove function get_arg_as_int
+	* libmobius_python: Add template function to_pyobject<T> for enum class instances
+	* libmobius_python: Add template function from_pyobject<T> for enum class instances
 	* pymobius: Remove module item_browser.py
 
 Mobius Forensic Toolkit 2.30
