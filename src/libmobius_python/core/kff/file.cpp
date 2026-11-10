@@ -23,8 +23,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "file.hpp"
 #include <mobius/core/exception.inc>
-#include <pymobius.hpp>
 #include <pycall.hpp>
+#include <pymobius.hpp>
 #include <stdexcept>
 
 namespace mobius::py

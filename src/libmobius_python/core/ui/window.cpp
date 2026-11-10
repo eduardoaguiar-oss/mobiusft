@@ -22,13 +22,14 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "window.hpp"
 #include <mobius/core/exception.inc>
+#include <stdexcept>
+#include "icon.hpp"
+#include "widget.hpp"
 #include <pyfunction.hpp>
 #include <pygil.hpp>
 #include <pymobius.hpp>
 #include <pyobject.hpp>
-#include <stdexcept>
-#include "icon.hpp"
-#include "widget.hpp"
+#include <pytuple.hpp>
 
 namespace
 {

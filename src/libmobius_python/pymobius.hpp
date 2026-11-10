@@ -493,26 +493,6 @@ check_setter_value (PyObject *value, const char *attr_name, F pycheck)
     }
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create new Python Tuple from C++ pair
-// @param p C++ pair
-// @return Python Tuple
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-template <typename T>
-PyObject *
-pytuple_from_cpp_pair (const T &p)
-{
-    PyObject *ret = PyTuple_New (2);
-
-    if (ret)
-    {
-        PyTuple_SetItem (ret, 0, to_pyobject (p.first));
-        PyTuple_SetItem (ret, 1, to_pyobject (p.second));
-    }
-
-    return ret;
-}
-
 } // namespace mobius::py
 
 #endif

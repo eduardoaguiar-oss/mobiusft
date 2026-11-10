@@ -137,6 +137,8 @@ Mobius Forensic Toolkit 2.31
 	* libmobius_python: Add template function call_function
 	* libmobius_python: Add template function generic_getter
 	* libmobius_python: Add template function generic_setter
+	* libmobius_python: Add new module pytuple.hpp
+	* libmobius_python: Move function pytuple_from_cpp_pair to pytuple.hpp
 	* pymobius: Remove module item_browser.py
 
 Mobius Forensic Toolkit 2.30
