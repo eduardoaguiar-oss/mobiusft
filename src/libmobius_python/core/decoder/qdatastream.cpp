@@ -75,7 +75,7 @@ tp_f_get_qint8 (core_decoder_qdatastream_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_int8_t (self->obj->get_qint8 ());
+        ret = mobius::py::to_pyobject (self->obj->get_qint8 ());
     }
     catch (const std::exception &e)
     {
@@ -100,7 +100,7 @@ tp_f_get_qint16 (core_decoder_qdatastream_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_int16_t (self->obj->get_qint16 ());
+        ret = mobius::py::to_pyobject (self->obj->get_qint16 ());
     }
     catch (const std::exception &e)
     {
@@ -125,7 +125,7 @@ tp_f_get_qint32 (core_decoder_qdatastream_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_int32_t (self->obj->get_qint32 ());
+        ret = mobius::py::to_pyobject (self->obj->get_qint32 ());
     }
     catch (const std::exception &e)
     {
@@ -150,7 +150,7 @@ tp_f_get_qint64 (core_decoder_qdatastream_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_int64_t (self->obj->get_qint64 ());
+        ret = mobius::py::to_pyobject (self->obj->get_qint64 ());
     }
     catch (const std::exception &e)
     {

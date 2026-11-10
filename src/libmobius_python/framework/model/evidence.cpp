@@ -97,7 +97,7 @@ tp_getter_uid (framework_model_evidence_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_int64_t (self->obj->get_uid ());
+        ret = mobius::py::to_pyobject (self->obj->get_uid ());
     }
     catch (const std::exception &e)
     {

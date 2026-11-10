@@ -152,7 +152,7 @@ tp_getter_file_idx (os_win_trashbin_info2_entry_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_int32_t (self->obj->get_file_idx ());
+        ret = mobius::py::to_pyobject (self->obj->get_file_idx ());
     }
     catch (const std::exception &e)
     {

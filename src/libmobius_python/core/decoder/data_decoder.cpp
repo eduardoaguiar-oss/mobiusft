@@ -175,7 +175,7 @@ tp_f_get_int8 (core_decoder_data_decoder_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_int8_t (self->obj->get_int8 ());
+        ret = mobius::py::to_pyobject (self->obj->get_int8 ());
     }
     catch (const std::exception &e)
     {
@@ -200,7 +200,7 @@ tp_f_get_int16_le (core_decoder_data_decoder_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_int16_t (self->obj->get_int16_le ());
+        ret = mobius::py::to_pyobject (self->obj->get_int16_le ());
     }
     catch (const std::exception &e)
     {
@@ -225,7 +225,7 @@ tp_f_get_int32_le (core_decoder_data_decoder_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_int32_t (self->obj->get_int32_le ());
+        ret = mobius::py::to_pyobject (self->obj->get_int32_le ());
     }
     catch (const std::exception &e)
     {

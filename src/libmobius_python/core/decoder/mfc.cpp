@@ -186,7 +186,7 @@ tp_f_get_int (core_decoder_mfc_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_int32_t (self->obj->get_int ());
+        ret = mobius::py::to_pyobject (self->obj->get_int ());
     }
     catch (const std::exception &e)
     {

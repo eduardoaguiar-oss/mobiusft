@@ -528,7 +528,7 @@ to_pyobject (const mobius::core::pod::data &value)
         ret = mobius::py::to_pyobject (bool (value));
 
     else if (value.is_integer ())
-        ret = mobius::py::pylong_from_std_int64_t (value.to_integer ());
+        ret = mobius::py::to_pyobject (value.to_integer ());
 
     else if (value.is_float ())
         ret = mobius::py::to_pyobject (value.to_float ());

@@ -58,7 +58,7 @@ tp_getter_uid (framework_model_item_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_int64_t (self->obj->get_uid ());
+        ret = mobius::py::to_pyobject (self->obj->get_uid ());
     }
     catch (const std::exception &e)
     {
@@ -141,7 +141,7 @@ tp_f_get_child_count (framework_model_item_o *self, PyObject *)
     try
     {
         ret =
-            mobius::py::pylong_from_std_int64_t (self->obj->get_child_count ());
+            mobius::py::to_pyobject (self->obj->get_child_count ());
     }
     catch (const std::exception &e)
     {
@@ -1066,12 +1066,12 @@ tp_f_count_evidences (framework_model_item_o *self, PyObject *args)
     {
         if (arg_type.empty ())
         {
-            ret = mobius::py::pylong_from_std_int64_t (
+            ret = mobius::py::to_pyobject (
                 self->obj->count_evidences ()
             );
         }
         else
-            ret = mobius::py::pylong_from_std_int64_t (
+            ret = mobius::py::to_pyobject (
                 self->obj->count_evidences (arg_type)
             );
     }

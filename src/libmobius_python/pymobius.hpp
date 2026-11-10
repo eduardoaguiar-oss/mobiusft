@@ -338,11 +338,6 @@ get_arg (PyObject *args, std::uint32_t idx, T dvalue)
 PyObject *pybytes_from_char (char);
 PyObject *pylong_from_int (int);
 
-PyObject *pylong_from_std_int8_t (std::int8_t);
-PyObject *pylong_from_std_int16_t (std::int16_t);
-PyObject *pylong_from_std_int32_t (std::int32_t);
-PyObject *pylong_from_std_int64_t (std::int64_t);
-
 PyObject *pylong_from_std_uint8_t (std::uint8_t);
 PyObject *pylong_from_std_uint16_t (std::uint16_t);
 PyObject *pylong_from_std_uint32_t (std::uint32_t);

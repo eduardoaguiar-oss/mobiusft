@@ -109,7 +109,7 @@ tp_getter_number_of_files (os_win_trashbin_info2_file_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_int32_t (
+        ret = mobius::py::to_pyobject (
             self->obj->get_number_of_files ());
     }
     catch (const std::exception &e)
@@ -132,7 +132,7 @@ tp_getter_last_file_idx (os_win_trashbin_info2_file_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_std_int32_t (
+        ret = mobius::py::to_pyobject (
             self->obj->get_last_file_idx ());
     }
     catch (const std::exception &e)
