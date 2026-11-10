@@ -648,17 +648,6 @@ pylong_from_std_int8_t (std::int8_t value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create std::int8_t from PyLong
-// @param value Python Object
-// @return std::int8_t
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::int8_t
-pylong_as_std_int8_t (PyObject *value)
-{
-    return PyLong_AsLong (value);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create PyLong from std::int16_t
 // @param value Value
 // @return Python Unicode object
@@ -670,17 +659,6 @@ pylong_from_std_int16_t (std::int16_t value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create std::uint16_t from PyLong
-// @param value Python Object
-// @return std::uint16_t
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::int16_t
-pylong_as_std_int16_t (PyObject *value)
-{
-    return PyLong_AsLong (value);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create PyLong from std::int32_t
 // @param value Value
 // @return Python Unicode object
@@ -689,17 +667,6 @@ PyObject *
 pylong_from_std_int32_t (std::int32_t value)
 {
     return PyLong_FromLong (value);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create std::uint32_t from PyLong
-// @param value Python Object
-// @return std::uint32_t
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::int32_t
-pylong_as_std_int32_t (PyObject *value)
-{
-    return PyLong_AsLong (value);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -777,17 +744,6 @@ PyObject *
 pylong_from_std_int64_t (std::int64_t value)
 {
     return PyLong_FromLongLong (value);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create std::uint64_t from PyLong
-// @param value Python Object
-// @return std::uint64_t
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::int64_t
-pylong_as_std_int64_t (PyObject *value)
-{
-    return PyLong_AsLongLong (value);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

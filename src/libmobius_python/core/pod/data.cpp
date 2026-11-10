@@ -599,7 +599,7 @@ pymobius_core_pod_data_from_pyobject (PyObject *value)
 
     else if (mobius::py::pylong_check (value))
         data = mobius::core::pod::data (
-            mobius::py::pylong_as_std_int64_t (value)
+            mobius::py::from_pyobject<std::int64_t> (value)
         );
 
     else if (mobius::py::pyfloat_check (value))
