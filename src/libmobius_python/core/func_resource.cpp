@@ -123,7 +123,7 @@ func_has_resource (PyObject *, PyObject *args)
     try
     {
         ret =
-            mobius::py::pybool_from_bool (mobius::core::has_resource (arg_id));
+            mobius::py::to_pyobject (mobius::core::has_resource (arg_id));
     }
     catch (const std::exception &e)
     {

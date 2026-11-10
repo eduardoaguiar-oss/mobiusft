@@ -337,7 +337,6 @@ get_arg (PyObject *args, std::uint32_t idx, T dvalue)
 
 PyObject *pystring_from_std_string (const std::string &);
 PyObject *pybytes_from_char (char);
-PyObject *pybool_from_bool (bool);
 PyObject *pylong_from_int (int);
 
 PyObject *pylong_from_std_int8_t (std::int8_t);

@@ -534,8 +534,8 @@ PyTuple_from_imagefile_info (const mobius::core::vfs::imagefile_type &type)
         PyTuple_SetItem (ret, 0, mobius::py::pystring_from_std_string (type.id));
         PyTuple_SetItem (ret, 1, mobius::py::pystring_from_std_string (type.description));
         PyTuple_SetItem (ret, 2, mobius::py::pylist_from_cpp_container (type.file_extensions));
-        PyTuple_SetItem (ret, 3, mobius::py::pybool_from_bool (type.is_writeable));
-        PyTuple_SetItem (ret, 4, mobius::py::pybool_from_bool (type.is_virtual_disk));
+        PyTuple_SetItem (ret, 3, mobius::py::to_pyobject (type.is_writeable));
+        PyTuple_SetItem (ret, 4, mobius::py::to_pyobject (type.is_virtual_disk));
     }
 
     return ret;

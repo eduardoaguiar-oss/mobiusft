@@ -564,20 +564,6 @@ pybool_check (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create PyBytes from mobius::core::bytearray
-// @param b Bool value
-// @return Python Bool object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-pybool_from_bool (bool b)
-{
-    PyObject *ret = b ? Py_True : Py_False;
-    Py_INCREF (ret);
-
-    return ret;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Check PyLong
 // @param value Python object
 // @return true/false
