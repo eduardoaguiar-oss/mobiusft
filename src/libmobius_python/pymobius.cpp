@@ -267,6 +267,18 @@ py_not_implemented ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create PyBytes from char
+// @param c Char
+// @return Python Bytes object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+to_pyobject (char c)
+{
+    char buffer[2] = {c, 0};
+    return PyBytes_FromStringAndSize (buffer, 1);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create PyBytes from mobius::core::bytearray
 // @param b Bool value
 // @return Python Bool object
@@ -459,18 +471,6 @@ bool
 pybytes_check (PyObject *value)
 {
     return PyBytes_Check (value);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create PyBytes from char
-// @param c Char
-// @return Python Bytes object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-pybytes_from_char (char c)
-{
-    char buffer[2] = {c, 0};
-    return PyBytes_FromStringAndSize (buffer, 1);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

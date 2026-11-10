@@ -130,7 +130,9 @@ Mobius Forensic Toolkit 2.31
 	* libmobius_python: Add template function to_pyobject<T> for enum class instances
 	* libmobius_python: Add template function from_pyobject<T> for enum class instances
 	* libmobius_python: Add template specialization from_pyobject<char> (PyObject *)
+	* libmobius_python: Add function to_pyobject (char)
 	* libmobius_python: Remove function get_arg_as_char
+	* libmobius_python: Remove function pybytes_from_char
 	* pymobius: Remove module item_browser.py
 
 Mobius Forensic Toolkit 2.30

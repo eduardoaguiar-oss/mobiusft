@@ -48,7 +48,7 @@ tp_f_get (core_decoder_sourcecode_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybytes_from_char (self->obj->get ());
+        ret = mobius::py::to_pyobject (self->obj->get ());
     }
     catch (const std::exception &e)
     {
@@ -73,7 +73,7 @@ tp_f_peek (core_decoder_sourcecode_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybytes_from_char (self->obj->peek ());
+        ret = mobius::py::to_pyobject (self->obj->peek ());
     }
     catch (const std::exception &e)
     {

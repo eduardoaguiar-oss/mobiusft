@@ -49,7 +49,7 @@ template <typename F>
 bool
 check_arg (PyObject *args, std::uint32_t idx, F f)
 {
-    if (idx < get_arg_size (args))
+    if (idx < PyTuple_Size (args))
         return f (get_arg (args, idx));
 
     throw std::out_of_range (MOBIUS_EXCEPTION_MSG ("argument index out of range"));
@@ -66,7 +66,7 @@ template <typename F, typename D>
 decltype (auto)
 get_arg_as_cpp (PyObject *args, std::uint32_t idx, F f, D d)
 {
-    if (idx < get_arg_size (args))
+    if (idx < PyTuple_Size (args))
         return f (get_arg (args, idx));
     return d;
 }
@@ -126,6 +126,7 @@ bool pyfloat_check (PyObject *);
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // C++ -> Python types conversion
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *to_pyobject (char);
 PyObject *to_pyobject (bool);
 PyObject *to_pyobject (std::int8_t);
 PyObject *to_pyobject (std::int16_t);
@@ -372,15 +373,11 @@ get_arg (PyObject *args, std::uint32_t idx)
 template <typename T> T
 get_arg (PyObject *args, std::uint32_t idx, T dvalue)
 {
-    if (idx < get_arg_size (args))
+    if (idx < PyTuple_Size (args))
         return mobius::py::from_pyobject<T> (mobius::py::get_arg (args, idx));
 
     return dvalue;
 }
-
-
-
-PyObject *pybytes_from_char (char);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // C++ <-> Python type conversion

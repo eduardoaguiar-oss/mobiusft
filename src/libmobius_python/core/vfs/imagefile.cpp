@@ -573,14 +573,12 @@ func_vfs_new_imagefile_by_path (PyObject *, PyObject *args)
 {
     // parse arguments
     std::string arg_path;
-    std::string arg_type = "autodetect";
+    std::string arg_type;
 
     try
     {
         arg_path = mobius::py::get_arg<std::string> (args, 0);
-
-        if (mobius::py::get_arg_size (args) > 1)
-            arg_type = mobius::py::get_arg<std::string> (args, 1);
+        arg_type = mobius::py::get_arg<std::string> (args, 1, "autodetect");
     }
     catch (const std::exception &e)
     {
@@ -613,14 +611,12 @@ func_vfs_new_imagefile_by_url (PyObject *, PyObject *args)
 {
     // parse arguments
     std::string arg_url;
-    std::string arg_type = "autodetect";
+    std::string arg_type;
 
     try
     {
         arg_url = mobius::py::get_arg<std::string> (args, 0);
-
-        if (mobius::py::get_arg_size (args) > 1)
-            arg_type = mobius::py::get_arg<std::string> (args, 1);
+        arg_type = mobius::py::get_arg<std::string> (args, 1, "autodetect");
     }
     catch (const std::exception &e)
     {
