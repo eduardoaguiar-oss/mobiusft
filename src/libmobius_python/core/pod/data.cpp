@@ -612,12 +612,12 @@ pymobius_core_pod_data_from_pyobject (PyObject *value)
 
     else if (mobius::py::pybytes_check (value))
         data = mobius::core::pod::data (
-            mobius::py::pybytes_as_bytearray (value)
+            mobius::py::from_pyobject<mobius::core::bytearray> (value)
         );
 
     else if (mobius::py::pystring_check (value))
         data = mobius::core::pod::data (
-            mobius::py::pystring_as_std_string (value)
+            mobius::py::from_pyobject<std::string> (value)
         );
 
     else if (PyList_Check (value))

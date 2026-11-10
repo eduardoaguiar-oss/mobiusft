@@ -1341,7 +1341,7 @@ tp_getattro (PyObject *o, PyObject *name)
 
             // search item.attributes, using item.get_attribute (name)
             auto self = reinterpret_cast<framework_model_item_o *> (o);
-            auto s_name = mobius::py::pystring_as_std_string (name);
+            auto s_name = mobius::py::from_pyobject<std::string> (name);
 
             if (self->obj->has_attribute (s_name))
                 ret = pymobius_core_pod_data_to_pyobject (
@@ -1372,7 +1372,7 @@ tp_setattro (PyObject *o, PyObject *name, PyObject *value)
 {
     try
     {
-        auto s_name = mobius::py::pystring_as_std_string (name);
+        auto s_name = mobius::py::from_pyobject<std::string> (name);
         PyObject *attr = PyObject_GenericGetAttr (o, name);
 
         // internal attributes are read only

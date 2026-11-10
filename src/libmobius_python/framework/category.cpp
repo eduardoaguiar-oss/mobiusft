@@ -102,7 +102,7 @@ tp_setter_name (framework_category_o *self, PyObject *value, void *)
     // Set name attribute
     try
     {
-        self->obj->set_name (mobius::py::pystring_as_std_string (value));
+        self->obj->set_name (mobius::py::from_pyobject<std::string> (value));
     }
     catch (const std::exception &e)
     {
@@ -161,7 +161,7 @@ tp_setter_description (framework_category_o *self, PyObject *value, void *)
     // Set description attribute
     try
     {
-        self->obj->set_description (mobius::py::pystring_as_std_string (value));
+        self->obj->set_description (mobius::py::from_pyobject<std::string> (value));
     }
     catch (const std::exception &e)
     {
@@ -219,7 +219,7 @@ tp_setter_icon_data (framework_category_o *self, PyObject *value, void *)
     // Set icon_data attribute
     try
     {
-        self->obj->set_icon_data (mobius::py::pybytes_as_bytearray (value));
+        self->obj->set_icon_data (mobius::py::from_pyobject<mobius::core::bytearray> (value));
     }
     catch (const std::exception &e)
     {

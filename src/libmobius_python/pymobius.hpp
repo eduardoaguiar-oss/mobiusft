@@ -336,16 +336,9 @@ get_arg (PyObject *args, std::uint32_t idx, T dvalue)
 
 
 PyObject *pystring_from_std_string (const std::string &);
-std::string pystring_as_std_string (PyObject *);
-
 PyObject *pybytes_from_char (char);
-mobius::core::bytearray pybytes_as_bytearray (PyObject *);
-
 PyObject *pybool_from_bool (bool);
-bool pybool_as_bool (PyObject *);
-
 PyObject *pylong_from_int (int);
-int pylong_as_int (PyObject *);
 
 PyObject *pylong_from_std_int8_t (std::int8_t);
 PyObject *pylong_from_std_int16_t (std::int16_t);

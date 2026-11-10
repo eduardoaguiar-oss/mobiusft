@@ -80,7 +80,7 @@ tp_setter_name (core_io_folder_o *self, PyObject *value, void *)
     // set path
     try
     {
-        self->obj->set_name (mobius::py::pystring_as_std_string (value));
+        self->obj->set_name (mobius::py::from_pyobject<std::string> (value));
     }
     catch (const std::exception &e)
     {
@@ -152,7 +152,7 @@ tp_setter_path (core_io_folder_o *self, PyObject *value, void *)
     // set path
     try
     {
-        self->obj->set_path (mobius::py::pystring_as_std_string (value));
+        self->obj->set_path (mobius::py::from_pyobject<std::string> (value));
     }
     catch (const std::exception &e)
     {

@@ -57,7 +57,7 @@ class callback_clicked
             if (!py_rc)
                 return true;
 
-            bool rc = mobius::py::pybool_as_bool (py_rc);
+            bool rc = mobius::py::from_pyobject<bool> (py_rc);
             Py_DECREF (py_rc);
 
             return rc;

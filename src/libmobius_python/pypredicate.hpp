@@ -55,7 +55,7 @@ public:
     mobius::py::pyobject py_obj = conv_ (obj);
     mobius::py::pyobject py_rc = f_.call (static_cast <PyObject *> (py_obj));
 
-    return mobius::py::pybool_as_bool (py_rc);
+    return mobius::py::from_pyobject<bool> (py_rc);
   }
 
 private:

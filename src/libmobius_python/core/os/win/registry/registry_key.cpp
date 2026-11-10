@@ -137,7 +137,7 @@ tp_setter_name (core_os_win_registry_registry_key_o *self, PyObject *value,
     // set name attribute
     try
     {
-        self->obj->set_name (mobius::py::pystring_as_std_string (value));
+        self->obj->set_name (mobius::py::from_pyobject<std::string> (value));
     }
     catch (const std::exception &e)
     {

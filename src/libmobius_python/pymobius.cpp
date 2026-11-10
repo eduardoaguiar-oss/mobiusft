@@ -204,8 +204,8 @@ get_error_message ()
 
     PyErr_NormalizeException (&exc_type, &exc_value, &exc_traceback);
 
-    std::string msg = mobius::py::pystring_as_std_string (PyObject_Str (exc_type)) + ' ' +
-                      mobius::py::pystring_as_std_string (PyObject_Str (exc_value));
+    std::string msg = mobius::py::from_pyobject<std::string> (PyObject_Str (exc_type)) + ' ' +
+                      mobius::py::from_pyobject<std::string> (PyObject_Str (exc_value));
 
     auto p_traceback = reinterpret_cast<PyTracebackObject *> (exc_traceback);
 
@@ -215,9 +215,9 @@ get_error_message ()
 
         if (f_code)
         {
-            msg += "\nFile: \"" + mobius::py::pystring_as_std_string (PyObject_Str (f_code->co_filename)) +
+            msg += "\nFile: \"" + mobius::py::from_pyobject<std::string> (PyObject_Str (f_code->co_filename)) +
                    "\", line " + std::to_string (PyCode_Addr2Line (f_code, p_traceback->tb_lasti)) + ", in " +
-                   mobius::py::pystring_as_std_string (PyObject_Str (f_code->co_name));
+                   mobius::py::from_pyobject<std::string> (PyObject_Str (f_code->co_name));
 
             Py_DECREF (f_code);
         }
@@ -265,7 +265,7 @@ get_filename ()
     auto f_code = PyFrame_GetCode (frame);
 
     if (f_code && f_code->co_filename)
-        filename = mobius::py::pystring_as_std_string (f_code->co_filename);
+        filename = mobius::py::from_pyobject<std::string> (f_code->co_filename);
 
     return filename;
 }
@@ -285,7 +285,7 @@ get_funcname ()
 
     auto f_code = PyFrame_GetCode (frame);
     if (f_code && f_code->co_name)
-        funcname = mobius::py::pystring_as_std_string (f_code->co_name);
+        funcname = mobius::py::from_pyobject<std::string> (f_code->co_name);
 
     return funcname;
 }
@@ -519,26 +519,6 @@ pystring_check (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create std::string from PyUnicode
-// @param value Python String
-// @return C++ string
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::string
-pystring_as_std_string (PyObject *value)
-{
-    const char *buffer = PyUnicode_AsUTF8 (value);
-    std::string str;
-
-    if (buffer)
-        str = buffer;
-
-    else
-        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid Python string"));
-
-    return str;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create PyUnicode from std::string
 // @param s C++ string
 // @return Python Unicode object
@@ -558,23 +538,6 @@ bool
 pybytes_check (PyObject *value)
 {
     return PyBytes_Check (value);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create mobius::core::bytearray from PyBytes
-// @param value Python Object
-// @return Bytearray
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::core::bytearray
-pybytes_as_bytearray (PyObject *value)
-{
-    char *buffer;
-    Py_ssize_t length;
-
-    if (PyBytes_AsStringAndSize (value, &buffer, &length) == -1)
-        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid bytes"));
-
-    return mobius::core::bytearray (reinterpret_cast<const std::uint8_t *> (buffer), length);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -612,17 +575,6 @@ pybool_from_bool (bool b)
     Py_INCREF (ret);
 
     return ret;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create bool from PyBool
-// @param value Python Object
-// @return bool value
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-bool
-pybool_as_bool (PyObject *value)
-{
-    return value == Py_True;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -733,17 +685,6 @@ PyObject *
 pylong_from_int (int value)
 {
     return PyLong_FromLongLong (value);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create int from PyLong
-// @param value Python Object
-// @return int
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-int
-pylong_as_int (PyObject *value)
-{
-    return PyLong_AsLong (value);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

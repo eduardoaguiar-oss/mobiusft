@@ -82,7 +82,7 @@ tp_setter_description (core_kff_hashset_o *self, PyObject *value, void *)
     // Set description attribute
     try
     {
-        self->obj->set_description (mobius::py::pystring_as_std_string (value));
+        self->obj->set_description (mobius::py::from_pyobject<std::string> (value));
     }
     catch (const std::exception &e)
     {

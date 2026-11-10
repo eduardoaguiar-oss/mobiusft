@@ -586,7 +586,7 @@ func_join_path (PyObject *, PyObject *args)
             segment = pymobius_core_io_path_from_pyobject (item);
 
         else if (mobius::py::pystring_check (item))
-            segment = mobius::core::io::path (mobius::py::pystring_as_std_string (item));
+            segment = mobius::core::io::path (mobius::py::from_pyobject<std::string> (item));
 
         else
         {
@@ -661,7 +661,7 @@ func_to_win_path (PyObject *, PyObject *args)
     mobius::core::io::path path;
 
     if (mobius::py::pystring_check (arg))
-        path = mobius::core::io::path (mobius::py::pystring_as_std_string (arg));
+        path = mobius::core::io::path (mobius::py::from_pyobject<std::string> (arg));
 
     else if (pymobius_core_io_path_check (arg))
         path = pymobius_core_io_path_from_pyobject (arg);

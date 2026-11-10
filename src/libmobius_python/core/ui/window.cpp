@@ -55,7 +55,7 @@ class callback_closing
         if (!py_rc)
             throw std::runtime_error (MOBIUS_EXCEPTION_MSG (mobius::py::get_error_message ()));
 
-        bool rc = mobius::py::pybool_as_bool (py_rc);
+        bool rc = mobius::py::from_pyobject<bool> (py_rc);
         Py_DECREF (py_rc);
 
         return rc;

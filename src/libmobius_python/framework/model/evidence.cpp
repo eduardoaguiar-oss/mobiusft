@@ -274,7 +274,7 @@ tp_f_set_attributes (framework_model_evidence_o *self, PyObject *args)
     try
     {
         arg_attributes = mobius::py::get_arg_as_cpp_map (
-            args, 0, mobius::py::pystring_as_std_string,
+            args, 0, mobius::py::from_pyobject<std::string>,
             pymobius_core_pod_data_from_pyobject
         );
     }
@@ -451,7 +451,7 @@ tp_f_set_tags (framework_model_evidence_o *self, PyObject *args)
     try
     {
         arg_tags = mobius::py::get_arg_as_cpp_set (
-            args, 0, mobius::py::pystring_as_std_string
+            args, 0, mobius::py::from_pyobject<std::string>
         );
     }
     catch (const std::exception &e)
@@ -793,7 +793,7 @@ tp_getattro (PyObject *o, PyObject *name)
 
             // search item.attributes, using evidence.get_attribute (name)
             auto self = reinterpret_cast<framework_model_evidence_o *> (o);
-            auto s_name = mobius::py::pystring_as_std_string (name);
+            auto s_name = mobius::py::from_pyobject<std::string> (name);
 
             if (self->obj->has_attribute (s_name))
                 ret = pymobius_core_pod_data_to_pyobject (
@@ -824,7 +824,7 @@ tp_setattro (PyObject *o, PyObject *name, PyObject *value)
 {
     try
     {
-        auto s_name = mobius::py::pystring_as_std_string (name);
+        auto s_name = mobius::py::from_pyobject<std::string> (name);
         PyObject *attr = PyObject_GenericGetAttr (o, name);
 
         // internal attributes are read only

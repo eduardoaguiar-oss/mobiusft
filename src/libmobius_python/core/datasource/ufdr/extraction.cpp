@@ -106,7 +106,7 @@ tp_setter_type (
     // Set type attribute
     try
     {
-        self->obj->set_type (mobius::py::pystring_as_std_string (value));
+        self->obj->set_type (mobius::py::from_pyobject<std::string> (value));
     }
     catch (const std::exception &e)
     {
@@ -167,7 +167,7 @@ tp_setter_name (
     // Set name attribute
     try
     {
-        self->obj->set_name (mobius::py::pystring_as_std_string (value));
+        self->obj->set_name (mobius::py::from_pyobject<std::string> (value));
     }
     catch (const std::exception &e)
     {
@@ -230,7 +230,7 @@ tp_setter_device_name (
     // Set device_name attribute
     try
     {
-        self->obj->set_device_name (mobius::py::pystring_as_std_string (value));
+        self->obj->set_device_name (mobius::py::from_pyobject<std::string> (value));
     }
     catch (const std::exception &e)
     {

@@ -365,7 +365,7 @@ tp_getattro (PyObject *o, PyObject *name)
 
             // search item.attributes, using item.get_attribute (name)
             auto self = reinterpret_cast<core_vfs_imagefile_o *> (o);
-            auto s_name = mobius::py::pystring_as_std_string (name);
+            auto s_name = mobius::py::from_pyobject<std::string> (name);
             ret = pymobius_core_pod_data_to_pyobject (self->obj->get_attribute (s_name));
         }
     }
@@ -390,7 +390,7 @@ tp_setattro (PyObject *o, PyObject *name, PyObject *value)
     try
     {
         // check if it is a deletion operation
-        auto s_name = mobius::py::pystring_as_std_string (name);
+        auto s_name = mobius::py::from_pyobject<std::string> (name);
 
         if (value == nullptr)
         {

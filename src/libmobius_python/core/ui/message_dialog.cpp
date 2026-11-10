@@ -102,7 +102,7 @@ tp_setter_title (core_ui_message_dialog_o *self, PyObject *value, void *)
     // Set title attribute
     try
     {
-        self->obj->set_title (mobius::py::pystring_as_std_string (value));
+        self->obj->set_title (mobius::py::from_pyobject<std::string> (value));
     }
     catch (const std::exception &e)
     {
@@ -160,7 +160,7 @@ tp_setter_text (core_ui_message_dialog_o *self, PyObject *value, void *)
     // Set text attribute
     try
     {
-        self->obj->set_text (mobius::py::pystring_as_std_string (value));
+        self->obj->set_text (mobius::py::from_pyobject<std::string> (value));
     }
     catch (const std::exception &e)
     {
@@ -221,7 +221,7 @@ tp_setter_informative_text (core_ui_message_dialog_o *self, PyObject *value,
     try
     {
         self->obj->set_informative_text (
-            mobius::py::pystring_as_std_string (value));
+            mobius::py::from_pyobject<std::string> (value));
     }
     catch (const std::exception &e)
     {
@@ -279,13 +279,13 @@ tp_f_add_button (core_ui_message_dialog_o *self, PyObject *args)
         {
             auto button_id =
                 static_cast<mobius::core::ui::message_dialog::button> (
-                    mobius::py::pylong_as_int (obj));
+                    mobius::py::from_pyobject<std::int16_t> (obj));
             ret =
                 mobius::py::pylong_from_int (self->obj->add_button (button_id));
         }
         else if (mobius::py::pystring_check (obj))
         {
-            auto text = mobius::py::pystring_as_std_string (obj);
+            auto text = mobius::py::from_pyobject<std::string> (obj);
             ret = mobius::py::pylong_from_int (self->obj->add_button (text));
         }
         else

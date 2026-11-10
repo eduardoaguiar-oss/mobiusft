@@ -410,13 +410,13 @@ pymobius_core_io_reader_from_pyobject (PyObject *value)
 
     else if (mobius::py::pybytes_check (value))
     {
-        auto bytearray = mobius::py::pybytes_as_bytearray (value);
+        auto bytearray = mobius::py::from_pyobject<mobius::core::bytearray> (value);
         reader = mobius::core::io::new_bytearray_reader (bytearray);
     }
 
     else if (mobius::py::pystring_check (value))
     {
-        mobius::core::bytearray data (mobius::py::pystring_as_std_string (value));
+        mobius::core::bytearray data (mobius::py::from_pyobject<std::string> (value));
         reader = mobius::core::io::new_bytearray_reader (data);
     }
 

@@ -563,7 +563,7 @@ pymobius_core_pod_map_from_pyobject (PyObject *py_value)
 
         while (PyDict_Next (py_value, &pos, &key, &value))
         {
-            auto cpp_key = mobius::py::pystring_as_std_string (key);
+            auto cpp_key = mobius::py::from_pyobject<std::string> (key);
             auto cpp_value = pymobius_core_pod_data_from_pyobject (value);
 
             map.set (cpp_key, cpp_value);

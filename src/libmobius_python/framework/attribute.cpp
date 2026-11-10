@@ -100,7 +100,7 @@ tp_setter_name (framework_attribute_o *self, PyObject *value, void *)
     // Set name attribute
     try
     {
-        self->obj->set_name (mobius::py::pystring_as_std_string (value));
+        self->obj->set_name (mobius::py::from_pyobject<std::string> (value));
     }
     catch (const std::exception &e)
     {
@@ -159,7 +159,7 @@ tp_setter_description (framework_attribute_o *self, PyObject *value, void *)
     // Set description attribute
     try
     {
-        self->obj->set_description (mobius::py::pystring_as_std_string (value));
+        self->obj->set_description (mobius::py::from_pyobject<std::string> (value));
     }
     catch (const std::exception &e)
     {
@@ -217,7 +217,7 @@ tp_setter_datatype (framework_attribute_o *self, PyObject *value, void *)
     // Set datatype attribute
     try
     {
-        self->obj->set_datatype (mobius::py::pystring_as_std_string (value));
+        self->obj->set_datatype (mobius::py::from_pyobject<std::string> (value));
     }
     catch (const std::exception &e)
     {
@@ -276,7 +276,7 @@ tp_setter_value_mask (framework_attribute_o *self, PyObject *value, void *)
     // Set value_mask attribute
     try
     {
-        self->obj->set_value_mask (mobius::py::pystring_as_std_string (value));
+        self->obj->set_value_mask (mobius::py::from_pyobject<std::string> (value));
     }
     catch (const std::exception &e)
     {
