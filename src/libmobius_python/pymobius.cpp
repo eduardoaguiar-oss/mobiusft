@@ -703,39 +703,6 @@ pylong_from_std_uint32_t (std::uint32_t value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create std::uint8_t from PyLong
-// @param value Python Object
-// @return std::uint8_t
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::uint8_t
-pylong_as_std_uint8_t (PyObject *value)
-{
-    return PyLong_AsUnsignedLong (value);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create std::uint16_t from PyLong
-// @param value Python Object
-// @return std::uint16_t
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::uint16_t
-pylong_as_std_uint16_t (PyObject *value)
-{
-    return PyLong_AsUnsignedLong (value);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create std::uint32_t from PyLong
-// @param value Python Object
-// @return std::uint32_t
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::uint32_t
-pylong_as_std_uint32_t (PyObject *value)
-{
-    return PyLong_AsUnsignedLong (value);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create PyLong from std::int64_t
 // @param value Value
 // @return Python Long object
@@ -755,22 +722,6 @@ PyObject *
 pylong_from_std_uint64_t (std::uint64_t value)
 {
     return PyLong_FromUnsignedLongLong (value);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create std::uint64_t from PyLong
-// @param value Python Object
-// @return std::uint64_t
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::uint64_t
-pylong_as_std_uint64_t (PyObject *value)
-{
-    std::uint64_t v = PyLong_AsUnsignedLongLong (value);
-
-    if (PyErr_Occurred ())
-        throw std::runtime_error (get_error_message ());
-
-    return v;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

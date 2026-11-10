@@ -81,7 +81,7 @@ tp_setter_uid (core_vfs_block_o *self, PyObject *value, void *)
     // Set uid attribute
     try
     {
-        self->obj->set_uid (mobius::py::pylong_as_std_uint32_t (value));
+        self->obj->set_uid (mobius::py::from_pyobject<std::uint32_t> (value));
     }
     catch (const std::exception &e)
     {

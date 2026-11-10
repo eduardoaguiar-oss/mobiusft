@@ -106,6 +106,10 @@ Mobius Forensic Toolkit 2.31
 	* libmobius_python: Remove function pylong_as_std_int16_t
 	* libmobius_python: Remove function pylong_as_std_int32_t
 	* libmobius_python: Remove function pylong_as_std_int64_t
+	* libmobius_python: Remove function pylong_as_std_uint8_t
+	* libmobius_python: Remove function pylong_as_std_uint16_t
+	* libmobius_python: Remove function pylong_as_std_uint32_t
+	* libmobius_python: Remove function pylong_as_std_uint64_t
 	* pymobius: Remove module item_browser.py
 
 Mobius Forensic Toolkit 2.30

@@ -334,7 +334,7 @@ tp_setter_index (framework_attribute_o *self, PyObject *value, void *)
     // Set index attribute
     try
     {
-        self->obj->set_index (mobius::py::pylong_as_std_uint32_t (value));
+        self->obj->set_index (mobius::py::from_pyobject<std::uint32_t> (value));
     }
     catch (const std::exception &e)
     {

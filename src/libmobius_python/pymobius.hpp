@@ -356,10 +356,6 @@ PyObject *pylong_from_std_uint8_t (std::uint8_t);
 PyObject *pylong_from_std_uint16_t (std::uint16_t);
 PyObject *pylong_from_std_uint32_t (std::uint32_t);
 PyObject *pylong_from_std_uint64_t (std::uint64_t);
-std::uint8_t pylong_as_std_uint8_t (PyObject *);
-std::uint16_t pylong_as_std_uint16_t (PyObject *);
-std::uint32_t pylong_as_std_uint32_t (PyObject *);
-std::uint64_t pylong_as_std_uint64_t (PyObject *);
 
 double pyfloat_as_cpp (PyObject *);
 
