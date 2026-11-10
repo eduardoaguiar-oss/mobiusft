@@ -179,7 +179,7 @@ tp_f_get_hash_password (core_turing_turing_o *self, PyObject *args)
         {
             PyTuple_SetItem (
                 ret, 0,
-                mobius::py::pylong_from_int (static_cast<int> (p.first)));
+                mobius::py::to_pyobject (static_cast<int> (p.first)));
 
             if (p.first == mobius::core::turing::turing::pwd_status::not_found)
                 PyTuple_SetItem (ret, 1, mobius::py::pynone ());

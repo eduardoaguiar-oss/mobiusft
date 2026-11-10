@@ -177,7 +177,7 @@ func_model_get_case_count (PyObject *, PyObject *)
 
     try
     {
-        ret = mobius::py::pylong_from_int (
+        ret = mobius::py::to_pyobject (
             mobius::framework::model::get_case_count ());
     }
     catch (const std::exception &e)

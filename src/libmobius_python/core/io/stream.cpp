@@ -67,7 +67,7 @@ tp_getter_type (core_io_stream_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_int (self->obj->get_type ());
+        ret = mobius::py::to_pyobject (self->obj->get_type ());
     }
     catch (const std::exception &e)
     {

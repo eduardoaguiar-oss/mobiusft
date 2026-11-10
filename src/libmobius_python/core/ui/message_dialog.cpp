@@ -45,7 +45,7 @@ tp_getter_type (core_ui_message_dialog_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_int (
+        ret = mobius::py::to_pyobject (
             static_cast<int> (self->obj->get_type ()));
     }
     catch (const std::exception &e)
@@ -281,12 +281,12 @@ tp_f_add_button (core_ui_message_dialog_o *self, PyObject *args)
                 static_cast<mobius::core::ui::message_dialog::button> (
                     mobius::py::from_pyobject<std::int16_t> (obj));
             ret =
-                mobius::py::pylong_from_int (self->obj->add_button (button_id));
+                mobius::py::to_pyobject (self->obj->add_button (button_id));
         }
         else if (mobius::py::pystring_check (obj))
         {
             auto text = mobius::py::from_pyobject<std::string> (obj);
-            ret = mobius::py::pylong_from_int (self->obj->add_button (text));
+            ret = mobius::py::to_pyobject (self->obj->add_button (text));
         }
         else
             mobius::py::set_invalid_type_error ("invalid argument");
@@ -352,7 +352,7 @@ tp_f_run (core_ui_message_dialog_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pylong_from_int (self->obj->run ());
+        ret = mobius::py::to_pyobject (self->obj->run ());
     }
     catch (const std::exception &e)
     {

@@ -336,7 +336,6 @@ get_arg (PyObject *args, std::uint32_t idx, T dvalue)
 
 
 PyObject *pybytes_from_char (char);
-PyObject *pylong_from_int (int);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // C++ <-> Python type conversion

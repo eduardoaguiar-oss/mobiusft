@@ -92,7 +92,7 @@ tp_getter_type (core_os_win_registry_registry_data_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_int (
+        ret = mobius::py::to_pyobject (
             static_cast<int> (self->obj->get_type ()));
     }
     catch (const std::exception &e)

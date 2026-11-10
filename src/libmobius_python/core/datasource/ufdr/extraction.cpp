@@ -47,7 +47,7 @@ tp_getter_id (core_datasource_ufdr_extraction_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_int (self->obj->get_id ());
+        ret = mobius::py::to_pyobject (self->obj->get_id ());
     }
     catch (const std::exception &e)
     {

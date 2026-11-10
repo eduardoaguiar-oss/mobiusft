@@ -213,7 +213,7 @@ tp_getter_user_id (core_io_folder_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_int (static_cast<int> (self->obj->get_user_id ()));
+        ret = mobius::py::to_pyobject (static_cast<int> (self->obj->get_user_id ()));
     }
     catch (const std::exception &e)
     {
@@ -253,7 +253,7 @@ tp_getter_group_id (core_io_folder_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_int (static_cast<int> (self->obj->get_group_id ()));
+        ret = mobius::py::to_pyobject (static_cast<int> (self->obj->get_group_id ()));
     }
     catch (const std::exception &e)
     {
@@ -293,7 +293,7 @@ tp_getter_permissions (core_io_folder_o *self, void *)
 
     try
     {
-        ret = mobius::py::pylong_from_int (static_cast<int> (self->obj->get_permissions ()));
+        ret = mobius::py::to_pyobject (static_cast<int> (self->obj->get_permissions ()));
     }
     catch (const std::exception &e)
     {
