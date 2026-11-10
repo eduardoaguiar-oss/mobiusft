@@ -242,7 +242,7 @@ tp_getter_value_mask (framework_attribute_o *self, void *)
     try
     {
         ret =
-            mobius::py::pystring_from_std_string (self->obj->get_value_mask ());
+            mobius::py::to_pyobject (self->obj->get_value_mask ());
     }
     catch (const std::exception &e)
     {

@@ -42,11 +42,11 @@ PyTuple_from_hash (const std::tuple<std::string, std::string, std::string> &row)
     if (ret)
     {
         PyTuple_SetItem (
-            ret, 0, mobius::py::pystring_from_std_string (std::get<0> (row)));
+            ret, 0, mobius::py::to_pyobject (std::get<0> (row)));
         PyTuple_SetItem (
-            ret, 1, mobius::py::pystring_from_std_string (std::get<1> (row)));
+            ret, 1, mobius::py::to_pyobject (std::get<1> (row)));
         PyTuple_SetItem (
-            ret, 2, mobius::py::pystring_from_std_string (std::get<2> (row)));
+            ret, 2, mobius::py::to_pyobject (std::get<2> (row)));
     }
 
     return ret;
@@ -186,7 +186,7 @@ tp_f_get_hash_password (core_turing_turing_o *self, PyObject *args)
 
             else
                 PyTuple_SetItem (
-                    ret, 1, mobius::py::pystring_from_std_string (p.second));
+                    ret, 1, mobius::py::to_pyobject (p.second));
         }
     }
     catch (const std::exception &e)

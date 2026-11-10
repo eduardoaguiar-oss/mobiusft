@@ -97,7 +97,7 @@ tp_f_get_authority (core_io_uri_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_authority ());
+        ret = mobius::py::to_pyobject (self->obj->get_authority ());
     }
     catch (const std::exception &e)
     {
@@ -538,7 +538,7 @@ tp_f_get_extension (core_io_uri_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_extension ());
+        ret = mobius::py::to_pyobject (self->obj->get_extension ());
     }
     catch (const std::exception &e)
     {

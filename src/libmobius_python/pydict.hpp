@@ -74,13 +74,12 @@ pydict_from_cpp_container (const C &container)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create new Python dict from C++ container
 // @param container C++ container
-// @param pyfk Function to convert C++ keys to Python objects
 // @param pyfv Function to convert C++ values to Python objects
 // @return Python dict
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-template <typename C, typename FK, typename FV>
+template <typename C, typename FV>
 PyObject *
-pydict_from_cpp_container (const C &container, FK pyfk, FV pyfv)
+pydict_from_cpp_container (const C &container, FV pyfv)
 {
     PyObject *ret = PyDict_New ();
 
@@ -89,7 +88,7 @@ pydict_from_cpp_container (const C &container, FK pyfk, FV pyfv)
 
     for (const auto &p : container)
     {
-        PyObject *py_key = pyfk (p.first);
+        PyObject *py_key = to_pyobject (p.first);
 
         if (!py_key)
         {

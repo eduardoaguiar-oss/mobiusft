@@ -212,10 +212,7 @@ tp_f_get_metadata_groups (core_file_decoder_decoder_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pylist_from_cpp_container (
-            self->obj->get_metadata_groups (),
-            mobius::py::pystring_from_std_string
-        );
+        ret = mobius::py::pylist_from_cpp_container (self->obj->get_metadata_groups ());
     }
     catch (const std::exception &e)
     {

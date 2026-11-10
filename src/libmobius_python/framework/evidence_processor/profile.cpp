@@ -150,9 +150,7 @@ tp_f_get_processors (framework_evidence_processor_profile_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pylist_from_cpp_container (
-            self->obj->get_processors (), mobius::py::pystring_from_std_string
-        );
+        ret = mobius::py::pylist_from_cpp_container (self->obj->get_processors ());
     }
     catch (const std::exception &e)
     {

@@ -153,49 +153,11 @@ tp_f_get_hashsets (core_kff_kff_o *self, PyObject *)
     {
         ret = mobius::py::pylist_from_cpp_pair_container (
             self->obj->get_hashsets (),
-            mobius::py::pystring_from_std_string,
+            [] (auto f)
+            {   
+                return mobius::py::to_pyobject (f);
+            },
             pymobius_core_kff_hashset_to_pyobject
-        );
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-    }
-
-    return ret;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>alert_lookup</i> method implementation
-// @param self Object
-// @param args Argument list
-// @return Hash sets
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyObject *
-tp_f_alert_lookup (core_kff_kff_o *self, PyObject *args)
-{
-    // Parse input args
-    std::string arg_type;
-    std::string arg_value;
-
-    try
-    {
-        arg_type = mobius::py::get_arg<std::string> (args, 0);
-        arg_value = mobius::py::get_arg<std::string> (args, 1);
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_invalid_type_error (e.what ());
-        return nullptr;
-    }
-
-    PyObject *ret = nullptr;
-
-    try
-    {
-        ret = mobius::py::pylist_from_cpp_container (
-            self->obj->alert_lookup (arg_type, arg_value),
-            mobius::py::pystring_from_std_string
         );
     }
     catch (const std::exception &e)
@@ -252,7 +214,6 @@ static PyMethodDef tp_methods[] = {
     {"new_hashset", (PyCFunction) tp_f_new_hashset, METH_VARARGS, "Create hash set"},
     {"remove_hashset", (PyCFunction) tp_f_remove_hashset, METH_VARARGS, "Remove hash set"},
     {"get_hashsets", (PyCFunction) tp_f_get_hashsets, METH_VARARGS, "Get hash sets"},
-    {"alert_lookup", (PyCFunction) tp_f_alert_lookup, METH_VARARGS, "Lookup hash in alert hash sets"},
     {"lookup", (PyCFunction) tp_f_lookup, METH_VARARGS, "Lookup hash in all hash sets"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };

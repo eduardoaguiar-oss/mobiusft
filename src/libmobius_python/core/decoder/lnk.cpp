@@ -538,7 +538,7 @@ tp_getter_arguments (core_decoder_lnk_o *self, void *)
     try
     {
         ret =
-            mobius::py::pystring_from_std_string (self->obj->get_arguments ());
+            mobius::py::to_pyobject (self->obj->get_arguments ());
     }
     catch (const std::exception &e)
     {

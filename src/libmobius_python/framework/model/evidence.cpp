@@ -350,7 +350,7 @@ tp_f_get_attributes (framework_model_evidence_o *self, PyObject *)
     try
     {
         ret = mobius::py::pydict_from_cpp_container (
-            self->obj->get_attributes (), mobius::py::pystring_from_std_string,
+            self->obj->get_attributes (),
             pymobius_core_pod_data_to_pyobject
         );
     }

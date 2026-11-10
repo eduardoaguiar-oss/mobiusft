@@ -581,7 +581,7 @@ tp_f_get_attributes (framework_model_item_o *self, PyObject *)
     try
     {
         ret = mobius::py::pydict_from_cpp_container (
-            self->obj->get_attributes (), mobius::py::pystring_from_std_string,
+            self->obj->get_attributes (),
             pymobius_core_pod_data_to_pyobject
         );
     }
@@ -1616,7 +1616,7 @@ class attribute_modified_callback
         mobius::py::GIL_guard gil_guard;
 
         f_ (pymobius_framework_model_item_to_pyobject (item),
-            mobius::py::pystring_from_std_string (id),
+            mobius::py::to_pyobject (id),
             pymobius_core_pod_data_to_pyobject (old_value),
             pymobius_core_pod_data_to_pyobject (new_value));
     }
@@ -1648,7 +1648,7 @@ class attribute_removed_callback
         mobius::py::GIL_guard gil_guard;
 
         f_ (pymobius_framework_model_item_to_pyobject (item),
-            mobius::py::pystring_from_std_string (id),
+            mobius::py::to_pyobject (id),
             pymobius_core_pod_data_to_pyobject (old_value));
     }
 

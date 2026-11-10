@@ -101,7 +101,7 @@ tp_getter_short_name (core_io_folder_o *self, void *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_short_name ());
+        ret = mobius::py::to_pyobject (self->obj->get_short_name ());
     }
     catch (const std::exception &e)
     {
@@ -233,7 +233,7 @@ tp_getter_user_name (core_io_folder_o *self, void *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_user_name ());
+        ret = mobius::py::to_pyobject (self->obj->get_user_name ());
     }
     catch (const std::exception &e)
     {
@@ -273,7 +273,7 @@ tp_getter_group_name (core_io_folder_o *self, void *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_group_name ());
+        ret = mobius::py::to_pyobject (self->obj->get_group_name ());
     }
     catch (const std::exception &e)
     {
@@ -600,7 +600,7 @@ tp_f_get_extension (core_io_folder_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_extension ());
+        ret = mobius::py::to_pyobject (self->obj->get_extension ());
     }
     catch (const std::exception &e)
     {

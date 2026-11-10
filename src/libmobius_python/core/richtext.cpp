@@ -101,7 +101,10 @@ tp_f_get_segments (core_richtext_o *self, PyObject *)
     try
     {
         ret = mobius::py::pylist_from_cpp_pair_transform (
-            self->obj->get_segments (), mobius::py::pystring_from_std_string,
+            self->obj->get_segments (), [] (auto f)
+            {   
+                return mobius::py::to_pyobject (f);
+            },
             pymobius_core_pod_map_to_python, t
         );
     }

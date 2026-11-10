@@ -37,7 +37,7 @@ static PyTypeObject *core_application_type = nullptr;
 static PyObject *
 tp_getter_name (core_application_o *self, void *)
 {
-    return mobius::py::pystring_from_std_string (self->obj->get_name ());
+    return mobius::py::to_pyobject (self->obj->get_name ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -46,7 +46,7 @@ tp_getter_name (core_application_o *self, void *)
 static PyObject *
 tp_getter_version (core_application_o *self, void *)
 {
-    return mobius::py::pystring_from_std_string (self->obj->get_version ());
+    return mobius::py::to_pyobject (self->obj->get_version ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -55,7 +55,7 @@ tp_getter_version (core_application_o *self, void *)
 static PyObject *
 tp_getter_title (core_application_o *self, void *)
 {
-    return mobius::py::pystring_from_std_string (self->obj->get_title ());
+    return mobius::py::to_pyobject (self->obj->get_title ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -64,7 +64,7 @@ tp_getter_title (core_application_o *self, void *)
 static PyObject *
 tp_getter_copyright (core_application_o *self, void *)
 {
-    return mobius::py::pystring_from_std_string (self->obj->get_copyright ());
+    return mobius::py::to_pyobject (self->obj->get_copyright ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

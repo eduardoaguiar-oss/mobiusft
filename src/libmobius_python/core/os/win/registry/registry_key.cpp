@@ -159,7 +159,7 @@ tp_getter_classname (core_os_win_registry_registry_key_o *self, void *)
     try
     {
         ret =
-            mobius::py::pystring_from_std_string (self->obj->get_classname ());
+            mobius::py::to_pyobject (self->obj->get_classname ());
     }
     catch (const std::exception &e)
     {

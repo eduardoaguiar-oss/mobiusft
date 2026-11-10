@@ -322,8 +322,7 @@ tp_f_to_python (core_pod_map_o *self, PyObject *)
     try
     {
         ret = mobius::py::pydict_from_cpp_container (
-            *self->obj, mobius::py::pystring_from_std_string,
-            pymobius_core_pod_data_to_pyobject
+            *self->obj, pymobius_core_pod_data_to_pyobject
         );
     }
     catch (const std::exception &e)
@@ -348,7 +347,11 @@ tp_f_get_values (core_pod_map_o *self, PyObject *)
     try
     {
         ret = mobius::py::pylist_from_cpp_pair_container (
-            *self->obj, mobius::py::pystring_from_std_string,
+            *self->obj,
+            [] (auto f)
+            {   
+                return mobius::py::to_pyobject (f);
+            },
             pymobius_core_pod_data_to_pyobject
         );
     }
@@ -526,8 +529,7 @@ pymobius_core_pod_map_to_python (const mobius::core::pod::map &map)
     try
     {
         ret = mobius::py::pydict_from_cpp_container (
-            map, mobius::py::pystring_from_std_string,
-            pymobius_core_pod_data_to_python
+            map, pymobius_core_pod_data_to_python
         );
     }
     catch (const std::exception &e)

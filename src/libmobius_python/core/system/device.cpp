@@ -82,7 +82,7 @@ tp_getter_subsystem (core_system_device_o *self, void *)
     try
     {
         ret =
-            mobius::py::pystring_from_std_string (self->obj->get_subsystem ());
+            mobius::py::to_pyobject (self->obj->get_subsystem ());
     }
     catch (const std::exception &e)
     {

@@ -136,7 +136,7 @@ tp_getter_hash_value (core_decoder_tdf_o *self, void *)
     try
     {
         ret =
-            mobius::py::pystring_from_std_string (self->obj->get_hash_value ());
+            mobius::py::to_pyobject (self->obj->get_hash_value ());
     }
     catch (const std::exception &e)
     {

@@ -335,7 +335,6 @@ get_arg (PyObject *args, std::uint32_t idx, T dvalue)
 
 
 
-PyObject *pystring_from_std_string (const std::string &);
 PyObject *pybytes_from_char (char);
 PyObject *pylong_from_int (int);
 
@@ -427,6 +426,26 @@ check_setter_value (PyObject *value, const char *attr_name, F pycheck)
         std::string msg = "invalid type for '" + std::string (attr_name) + "' attribute";
         throw std::invalid_argument (MOBIUS_EXCEPTION_MSG (msg.c_str ()));
     }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create new Python Tuple from C++ pair
+// @param p C++ pair
+// @return Python Tuple
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+template <typename T>
+PyObject *
+pytuple_from_cpp_pair (const T &p)
+{
+    PyObject *ret = PyTuple_New (2);
+
+    if (ret)
+    {
+        PyTuple_SetItem (ret, 0, to_pyobject (p.first));
+        PyTuple_SetItem (ret, 1, to_pyobject (p.second));
+    }
+
+    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

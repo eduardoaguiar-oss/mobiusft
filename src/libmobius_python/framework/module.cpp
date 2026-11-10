@@ -125,7 +125,7 @@ class sampling_file_callback
     {
         mobius::py::GIL_guard gil_guard;
 
-        f_ (mobius::py::pystring_from_std_string (sampling_id), pymobius_core_io_reader_to_pyobject (reader));
+        f_ (mobius::py::to_pyobject (sampling_id), pymobius_core_io_reader_to_pyobject (reader));
     }
 
   private:
@@ -150,7 +150,7 @@ class sampling_folder_callback
     {
         mobius::py::GIL_guard gil_guard;
 
-        f_ (mobius::py::pystring_from_std_string (sampling_id), pymobius_core_io_folder_to_pyobject (folder));
+        f_ (mobius::py::to_pyobject (sampling_id), pymobius_core_io_folder_to_pyobject (folder));
     }
 
   private:
@@ -175,7 +175,7 @@ class config_set_callback
     {
         mobius::py::GIL_guard gil_guard;
 
-        f_ (mobius::py::pystring_from_std_string (name), pymobius_core_pod_data_to_python (value));
+        f_ (mobius::py::to_pyobject (name), pymobius_core_pod_data_to_python (value));
     }
 
   private:
@@ -200,7 +200,7 @@ class config_remove_callback
     {
         mobius::py::GIL_guard gil_guard;
 
-        f_ (mobius::py::pystring_from_std_string (name));
+        f_ (mobius::py::to_pyobject (name));
     }
 
   private:

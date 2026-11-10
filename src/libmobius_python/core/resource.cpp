@@ -240,7 +240,7 @@ class resource_added_callback
         mobius::py::GIL_guard gil_guard;
 
         f_ (
-            mobius::py::pystring_from_std_string (id),
+            mobius::py::to_pyobject (id),
             pymobius_core_resource_to_pyobject (r)
         );
     }
@@ -267,7 +267,7 @@ class resource_removed_callback
     {
         mobius::py::GIL_guard gil_guard;
 
-        f_ (mobius::py::pystring_from_std_string (id));
+        f_ (mobius::py::to_pyobject (id));
     }
 
   private:
