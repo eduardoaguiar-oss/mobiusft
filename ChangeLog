@@ -158,6 +158,7 @@ Mobius Forensic Toolkit 2.31
 	* libmobius_python: Remove deprecated class mobius.core.kff.hashset
 	* libmobius_python: Remove deprecated class mobius.core.database.connection_set
 	* pymobius: Remove module item_browser.py
+	* pymobius: Set extension directory to "$HOME/.config/mobius/extensions/{app.version}"
 	* tools: Add new kff_status tool
 
 Mobius Forensic Toolkit 2.30

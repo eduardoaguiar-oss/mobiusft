@@ -79,7 +79,7 @@ class Application(object):
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __configure_user(self):
         app = mobius.core.application()
-        extensions_dir = app.get_config_path('extensions')
+        extensions_dir = app.get_config_path(f'extensions/{app.version}')
 
         if not os.path.exists(extensions_dir):
             os.makedirs(extensions_dir)

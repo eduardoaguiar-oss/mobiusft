@@ -63,7 +63,7 @@ class Metadata(object):
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 def get_path(extension_id, *args):
     app = mobius.core.application()
-    extension_path = app.get_config_path('extensions')
+    extension_path = app.get_config_path(f'extensions/{app.version}')
     path = os.path.join(extension_path, extension_id, *args)
 
     return path
@@ -191,7 +191,7 @@ def uninstall(extension_id):
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 def installed():
     app = mobius.core.application()
-    basedir = app.get_config_path("extensions")
+    basedir = app.get_config_path(f"extensions/{app.version}")
 
     for filename in os.listdir(basedir):
         fullpath = os.path.join(basedir, filename)
