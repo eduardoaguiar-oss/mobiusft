@@ -148,6 +148,7 @@ Mobius Forensic Toolkit 2.31
 	* libmobius_python: Add function kff.get_file_type_string
 	* libmobius_python: Add function kff.get_hash_type_string
 	* pymobius: Remove module item_browser.py
+	* tools: Add new kff_status tool
 
 Mobius Forensic Toolkit 2.30
 	* app-chromium: Use db.new_statement_with_pattern in file_cookies::_load_cookies
