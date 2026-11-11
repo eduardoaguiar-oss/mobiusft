@@ -27,7 +27,7 @@ main (int, char **)
         std::cout << std::endl;
         std::cout << "File types:" << std::endl;
 
-        for (std::uint16_t i = 0; i < 32; i++)
+        for (std::uint16_t i = 1; i < 32; i++)
         {
             auto desc = mobius::core::kff::get_file_type_string (i);
             if (desc.empty ())
