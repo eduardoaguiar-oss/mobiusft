@@ -43,10 +43,12 @@ namespace mobius::py
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Functions prototypes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *func_core_kff_get_file_type (PyObject *, PyObject *);
 PyObject *func_core_kff_get_file_type_string (PyObject *, PyObject *);
-PyObject *func_core_kff_get_hash_type_string (PyObject *, PyObject *);
 PyObject *func_core_kff_get_file_count (PyObject *, PyObject *);
 PyObject *func_core_kff_get_file_count_by_type (PyObject *, PyObject *);
+PyObject *func_core_kff_get_hash_type (PyObject *, PyObject *);
+PyObject *func_core_kff_get_hash_type_string (PyObject *, PyObject *);
 PyObject *func_core_kff_get_hash_count (PyObject *, PyObject *);
 PyObject *func_core_kff_get_hash_count_by_type (PyObject *, PyObject *);
 PyObject *func_core_kff_get_alert_count (PyObject *, PyObject *);

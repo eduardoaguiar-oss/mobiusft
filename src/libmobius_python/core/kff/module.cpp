@@ -32,7 +32,9 @@ namespace
 // @brief Module methods
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef module_methods[] = {
+    {"get_file_type", mobius::py::func_core_kff_get_file_type, METH_VARARGS, "Get file type index"},
     {"get_file_type_string", mobius::py::func_core_kff_get_file_type_string, METH_VARARGS, "Get file type string"},
+    {"get_hash_type", mobius::py::func_core_kff_get_hash_type, METH_VARARGS, "Get hash type index"},
     {"get_hash_type_string", mobius::py::func_core_kff_get_hash_type_string, METH_VARARGS, "Get hash type string"},
     {"get_alert_count", mobius::py::func_core_kff_get_alert_count, METH_NOARGS, "Get alert count"},
     {"get_file_count", mobius::py::func_core_kff_get_file_count, METH_NOARGS, "Get file count"},

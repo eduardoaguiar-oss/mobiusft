@@ -374,6 +374,32 @@ func_core_kff_get_file_type_string (PyObject *, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get file type
+// @param self Python self
+// @param args Python arguments
+// @return File type index
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_core_kff_get_file_type (PyObject *, PyObject *args)
+{
+    // Parse input args
+    std::string arg_name;
+
+    try
+    {
+        arg_name = mobius::py::get_arg<std::string> (args, 0);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
+    }
+
+    // Execute C++ function
+    return mobius::py::call_function (mobius::core::kff::get_file_type, arg_name);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get hash type string
 // @param self Python self
 // @param args Python arguments
@@ -397,6 +423,32 @@ func_core_kff_get_hash_type_string (PyObject *, PyObject *args)
 
     // Execute C++ function
     return mobius::py::call_function (mobius::core::kff::get_hash_type_string, arg_type);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get hash type index
+// @param self Python self
+// @param args Python arguments
+// @return Hash type index
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_core_kff_get_hash_type (PyObject *, PyObject *args)
+{
+    // Parse input args
+    std::string arg_name;
+
+    try
+    {
+        arg_name = mobius::py::get_arg<std::string> (args, 0);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
+    }
+
+    // Execute C++ function
+    return mobius::py::call_function (mobius::core::kff::get_hash_type, arg_name);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
