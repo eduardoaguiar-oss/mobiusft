@@ -45,7 +45,6 @@ Mobius Forensic Toolkit 2.31
 	* libmobius_core: Add function string_view::rstrip
 	* libmobius_core: Add function string_view::to_integer
 	* libmobius_core: Add function kff::has_size
-	* libmobius_core: Add function kff::get_file_count_by_type
 	* libmobius_core: Add function kff::new_transaction
 	* libmobius_core: Add new class kff::file
 	* libmobius_core: Add function kff::lookup
@@ -54,11 +53,14 @@ Mobius Forensic Toolkit 2.31
 	* libmobius_core: Add function kff::get_hash_count
 	* libmobius_core: Add function kff::get_alert_count
 	* libmobius_core: Add function kff::get_thumbnail_count
-	* libmobius_core: Add function kff::get_hash_count_by_type
+	* libmobius_core: Add function kff::get_file_type_string
+	* libmobius_core: Add function kff::get_hash_type_string
 	* libmobius_core: Add function kff::set_file_count
 	* libmobius_core: Add function kff::set_hash_count
 	* libmobius_core: Add function kff::set_alert_count
 	* libmobius_core: Add function kff::set_thumbnail_count
+	* libmobius_core: Add function kff::get_file_type_string
+	* libmobius_core: Add function kff::get_hash_type_string
 	* libmobius_framework: Use SQLite WAL journal mode in config module
 	* libmobius_framework: Remove thread_guard from config module
 	* libmobius_framework: Use single DB connection shared by all threads in config module
@@ -143,6 +145,8 @@ Mobius Forensic Toolkit 2.31
 	* libmobius_python: Add template function generic_setter
 	* libmobius_python: Add new module pytuple.hpp
 	* libmobius_python: Move function pytuple_from_cpp_pair to pytuple.hpp
+	* libmobius_python: Add function kff.get_file_type_string
+	* libmobius_python: Add function kff.get_hash_type_string
 	* pymobius: Remove module item_browser.py
 
 Mobius Forensic Toolkit 2.30

@@ -67,34 +67,6 @@ static std::vector<std::string> HASH_TYPES = {
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get file type by index
-// @param index The index of the file type
-// @return The file type as a string, or an empty string if the index is invalid
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static std::string
-_get_file_type_string (std::uint16_t index)
-{
-    if (index < FILE_TYPES.size ())
-        return FILE_TYPES[index];
-
-    return {};
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get hash type by index
-// @param index The index of the hash type
-// @return The hash type as a string, or an empty string if the index is invalid
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static std::string
-_get_hash_type_string (std::uint16_t index)
-{
-    if (index < HASH_TYPES.size ())
-        return HASH_TYPES[index];
-
-    return {};
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create DB tables
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
@@ -289,6 +261,34 @@ has_size (uint64_t size)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get file type by index
+// @param index The index of the file type
+// @return The file type as a string, or an empty string if the index is invalid
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+get_file_type_string (std::uint16_t index)
+{
+    if (index < FILE_TYPES.size ())
+        return FILE_TYPES[index];
+
+    return {};
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get hash type by index
+// @param index The index of the hash type
+// @return The hash type as a string, or an empty string if the index is invalid
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+get_hash_type_string (std::uint16_t index)
+{
+    if (index < HASH_TYPES.size ())
+        return HASH_TYPES[index];
+
+    return {};
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get total file count in the database
 // @return Total number of files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -350,50 +350,6 @@ get_thumbnail_count ()
         return stmt.get_column_int64 (0);
 
     return 0;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get file count by type
-// @return Map of file types to their respective counts
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::map<std::string, int64_t>
-get_file_count_by_type ()
-{
-    auto db = get_database ();
-
-    auto stmt = db.new_statement ("SELECT type, COUNT(*) FROM file GROUP BY type");
-    std::map<std::string, int64_t> result;
-
-    while (stmt.fetch_row ())
-    {
-        auto type = stmt.get_column_int64 (0);
-        auto count = stmt.get_column_int64 (1);
-        result[_get_file_type_string (type)] = count;
-    }
-
-    return result;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get total hash by type
-// @return Map of hash types to their respective counts
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::map<std::string, int64_t>
-get_hash_count_by_type ()
-{
-    auto db = get_database ();
-
-    auto stmt = db.new_statement ("SELECT type, COUNT(*) FROM hash GROUP BY type");
-    std::map<std::string, int64_t> result;
-
-    while (stmt.fetch_row ())
-    {
-        auto type = stmt.get_column_int64 (0);
-        auto count = stmt.get_column_int64 (1);
-        result[_get_hash_type_string (type)] = count;
-    }
-
-    return result;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

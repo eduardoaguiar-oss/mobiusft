@@ -348,6 +348,58 @@ pymobius_core_kff_kff_from_pyobject (PyObject *value)
 namespace mobius::py
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get file type string
+// @param self Python self
+// @param args Python arguments
+// @return File count
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_core_kff_get_file_type_string (PyObject *, PyObject *args)
+{
+    // Parse input args
+    std::uint16_t arg_type;
+
+    try
+    {
+        arg_type = mobius::py::get_arg<std::uint16_t> (args, 0);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
+    }
+
+    // Execute C++ function
+    return mobius::py::call_function (mobius::core::kff::get_file_type_string, arg_type);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get hash type string
+// @param self Python self
+// @param args Python arguments
+// @return Hash type string
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_core_kff_get_hash_type_string (PyObject *, PyObject *args)
+{
+    // Parse input args
+    std::uint16_t arg_type;
+
+    try
+    {
+        arg_type = mobius::py::get_arg<std::uint16_t> (args, 0);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
+    }
+
+    // Execute C++ function
+    return mobius::py::call_function (mobius::core::kff::get_hash_type_string, arg_type);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get file count
 // @param self Python self
 // @param args Python arguments
@@ -393,56 +445,6 @@ PyObject *
 func_core_kff_get_thumbnail_count (PyObject *, PyObject *)
 {
     return mobius::py::call_function (mobius::core::kff::get_thumbnail_count);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get file count by type
-// @param self Python self
-// @param args Python arguments
-// @return Dictionary with file count by type
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-func_core_kff_get_file_count_by_type (PyObject *, PyObject *)
-{
-    // execute C++ function
-    PyObject *ret = nullptr;
-
-    try
-    {
-        ret = mobius::py::pydict_from_cpp_container (mobius::core::kff::get_file_count_by_type ());
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-    }
-
-    // return value
-    return ret;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get hash count by type
-// @param self Python self
-// @param args Python arguments
-// @return Dictionary with hash count by type
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-func_core_kff_get_hash_count_by_type (PyObject *, PyObject *)
-{
-    // execute C++ function
-    PyObject *ret = nullptr;
-
-    try
-    {
-        ret = mobius::py::pydict_from_cpp_container (mobius::core::kff::get_hash_count_by_type ());
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-    }
-
-    // return value
-    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
