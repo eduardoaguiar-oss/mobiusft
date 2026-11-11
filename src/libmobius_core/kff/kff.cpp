@@ -109,9 +109,13 @@ _create_db_tables (mobius::core::database::database &db)
     );
 
     db.execute (
-        "INSERT OR REPLACE INTO meta (key, value) VALUES "
+        "INSERT OR IGNORE INTO meta (key, value) VALUES "
         "('schema_version', '1'), "
-        "('creation_time', datetime ('now'));"
+        "('creation_time', datetime ('now')), "
+        "('file_count', '0'), "
+        "('hash_count', '0'), "
+        "('alert_count', '0'), "
+        "('thumbnail_count', '0');"
     );
 
     // Table: file
@@ -292,7 +296,7 @@ std::uint64_t
 get_file_count ()
 {
     auto db = get_database ();
-    auto stmt = db.new_statement ("SELECT COUNT(*) FROM file");
+    auto stmt = db.new_statement ("SELECT value FROM meta WHERE key = 'file_count'");
 
     if (stmt.fetch_row ())
         return stmt.get_column_int64 (0);
@@ -308,7 +312,7 @@ std::uint64_t
 get_hash_count ()
 {
     auto db = get_database ();
-    auto stmt = db.new_statement ("SELECT COUNT(*) FROM hash");
+    auto stmt = db.new_statement ("SELECT value FROM meta WHERE key = 'hash_count'");
 
     if (stmt.fetch_row ())
         return stmt.get_column_int64 (0);
@@ -324,7 +328,7 @@ std::uint64_t
 get_alert_count ()
 {
     auto db = get_database ();
-    auto stmt = db.new_statement ("SELECT COUNT(*) FROM file where type > 0");
+    auto stmt = db.new_statement ("SELECT value FROM meta WHERE key = 'alert_count'");
 
     if (stmt.fetch_row ())
         return stmt.get_column_int64 (0);
@@ -340,7 +344,7 @@ std::uint64_t
 get_thumbnail_count ()
 {
     auto db = get_database ();
-    auto stmt = db.new_statement ("SELECT COUNT(*) FROM thumbnail");
+    auto stmt = db.new_statement ("SELECT value FROM meta WHERE key = 'thumbnail_count'");
 
     if (stmt.fetch_row ())
         return stmt.get_column_int64 (0);
@@ -391,6 +395,58 @@ get_hash_count_by_type ()
 
     return result;
 }
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Set file count in the metadata
+// @param count The new file count
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+set_file_count (std::uint64_t count)
+{
+    auto db = get_database ();
+    auto stmt = db.new_statement ("UPDATE meta SET value = ? WHERE key = 'file_count'");
+    stmt.bind (1, static_cast<int64_t> (count));
+    stmt.execute ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Set hash count in the metadata
+// @param count The new hash count
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+set_hash_count (std::uint64_t count)
+{
+    auto db = get_database ();
+    auto stmt = db.new_statement ("UPDATE meta SET value = ? WHERE key = 'hash_count'");
+    stmt.bind (1, static_cast<int64_t> (count));
+    stmt.execute ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Set alert count in the metadata
+// @param count The new alert count
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+set_alert_count (std::uint64_t count)
+{
+    auto db = get_database ();
+    auto stmt = db.new_statement ("UPDATE meta SET value = ? WHERE key = 'alert_count'");
+    stmt.bind (1, static_cast<int64_t> (count));
+    stmt.execute ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Set thumbnail count in the metadata
+// @param count The new thumbnail count
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+set_thumbnail_count (std::uint64_t count)
+{
+    auto db = get_database ();
+    auto stmt = db.new_statement ("UPDATE meta SET value = ? WHERE key = 'thumbnail_count'");
+    stmt.bind (1, static_cast<int64_t> (count));
+    stmt.execute ();
+}   
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Lookup a file by its hash in the database
