@@ -18,15 +18,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/database/connection_set.hpp>
 #include <mobius/core/database/database.hpp>
-#include <mobius/core/kff/hashset.hpp>
 #include <mobius/core/kff/file.hpp>
-#include <unordered_map>
-#include <utility>
-#include <map>
+#include <cstdint>
 #include <string>
-#include <vector>
 
 namespace mobius::core::kff
 {
@@ -54,7 +49,7 @@ mobius::core::database::transaction new_transaction ();
 bool has_size (uint64_t);
 file lookup (std::uint16_t, const std::string &);
 file new_file (std::int64_t, std::uint16_t, std::uint64_t);
-std::uint16_t get_file_type (const std::string&);
+std::uint16_t get_file_type (const std::string &);
 std::uint16_t get_hash_type (const std::string &);
 std::string get_file_type_string (std::uint16_t);
 std::string get_hash_type_string (std::uint16_t);
@@ -66,38 +61,6 @@ void set_file_count (std::uint64_t);
 void set_hash_count (std::uint64_t);
 void set_alert_count (std::uint64_t);
 void set_thumbnail_count (std::uint64_t);
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief KFF database (singleton)
-// @author Eduardo Aguiar
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class kff
-{
-  public:
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Constructors
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    kff ();
-    kff (kff &&) noexcept = default;
-    kff (const kff &) noexcept = default;
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Operators
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    kff &operator= (const kff &) noexcept = default;
-    kff &operator= (kff &&) noexcept = default;
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Function prototypes
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    mobius::core::database::connection_set new_connection ();
-
-    hashset new_hashset (const std::string &, bool);
-    void remove_hashset (const std::string &);
-    std::vector<std::pair<std::string, hashset>> get_hashsets () const;
-    std::vector<std::string> alert_lookup (const std::string &, const std::string &) const;
-    char lookup (const std::string &, const std::string &) const;
-};
 
 } // namespace mobius::core::kff
 

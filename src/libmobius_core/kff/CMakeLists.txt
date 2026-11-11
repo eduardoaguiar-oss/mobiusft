@@ -27,7 +27,6 @@ project(mobius_core_kff LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_library(mobius_core_kff STATIC
     file.cpp
-    hashset.cpp
     kff.cpp
 )
 

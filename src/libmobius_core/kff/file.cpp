@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#include <mobius/core/database/database.hpp>
 #include <mobius/core/decoder/hexstring.hpp>
 #include <mobius/core/exception.inc>
 #include <mobius/core/kff/file.hpp>
