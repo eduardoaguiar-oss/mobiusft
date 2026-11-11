@@ -39,7 +39,6 @@ endif()
 add_library(mobius_core_database STATIC
     connection.cpp
     connection_pool.cpp
-    connection_set.cpp
     database.cpp
     meta_table.cpp
     statement.cpp
