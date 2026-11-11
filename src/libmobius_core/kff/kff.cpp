@@ -58,7 +58,6 @@ static std::vector<std::string> FILE_TYPES = {
 // @brief Hash types
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::vector<std::string> HASH_TYPES = {
-    "", // Placeholder for no hash type
     "ed2k",
     "md5",
     "sha1",
@@ -123,9 +122,9 @@ _create_db_tables (mobius::core::database::database &db)
 
     db.execute (
         "INSERT OR REPLACE INTO file_type (id, name) VALUES "
-        "(0, 'info'), "
-        "(1, 'alert.csam'), "
-        "(2, 'alert.malware');"
+        "(1, 'regular'), "
+        "(2, 'alert.csam'), "
+        "(3, 'alert.malware');"
     );
 
     // Table: hash_type
@@ -261,6 +260,22 @@ has_size (uint64_t size)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get file type index by name
+// @param name The name of the file type
+// @return The index of the file type, or an invalid index if not found
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::uint16_t
+get_file_type (const std::string &name)
+{
+    auto iter = std::find (FILE_TYPES.begin (), FILE_TYPES.end (), name);
+
+    if (iter != FILE_TYPES.end ())
+        return static_cast<std::uint16_t> (std::distance (FILE_TYPES.begin (), iter)) + 1;
+
+    return 0;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get file type by index
 // @param index The index of the file type
 // @return The file type as a string, or an empty string if the index is invalid
@@ -268,10 +283,26 @@ has_size (uint64_t size)
 std::string
 get_file_type_string (std::uint16_t index)
 {
-    if (index < FILE_TYPES.size ())
-        return FILE_TYPES[index];
+    if (index > 0 && index <= FILE_TYPES.size ())
+        return FILE_TYPES[index - 1];
 
     return {};
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get hash type index by name
+// @param name The name of the hash type
+// @return The index of the hash type, or 0 if not found
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::uint16_t
+get_hash_type (const std::string &name)
+{
+    auto iter = std::find (HASH_TYPES.begin (), HASH_TYPES.end (), name);
+
+    if (iter != HASH_TYPES.end ())
+        return static_cast<std::uint16_t> (std::distance (HASH_TYPES.begin (), iter)) + 1;
+
+    return 0;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -282,8 +313,8 @@ get_file_type_string (std::uint16_t index)
 std::string
 get_hash_type_string (std::uint16_t index)
 {
-    if (index < HASH_TYPES.size ())
-        return HASH_TYPES[index];
+    if (index > 0 && index <= HASH_TYPES.size ())
+        return HASH_TYPES[index - 1];
 
     return {};
 }

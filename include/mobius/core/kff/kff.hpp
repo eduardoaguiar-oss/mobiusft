@@ -33,9 +33,9 @@ namespace mobius::core::kff
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // File types
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-constexpr std::uint16_t FILE_TYPE_REGULAR = 0;
-constexpr std::uint16_t FILE_TYPE_ALERT_CSAM = 1;
-constexpr std::uint16_t FILE_TYPE_ALERT_MALWARE = 2;
+constexpr std::uint16_t FILE_TYPE_REGULAR = 1;
+constexpr std::uint16_t FILE_TYPE_ALERT_CSAM = 2;
+constexpr std::uint16_t FILE_TYPE_ALERT_MALWARE = 3;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Hash types
@@ -54,6 +54,8 @@ mobius::core::database::transaction new_transaction ();
 bool has_size (uint64_t);
 file lookup (std::uint16_t, const std::string &);
 file new_file (std::int64_t, std::uint16_t, std::uint64_t);
+std::uint16_t get_file_type (const std::string&);
+std::uint16_t get_hash_type (const std::string &);
 std::string get_file_type_string (std::uint16_t);
 std::string get_hash_type_string (std::uint16_t);
 std::uint64_t get_file_count ();
