@@ -23,7 +23,6 @@
 #include "module.hpp"
 #include <pymobius.hpp>
 #include "connection.hpp"
-#include "connection_set.hpp"
 #include "transaction.hpp"
 
 namespace
@@ -56,9 +55,6 @@ new_core_database_module ()
 
     // Add types
     module.add_type ("connection", new_core_database_connection_type ());
-    module.add_type (
-        "connection_set", new_core_database_connection_set_type ()
-    );
     module.add_type ("transaction", new_core_database_transaction_type ());
 
     // Return module

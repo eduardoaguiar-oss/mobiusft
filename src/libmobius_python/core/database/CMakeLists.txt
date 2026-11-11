@@ -28,7 +28,6 @@ project(libmobius_python_core_database LANGUAGES CXX)
 add_library(libmobius_python_core_database STATIC
     module.cpp
     connection.cpp
-    connection_set.cpp
     transaction.cpp
 )
 
