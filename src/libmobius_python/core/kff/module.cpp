@@ -23,7 +23,6 @@
 #include <pymobius.hpp>
 #include "module.hpp"
 #include "file.hpp"
-#include "hashset.hpp"
 #include "kff.hpp"
 
 namespace
@@ -74,8 +73,6 @@ new_core_kff_module ()
 
     // Add types
     module.add_type ("file", mobius::py::new_core_kff_file_type ());
-    module.add_type ("kff", new_core_kff_kff_type ());
-    module.add_type ("hashset", new_core_kff_hashset_type ());
 
     // Add constants
     module.add_constant("FILE_TYPE_REGULAR", mobius::core::kff::FILE_TYPE_REGULAR);

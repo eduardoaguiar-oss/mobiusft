@@ -151,6 +151,8 @@ Mobius Forensic Toolkit 2.31
 	* libmobius_python: Move function pytuple_from_cpp_pair to pytuple.hpp
 	* libmobius_python: Add function kff.get_file_type_string
 	* libmobius_python: Add function kff.get_hash_type_string
+	* libmobius_python: Remove deprecated class mobius.core.kff.kff
+	* libmobius_python: Remove deprecated class mobius.core.kff.hashset
 	* pymobius: Remove module item_browser.py
 	* tools: Add new kff_status tool
 
