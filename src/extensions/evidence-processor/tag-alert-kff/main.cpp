@@ -25,10 +25,9 @@ extern "C"
 {
     const char *EXTENSION_ID = "tag-alert-kff";
     const char *EXTENSION_NAME = "Tag Alert KFF evidence-processor";
-    const char *EXTENSION_VERSION = "1.0";
+    const char *EXTENSION_VERSION = "1.1";
     const char *EXTENSION_AUTHORS = "Eduardo Aguiar";
-    const char *EXTENSION_DESCRIPTION =
-        "Tag evidences with alert.kff tag";
+    const char *EXTENSION_DESCRIPTION = "Tag evidences with alert.kff tag";
 } // extern "C"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -37,10 +36,8 @@ extern "C"
 extern "C" void
 start ()
 {
-    mobius::framework::evidence_processor::
-        register_evidence_processor_implementation<
-            mobius::extension::evidence_processor::tag_alert_kff::
-                evidence_processor_impl> (EXTENSION_ID, EXTENSION_NAME);
+    mobius::framework::evidence_processor::register_evidence_processor_implementation<
+        mobius::extension::evidence_processor::tag_alert_kff::evidence_processor_impl> (EXTENSION_ID, EXTENSION_NAME);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -49,6 +46,5 @@ start ()
 extern "C" void
 stop ()
 {
-    mobius::framework::evidence_processor::
-        unregister_evidence_processor_implementation (EXTENSION_ID);
+    mobius::framework::evidence_processor::unregister_evidence_processor_implementation (EXTENSION_ID);
 }

@@ -10,10 +10,12 @@ Mobius Forensic Toolkit 2.31
 	* iped-frontend: Remove thread_guard usage
 	* iped-frontend: Remove framework.new_config_transaction calls
 	* kff-manager: Remove framework.new_config_transaction calls
+	* kff-manager: Implement new version on top of the new KFF implementation and API
 	* part-catalogue: Remove framework.new_config_transaction calls
 	* report-generator: Remove thread_guard usage
 	* report-generator: Remove framework.new_config_transaction calls
 	* sdi-window-manager: Remove framework.new_config_transaction calls
+	* tag-alert-kff: Implement new version on top of the new KFF implementation and API
 	* libmobius_core: Improve database::database with full implementation class
 	* libmobius_core: Check for SQLite3 multithread support in database constructor
 	* libmobius_core: Add new is_serialized option in database constructor class
@@ -61,6 +63,8 @@ Mobius Forensic Toolkit 2.31
 	* libmobius_core: Add function kff::set_thumbnail_count
 	* libmobius_core: Add function kff::get_file_type_string
 	* libmobius_core: Add function kff::get_hash_type_string
+	* libmobius_core: Add function kff::get_file_type
+	* libmobius_core: Add function kff::get_hash_type
 	* libmobius_framework: Use SQLite WAL journal mode in config module
 	* libmobius_framework: Remove thread_guard from config module
 	* libmobius_framework: Use single DB connection shared by all threads in config module
