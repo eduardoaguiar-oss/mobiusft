@@ -189,7 +189,7 @@ tp_f_set_attribute (core_vfs_disk_o *self, PyObject *args)
     try
     {
         arg_id = mobius::py::get_arg<std::string> (args, 0);
-        arg_value = mobius::py::get_arg_as_cpp (args, 1, pymobius_core_pod_data_from_pyobject);
+        arg_value = mobius::py::get_arg<mobius::core::pod::data> (args, 1);
     }
     catch (const std::exception &e)
     {
@@ -239,7 +239,7 @@ tp_f_get_attribute (core_vfs_disk_o *self, PyObject *args)
 
     try
     {
-        ret = pymobius_core_pod_data_to_pyobject (self->obj->get_attribute (arg_id));
+        ret = mobius::py::to_pyobject (self->obj->get_attribute (arg_id));
     }
     catch (const std::exception &e)
     {

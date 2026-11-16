@@ -23,11 +23,8 @@
 #include "item.hpp"
 #include <functional>
 #include <pycallback.hpp>
-#include <pydict.hpp>
 #include <pyfunction.hpp>
 #include <pygil.hpp>
-#include <pylist.hpp>
-#include <pymobius.hpp>
 #include <pyobject.hpp>
 #include "ant.hpp"
 #include "case.hpp"
@@ -38,6 +35,9 @@
 #include "event.hpp"
 #include "evidence.hpp"
 #include "module.hpp"
+#include <pylist.hpp>
+#include <pydict.hpp>
+#include <pymobius.hpp>
 
 namespace
 {
@@ -477,7 +477,7 @@ tp_f_get_attribute (framework_model_item_o *self, PyObject *args)
 
     try
     {
-        ret = pymobius_core_pod_data_to_pyobject (
+        ret = mobius::py::to_pyobject (
             self->obj->get_attribute (arg_id)
         );
     }
@@ -504,9 +504,7 @@ tp_f_set_attribute (framework_model_item_o *self, PyObject *args)
     try
     {
         arg_id = mobius::py::get_arg<std::string> (args, 0);
-        arg_value = mobius::py::get_arg_as_cpp (
-            args, 1, pymobius_core_pod_data_from_pyobject
-        );
+        arg_value = mobius::py::get_arg<mobius::core::pod::data> (args, 1);
     }
     catch (const std::exception &e)
     {
@@ -580,10 +578,7 @@ tp_f_get_attributes (framework_model_item_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pydict_from_cpp_container (
-            self->obj->get_attributes (),
-            pymobius_core_pod_data_to_pyobject
-        );
+        ret = mobius::py::pydict_from_cpp_container (self->obj->get_attributes ());
     }
     catch (const std::exception &e)
     {
@@ -1344,7 +1339,7 @@ tp_getattro (PyObject *o, PyObject *name)
             auto s_name = mobius::py::from_pyobject<std::string> (name);
 
             if (self->obj->has_attribute (s_name))
-                ret = pymobius_core_pod_data_to_pyobject (
+                ret = mobius::py::to_pyobject (
                     self->obj->get_attribute (s_name)
                 );
 
@@ -1404,7 +1399,7 @@ tp_setattro (PyObject *o, PyObject *name, PyObject *value)
 
             else
             {
-                auto s_value = pymobius_core_pod_data_from_pyobject (value);
+                auto s_value = mobius::py::from_pyobject<mobius::core::pod::data> (value);
                 self->obj->set_attribute (s_name, s_value);
             }
         }
@@ -1617,8 +1612,8 @@ class attribute_modified_callback
 
         f_ (pymobius_framework_model_item_to_pyobject (item),
             mobius::py::to_pyobject (id),
-            pymobius_core_pod_data_to_pyobject (old_value),
-            pymobius_core_pod_data_to_pyobject (new_value));
+            mobius::py::to_pyobject (old_value),
+            mobius::py::to_pyobject (new_value));
     }
 
   private:
@@ -1649,7 +1644,7 @@ class attribute_removed_callback
 
         f_ (pymobius_framework_model_item_to_pyobject (item),
             mobius::py::to_pyobject (id),
-            pymobius_core_pod_data_to_pyobject (old_value));
+            mobius::py::to_pyobject (old_value));
     }
 
   private:

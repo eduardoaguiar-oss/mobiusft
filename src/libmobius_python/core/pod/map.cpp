@@ -23,13 +23,13 @@
 #include "map.hpp"
 #include <mobius/core/exception.inc>
 #include <mobius/core/string_functions.hpp>
-#include <pydict.hpp>
-#include <pylist.hpp>
-#include <pymobius.hpp>
 #include <stdexcept>
 #include "api_dataholder.hpp"
 #include "data.hpp"
 #include "pyobject.hpp"
+#include <pydict.hpp>
+#include <pylist.hpp>
+#include <pymobius.hpp>
 
 namespace
 {
@@ -49,9 +49,7 @@ map_to_object (const mobius::core::pod::map &value)
     for (const auto &p : value)
     {
         if (p.first != ".object")
-            api_dataholder_setattr (
-                data, p.first, pymobius_core_pod_data_to_pyobject (p.second)
-            );
+            api_dataholder_setattr (data, p.first, mobius::py::to_pyobject (p.second));
     }
 
     return reinterpret_cast<PyObject *> (data);
@@ -76,7 +74,7 @@ map_from_object (PyObject *obj)
             !value.is_callable () && // eliminate functions
             obj != value             // eliminate self references
         )
-            map.set (key, pymobius_core_pod_data_from_pyobject (value));
+            map.set (key, mobius::py::from_pyobject<mobius::core::pod::data> (value));
     }
 
     map.set (".object", mobius::core::pod::data ());
@@ -165,10 +163,7 @@ tp_f_get (core_pod_map_o *self, PyObject *args)
     try
     {
         arg_key = mobius::py::get_arg<std::string> (args, 0);
-        arg_varg = mobius::py::get_arg_as_cpp (
-            args, 1, pymobius_core_pod_data_from_pyobject,
-            mobius::core::pod::data ()
-        );
+        arg_varg = mobius::py::get_arg<mobius::core::pod::data> (args, 1, {});
     }
     catch (const std::exception &e)
     {
@@ -181,9 +176,7 @@ tp_f_get (core_pod_map_o *self, PyObject *args)
 
     try
     {
-        ret = pymobius_core_pod_data_to_pyobject (
-            self->obj->get (arg_key, arg_varg)
-        );
+        ret = mobius::py::to_pyobject (self->obj->get (arg_key, arg_varg));
     }
     catch (const std::exception &e)
     {
@@ -210,9 +203,7 @@ tp_f_set (core_pod_map_o *self, PyObject *args)
     try
     {
         arg_key = mobius::py::get_arg<std::string> (args, 0);
-        arg_value = mobius::py::get_arg_as_cpp (
-            args, 1, pymobius_core_pod_data_from_pyobject
-        );
+        arg_value = mobius::py::get_arg<mobius::core::pod::data> (args, 1);
     }
     catch (const std::exception &e)
     {
@@ -321,9 +312,7 @@ tp_f_to_python (core_pod_map_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pydict_from_cpp_container (
-            *self->obj, pymobius_core_pod_data_to_pyobject
-        );
+        ret = mobius::py::pydict_from_cpp_container (*self->obj);
     }
     catch (const std::exception &e)
     {
@@ -346,14 +335,7 @@ tp_f_get_values (core_pod_map_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pylist_from_cpp_pair_container (
-            *self->obj,
-            [] (auto f)
-            {   
-                return mobius::py::to_pyobject (f);
-            },
-            pymobius_core_pod_data_to_pyobject
-        );
+        ret = mobius::py::pylist_from_cpp_pair_container (*self->obj);
     }
     catch (const std::exception &e)
     {
@@ -566,7 +548,7 @@ pymobius_core_pod_map_from_pyobject (PyObject *py_value)
         while (PyDict_Next (py_value, &pos, &key, &value))
         {
             auto cpp_key = mobius::py::from_pyobject<std::string> (key);
-            auto cpp_value = pymobius_core_pod_data_from_pyobject (value);
+            auto cpp_value = mobius::py::from_pyobject<mobius::core::pod::data> (value);
 
             map.set (cpp_key, cpp_value);
         }

@@ -41,8 +41,7 @@ _serialize_to_bytearray (PyObject *args)
 
     try
     {
-        arg_data = mobius::py::get_arg_as_cpp (
-            args, 0, pymobius_core_pod_data_from_pyobject);
+        arg_data = mobius::py::get_arg<mobius::core::pod::data> (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -82,8 +81,7 @@ _serialize_to_writer (PyObject *args)
     {
         arg_writer = mobius::py::get_arg_as_cpp (
             args, 0, pymobius_core_io_writer_from_pyobject);
-        arg_data = mobius::py::get_arg_as_cpp (
-            args, 1, pymobius_core_pod_data_from_pyobject);
+        arg_data = mobius::py::get_arg<mobius::core::pod::data> (args, 1);
     }
     catch (const std::exception &e)
     {

@@ -209,7 +209,7 @@ tp_f_get_metadata (core_vfs_filesystem_o *self, PyObject *args)
 
     try
     {
-        ret = pymobius_core_pod_data_to_pyobject (self->obj->get_metadata (arg_name));
+        ret = mobius::py::to_pyobject (self->obj->get_metadata (arg_name));
     }
     catch (const std::exception &e)
     {

@@ -22,11 +22,12 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "richtext.hpp"
 #include <mobius/core/exception.inc>
-#include <pylist.hpp>
-#include <pymobius.hpp>
 #include <stdexcept>
 #include "pod/data.hpp"
 #include "pod/map.hpp"
+#include <pylist.hpp>
+#include <pymobius.hpp>
+#include <pycall.hpp>
 
 namespace
 {
@@ -697,20 +698,7 @@ tp_f_to_pango (core_richtext_o *self, PyObject *)
 static PyObject *
 tp_f_to_pod (core_richtext_o *self, PyObject *)
 {
-    // Execute C++ function
-    PyObject *ret = nullptr;
-
-    try
-    {
-        ret = pymobius_core_pod_data_to_python (self->obj->to_pod ());
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-    }
-
-    // Return value
-    return ret;
+    return mobius::py::call_method (self->obj, &mobius::core::richtext::to_pod);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -907,6 +895,6 @@ pymobius_core_richtext_from_pyobject (PyObject *value)
 mobius::core::richtext
 pymobius_core_richtext_from_python (PyObject *value)
 {
-    auto data = pymobius_core_pod_data_from_pyobject (value);
+    auto data = mobius::py::from_pyobject<mobius::core::pod::data> (value);
     return mobius::core::richtext (std::vector<mobius::core::pod::map> (data));
 }

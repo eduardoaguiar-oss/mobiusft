@@ -21,6 +21,7 @@
 #include <Python.h>
 #include <mobius/core/pod/data.hpp>
 #include <pytypeobject.hpp>
+#include <pymobius.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -36,9 +37,25 @@ typedef struct
 mobius::py::pytypeobject new_core_pod_data_type ();
 PyTypeObject *get_core_pod_data_type ();
 bool pymobius_core_pod_data_check (PyObject *);
-mobius::core::pod::data pymobius_core_pod_data_from_pyobject (PyObject *);
-PyObject *pymobius_core_pod_data_to_pyobject (const mobius::core::pod::data &);
 PyObject *pymobius_core_pod_data_to_python (const mobius::core::pod::data &);
+
+namespace mobius::py
+{
+mobius::core::pod::data pymobius_core_pod_data_from_pyobject (PyObject *);
 PyObject *to_pyobject (const mobius::core::pod::data &);
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Specialization of from_pyobject for mobius::core::pod::data
+// @param value Python value
+// @return C++ object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+template <>
+inline mobius::core::pod::data
+from_pyobject<mobius::core::pod::data> (PyObject *value)
+{
+    return pymobius_core_pod_data_from_pyobject (value);
+}
+
+} // namespace mobius::py
 
 #endif

@@ -325,7 +325,7 @@ tp_f_get_qvariant (core_decoder_qdatastream_o *self, PyObject *)
 
     try
     {
-        ret = pymobius_core_pod_data_to_pyobject (self->obj->get_qvariant ());
+        ret = mobius::py::to_pyobject (self->obj->get_qvariant ());
     }
     catch (const std::exception &e)
     {

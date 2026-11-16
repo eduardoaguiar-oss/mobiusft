@@ -55,7 +55,7 @@ pymobius_core_pod_data_vector_from_pytuple (PyObject *py_value)
                 MOBIUS_EXCEPTION_MSG (mobius::py::get_error_message ())
             );
 
-        v.push_back (pymobius_core_pod_data_from_pyobject (item));
+        v.push_back (mobius::py::from_pyobject<mobius::core::pod::data> (item));
     }
 
     return v;
@@ -81,7 +81,7 @@ pymobius_core_pod_data_vector_from_pyset (PyObject *py_value)
 
     while (item)
     {
-        v.push_back (pymobius_core_pod_data_from_pyobject (item));
+        v.push_back (mobius::py::from_pyobject<mobius::core::pod::data> (item));
         item = PyIter_Next (iter);
     }
 
@@ -126,7 +126,7 @@ tp_getter_value (core_pod_data_o *self, void *)
 
     try
     {
-        ret = pymobius_core_pod_data_to_pyobject (*(self->obj));
+        ret = mobius::py::to_pyobject (*(self->obj));
     }
     catch (const std::exception &e)
     {
@@ -161,7 +161,7 @@ tp_f_clone (core_pod_data_o *self, PyObject *)
 
     try
     {
-        ret = pymobius_core_pod_data_to_pyobject (self->obj->clone ());
+        ret = mobius::py::to_pyobject (self->obj->clone ());
     }
     catch (const std::exception &e)
     {
@@ -506,6 +506,8 @@ pymobius_core_pod_data_check (PyObject *value)
     return mobius::py::isinstance (value, core_pod_data_type);
 }
 
+namespace mobius::py
+{
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create <i>core.pod.data</i> Python object from C++ object
 // @param value C++ object
@@ -545,10 +547,7 @@ to_pyobject (const mobius::core::pod::data &value)
         );
 
     else if (value.is_list ())
-        ret = mobius::py::pylist_from_cpp_container (
-            value.to_list (),
-            pymobius_core_pod_data_to_pyobject
-        );
+        ret = mobius::py::pylist_from_cpp_container (value.to_list ());
 
     else if (value.is_map ())
         ret =
@@ -560,17 +559,6 @@ to_pyobject (const mobius::core::pod::data &value)
         );
 
     return ret;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>core.pod.data</i> Python object from C++ object
-// @param value C++ object
-// @return New core.pod.data object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-pymobius_core_pod_data_to_pyobject (const mobius::core::pod::data &value)
-{
-    return to_pyobject (value);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -622,7 +610,7 @@ pymobius_core_pod_data_from_pyobject (PyObject *value)
 
     else if (PyList_Check (value))
         data = mobius::py::pylist_to_cpp_container (
-            value, pymobius_core_pod_data_from_pyobject
+            value, mobius::py::from_pyobject<mobius::core::pod::data>
         );
 
     else if (PyTuple_Check (value))
@@ -639,6 +627,8 @@ pymobius_core_pod_data_from_pyobject (PyObject *value)
 
     return data;
 }
+
+} // namespace mobius::py
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create pure Python object from mobius.core.pod.data value
@@ -665,7 +655,7 @@ pymobius_core_pod_data_to_python (const mobius::core::pod::data &value)
         ret = pymobius_core_pod_map_to_python (mobius::core::pod::map (value));
 
     else
-        ret = pymobius_core_pod_data_to_pyobject (value);
+        ret = mobius::py::to_pyobject (value);
 
     return ret;
 }
