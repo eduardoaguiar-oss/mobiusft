@@ -100,10 +100,18 @@ class file::impl
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void set_size (uint64_t size);
+
     bool has_hash (std::uint16_t) const;
     std::string get_hash (std::uint16_t) const;
     void set_hash (std::uint16_t, const std::string &);
     void remove_hash (std::uint16_t);
+
+    bool has_attribute (std::uint16_t) const;
+    void set_attribute (std::uint16_t, const mobius::core::pod::data &);
+    mobius::core::pod::data get_attribute (std::uint16_t) const;
+    void remove_attribute (std::uint16_t);
+
+    bool has_thumbnail () const;
     mobius::core::bytearray get_thumbnail () const;
     void set_thumbnail (const mobius::core::bytearray &);
 
@@ -241,6 +249,90 @@ file::impl::remove_hash (std::uint16_t hash_type)
     stmt.bind (1, id_);
     stmt.bind (2, hash_type);
     stmt.execute ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if the file has a specific attribute
+// @param attr The attribute identifier
+// @return True if the file has the attribute, false otherwise
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+file::impl::has_attribute (std::uint16_t attr) const
+{
+    auto db = get_database ();
+
+    auto stmt = db.new_statement ("SELECT 1 FROM attribute WHERE file_id = ? AND type = ?");
+    stmt.bind (1, id_);
+    stmt.bind (2, attr);
+
+    return stmt.fetch_row ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get file attribute
+// @param attr The attribute identifier
+// @return The attribute value
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::pod::data
+file::impl::get_attribute (std::uint16_t attr) const
+{
+    mobius::core::pod::data value;
+
+    auto db = get_database ();
+    auto stmt = db.new_statement ("SELECT data FROM attribute WHERE file_id = ? AND type = ?");
+    stmt.bind (1, id_);
+    stmt.bind (2, attr);
+
+    if (stmt.fetch_row ())
+        value = stmt.get_column_pod (0);
+
+    return value;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Set file attribute
+// @param attr The attribute identifier
+// @param value The attribute value to set
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+file::impl::set_attribute (std::uint16_t attr, const mobius::core::pod::data &value)
+{
+    auto db = get_database ();
+
+    auto stmt = db.new_statement ("INSERT OR REPLACE INTO attribute (file_id, type, data) VALUES (?, ?, ?)");
+    stmt.bind (1, id_);
+    stmt.bind (2, attr);
+    stmt.bind (3, value);
+    stmt.execute ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Remove file attribute
+// @param attr The attribute identifier
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+file::impl::remove_attribute (std::uint16_t attr)
+{
+    auto db = get_database ();
+
+    auto stmt = db.new_statement ("DELETE FROM attribute WHERE file_id = ? AND type = ?");
+    stmt.bind (1, id_);
+    stmt.bind (2, attr);
+    stmt.execute ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if the file has a thumbnail
+// @return True if the file has a thumbnail, false otherwise
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+file::impl::has_thumbnail () const
+{
+    auto db = get_database ();
+    auto stmt = db.new_statement ("SELECT 1 FROM thumbnail WHERE file_id = ?");
+    stmt.bind (1, id_);
+
+    return stmt.fetch_row ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -415,6 +507,74 @@ file::remove_hash (std::uint16_t hash_type)
         throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid KFF file"));
 
     impl_->remove_hash (hash_type);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if the file has a given attribute
+// @param attr The attribute identifier
+// @return True if the file has the attribute, false otherwise
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+file::has_attribute (std::uint16_t attr) const
+{
+    if (!impl_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid KFF file"));
+
+    return impl_->has_attribute (attr);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get file attribute
+// @param attr The attribute identifier
+// @return The attribute value
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::pod::data
+file::get_attribute (std::uint16_t attr) const
+{
+    if (!impl_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid KFF file"));
+
+    return impl_->get_attribute (attr);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Set file attribute
+// @param attr The attribute identifier
+// @param value The attribute value to set
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+file::set_attribute (std::uint16_t attr, const mobius::core::pod::data &value)
+{
+    if (!impl_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid KFF file"));
+
+    impl_->set_attribute (attr, value);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Remove file attribute
+// @param attr The attribute identifier
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+file::remove_attribute (std::uint16_t attr)
+{
+    if (!impl_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid KFF file"));
+
+    impl_->remove_attribute (attr);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if the file has a thumbnail
+// @return True if the file has a thumbnail, false otherwise
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+file::has_thumbnail () const
+{
+    if (!impl_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid KFF file"));
+
+    return impl_->has_thumbnail ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
