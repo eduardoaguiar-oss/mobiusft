@@ -241,12 +241,27 @@ new_transaction ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get next file ID
+// @return Next file ID as int64_t
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::int64_t
+get_next_file_id ()
+{
+    auto db = get_database ();
+
+    auto stmt = db.new_statement ("SELECT COALESCE(MAX(id), 0) + 1 FROM file");
+    stmt.fetch_row ();
+
+    return stmt.get_column_int64 (0);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Check if file size exists in the database
 // @param size The file size to check
 // @return True if the size exists, false otherwise
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-has_size (uint64_t size)
+has_size (std::uint64_t size)
 {
     auto db = get_database ();
 
@@ -379,58 +394,6 @@ get_thumbnail_count ()
 
     return 0;
 }
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Set file count in the metadata
-// @param count The new file count
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-set_file_count (std::uint64_t count)
-{
-    auto db = get_database ();
-    auto stmt = db.new_statement ("UPDATE meta SET value = ? WHERE key = 'file_count'");
-    stmt.bind (1, static_cast<int64_t> (count));
-    stmt.execute ();
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Set hash count in the metadata
-// @param count The new hash count
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-set_hash_count (std::uint64_t count)
-{
-    auto db = get_database ();
-    auto stmt = db.new_statement ("UPDATE meta SET value = ? WHERE key = 'hash_count'");
-    stmt.bind (1, static_cast<int64_t> (count));
-    stmt.execute ();
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Set alert count in the metadata
-// @param count The new alert count
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-set_alert_count (std::uint64_t count)
-{
-    auto db = get_database ();
-    auto stmt = db.new_statement ("UPDATE meta SET value = ? WHERE key = 'alert_count'");
-    stmt.bind (1, static_cast<int64_t> (count));
-    stmt.execute ();
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Set thumbnail count in the metadata
-// @param count The new thumbnail count
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-set_thumbnail_count (std::uint64_t count)
-{
-    auto db = get_database ();
-    auto stmt = db.new_statement ("UPDATE meta SET value = ? WHERE key = 'thumbnail_count'");
-    stmt.bind (1, static_cast<int64_t> (count));
-    stmt.execute ();
-}   
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Lookup a file by its hash in the database

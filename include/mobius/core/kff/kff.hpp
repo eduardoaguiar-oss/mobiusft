@@ -47,7 +47,8 @@ constexpr std::uint16_t HASH_TYPE_SHA2_512 = 5;
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::database::database get_database ();
 mobius::core::database::transaction new_transaction ();
-bool has_size (uint64_t);
+std::int64_t get_next_file_id ();
+bool has_size (std::uint64_t);
 file lookup (std::uint16_t, const std::string &);
 file new_file (std::int64_t, std::uint16_t, std::uint64_t);
 std::uint16_t get_file_type (const std::string &);
@@ -58,11 +59,6 @@ std::uint64_t get_file_count ();
 std::uint64_t get_hash_count ();
 std::uint64_t get_alert_count ();
 std::uint64_t get_thumbnail_count ();
-void set_file_count (std::uint64_t);
-void set_hash_count (std::uint64_t);
-void set_alert_count (std::uint64_t);
-void set_thumbnail_count (std::uint64_t);
-
 } // namespace mobius::core::kff
 
 #endif
