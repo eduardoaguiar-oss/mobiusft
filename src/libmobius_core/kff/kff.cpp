@@ -44,7 +44,8 @@ static std::atomic<bool> schema_flag_ {false};
 // @brief File types
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::vector<std::string> FILE_TYPES = {
-    "regular",
+    "info",
+    "ignored",
     "alert.csam",
     "alert.malware",
 };
@@ -117,9 +118,10 @@ _create_db_tables (mobius::core::database::database &db)
 
     db.execute (
         "INSERT OR REPLACE INTO file_type (id, name) VALUES "
-        "(1, 'regular'), "
-        "(2, 'alert.csam'), "
-        "(3, 'alert.malware');"
+        "(1, 'info'), "
+        "(2, 'ignored'), "
+        "(3, 'alert.csam'), "
+        "(4, 'alert.malware');"
     );
 
     // Table: hash_type

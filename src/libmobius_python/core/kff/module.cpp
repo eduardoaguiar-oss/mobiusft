@@ -75,7 +75,8 @@ new_core_kff_module ()
     module.add_type ("file", mobius::py::new_core_kff_file_type ());
 
     // Add constants
-    module.add_constant("FILE_TYPE_REGULAR", mobius::core::kff::FILE_TYPE_REGULAR);
+    module.add_constant("FILE_TYPE_INFO", mobius::core::kff::FILE_TYPE_INFO);
+    module.add_constant("FILE_TYPE_IGNORED", mobius::core::kff::FILE_TYPE_IGNORED);
     module.add_constant("FILE_TYPE_ALERT_CSAM", mobius::core::kff::FILE_TYPE_ALERT_CSAM);
     module.add_constant("FILE_TYPE_ALERT_MALWARE", mobius::core::kff::FILE_TYPE_ALERT_MALWARE);
     module.add_constant("HASH_TYPE_ED2K", mobius::core::kff::HASH_TYPE_ED2K);

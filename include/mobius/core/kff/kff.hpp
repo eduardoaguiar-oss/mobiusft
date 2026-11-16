@@ -28,9 +28,10 @@ namespace mobius::core::kff
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // File types
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-constexpr std::uint16_t FILE_TYPE_REGULAR = 1;
-constexpr std::uint16_t FILE_TYPE_ALERT_CSAM = 2;
-constexpr std::uint16_t FILE_TYPE_ALERT_MALWARE = 3;
+constexpr std::uint16_t FILE_TYPE_INFO = 1;
+constexpr std::uint16_t FILE_TYPE_IGNORED = 2;
+constexpr std::uint16_t FILE_TYPE_ALERT_CSAM = 3;
+constexpr std::uint16_t FILE_TYPE_ALERT_MALWARE = 4;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Hash types
