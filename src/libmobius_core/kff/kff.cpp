@@ -428,7 +428,7 @@ lookup (std::uint16_t hash_type, const std::string &hash_value)
 // @return File object representing the newly inserted file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 file
-new_file (std::int64_t file_id, std::uint16_t type, std::uint64_t size)
+new_file (std::int64_t file_id, std::uint16_t type, std::int64_t size)
 {
     thread_local mobius::core::database::statement stmt;
 
@@ -444,7 +444,12 @@ new_file (std::int64_t file_id, std::uint16_t type, std::uint64_t size)
 
     stmt.bind (1, file_id);
     stmt.bind (2, type);
-    stmt.bind (3, static_cast<int64_t> (size));
+
+    if (size == -1)
+        stmt.bind_null (3);
+    else
+        stmt.bind (3, size);
+
     stmt.execute ();
     stmt.reset ();
 

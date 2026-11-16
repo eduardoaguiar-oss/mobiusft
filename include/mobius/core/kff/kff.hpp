@@ -50,7 +50,7 @@ mobius::core::database::transaction new_transaction ();
 std::int64_t get_next_file_id ();
 bool has_size (std::uint64_t);
 file lookup (std::uint16_t, const std::string &);
-file new_file (std::int64_t, std::uint16_t, std::uint64_t);
+file new_file (std::int64_t, std::uint16_t, std::int64_t = -1);
 std::uint16_t get_file_type (const std::string &);
 std::uint16_t get_hash_type (const std::string &);
 std::string get_file_type_string (std::uint16_t);
@@ -59,6 +59,7 @@ std::uint64_t get_file_count ();
 std::uint64_t get_hash_count ();
 std::uint64_t get_alert_count ();
 std::uint64_t get_thumbnail_count ();
+
 } // namespace mobius::core::kff
 
 #endif
