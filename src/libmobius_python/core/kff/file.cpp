@@ -212,6 +212,68 @@ tp_f_remove_hash (core_kff_file_o *self, PyObject *arg)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>has_attribute</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return True if the file has the attribute, false otherwise
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_has_attribute (core_kff_file_o *self, PyObject *arg)
+{
+    // Parse input args
+    std::uint16_t arg_attr;
+
+    try
+    {
+        arg_attr = mobius::py::from_pyobject<std::uint16_t> (arg);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
+    }
+
+    // Execute C++ function
+    return mobius::py::call_method (self->obj, &mobius::core::kff::file::has_attribute, arg_attr);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>remove_attribute</i> method implementation
+// @param self Object
+// @param args Argument list
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_remove_attribute (core_kff_file_o *self, PyObject *arg)
+{
+    // Parse input args
+    std::uint16_t arg_attr;
+
+    try
+    {
+        arg_attr = mobius::py::from_pyobject<std::uint16_t> (arg);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
+    }
+
+    // Execute C++ function
+    return mobius::py::call_method (self->obj, &mobius::core::kff::file::remove_attribute, arg_attr);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>has_thumbnail</i> method implementation
+// @param self Object
+// @return True if the file has a thumbnail, false otherwise
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_has_thumbnail (core_kff_file_o *self, PyObject *)
+{
+    return mobius::py::call_method (self->obj, &mobius::core::kff::file::has_thumbnail);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>get_thumbnail</i> method implementation
 // @param self Object
 // @param args Argument list
@@ -276,6 +338,18 @@ static PyMethodDef tp_methods[] = {
      reinterpret_cast<PyCFunction> (tp_f_remove_hash),
      METH_O,
      "remove_hash(hash_type)\n--\n\nRemove file hash"},
+    {"has_attribute",
+     reinterpret_cast<PyCFunction> (tp_f_has_attribute),
+     METH_O,
+     "has_attribute(attr)\n--\n\nCheck if file has an attribute"},
+    {"remove_attribute",
+     reinterpret_cast<PyCFunction> (tp_f_remove_attribute),
+     METH_O,
+     "remove_attribute(attr)\n--\n\nRemove file attribute"},
+    {"has_thumbnail",
+     reinterpret_cast<PyCFunction> (tp_f_has_thumbnail),
+     METH_NOARGS,
+     "has_thumbnail()\n--\n\nCheck if file has a thumbnail"},
     {"get_thumbnail",
      reinterpret_cast<PyCFunction> (tp_f_get_thumbnail),
      METH_NOARGS,
