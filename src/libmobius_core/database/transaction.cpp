@@ -46,7 +46,7 @@ transaction::impl::impl (const database &db, bool is_master)
       is_master_ (is_master)
 {
     if (is_master_)
-        db_.execute ("BEGIN TRANSACTION;");
+        db_.execute ("BEGIN IMMEDIATE;");
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
