@@ -48,6 +48,7 @@ get_arg (PyObject *args, std::uint32_t idx)
     if (idx < PyTuple_Size (args))
         return PyTuple_GetItem (args, idx);
 
+    mobius::py::set_invalid_type_error ("argument index out of range");
     throw std::out_of_range ("argument index out of range");
 }
 

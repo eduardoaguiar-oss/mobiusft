@@ -157,6 +157,11 @@ Mobius Forensic Toolkit 2.31
 	* libmobius_python: Remove deprecated class mobius.core.kff.kff
 	* libmobius_python: Remove deprecated class mobius.core.kff.hashset
 	* libmobius_python: Remove deprecated class mobius.core.database.connection_set
+	* libmobius_python: Add template function from_pyobject<mobius::core::pod::data>
+	* libmobius_python: Remove function pymobius_core_pod_data_to_pyobject
+	* libmobius_python: Use from_pyobject instead of pymobius_core_pod_data_from_pyobject
+	* libmobius_python: Move mobius::core::pod::data wrapper to mobius::py namespace
+	* libmobius_python: Set invalid_type_error in mobius::py::get_arg on error
 	* pymobius: Remove module item_browser.py
 	* pymobius: Set extension directory to "$HOME/.config/mobius/extensions/{app.version}"
 	* tools: Add new kff_status tool
