@@ -90,6 +90,8 @@ pymobius_core_pod_data_vector_from_pyset (PyObject *py_value)
 
 } // namespace
 
+namespace mobius::py
+{
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>type</i> Attribute getter
 // @param self Object
@@ -506,8 +508,6 @@ pymobius_core_pod_data_check (PyObject *value)
     return mobius::py::isinstance (value, core_pod_data_type);
 }
 
-namespace mobius::py
-{
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create <i>core.pod.data</i> Python object from C++ object
 // @param value C++ object
@@ -628,8 +628,6 @@ pymobius_core_pod_data_from_pyobject (PyObject *value)
     return data;
 }
 
-} // namespace mobius::py
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create pure Python object from mobius.core.pod.data value
 // @param value mobius.core.pod.data value
@@ -659,3 +657,5 @@ pymobius_core_pod_data_to_python (const mobius::core::pod::data &value)
 
     return ret;
 }
+
+} // namespace mobius::py

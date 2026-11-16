@@ -413,7 +413,7 @@ tp_dealloc (core_pod_map_o *self)
 // @brief Type Slots
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyType_Slot core_pod_map_slots[] = {
-    {Py_tp_base, reinterpret_cast<void *> (new_core_pod_data_type ().get())},
+    {Py_tp_base, reinterpret_cast<void *> (mobius::py::new_core_pod_data_type ().get())},
     {Py_tp_new, reinterpret_cast<void *> (tp_new)},
     {Py_tp_dealloc, reinterpret_cast<void *> (tp_dealloc)},
     {Py_tp_doc, const_cast<char *> ("core.pod.map class")},
@@ -511,7 +511,7 @@ pymobius_core_pod_map_to_python (const mobius::core::pod::map &map)
     try
     {
         ret = mobius::py::pydict_from_cpp_container (
-            map, pymobius_core_pod_data_to_python
+            map, mobius::py::pymobius_core_pod_data_to_python
         );
     }
     catch (const std::exception &e)

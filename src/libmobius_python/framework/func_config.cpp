@@ -119,7 +119,7 @@ func_framework_get_config (PyObject *, PyObject *args)
 
     try
     {
-        ret = pymobius_core_pod_data_to_python (mobius::framework::get_config (arg_name));
+        ret = mobius::py::pymobius_core_pod_data_to_python (mobius::framework::get_config (arg_name));
     }
     catch (const std::exception &e)
     {

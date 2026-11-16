@@ -58,7 +58,7 @@ decoder_func_plist (PyObject *, PyObject *args)
         auto data =
             mobius::py::GIL () (mobius::core::decoder::plist (arg_reader));
 
-        ret = pymobius_core_pod_data_to_python (data);
+        ret = mobius::py::pymobius_core_pod_data_to_python (data);
     }
     catch (const std::exception &e)
     {

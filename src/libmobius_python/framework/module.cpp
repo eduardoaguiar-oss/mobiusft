@@ -175,7 +175,7 @@ class config_set_callback
     {
         mobius::py::GIL_guard gil_guard;
 
-        f_ (mobius::py::to_pyobject (name), pymobius_core_pod_data_to_python (value));
+        f_ (mobius::py::to_pyobject (name), mobius::py::pymobius_core_pod_data_to_python (value));
     }
 
   private:

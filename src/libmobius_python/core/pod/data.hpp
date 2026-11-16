@@ -23,6 +23,8 @@
 #include <pytypeobject.hpp>
 #include <pymobius.hpp>
 
+namespace mobius::py
+{
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -37,11 +39,8 @@ typedef struct
 mobius::py::pytypeobject new_core_pod_data_type ();
 PyTypeObject *get_core_pod_data_type ();
 bool pymobius_core_pod_data_check (PyObject *);
-PyObject *pymobius_core_pod_data_to_python (const mobius::core::pod::data &);
-
-namespace mobius::py
-{
 mobius::core::pod::data pymobius_core_pod_data_from_pyobject (PyObject *);
+PyObject *pymobius_core_pod_data_to_python (const mobius::core::pod::data &);
 PyObject *to_pyobject (const mobius::core::pod::data &);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

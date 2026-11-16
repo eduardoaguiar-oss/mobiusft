@@ -58,7 +58,7 @@ decoder_func_btencode (PyObject *, PyObject *args)
         auto data =
             mobius::py::GIL () (mobius::core::decoder::btencode (arg_reader));
 
-        ret = pymobius_core_pod_data_to_python (data);
+        ret = mobius::py::pymobius_core_pod_data_to_python (data);
     }
     catch (const std::exception &e)
     {
