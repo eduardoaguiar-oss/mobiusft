@@ -22,9 +22,9 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "file.hpp"
+#include "../pod/data.hpp"
 #include <mobius/core/exception.inc>
 #include <stdexcept>
-#include "../pod/data.hpp"
 #include <pycall.hpp>
 #include <pymobius.hpp>
 
@@ -184,7 +184,14 @@ tp_f_set_hash (core_kff_file_o *self, PyObject *args)
     }
 
     // Execute C++ function
-    return mobius::py::call_method (self->obj, &mobius::core::kff::file::set_hash, arg_hash_type, arg_value);
+    return mobius::py::call_method (
+        self->obj,
+        static_cast<void (mobius::core::kff::file::*) (std::uint16_t, const std::string &)> (
+            &mobius::core::kff::file::set_hash
+        ),
+        arg_hash_type,
+        arg_value
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
