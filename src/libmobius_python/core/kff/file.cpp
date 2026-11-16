@@ -23,9 +23,10 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "file.hpp"
 #include <mobius/core/exception.inc>
+#include <stdexcept>
+#include "../pod/data.hpp"
 #include <pycall.hpp>
 #include <pymobius.hpp>
-#include <stdexcept>
 
 namespace mobius::py
 {
@@ -238,6 +239,47 @@ tp_f_has_attribute (core_kff_file_o *self, PyObject *arg)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>get_attribute</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Attribute value
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_get_attribute (core_kff_file_o *self, PyObject *arg)
+{
+    try
+    {
+        auto arg_attr = mobius::py::from_pyobject<std::uint16_t> (arg);
+        return mobius::py::call_method (self->obj, &mobius::core::kff::file::get_attribute, arg_attr);
+    }
+    catch (const std::exception &e)
+    {
+        return nullptr;
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>set_attribute</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return None
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_set_attribute (core_kff_file_o *self, PyObject *args)
+{
+    try
+    {
+        auto arg_attr = mobius::py::get_arg<std::uint16_t> (args, 0);
+        auto arg_data = mobius::py::get_arg<mobius::core::pod::data> (args, 1);
+        return mobius::py::call_method (self->obj, &mobius::core::kff::file::set_attribute, arg_attr, arg_data);
+    }
+    catch (const std::exception &e)
+    {
+        return nullptr;
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>remove_attribute</i> method implementation
 // @param self Object
 // @param args Argument list
@@ -342,6 +384,14 @@ static PyMethodDef tp_methods[] = {
      reinterpret_cast<PyCFunction> (tp_f_has_attribute),
      METH_O,
      "has_attribute(attr)\n--\n\nCheck if file has an attribute"},
+    {"get_attribute",
+     reinterpret_cast<PyCFunction> (tp_f_get_attribute),
+     METH_O,
+     "get_attribute(attr)\n--\n\nGet file attribute"},
+    {"set_attribute",
+     reinterpret_cast<PyCFunction> (tp_f_set_attribute),
+     METH_VARARGS,
+     "set_attribute(attr,value)\n--\n\nSet file attribute"},
     {"remove_attribute",
      reinterpret_cast<PyCFunction> (tp_f_remove_attribute),
      METH_O,
