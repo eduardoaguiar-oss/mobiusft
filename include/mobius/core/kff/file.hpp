@@ -55,6 +55,7 @@ class file
     bool has_hash (std::uint16_t) const;
     std::string get_hash (std::uint16_t) const;
     void set_hash (std::uint16_t, const std::string &);
+    void set_hash (std::uint16_t, const mobius::core::bytearray &);
     void remove_hash (std::uint16_t);
 
     bool has_attribute (std::uint16_t) const;
@@ -84,7 +85,7 @@ class file
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     template <typename T>
     T
-    get_attribute (std::uint16_t attr) const
+    get_attribute_as (std::uint16_t attr) const
     {
         return static_cast<T> (get_attribute (attr));
     }

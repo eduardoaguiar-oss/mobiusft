@@ -104,6 +104,7 @@ class file::impl
     bool has_hash (std::uint16_t) const;
     std::string get_hash (std::uint16_t) const;
     void set_hash (std::uint16_t, const std::string &);
+    void set_hash (std::uint16_t, const mobius::core::bytearray &);
     void remove_hash (std::uint16_t);
 
     bool has_attribute (std::uint16_t) const;
@@ -216,7 +217,7 @@ file::impl::get_hash (std::uint16_t hash_type) const
 // @param hash_value The hash value to set
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-file::impl::set_hash (std::uint16_t hash_type, const std::string &hash_value)
+file::impl::set_hash (std::uint16_t hash_type, const mobius::core::bytearray &hash_value)
 {
     thread_local mobius::core::database::statement stmt;
 
@@ -232,8 +233,19 @@ file::impl::set_hash (std::uint16_t hash_type, const std::string &hash_value)
 
     stmt.bind (1, id_);
     stmt.bind (2, hash_type);
-    stmt.bind (3, mobius::core::decoder::hexstring (hash_value));
+    stmt.bind (3, hash_value);
     stmt.execute ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Set file hash
+// @param hash_type The type of hash to set
+// @param hash_value The hash value to set
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+file::impl::set_hash (std::uint16_t hash_type, const std::string &hash_value)
+{
+    set_hash (hash_type, mobius::core::decoder::hexstring (hash_value));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -480,6 +492,20 @@ file::get_hash (std::uint16_t hash_type) const
         throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid KFF file"));
 
     return impl_->get_hash (hash_type);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Set file hash
+// @param hash_type The type of hash to set
+// @param hash_value The hash value to set
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+file::set_hash (std::uint16_t hash_type, const mobius::core::bytearray &hash_value)
+{
+    if (!impl_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid KFF file"));
+
+    impl_->set_hash (hash_type, hash_value);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
