@@ -62,6 +62,11 @@ class file
     void set_attribute (std::uint16_t, const mobius::core::pod::data &);
     mobius::core::pod::data get_attribute (std::uint16_t) const;
     void remove_attribute (std::uint16_t);
+    
+    bool has_password () const;
+    void set_password (const std::string&);
+    std::string get_password () const;
+    void remove_password ();
 
     bool has_thumbnail () const;
     mobius::core::bytearray get_thumbnail () const;
