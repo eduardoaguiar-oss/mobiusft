@@ -21,6 +21,15 @@
 #include <mobius/core/kff/file.hpp>
 #include <mobius/core/kff/kff.hpp>
 
+namespace
+{
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// File attributes
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static constexpr int FILE_ATTRIBUTE_PASSWORD = 1;
+
+} // namespace
+
 namespace mobius::core::kff
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -536,58 +545,61 @@ file::remove_hash (std::uint16_t hash_type)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Check if the file has a given attribute
-// @param attr The attribute identifier
-// @return True if the file has the attribute, false otherwise
+// @brief Check if the file has password set
+// @return True if the file has password set, false otherwise
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-file::has_attribute (std::uint16_t attr) const
+file::has_password () const
 {
     if (!impl_)
         throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid KFF file"));
 
-    return impl_->has_attribute (attr);
+    return impl_->has_attribute (FILE_ATTRIBUTE_PASSWORD);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get file attribute
-// @param attr The attribute identifier
+// @brief Get file password
 // @return The attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::core::pod::data
-file::get_attribute (std::uint16_t attr) const
+std::string
+file::get_password () const
 {
     if (!impl_)
         throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid KFF file"));
 
-    return impl_->get_attribute (attr);
+    std::string pwd;
+
+    auto data = impl_->get_attribute (FILE_ATTRIBUTE_PASSWORD);
+
+    if (data.is_string ())
+        pwd = data.to_string ();
+
+    return pwd;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Set file attribute
-// @param attr The attribute identifier
-// @param value The attribute value to set
+// @brief Set file password
+// @param password The password to set
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-file::set_attribute (std::uint16_t attr, const mobius::core::pod::data &value)
+file::set_password (const std::string &password)
 {
     if (!impl_)
         throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid KFF file"));
 
-    impl_->set_attribute (attr, value);
+    impl_->set_attribute (FILE_ATTRIBUTE_PASSWORD, password);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Remove file attribute
-// @param attr The attribute identifier
+// @brief Remove file password
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-file::remove_attribute (std::uint16_t attr)
+file::remove_password ()
 {
     if (!impl_)
         throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid KFF file"));
 
-    impl_->remove_attribute (attr);
+    impl_->remove_attribute (FILE_ATTRIBUTE_PASSWORD);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
