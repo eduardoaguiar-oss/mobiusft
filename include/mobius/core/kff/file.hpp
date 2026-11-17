@@ -58,11 +58,6 @@ class file
     void set_hash (std::uint16_t, const mobius::core::bytearray &);
     void remove_hash (std::uint16_t);
 
-    bool has_attribute (std::uint16_t) const;
-    void set_attribute (std::uint16_t, const mobius::core::pod::data &);
-    mobius::core::pod::data get_attribute (std::uint16_t) const;
-    void remove_attribute (std::uint16_t);
-    
     bool has_password () const;
     void set_password (const std::string&);
     std::string get_password () const;
@@ -80,19 +75,6 @@ class file
     operator bool () const noexcept
     {
         return bool (impl_);
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get attribute as a specific type
-    // @tparam T The type to convert the attribute to
-    // @param attr The attribute identifier
-    // @return The attribute value converted to the specified type
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    template <typename T>
-    T
-    get_attribute_as (std::uint16_t attr) const
-    {
-        return static_cast<T> (get_attribute (attr));
     }
 
   private:

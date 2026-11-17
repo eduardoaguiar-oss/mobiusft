@@ -220,44 +220,29 @@ tp_f_remove_hash (core_kff_file_o *self, PyObject *arg)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>has_attribute</i> method implementation
+// @brief <i>has_password</i> method implementation
 // @param self Object
 // @param args Argument list
 // @return True if the file has the attribute, false otherwise
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_has_attribute (core_kff_file_o *self, PyObject *arg)
+tp_f_has_password (core_kff_file_o *self, PyObject *)
 {
-    // Parse input args
-    std::uint16_t arg_attr;
-
-    try
-    {
-        arg_attr = mobius::py::from_pyobject<std::uint16_t> (arg);
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_invalid_type_error (e.what ());
-        return nullptr;
-    }
-
-    // Execute C++ function
-    return mobius::py::call_method (self->obj, &mobius::core::kff::file::has_attribute, arg_attr);
+    return mobius::py::call_method (self->obj, &mobius::core::kff::file::has_password);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>get_attribute</i> method implementation
+// @brief <i>get_password</i> method implementation
 // @param self Object
 // @param args Argument list
 // @return Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_get_attribute (core_kff_file_o *self, PyObject *arg)
+tp_f_get_password (core_kff_file_o *self, PyObject *)
 {
     try
     {
-        auto arg_attr = mobius::py::from_pyobject<std::uint16_t> (arg);
-        return mobius::py::call_method (self->obj, &mobius::core::kff::file::get_attribute, arg_attr);
+        return mobius::py::call_method (self->obj, &mobius::core::kff::file::get_password);
     }
     catch (const std::exception &e)
     {
@@ -266,19 +251,18 @@ tp_f_get_attribute (core_kff_file_o *self, PyObject *arg)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>set_attribute</i> method implementation
+// @brief <i>set_password</i> method implementation
 // @param self Object
 // @param args Argument list
 // @return None
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_set_attribute (core_kff_file_o *self, PyObject *args)
+tp_f_set_password (core_kff_file_o *self, PyObject *arg)
 {
     try
     {
-        auto arg_attr = mobius::py::get_arg<std::uint16_t> (args, 0);
-        auto arg_data = mobius::py::get_arg<mobius::core::pod::data> (args, 1);
-        return mobius::py::call_method (self->obj, &mobius::core::kff::file::set_attribute, arg_attr, arg_data);
+        auto arg_value = mobius::py::from_pyobject<std::string> (arg);
+        return mobius::py::call_method (self->obj, &mobius::core::kff::file::set_password, arg_value);
     }
     catch (const std::exception &e)
     {
@@ -287,28 +271,14 @@ tp_f_set_attribute (core_kff_file_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>remove_attribute</i> method implementation
+// @brief <i>remove_password</i> method implementation
 // @param self Object
 // @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_remove_attribute (core_kff_file_o *self, PyObject *arg)
+tp_f_remove_password (core_kff_file_o *self, PyObject *)
 {
-    // Parse input args
-    std::uint16_t arg_attr;
-
-    try
-    {
-        arg_attr = mobius::py::from_pyobject<std::uint16_t> (arg);
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_invalid_type_error (e.what ());
-        return nullptr;
-    }
-
-    // Execute C++ function
-    return mobius::py::call_method (self->obj, &mobius::core::kff::file::remove_attribute, arg_attr);
+    return mobius::py::call_method (self->obj, &mobius::core::kff::file::remove_password);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -387,22 +357,22 @@ static PyMethodDef tp_methods[] = {
      reinterpret_cast<PyCFunction> (tp_f_remove_hash),
      METH_O,
      "remove_hash(hash_type)\n--\n\nRemove file hash"},
-    {"has_attribute",
-     reinterpret_cast<PyCFunction> (tp_f_has_attribute),
+    {"has_password",
+     reinterpret_cast<PyCFunction> (tp_f_has_password),
+     METH_NOARGS,
+     "has_password()\n--\n\nCheck if file has a password"},
+    {"get_password",
+     reinterpret_cast<PyCFunction> (tp_f_get_password),
+     METH_NOARGS,
+     "get_password()\n--\n\nGet file password"},
+    {"set_password",
+     reinterpret_cast<PyCFunction> (tp_f_set_password),
      METH_O,
-     "has_attribute(attr)\n--\n\nCheck if file has an attribute"},
-    {"get_attribute",
-     reinterpret_cast<PyCFunction> (tp_f_get_attribute),
-     METH_O,
-     "get_attribute(attr)\n--\n\nGet file attribute"},
-    {"set_attribute",
-     reinterpret_cast<PyCFunction> (tp_f_set_attribute),
-     METH_VARARGS,
-     "set_attribute(attr,value)\n--\n\nSet file attribute"},
-    {"remove_attribute",
-     reinterpret_cast<PyCFunction> (tp_f_remove_attribute),
-     METH_O,
-     "remove_attribute(attr)\n--\n\nRemove file attribute"},
+     "set_password(password)\n--\n\nSet file password"},
+    {"remove_password",
+     reinterpret_cast<PyCFunction> (tp_f_remove_password),
+     METH_NOARGS,
+     "remove_password()\n--\n\nRemove file password"},
     {"has_thumbnail",
      reinterpret_cast<PyCFunction> (tp_f_has_thumbnail),
      METH_NOARGS,
