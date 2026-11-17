@@ -144,6 +144,11 @@ _create_db_tables (mobius::core::database::database &db)
         "CREATE TABLE IF NOT EXISTS attribute_type "
         "(id INTEGER NOT NULL, name TEXT NOT NULL);"
     );
+
+    db.execute (
+        "INSERT OR REPLACE INTO attribute_type (id, name) VALUES "
+        "(1, 'password');"
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
