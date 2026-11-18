@@ -26,6 +26,17 @@
 namespace mobius::py
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create a new Python type from a type specification
+// @param spec Type specification
+// @return PyTypeObject pointer for the new type
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyTypeObject *
+create_type (PyType_Spec *spec)
+{
+    return reinterpret_cast<PyTypeObject *> (PyType_FromSpec (spec));
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get function argument list size
 // @param args Argument tuple
 // @return Number of items
