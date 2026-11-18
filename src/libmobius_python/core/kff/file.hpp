@@ -18,10 +18,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <Python.h>
-#include <mobius/core/kff/file.hpp>
 #include <pymobius.hpp>
-#include <pytypeobject.hpp>
+#include <mobius/core/kff/file.hpp>
 
 namespace mobius::py
 {
@@ -36,9 +34,8 @@ typedef struct
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::py::pytypeobject new_core_kff_file_type ();
+PyTypeObject *get_core_kff_file_type ();
 bool pymobius_core_kff_file_check (PyObject *);
-mobius::core::kff::file pymobius_core_kff_file_from_pyobject (PyObject *);
 PyObject *to_pyobject (const mobius::core::kff::file &);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -50,7 +47,7 @@ template <>
 inline mobius::core::kff::file
 from_pyobject<mobius::core::kff::file> (PyObject *value)
 {
-    return pymobius_core_kff_file_from_pyobject (value);
+    return mobius::py::from_pyobject<core_kff_file_o> (value, get_core_kff_file_type ());
 }
 
 } // namespace mobius::py

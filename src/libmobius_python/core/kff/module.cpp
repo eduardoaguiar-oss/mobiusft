@@ -72,7 +72,7 @@ new_core_kff_module ()
     mobius::py::pymodule module (&module_def);
 
     // Add types
-    module.add_type ("file", mobius::py::new_core_kff_file_type ());
+    module.add_type ("file", mobius::py::get_core_kff_file_type ());
 
     // Add constants
     module.add_constant("FILE_TYPE_INFO", mobius::core::kff::FILE_TYPE_INFO);
