@@ -28,6 +28,7 @@
 #include "module.hpp"
 #include <pylist.hpp>
 #include <pymobius.hpp>
+#include <pycall.hpp>
 
 namespace
 {
@@ -205,21 +206,7 @@ tp_f_new_connection (framework_model_case_o *self, PyObject *)
 static PyObject *
 tp_f_new_transaction (framework_model_case_o *self, PyObject *)
 {
-    // execute C++ function
-    PyObject *ret = nullptr;
-
-    try
-    {
-        ret = pymobius_core_database_transaction_to_pyobject (
-            self->obj->new_transaction ());
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-    }
-
-    // return value
-    return ret;
+    return mobius::py::call_method (self->obj, &mobius::framework::model::Case::new_transaction);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

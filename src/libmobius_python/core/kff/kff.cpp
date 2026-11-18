@@ -244,7 +244,7 @@ func_core_kff_new_transaction (PyObject *, PyObject *)
 
     try
     {
-        ret = pymobius_core_database_transaction_to_pyobject (mobius::core::kff::new_transaction ());
+        ret = mobius::py::to_pyobject (mobius::core::kff::new_transaction ());
     }
     catch (const std::exception &e)
     {

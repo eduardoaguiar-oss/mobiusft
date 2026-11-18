@@ -55,7 +55,7 @@ new_core_database_module ()
 
     // Add types
     module.add_type ("connection", new_core_database_connection_type ());
-    module.add_type ("transaction", new_core_database_transaction_type ());
+    module.add_type ("transaction", mobius::py::get_core_database_transaction_type ());
 
     // Return module
     return module;

@@ -17,21 +17,18 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @file transaction.cc C++ API <i>mobius.core.database.transaction</i> class wrapper
+// @file transaction.cpp C++ API <i>mobius.core.database.transaction</i> class wrapper
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "transaction.hpp"
-#include <mobius/core/exception.inc>
-#include <pymobius.hpp>
 #include <stdexcept>
-#include "module.hpp"
 
+namespace mobius::py
+{
 namespace
 {
 // @brief Global pointer to hold the heap-allocated type
 static PyTypeObject *core_database_transaction_type = nullptr;
-
-} // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>commit</i> method implementation
@@ -102,8 +99,7 @@ tp_f_rollback (core_database_transaction_o *self, PyObject *)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
     {"commit", (PyCFunction) tp_f_commit, METH_VARARGS, "commit operations"},
-    {"rollback", (PyCFunction) tp_f_rollback, METH_VARARGS,
-     "rollback operations"},
+    {"rollback", (PyCFunction) tp_f_rollback, METH_VARARGS, "rollback operations"},
     {nullptr, nullptr, 0, nullptr}, // sentinel
 };
 
@@ -141,26 +137,19 @@ static PyType_Spec core_database_transaction_spec = {
     .slots = core_database_transaction_slots,
 };
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>mobius.core.database.transaction</i> type
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::py::pytypeobject
-new_core_database_transaction_type ()
+} // namespace
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get the global type object for core_database_transaction
+// @return PyTypeObject pointer for core_database_transaction
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyTypeObject *
+get_core_database_transaction_type ()
 {
-    // If type is already created, return it
-    if (core_database_transaction_type)
-        return mobius::py::pytypeobject (core_database_transaction_type);
+    if (!core_database_transaction_type)
+        core_database_transaction_type = create_type (&core_database_transaction_spec);
 
-    // Allocate type from spec
-    core_database_transaction_type = reinterpret_cast<PyTypeObject *> (
-        PyType_FromSpec (&core_database_transaction_spec)
-    );
-
-    // Create type
-    mobius::py::pytypeobject type (core_database_transaction_type);
-    type.create ();
-
-    return type;
+    return core_database_transaction_type;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -171,12 +160,7 @@ new_core_database_transaction_type ()
 bool
 pymobius_core_database_transaction_check (PyObject *value)
 {
-    if (!core_database_transaction_type)
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("transaction type is not initialized")
-        );
-
-    return mobius::py::isinstance (value, core_database_transaction_type);
+    return mobius::py::isinstance (value, get_core_database_transaction_type ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -185,34 +169,9 @@ pymobius_core_database_transaction_check (PyObject *value)
 // @return New transaction object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_core_database_transaction_to_pyobject (
-    const mobius::core::database::transaction &obj
-)
+to_pyobject (const mobius::core::database::transaction &obj)
 {
-    if (!core_database_transaction_type)
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("transaction type is not initialized")
-        );
-
-    return mobius::py::to_pyobject<core_database_transaction_o> (
-        obj, core_database_transaction_type
-    );
+    return mobius::py::to_pyobject<core_database_transaction_o> (obj, get_core_database_transaction_type ());
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>transaction</i> C++ object from Python object
-// @param value Python value
-// @return Transaction object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::core::database::transaction
-pymobius_core_database_transaction_from_pyobject (PyObject *value)
-{
-    if (!core_database_transaction_type)
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("transaction type is not initialized")
-        );
-
-    return mobius::py::from_pyobject<core_database_transaction_o> (
-        value, core_database_transaction_type
-    );
-}
+} // namespace mobius::py

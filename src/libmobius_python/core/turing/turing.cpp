@@ -25,6 +25,7 @@
 #include "module.hpp"
 #include <pylist.hpp>
 #include <pymobius.hpp>
+#include <pycall.hpp>
 
 namespace
 {
@@ -205,20 +206,7 @@ tp_f_get_hash_password (core_turing_turing_o *self, PyObject *args)
 static PyObject *
 tp_f_remove_hashes (core_turing_turing_o *self, PyObject *)
 {
-    // execute C++ function
-    PyObject *ret = nullptr;
-
-    try
-    {
-        self->obj->remove_hashes ();
-        ret = mobius::py::pynone ();
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-    }
-
-    return ret;
+    return mobius::py::call_method (self->obj, &mobius::core::turing::turing::remove_hashes);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -254,21 +242,7 @@ tp_f_get_hashes (core_turing_turing_o *self, PyObject *)
 static PyObject *
 tp_f_new_transaction (core_turing_turing_o *self, PyObject *)
 {
-    // execute C++ function
-    PyObject *ret = nullptr;
-
-    try
-    {
-        ret = pymobius_core_database_transaction_to_pyobject (
-            self->obj->new_transaction ());
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-    }
-
-    // return value
-    return ret;
+    return mobius::py::call_method (self->obj, &mobius::core::turing::turing::new_transaction);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

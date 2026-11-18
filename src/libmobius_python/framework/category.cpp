@@ -26,6 +26,7 @@
 #include <mobius/framework/config.hpp>
 #include <pylist.hpp>
 #include <pymobius.hpp>
+#include <pycall.hpp>
 
 namespace
 {
@@ -647,20 +648,7 @@ func_framework_get_categories (PyObject *, PyObject *)
 PyObject *
 func_framework_remove_categories (PyObject *, PyObject *)
 {
-    // execute C++ function
-    PyObject *ret = nullptr;
-
-    try
-    {
-        mobius::framework::remove_categories ();
-        ret = mobius::py::pynone ();
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-    }
-
-    return ret;
+    return mobius::py::call_function (mobius::framework::remove_categories);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -670,19 +658,5 @@ func_framework_remove_categories (PyObject *, PyObject *)
 PyObject *
 func_framework_new_category_transaction (PyObject *, PyObject *)
 {
-    // execute C++ function
-    PyObject *ret = nullptr;
-
-    try
-    {
-        ret = pymobius_core_database_transaction_to_pyobject (
-            mobius::framework::new_category_transaction ());
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-    }
-
-    // return value
-    return ret;
+    return mobius::py::call_function (mobius::framework::new_category_transaction);
 }

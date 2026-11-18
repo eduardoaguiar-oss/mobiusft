@@ -19,26 +19,38 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/database/transaction.hpp>
-#include <Python.h>
-#include <pytypeobject.hpp>
+#include <pymobius.hpp>
 
+namespace mobius::py
+{
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
-    PyObject_HEAD mobius::core::database::transaction *obj;
+    PyObject_HEAD // Python object header
+    mobius::core::database::transaction *obj;
 } core_database_transaction_o;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// Helper functions
+// Prototypes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::py::pytypeobject new_core_database_transaction_type ();
+PyTypeObject *get_core_database_transaction_type ();
 bool pymobius_core_database_transaction_check (PyObject *);
-PyObject *pymobius_core_database_transaction_to_pyobject (
-    const mobius::core::database::transaction &
-);
-mobius::core::database::transaction
-pymobius_core_database_transaction_from_pyobject (PyObject *);
+PyObject *to_pyobject (const mobius::core::database::transaction &);
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create mobius::core::database::transaction from PyObject
+// @param value Python Object
+// @return mobius::core::database::transaction object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+template <>
+inline mobius::core::database::transaction
+from_pyobject<mobius::core::database::transaction> (PyObject *value)
+{
+    return mobius::py::from_pyobject<core_database_transaction_o> (value, get_core_database_transaction_type ());
+}
+
+} // namespace mobius::py
 
 #endif
