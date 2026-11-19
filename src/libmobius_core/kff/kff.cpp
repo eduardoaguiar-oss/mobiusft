@@ -198,6 +198,51 @@ _create_db_schema (mobius::core::database::database &db)
 
 namespace mobius::core::kff
 {
+namespace
+{
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// File generator implementation
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+class file_generator_impl : public mobius::core::generator_impl_base<file>
+{
+  public:
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Constructor
+    // @param stmt Database statement to fetch files from
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    explicit file_generator_impl (const mobius::core::database::statement& stmt)
+        : stmt_ (stmt)
+    {
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Fetch next file from the database
+    // @param f File object to populate
+    // @return True if a file was fetched, false if no more files are available
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    bool
+    next (file &f) final
+    {
+        if (!stmt_.fetch_row ())
+            return false;
+
+        f = file (
+            stmt_.get_column_int64 (0),
+            static_cast<int> (stmt_.get_column_int64 (1)),
+            stmt_.is_column_null (2) ? -1 : stmt_.get_column_int64 (2)
+        );
+
+        return true;
+    }
+
+  private:
+    mobius::core::database::statement stmt_;
+};
+
+static_assert (std::ranges::input_range<mobius::core::generator<file>>);
+
+} // namespace
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get database instance
 // @return Database object
@@ -462,34 +507,16 @@ new_file (std::int64_t file_id, std::uint16_t type, std::int64_t size)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Fetch the next file from the statement
-// @return true if a file was fetched, false otherwise
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-bool
-file_range::_fetch ()
-{
-    if (!stmt_.fetch_row ())
-        return false;
-
-    current_ = file (
-        stmt_.get_column_int64 (0),
-        static_cast<std::uint16_t> (stmt_.get_column_int64 (1)),
-        stmt_.is_column_null (2) ? -1 : stmt_.get_column_int64 (2)
-    );
-
-    return true;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Iterate over all files
 // @return A file_range object for iterating over all files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-file_range
+mobius::core::generator<file>
 iter_files ()
 {
     auto db = get_database ();
     auto stmt = db.new_statement ("SELECT id, type, size FROM file ORDER BY id");
-    return file_range (stmt);
+
+    return mobius::core::generator<file> (std::make_shared<file_generator_impl> (stmt));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -497,13 +524,14 @@ iter_files ()
 // @param type The type of files to iterate over
 // @return A file_range object for iterating over all files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-file_range
+mobius::core::generator<file>
 iter_files_by_type (std::uint16_t type)
 {
     auto db = get_database ();
     auto stmt = db.new_statement ("SELECT id, type, size FROM file WHERE type = ? ORDER BY id");
     stmt.bind (1, static_cast<std::int64_t> (type));
-    return file_range (stmt);
+
+    return mobius::core::generator<file> (std::make_shared<file_generator_impl> (stmt));
 }
 
 } // namespace mobius::core::kff

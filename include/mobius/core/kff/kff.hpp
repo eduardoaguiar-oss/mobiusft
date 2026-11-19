@@ -19,6 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/database/database.hpp>
+#include <mobius/core/generator.hpp>
 #include <mobius/core/kff/file.hpp>
 #include <cstdint>
 #include <iterator>
@@ -45,98 +46,6 @@ constexpr std::uint16_t HASH_TYPE_SHA2_256 = 4;
 constexpr std::uint16_t HASH_TYPE_SHA2_512 = 5;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Single-pass range over KFF files, backed by one statement
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class file_range
-{
-  public:
-    class iterator
-    {
-      public:
-        using iterator_concept = std::input_iterator_tag;
-        using value_type = file;
-        using difference_type = std::ptrdiff_t;
-
-        iterator () = default;
-
-        explicit iterator (file_range *range)
-            : range_ (range)
-        {
-            ++*this; // fetch first row
-        }
-
-        const file &
-        operator* () const
-        {
-            return range_->current_;
-        }
-
-        const file *
-        operator->() const
-        {
-            return &range_->current_;
-        }
-
-        iterator &
-        operator++ ()
-        {
-            if (!range_->_fetch ())
-                range_ = nullptr; // end reached
-
-            return *this;
-        }
-
-        void
-        operator++ (int)
-        {
-            ++*this;
-        }
-
-        friend bool
-        operator== (const iterator &it, std::default_sentinel_t) noexcept
-        {
-            return it.range_ == nullptr;
-        }
-
-      private:
-        file_range *range_ = nullptr;
-    };
-
-    explicit file_range (const mobius::core::database::statement& stmt)
-        : stmt_ (stmt)
-    {
-    }
-
-    // Iterators point into the range: no copies; move only before iterating
-    file_range (const file_range &) = delete;
-    file_range &operator= (const file_range &) = delete;
-    file_range (file_range &&) = default;
-    file_range &operator= (file_range &&) = default;
-
-    iterator
-    begin ()
-    {
-        return iterator (this);
-    }
-
-    std::default_sentinel_t
-    end () const noexcept
-    {
-        return {};
-    }
-
-  private:
-    mobius::core::database::statement stmt_;
-    file current_;
-
-    // Helper functions
-    bool _fetch ();
-};
-
-static_assert (std::input_iterator<file_range::iterator>);
-static_assert (std::ranges::input_range<file_range>);
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Prototypes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::database::database get_database ();
@@ -153,8 +62,8 @@ std::uint64_t get_file_count ();
 std::uint64_t get_hash_count ();
 std::uint64_t get_alert_count ();
 std::uint64_t get_thumbnail_count ();
-file_range iter_files ();
-file_range iter_files_by_type (std::uint16_t);
+mobius::core::generator<file> iter_files ();
+mobius::core::generator<file> iter_files_by_type (std::uint16_t);
 
 } // namespace mobius::core::kff
 
