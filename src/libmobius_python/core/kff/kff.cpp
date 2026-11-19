@@ -110,6 +110,18 @@ func_core_kff_get_hash_type_string (PyObject *, PyObject *arg)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get alert count
+// @param self Python self
+// @param args Python arguments
+// @return Alert count
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_core_kff_get_alert_count (PyObject *, PyObject *)
+{
+    return mobius::py::call_function (mobius::core::kff::get_alert_count);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get file count
 // @param self Python self
 // @param args Python arguments
@@ -134,15 +146,15 @@ func_core_kff_get_hash_count (PyObject *, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get alert count
+// @brief Get next file ID
 // @param self Python self
 // @param args Python arguments
-// @return Alert count
+// @return Next file ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-func_core_kff_get_alert_count (PyObject *, PyObject *)
+func_core_kff_get_next_file_id (PyObject *, PyObject *)
 {
-    return mobius::py::call_function (mobius::core::kff::get_alert_count);
+    return mobius::py::call_function (mobius::core::kff::get_next_file_id);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -176,44 +188,6 @@ func_core_kff_has_size (PyObject *, PyObject *arg)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>lookup</i> function implementation
-// @param self Python self
-// @param args Python arguments
-// @return Lookup result
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-func_core_kff_lookup (PyObject *, PyObject *args)
-{
-    try
-    {
-        auto arg_hash_type = mobius::py::get_arg<std::uint16_t> (args, 0);
-        auto arg_value = mobius::py::get_arg<std::string> (args, 1);
-        return mobius::py::call_function (mobius::core::kff::lookup, arg_hash_type, arg_value);
-    }
-    catch (...)
-    {
-        return nullptr;
-    }
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>new_transaction</i> function implementation
-// @return new transaction object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-func_core_kff_new_transaction (PyObject *, PyObject *)
-{
-    try
-    {
-        return mobius::py::call_function (mobius::core::kff::new_transaction);
-    }
-    catch (...)
-    {
-        return nullptr;
-    }
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>iter_files</i> function implementation
 // @return Generator for iterating over files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -240,8 +214,67 @@ func_kff_iter_files_by_type (PyObject *, PyObject *arg)
     try
     {
         auto arg_hash_type = mobius::py::get_arg<std::uint16_t> (arg);
-
         return mobius::py::call_function (mobius::core::kff::iter_files_by_type, arg_hash_type);
+    }
+    catch (...)
+    {
+        return nullptr;
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>lookup</i> function implementation
+// @param self Python self
+// @param args Python arguments
+// @return Lookup result
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_core_kff_lookup (PyObject *, PyObject *args)
+{
+    try
+    {
+        auto arg_hash_type = mobius::py::get_arg<std::uint16_t> (args, 0);
+        auto arg_value = mobius::py::get_arg<std::string> (args, 1);
+        return mobius::py::call_function (mobius::core::kff::lookup, arg_hash_type, arg_value);
+    }
+    catch (...)
+    {
+        return nullptr;
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>new_file</i> function implementation
+// @param self Python self
+// @param args Python arguments
+// @return new file object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_core_kff_new_file (PyObject *, PyObject *args)
+{
+    try
+    {
+        auto arg_file_id = mobius::py::get_arg<std::uint64_t> (args, 0);
+        auto arg_type = mobius::py::get_arg<std::uint16_t> (args, 1);
+        auto arg_size = mobius::py::get_arg<std::int64_t> (args, 2, -1);
+        return mobius::py::call_function (mobius::core::kff::new_file, arg_file_id, arg_type, arg_size);
+    }
+    catch (...)
+    {
+        return nullptr;
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>new_transaction</i> function implementation
+// @return new transaction object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_core_kff_new_transaction (PyObject *, PyObject *)
+{
+    try
+    {
+        return mobius::py::call_function (mobius::core::kff::new_transaction);
     }
     catch (...)
     {

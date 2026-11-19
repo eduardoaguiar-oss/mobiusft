@@ -31,18 +31,20 @@ namespace
 // @brief Module methods
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef module_methods[] = {
-    {"get_file_type", mobius::py::func_core_kff_get_file_type, METH_O, "Get file type index"},
-    {"get_file_type_string", mobius::py::func_core_kff_get_file_type_string, METH_O, "Get file type string"},
-    {"get_hash_type", mobius::py::func_core_kff_get_hash_type, METH_O, "Get hash type index"},
-    {"get_hash_type_string", mobius::py::func_core_kff_get_hash_type_string, METH_O, "Get hash type string"},
     {"get_alert_count", mobius::py::func_core_kff_get_alert_count, METH_NOARGS, "Get alert count"},
     {"get_file_count", mobius::py::func_core_kff_get_file_count, METH_NOARGS, "Get file count"},
+    {"get_file_type", mobius::py::func_core_kff_get_file_type, METH_O, "Get file type index"},
+    {"get_file_type_string", mobius::py::func_core_kff_get_file_type_string, METH_O, "Get file type string"},
     {"get_hash_count", mobius::py::func_core_kff_get_hash_count, METH_NOARGS, "Get hash count"},
+    {"get_hash_type", mobius::py::func_core_kff_get_hash_type, METH_O, "Get hash type index"},
+    {"get_hash_type_string", mobius::py::func_core_kff_get_hash_type_string, METH_O, "Get hash type string"},
+    {"get_next_file_id", mobius::py::func_core_kff_get_next_file_id, METH_NOARGS, "Get next file ID"},
     {"get_thumbnail_count", mobius::py::func_core_kff_get_thumbnail_count, METH_NOARGS, "Get thumbnail count"},
     {"has_size", mobius::py::func_core_kff_has_size, METH_O, "Check if file has size"},
     {"iter_files", mobius::py::func_kff_iter_files, METH_NOARGS, "Iterate over files"},
     {"iter_files_by_type", mobius::py::func_kff_iter_files_by_type, METH_O, "Iterate over files by hash type"},
     {"lookup", mobius::py::func_core_kff_lookup, METH_VARARGS, "Lookup file by hash type and value"},
+    {"new_file", mobius::py::func_core_kff_new_file, METH_VARARGS, "Create new file"},
     {"new_transaction", mobius::py::func_core_kff_new_transaction, METH_NOARGS, "Create new transaction to KFF database"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };
