@@ -23,18 +23,15 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "file.hpp"
 #include <mobius/core/exception.inc>
-#include <pycall.hpp>
-#include <pymobius.hpp>
 #include <stdexcept>
 #include "../pod/data.hpp"
+#include <pymobius.hpp>
+#include <pycall.hpp>
 
 namespace mobius::py
 {
 namespace
 {
-// @brief Global pointer to hold the heap-allocated type
-static PyTypeObject *core_kff_file_type = nullptr;
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>is_alert</i> method implementation
 // @param self Object
@@ -44,10 +41,39 @@ static PyTypeObject *core_kff_file_type = nullptr;
 static PyObject *
 tp_f_is_alert (PyObject *self, PyObject *)
 {
-    return mobius::py::call_method (
-        reinterpret_cast<core_kff_file_o *> (self)->obj,
-        &mobius::core::kff::file::is_alert
-    );
+    try
+    {
+        return mobius::py::call_method (
+            reinterpret_cast<core_kff_file_o *> (self)->obj,
+            &mobius::core::kff::file::is_alert
+        );
+    }
+    catch (...)
+    {
+        return nullptr;
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>get_id</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return File ID
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_get_id (PyObject *self, PyObject *)
+{
+    try
+    {
+        return mobius::py::call_method (
+            reinterpret_cast<core_kff_file_o *> (self)->obj,
+            &mobius::core::kff::file::get_id
+        );
+    }
+    catch (...)
+    {
+        return nullptr;
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -59,10 +85,17 @@ tp_f_is_alert (PyObject *self, PyObject *)
 static PyObject *
 tp_f_get_type (PyObject *self, PyObject *)
 {
-    return mobius::py::call_method (
-        reinterpret_cast<core_kff_file_o *> (self)->obj,
-        &mobius::core::kff::file::get_type
-    );
+    try
+    {
+        return mobius::py::call_method (
+            reinterpret_cast<core_kff_file_o *> (self)->obj,
+            &mobius::core::kff::file::get_type
+        );
+    }
+    catch (...)
+    {
+        return nullptr;
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -74,10 +107,17 @@ tp_f_get_type (PyObject *self, PyObject *)
 static PyObject *
 tp_f_has_size (PyObject *self, PyObject *)
 {
-    return mobius::py::call_method (
-        reinterpret_cast<core_kff_file_o *> (self)->obj,
-        &mobius::core::kff::file::has_size
-    );
+    try
+    {
+        return mobius::py::call_method (
+            reinterpret_cast<core_kff_file_o *> (self)->obj,
+            &mobius::core::kff::file::has_size
+        );
+    }
+    catch (...)
+    {
+        return nullptr;
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -89,10 +129,17 @@ tp_f_has_size (PyObject *self, PyObject *)
 static PyObject *
 tp_f_get_size (PyObject *self, PyObject *)
 {
-    return mobius::py::call_method (
-        reinterpret_cast<core_kff_file_o *> (self)->obj,
-        &mobius::core::kff::file::get_size
-    );
+    try
+    {
+        return mobius::py::call_method (
+            reinterpret_cast<core_kff_file_o *> (self)->obj,
+            &mobius::core::kff::file::get_size
+        );
+    }
+    catch (...)
+    {
+        return nullptr;
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -113,7 +160,7 @@ tp_f_set_size (PyObject *self, PyObject *arg)
             arg_size
         );
     }
-    catch (const std::exception &e)
+    catch (...)
     {
         return nullptr;
     }
@@ -138,7 +185,7 @@ tp_f_has_hash (PyObject *self, PyObject *arg)
             arg_hash_type
         );
     }
-    catch (const std::exception &e)
+    catch (...)
     {
         return nullptr;
     }
@@ -163,7 +210,7 @@ tp_f_get_hash (PyObject *self, PyObject *arg)
             arg_hash_type
         );
     }
-    catch (const std::exception &e)
+    catch (...)
     {
         return nullptr;
     }
@@ -177,30 +224,24 @@ tp_f_get_hash (PyObject *self, PyObject *arg)
 static PyObject *
 tp_f_set_hash (PyObject *self, PyObject *args)
 {
-    // Parse input args
-    std::uint16_t arg_hash_type;
-    std::string arg_value;
-
     try
     {
-        arg_hash_type = mobius::py::get_arg<std::uint16_t> (args, 0);
-        arg_value = mobius::py::get_arg<std::string> (args, 1);
+        auto arg_hash_type = mobius::py::get_arg<std::uint16_t> (args, 0);
+        auto arg_value = mobius::py::get_arg<std::string> (args, 1);
+
+        return mobius::py::call_method (
+            reinterpret_cast<core_kff_file_o *> (self)->obj,
+            static_cast<void (mobius::core::kff::file::*) (std::uint16_t, const std::string &)> (
+                &mobius::core::kff::file::set_hash
+            ),
+            arg_hash_type,
+            arg_value
+        );
     }
-    catch (const std::exception &e)
+    catch (...)
     {
-        mobius::py::set_invalid_type_error (e.what ());
         return nullptr;
     }
-
-    // Execute C++ function
-    return mobius::py::call_method (
-        reinterpret_cast<core_kff_file_o *> (self)->obj,
-        static_cast<void (mobius::core::kff::file::*) (std::uint16_t, const std::string &)> (
-            &mobius::core::kff::file::set_hash
-        ),
-        arg_hash_type,
-        arg_value
-    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -221,7 +262,7 @@ tp_f_remove_hash (PyObject *self, PyObject *arg)
             arg_hash_type
         );
     }
-    catch (const std::exception &e)
+    catch (...)
     {
         return nullptr;
     }
@@ -236,10 +277,17 @@ tp_f_remove_hash (PyObject *self, PyObject *arg)
 static PyObject *
 tp_f_has_password (PyObject *self, PyObject *)
 {
-    return mobius::py::call_method (
-        reinterpret_cast<core_kff_file_o *> (self)->obj,
-        &mobius::core::kff::file::has_password
-    );
+    try
+    {
+        return mobius::py::call_method (
+            reinterpret_cast<core_kff_file_o *> (self)->obj,
+            &mobius::core::kff::file::has_password
+        );
+    }
+    catch (...)
+    {
+        return nullptr;
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -251,17 +299,23 @@ tp_f_has_password (PyObject *self, PyObject *)
 static PyObject *
 tp_f_get_password (PyObject *self, PyObject *)
 {
-    return mobius::py::call_method (
-        reinterpret_cast<core_kff_file_o *> (self)->obj,
-        &mobius::core::kff::file::get_password
-    );
+    try
+    {
+        return mobius::py::call_method (
+            reinterpret_cast<core_kff_file_o *> (self)->obj,
+            &mobius::core::kff::file::get_password
+        );
+    }
+    catch (...)
+    {
+        return nullptr;
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>set_password</i> method implementation
 // @param self Object
 // @param args Argument list
-// @return None
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_set_password (PyObject *self, PyObject *arg)
@@ -276,9 +330,8 @@ tp_f_set_password (PyObject *self, PyObject *arg)
             arg_value
         );
     }
-    catch (const std::exception &e)
+    catch (...)
     {
-        mobius::py::set_runtime_error (e.what ());
         return nullptr;
     }
 }
@@ -291,10 +344,17 @@ tp_f_set_password (PyObject *self, PyObject *arg)
 static PyObject *
 tp_f_remove_password (PyObject *self, PyObject *)
 {
-    return mobius::py::call_method (
-        reinterpret_cast<core_kff_file_o *> (self)->obj,
-        &mobius::core::kff::file::remove_password
-    );
+    try
+    {
+        return mobius::py::call_method (
+            reinterpret_cast<core_kff_file_o *> (self)->obj,
+            &mobius::core::kff::file::remove_password
+        );
+    }
+    catch (...)
+    {
+        return nullptr;
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -305,10 +365,17 @@ tp_f_remove_password (PyObject *self, PyObject *)
 static PyObject *
 tp_f_has_thumbnail (PyObject *self, PyObject *)
 {
-    return mobius::py::call_method (
-        reinterpret_cast<core_kff_file_o *> (self)->obj,
-        &mobius::core::kff::file::has_thumbnail
-    );
+    try
+    {
+        return mobius::py::call_method (
+            reinterpret_cast<core_kff_file_o *> (self)->obj,
+            &mobius::core::kff::file::has_thumbnail
+        );
+    }
+    catch (...)
+    {
+        return nullptr;
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -320,10 +387,17 @@ tp_f_has_thumbnail (PyObject *self, PyObject *)
 static PyObject *
 tp_f_get_thumbnail (PyObject *self, PyObject *)
 {
-    return mobius::py::call_method (
-        reinterpret_cast<core_kff_file_o *> (self)->obj,
-        &mobius::core::kff::file::get_thumbnail
-    );
+    try
+    {
+        return mobius::py::call_method (
+            reinterpret_cast<core_kff_file_o *> (self)->obj,
+            &mobius::core::kff::file::get_thumbnail
+        );
+    }
+    catch (...)
+    {
+        return nullptr;
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -344,7 +418,7 @@ tp_f_set_thumbnail (PyObject *self, PyObject *arg)
             arg_thumbnail
         );
     }
-    catch (const std::exception &e)
+    catch (...)
     {
         return nullptr;
     }
@@ -355,6 +429,7 @@ tp_f_set_thumbnail (PyObject *self, PyObject *arg)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
     {"is_alert", tp_f_is_alert, METH_NOARGS, "is_alert()\n--\n\nCheck if the file is an alert"},
+    {"get_id", tp_f_get_id, METH_NOARGS, "get_id()\n--\n\nGet file ID"},
     {"get_type", tp_f_get_type, METH_NOARGS, "get_type()\n--\n\nGet file type"},
     {"has_size", tp_f_has_size, METH_NOARGS, "has_size()\n--\n\nCheck if file has size"},
     {"get_size", tp_f_get_size, METH_NOARGS, "get_size()\n--\n\nGet file size"},
@@ -416,8 +491,11 @@ static PyType_Spec core_kff_file_spec = {
 PyTypeObject *
 get_core_kff_file_type ()
 {
+    // @brief Pointer to hold the heap-allocated type
+    static PyTypeObject *core_kff_file_type = nullptr;
+
     if (!core_kff_file_type)
-        core_kff_file_type = create_type (&core_kff_file_spec);
+        core_kff_file_type = reinterpret_cast<PyTypeObject *> (PyType_FromSpec (&core_kff_file_spec));
 
     return core_kff_file_type;
 }

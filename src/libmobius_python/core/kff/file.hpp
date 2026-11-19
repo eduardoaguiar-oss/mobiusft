@@ -28,7 +28,8 @@ namespace mobius::py
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
-    PyObject_HEAD mobius::core::kff::file *obj;
+    PyObject_HEAD // Python object header
+    mobius::core::kff::file *obj;
 } core_kff_file_o;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
