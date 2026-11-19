@@ -65,10 +65,12 @@ Mobius Forensic Toolkit 2.31
 	* libmobius_core: Add function kff::get_hash_type_string
 	* libmobius_core: Add function kff::get_file_type
 	* libmobius_core: Add function kff::get_hash_type
-	* libmobius_core: Remove deprecated class mobius::core::kff::kff
-	* libmobius_core: Remove deprecated class mobius::core::kff::hashset
-	* libmobius_core: Remove deprecated class mobius::core::database::connection_set
+	* libmobius_core: Remove deprecated class kff::kff
+	* libmobius_core: Remove deprecated class kff::hashset
+	* libmobius_core: Remove deprecated class database::connection_set
 	* libmobius_core: Use BEGIN IMMEDIATE when starting a database::transaction
+	* libmobius_core: Remove deprecated class collection
+	* libmobius_core: Remove deprecated class collection_impl_base
 	* libmobius_framework: Use SQLite WAL journal mode in config module
 	* libmobius_framework: Remove thread_guard from config module
 	* libmobius_framework: Use single DB connection shared by all threads in config module
