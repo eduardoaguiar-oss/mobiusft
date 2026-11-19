@@ -37,9 +37,10 @@ static_assert (!std::is_same_v<char, std::int8_t> && !std::is_same_v<char, std::
 namespace mobius::py
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// PyTypeObject functions
+// Type functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject *create_type (PyType_Spec *);
+std::string get_type_name (PyObject *);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Parse function arguments
@@ -210,7 +211,17 @@ template <>
 inline bool
 from_pyobject<bool> (PyObject *value)
 {
-    return value == Py_True;
+    if (value == Py_None)
+        return false;
+    
+    else if (pybool_check (value))
+        return value == Py_True;
+    
+    else if (pylong_check (value))
+        return bool (PyLong_AsLong (value));
+        
+    else
+        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid argument type: " + get_type_name (value)));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -222,6 +233,9 @@ template <>
 inline std::int8_t
 from_pyobject<std::int8_t> (PyObject *value)
 {
+    if (!pylong_check (value))
+        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid argument type: " + get_type_name (value)));
+
     return PyLong_AsLong (value);
 }
 
@@ -234,6 +248,9 @@ template <>
 inline std::int16_t
 from_pyobject<std::int16_t> (PyObject *value)
 {
+    if (!pylong_check (value))
+        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid argument type: " + get_type_name (value)));
+
     return PyLong_AsLong (value);
 }
 
@@ -246,6 +263,9 @@ template <>
 inline std::int32_t
 from_pyobject<std::int32_t> (PyObject *value)
 {
+    if (!pylong_check (value))
+        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid argument type: " + get_type_name (value)));
+
     return PyLong_AsLong (value);
 }
 
@@ -258,6 +278,9 @@ template <>
 inline std::int64_t
 from_pyobject<std::int64_t> (PyObject *value)
 {
+    if (!pylong_check (value))
+        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid argument type: " + get_type_name (value)));
+
     return PyLong_AsLongLong (value);
 }
 
@@ -270,6 +293,9 @@ template <>
 inline std::uint8_t
 from_pyobject<std::uint8_t> (PyObject *value)
 {
+    if (!pylong_check (value))
+        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid argument type: " + get_type_name (value)));
+
     return PyLong_AsUnsignedLong (value);
 }
 
@@ -282,6 +308,9 @@ template <>
 inline std::uint16_t
 from_pyobject<std::uint16_t> (PyObject *value)
 {
+    if (!pylong_check (value))
+        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid argument type: " + get_type_name (value)));
+
     return PyLong_AsUnsignedLong (value);
 }
 
@@ -294,6 +323,9 @@ template <>
 inline std::uint32_t
 from_pyobject<std::uint32_t> (PyObject *value)
 {
+    if (!pylong_check (value))
+        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid argument type: " + get_type_name (value)));
+
     return PyLong_AsUnsignedLong (value);
 }
 
@@ -306,6 +338,9 @@ template <>
 inline std::uint64_t
 from_pyobject<std::uint64_t> (PyObject *value)
 {
+    if (!pylong_check (value))
+        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid argument type: " + get_type_name (value)));
+
     std::uint64_t v = PyLong_AsUnsignedLongLong (value);
 
     if (PyErr_Occurred ())
@@ -323,7 +358,10 @@ template <>
 inline double
 from_pyobject<double> (PyObject *value)
 {
-    return PyFloat_AS_DOUBLE (value);
+    if (pyfloat_check (value))
+        return PyFloat_AS_DOUBLE (value);
+
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid argument type: " + get_type_name (value)));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -335,6 +373,9 @@ template <>
 inline std::string
 from_pyobject<std::string> (PyObject *value)
 {
+    if (!pystring_check (value))
+        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid argument type: " + get_type_name (value)));
+
     const char *buffer = PyUnicode_AsUTF8 (value);
     std::string str;
 
@@ -342,7 +383,7 @@ from_pyobject<std::string> (PyObject *value)
         str = buffer;
 
     else
-        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid Python string"));
+        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid argument type: " + get_type_name (value)));
 
     return str;
 }
@@ -356,6 +397,9 @@ template <>
 inline mobius::core::bytearray
 from_pyobject<mobius::core::bytearray> (PyObject *value)
 {
+    if (!pybytes_check (value))
+        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid argument type: " + get_type_name (value)));
+
     char *buffer;
     Py_ssize_t length;
 
@@ -376,7 +420,10 @@ template <>
 inline mobius::core::datetime::datetime
 from_pyobject<mobius::core::datetime::datetime> (PyObject *value)
 {
-    return pydatetime_as_datetime (value);
+    if (pydatetime_check (value))
+        return pydatetime_as_datetime (value);
+
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid argument type: " + get_type_name (value)));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -401,7 +448,15 @@ template <typename T>
 T
 get_arg (PyObject *args, std::uint32_t idx)
 {
-    return mobius::py::from_pyobject<T> (mobius::py::get_arg (args, idx));
+    try
+    {
+        return mobius::py::from_pyobject<T> (mobius::py::get_arg (args, idx));
+    }
+    catch (const std::exception &e)
+    {
+        set_invalid_type_error (e.what ());
+        throw;
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -415,9 +470,28 @@ T
 get_arg (PyObject *args, std::uint32_t idx, T dvalue)
 {
     if (idx < PyTuple_Size (args))
-        return mobius::py::from_pyobject<T> (mobius::py::get_arg (args, idx));
+        return mobius::py::get_arg<T> (args, idx);
 
     return dvalue;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Parse function argument
+// @param arg Argument
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+template <typename T>
+T
+get_arg (PyObject *arg)
+{
+    try
+    {
+        return mobius::py::from_pyobject<T> (arg);
+    }
+    catch (const std::exception &e)
+    {
+        set_invalid_type_error (e.what ());
+        throw;
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -437,7 +511,7 @@ from_pyobject (PyObject *value, T *type)
     if (isinstance (value, type))
         return *(reinterpret_cast<O *> (value)->obj);
 
-    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("object must be an instance of " + std::string (type->tp_name)));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid argument type: " + get_type_name (value)));
 }
 
 template <typename O, typename Tcpp, typename T>

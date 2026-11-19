@@ -37,6 +37,18 @@ create_type (PyType_Spec *spec)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get type name of a given object
+// @param value PyObject
+// @return Type name
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+get_type_name (PyObject *value)
+{
+    const char *p_name = Py_TYPE (value)->tp_name;
+    return (p_name) ? p_name : std::string {};
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get function argument list size
 // @param args Argument tuple
 // @return Number of items
