@@ -40,6 +40,8 @@ static PyMethodDef module_methods[] = {
     {"get_hash_count", mobius::py::func_core_kff_get_hash_count, METH_NOARGS, "Get hash count"},
     {"get_thumbnail_count", mobius::py::func_core_kff_get_thumbnail_count, METH_NOARGS, "Get thumbnail count"},
     {"has_size", mobius::py::func_core_kff_has_size, METH_O, "Check if file has size"},
+    {"iter_files", mobius::py::func_kff_iter_files, METH_NOARGS, "Iterate over files"},
+    {"iter_files_by_type", mobius::py::func_kff_iter_files_by_type, METH_O, "Iterate over files by hash type"},
     {"lookup", mobius::py::func_core_kff_lookup, METH_VARARGS, "Lookup file by hash type and value"},
     {"new_transaction", mobius::py::func_core_kff_new_transaction, METH_NOARGS, "Create new transaction to KFF database"},
     {nullptr, nullptr, 0, nullptr} // sentinel

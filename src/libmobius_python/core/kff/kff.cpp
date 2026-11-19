@@ -21,8 +21,9 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "kff.hpp"
-#include "core/database/transaction.hpp"
 #include "file.hpp"
+#include "core/database/transaction.hpp"
+#include "core/generator.hpp"
 #include <pycall.hpp>
 #include <stdexcept>
 
@@ -189,7 +190,7 @@ func_core_kff_lookup (PyObject *, PyObject *args)
         auto arg_value = mobius::py::get_arg<std::string> (args, 1);
         return mobius::py::call_function (mobius::core::kff::lookup, arg_hash_type, arg_value);
     }
-    catch (const std::exception &e)
+    catch (...)
     {
         return nullptr;
     }
@@ -202,7 +203,50 @@ func_core_kff_lookup (PyObject *, PyObject *args)
 PyObject *
 func_core_kff_new_transaction (PyObject *, PyObject *)
 {
-    return mobius::py::call_function (mobius::core::kff::new_transaction);
+    try
+    {
+        return mobius::py::call_function (mobius::core::kff::new_transaction);
+    }
+    catch (...)
+    {
+        return nullptr;
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>iter_files</i> function implementation
+// @return Generator for iterating over files
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_kff_iter_files (PyObject *, PyObject *)
+{
+    try
+    {
+        return mobius::py::call_function (mobius::core::kff::iter_files);
+    }
+    catch (...)
+    {
+        return nullptr;
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>iter_files_by_type</i> function implementation
+// @return Generator for iterating over files
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_kff_iter_files_by_type (PyObject *, PyObject *arg)
+{
+    try
+    {
+        auto arg_hash_type = mobius::py::get_arg<std::uint16_t> (arg);
+
+        return mobius::py::call_function (mobius::core::kff::iter_files_by_type, arg_hash_type);
+    }
+    catch (...)
+    {
+        return nullptr;
+    }
 }
 
 } // namespace mobius::py
