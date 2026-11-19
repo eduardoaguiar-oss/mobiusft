@@ -31,15 +31,15 @@ namespace mobius::py
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get file type
 // @param self Python self
-// @param args Python arguments
+// @param arg Python argument
 // @return File type index
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-func_core_kff_get_file_type (PyObject *, PyObject *args)
+func_core_kff_get_file_type (PyObject *, PyObject *arg)
 {
     try
     {
-        auto arg_name = mobius::py::get_arg<std::string> (args, 0);
+        auto arg_name = mobius::py::get_arg<std::string> (arg);
         return mobius::py::call_function (mobius::core::kff::get_file_type, arg_name);
     }
     catch (const std::exception &e)
@@ -51,15 +51,15 @@ func_core_kff_get_file_type (PyObject *, PyObject *args)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get file type string
 // @param self Python self
-// @param args Python arguments
+// @param arg Python argument
 // @return File count
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-func_core_kff_get_file_type_string (PyObject *, PyObject *args)
+func_core_kff_get_file_type_string (PyObject *, PyObject *arg)
 {
     try
     {
-        auto arg_type = mobius::py::get_arg<std::uint16_t> (args, 0);
+        auto arg_type = mobius::py::get_arg<std::uint16_t> (arg);
         return mobius::py::call_function (mobius::core::kff::get_file_type_string, arg_type);
     }
     catch (const std::exception &e)
@@ -71,15 +71,15 @@ func_core_kff_get_file_type_string (PyObject *, PyObject *args)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get hash type index
 // @param self Python self
-// @param args Python arguments
+// @param arg Python argument
 // @return Hash type index
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-func_core_kff_get_hash_type (PyObject *, PyObject *args)
+func_core_kff_get_hash_type (PyObject *, PyObject *arg)
 {
     try
     {
-        auto arg_name = mobius::py::get_arg<std::string> (args, 0);
+        auto arg_name = mobius::py::get_arg<std::string> (arg);
         return mobius::py::call_function (mobius::core::kff::get_hash_type, arg_name);
     }
     catch (const std::exception &e)
@@ -91,15 +91,15 @@ func_core_kff_get_hash_type (PyObject *, PyObject *args)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get hash type string
 // @param self Python self
-// @param args Python arguments
+// @param arg Python argument
 // @return Hash type string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-func_core_kff_get_hash_type_string (PyObject *, PyObject *args)
+func_core_kff_get_hash_type_string (PyObject *, PyObject *arg)
 {
     try
     {
-        auto arg_type = mobius::py::get_arg<std::uint16_t> (args, 0);
+        auto arg_type = mobius::py::get_arg<std::uint16_t> (arg);
         return mobius::py::call_function (mobius::core::kff::get_hash_type_string, arg_type);
     }
     catch (const std::exception &e)
@@ -158,13 +158,14 @@ func_core_kff_get_thumbnail_count (PyObject *, PyObject *)
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <b>has_size</b> function implementation
+// @param arg Python argument
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-func_core_kff_has_size (PyObject *, PyObject *args)
+func_core_kff_has_size (PyObject *, PyObject *arg)
 {
     try
     {
-        auto arg_size = mobius::py::get_arg<std::uint64_t> (args, 0);
+        auto arg_size = mobius::py::get_arg<std::uint64_t> (arg);
         return mobius::py::call_function (mobius::core::kff::has_size, arg_size);
     }
     catch (const std::exception &e)
