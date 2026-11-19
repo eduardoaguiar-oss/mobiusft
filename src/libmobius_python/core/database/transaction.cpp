@@ -27,9 +27,6 @@ namespace mobius::py
 {
 namespace
 {
-// @brief Global pointer to hold the heap-allocated type
-static PyTypeObject *core_database_transaction_type = nullptr;
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>commit</i> method implementation
 // @param self object
@@ -146,8 +143,12 @@ static PyType_Spec core_database_transaction_spec = {
 PyTypeObject *
 get_core_database_transaction_type ()
 {
+    // @brief Pointer to hold the heap-allocated type
+    static PyTypeObject *core_database_transaction_type = nullptr;
+
     if (!core_database_transaction_type)
-        core_database_transaction_type = create_type (&core_database_transaction_spec);
+        core_database_transaction_type =
+            reinterpret_cast<PyTypeObject *> (PyType_FromSpec (&core_database_transaction_spec));
 
     return core_database_transaction_type;
 }
