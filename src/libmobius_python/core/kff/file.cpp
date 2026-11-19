@@ -103,25 +103,20 @@ tp_f_get_size (PyObject *self, PyObject *)
 static PyObject *
 tp_f_set_size (PyObject *self, PyObject *arg)
 {
-    // Parse input args
-    std::uint64_t arg_size;
-
     try
     {
-        arg_size = mobius::py::from_pyobject<std::uint64_t> (arg);
+        auto arg_size = mobius::py::get_arg<std::uint64_t> (arg);
+
+        return mobius::py::call_method (
+            reinterpret_cast<core_kff_file_o *> (self)->obj,
+            &mobius::core::kff::file::set_size,
+            arg_size
+        );
     }
     catch (const std::exception &e)
     {
-        mobius::py::set_invalid_type_error (e.what ());
         return nullptr;
     }
-
-    // Execute C++ function
-    return mobius::py::call_method (
-        reinterpret_cast<core_kff_file_o *> (self)->obj,
-        &mobius::core::kff::file::set_size,
-        arg_size
-    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -133,25 +128,20 @@ tp_f_set_size (PyObject *self, PyObject *arg)
 static PyObject *
 tp_f_has_hash (PyObject *self, PyObject *arg)
 {
-    // Parse input args
-    std::uint16_t arg_hash_type;
-
     try
     {
-        arg_hash_type = mobius::py::from_pyobject<std::uint16_t> (arg);
+        auto arg_hash_type = mobius::py::get_arg<std::uint16_t> (arg);
+
+        return mobius::py::call_method (
+            reinterpret_cast<core_kff_file_o *> (self)->obj,
+            &mobius::core::kff::file::has_hash,
+            arg_hash_type
+        );
     }
     catch (const std::exception &e)
     {
-        mobius::py::set_invalid_type_error (e.what ());
         return nullptr;
     }
-
-    // Execute C++ function
-    return mobius::py::call_method (
-        reinterpret_cast<core_kff_file_o *> (self)->obj,
-        &mobius::core::kff::file::has_hash,
-        arg_hash_type
-    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -163,25 +153,20 @@ tp_f_has_hash (PyObject *self, PyObject *arg)
 static PyObject *
 tp_f_get_hash (PyObject *self, PyObject *arg)
 {
-    // Parse input args
-    std::uint16_t arg_hash_type;
-
     try
     {
-        arg_hash_type = mobius::py::from_pyobject<std::uint16_t> (arg);
+        auto arg_hash_type = mobius::py::get_arg<std::uint16_t> (arg);
+
+        return mobius::py::call_method (
+            reinterpret_cast<core_kff_file_o *> (self)->obj,
+            &mobius::core::kff::file::get_hash,
+            arg_hash_type
+        );
     }
     catch (const std::exception &e)
     {
-        mobius::py::set_invalid_type_error (e.what ());
         return nullptr;
     }
-
-    // Execute C++ function
-    return mobius::py::call_method (
-        reinterpret_cast<core_kff_file_o *> (self)->obj,
-        &mobius::core::kff::file::get_hash,
-        arg_hash_type
-    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -226,25 +211,20 @@ tp_f_set_hash (PyObject *self, PyObject *args)
 static PyObject *
 tp_f_remove_hash (PyObject *self, PyObject *arg)
 {
-    // Parse input args
-    std::uint16_t arg_hash_type;
-
     try
     {
-        arg_hash_type = mobius::py::from_pyobject<std::uint16_t> (arg);
+        auto arg_hash_type = mobius::py::get_arg<std::uint16_t> (arg);
+
+        return mobius::py::call_method (
+            reinterpret_cast<core_kff_file_o *> (self)->obj,
+            &mobius::core::kff::file::remove_hash,
+            arg_hash_type
+        );
     }
     catch (const std::exception &e)
     {
-        mobius::py::set_invalid_type_error (e.what ());
         return nullptr;
     }
-
-    // Execute C++ function
-    return mobius::py::call_method (
-        reinterpret_cast<core_kff_file_o *> (self)->obj,
-        &mobius::core::kff::file::remove_hash,
-        arg_hash_type
-    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -288,7 +268,7 @@ tp_f_set_password (PyObject *self, PyObject *arg)
 {
     try
     {
-        auto arg_value = mobius::py::from_pyobject<std::string> (arg);
+        auto arg_value = mobius::py::get_arg<std::string> (arg);
 
         return mobius::py::call_method (
             reinterpret_cast<core_kff_file_o *> (self)->obj,
@@ -354,25 +334,20 @@ tp_f_get_thumbnail (PyObject *self, PyObject *)
 static PyObject *
 tp_f_set_thumbnail (PyObject *self, PyObject *arg)
 {
-    // Parse input args
-    mobius::core::bytearray arg_thumbnail;
-
     try
     {
-        arg_thumbnail = mobius::py::from_pyobject<mobius::core::bytearray> (arg);
+        auto arg_thumbnail = mobius::py::get_arg<mobius::core::bytearray> (arg);
+
+        return mobius::py::call_method (
+            reinterpret_cast<core_kff_file_o *> (self)->obj,
+            &mobius::core::kff::file::set_thumbnail,
+            arg_thumbnail
+        );
     }
     catch (const std::exception &e)
     {
-        mobius::py::set_invalid_type_error (e.what ());
         return nullptr;
     }
-
-    // Execute C++ function
-    return mobius::py::call_method (
-        reinterpret_cast<core_kff_file_o *> (self)->obj,
-        &mobius::core::kff::file::set_thumbnail,
-        arg_thumbnail
-    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
