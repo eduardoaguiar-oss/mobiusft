@@ -491,7 +491,11 @@ get_arg (PyObject *arg)
 {
     try
     {
+        if (!arg)
+            throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("cannot delete attribute"));
+
         return mobius::py::from_pyobject<T> (arg);
+
     }
     catch (const std::exception &e)
     {
