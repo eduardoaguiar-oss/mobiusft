@@ -22,11 +22,11 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "extraction.hpp"
-#include <mobius/core/exception.inc>
-#include <pylist.hpp>
-#include <pymobius.hpp>
 #include <stdexcept>
 #include "core/pod/map.hpp"
+#include <pylist.hpp>
+#include <pymobius.hpp>
+#include <pycall.hpp>
 
 namespace
 {
@@ -63,20 +63,19 @@ tp_getter_id (core_datasource_ufdr_extraction_o *self, void *)
 // @return <i>type</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_type (core_datasource_ufdr_extraction_o *self, void *)
+tp_getter_type (PyObject *self, void *)
 {
-    PyObject *ret = nullptr;
-
     try
     {
-        ret = mobius::py::to_pyobject (self->obj->get_type ());
+        return mobius::py::call_method (
+            reinterpret_cast<core_datasource_ufdr_extraction_o *> (self)->obj,
+            &mobius::core::datasource::ufdr::extraction::get_type
+        );
     }
-    catch (const std::exception &e)
+    catch (...)
     {
-        mobius::py::set_runtime_error (e.what ());
+        return nullptr;
     }
-
-    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -86,36 +85,24 @@ tp_getter_type (core_datasource_ufdr_extraction_o *self, void *)
 // @return 0 on success, -1 on error
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static int
-tp_setter_type (
-    core_datasource_ufdr_extraction_o *self, PyObject *value, void *
-)
+tp_setter_type (PyObject *self, PyObject *value, void *)
 {
-    // Check value
     try
     {
-        mobius::py::check_setter_value (
-            value, "type", mobius::py::pystring_check
+        auto arg_type = mobius::py::get_arg<std::string> (value);
+
+        mobius::py::call_method (
+            reinterpret_cast<core_datasource_ufdr_extraction_o *> (self)->obj,
+            &mobius::core::datasource::ufdr::extraction::set_type,
+            arg_type
         );
+
+        return 0;
     }
-    catch (const std::exception &e)
+    catch (...)
     {
-        mobius::py::set_invalid_type_error (e.what ());
         return -1;
     }
-
-    // Set type attribute
-    try
-    {
-        self->obj->set_type (mobius::py::from_pyobject<std::string> (value));
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-        return -1;
-    }
-
-    // Return success
-    return 0;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -124,20 +111,19 @@ tp_setter_type (
 // @return <i>name</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_name (core_datasource_ufdr_extraction_o *self, void *)
+tp_getter_name (PyObject *self, void *)
 {
-    PyObject *ret = nullptr;
-
     try
     {
-        ret = mobius::py::to_pyobject (self->obj->get_name ());
+        return mobius::py::call_method (
+            reinterpret_cast<core_datasource_ufdr_extraction_o *> (self)->obj,
+            &mobius::core::datasource::ufdr::extraction::get_name
+        );
     }
-    catch (const std::exception &e)
+    catch (...)
     {
-        mobius::py::set_runtime_error (e.what ());
+        return nullptr;
     }
-
-    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -147,36 +133,24 @@ tp_getter_name (core_datasource_ufdr_extraction_o *self, void *)
 // @return 0 on success, -1 on error
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static int
-tp_setter_name (
-    core_datasource_ufdr_extraction_o *self, PyObject *value, void *
-)
+tp_setter_name (PyObject *self, PyObject *value, void *)
 {
-    // Check value
     try
     {
-        mobius::py::check_setter_value (
-            value, "name", mobius::py::pystring_check
+        auto arg_name = mobius::py::get_arg<std::string> (value);
+
+        mobius::py::call_method (
+            reinterpret_cast<core_datasource_ufdr_extraction_o *> (self)->obj,
+            &mobius::core::datasource::ufdr::extraction::set_name,
+            arg_name
         );
+
+        return 0;
     }
-    catch (const std::exception &e)
+    catch (...)
     {
-        mobius::py::set_invalid_type_error (e.what ());
         return -1;
     }
-
-    // Set name attribute
-    try
-    {
-        self->obj->set_name (mobius::py::from_pyobject<std::string> (value));
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-        return -1;
-    }
-
-    // Return success
-    return 0;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -185,22 +159,19 @@ tp_setter_name (
 // @return <i>device_name</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_device_name (core_datasource_ufdr_extraction_o *self, void *)
+tp_getter_device_name (PyObject *self, void *)
 {
-    PyObject *ret = nullptr;
-
     try
     {
-        ret = mobius::py::to_pyobject (
-            self->obj->get_device_name ()
+        return mobius::py::call_method (
+            reinterpret_cast<core_datasource_ufdr_extraction_o *> (self)->obj,
+            &mobius::core::datasource::ufdr::extraction::get_device_name
         );
     }
-    catch (const std::exception &e)
+    catch (...)
     {
-        mobius::py::set_runtime_error (e.what ());
+        return nullptr;
     }
-
-    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -210,50 +181,34 @@ tp_getter_device_name (core_datasource_ufdr_extraction_o *self, void *)
 // @return 0 on success, -1 on error
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static int
-tp_setter_device_name (
-    core_datasource_ufdr_extraction_o *self, PyObject *value, void *
-)
+tp_setter_device_name (PyObject *self, PyObject *value, void *)
 {
-    // Check value
     try
     {
-        mobius::py::check_setter_value (
-            value, "device_name", mobius::py::pystring_check
+        auto arg_device_name = mobius::py::get_arg<std::string> (value);
+
+        mobius::py::call_method (
+            reinterpret_cast<core_datasource_ufdr_extraction_o *> (self)->obj,
+            &mobius::core::datasource::ufdr::extraction::set_device_name,
+            arg_device_name
         );
+
+        return 0;
     }
-    catch (const std::exception &e)
+    catch (...)
     {
-        mobius::py::set_invalid_type_error (e.what ());
         return -1;
     }
-
-    // Set device_name attribute
-    try
-    {
-        self->obj->set_device_name (mobius::py::from_pyobject<std::string> (value));
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-        return -1;
-    }
-
-    // Return success
-    return 0;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {"id", (getter) tp_getter_id, (setter) 0, "Extraction ID",
-     nullptr},
-    {"type", (getter) tp_getter_type, (setter) tp_setter_type,
-     "Extraction type", nullptr},
-    {"name", (getter) tp_getter_name, (setter) tp_setter_name,
-     "Extraction name", nullptr},
-    {"device_name", (getter) tp_getter_device_name,
-     (setter) tp_setter_device_name, "Device name", nullptr},
+    {"id", (getter) tp_getter_id, (setter) 0, "Extraction ID", nullptr},
+    {"type", tp_getter_type, tp_setter_type, "Extraction type", nullptr},
+    {"name", tp_getter_name, tp_setter_name, "Extraction name", nullptr},
+    {"device_name", tp_getter_device_name, tp_setter_device_name, "Device name", nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
 
@@ -349,12 +304,9 @@ tp_f_get_state (core_datasource_ufdr_extraction_o *self, PyObject *)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {"add_metadata", (PyCFunction) tp_f_add_metadata, METH_VARARGS,
-     "Add metadata"},
-    {"get_metadata", (PyCFunction) tp_f_get_metadata, METH_VARARGS,
-     "Get metadata"},
-    {"get_state", (PyCFunction) tp_f_get_state, METH_VARARGS,
-     "Get object state"},
+    {"add_metadata", (PyCFunction) tp_f_add_metadata, METH_VARARGS, "Add metadata"},
+    {"get_metadata", (PyCFunction) tp_f_get_metadata, METH_VARARGS, "Get metadata"},
+    {"get_state", (PyCFunction) tp_f_get_state, METH_VARARGS, "Get object state"},
     {nullptr, nullptr, 0, nullptr}, // sentinel
 };
 
@@ -383,9 +335,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 
     // Create Python object
     core_datasource_ufdr_extraction_o *ret =
-        reinterpret_cast<core_datasource_ufdr_extraction_o *> (
-            type->tp_alloc (type, 0)
-        );
+        reinterpret_cast<core_datasource_ufdr_extraction_o *> (type->tp_alloc (type, 0));
 
     if (ret)
     {
@@ -451,9 +401,8 @@ new_core_datasource_ufdr_extraction_type ()
         return mobius::py::pytypeobject (core_datasource_ufdr_extraction_type);
 
     // Allocate type from spec
-    core_datasource_ufdr_extraction_type = reinterpret_cast<PyTypeObject *> (
-        PyType_FromSpec (&core_datasource_ufdr_extraction_spec)
-    );
+    core_datasource_ufdr_extraction_type =
+        reinterpret_cast<PyTypeObject *> (PyType_FromSpec (&core_datasource_ufdr_extraction_spec));
 
     // Create type
     mobius::py::pytypeobject type (core_datasource_ufdr_extraction_type);
@@ -471,9 +420,7 @@ bool
 pymobius_core_datasource_ufdr_extraction_check (PyObject *value)
 {
     if (!core_datasource_ufdr_extraction_type)
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("extraction type is not initialized")
-        );
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("extraction type is not initialized"));
 
     return mobius::py::isinstance (value, core_datasource_ufdr_extraction_type);
 }
@@ -484,18 +431,12 @@ pymobius_core_datasource_ufdr_extraction_check (PyObject *value)
 // @return New extraction object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_core_datasource_ufdr_extraction_to_pyobject (
-    const mobius::core::datasource::ufdr::extraction &obj
-)
+pymobius_core_datasource_ufdr_extraction_to_pyobject (const mobius::core::datasource::ufdr::extraction &obj)
 {
     if (!core_datasource_ufdr_extraction_type)
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("extraction type is not initialized")
-        );
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("extraction type is not initialized"));
 
-    return mobius::py::to_pyobject<core_datasource_ufdr_extraction_o> (
-        obj, core_datasource_ufdr_extraction_type
-    );
+    return mobius::py::to_pyobject<core_datasource_ufdr_extraction_o> (obj, core_datasource_ufdr_extraction_type);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -507,11 +448,7 @@ mobius::core::datasource::ufdr::extraction
 pymobius_core_datasource_ufdr_extraction_from_pyobject (PyObject *value)
 {
     if (!core_datasource_ufdr_extraction_type)
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("extraction type is not initialized")
-        );
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("extraction type is not initialized"));
 
-    return mobius::py::from_pyobject<core_datasource_ufdr_extraction_o> (
-        value, core_datasource_ufdr_extraction_type
-    );
+    return mobius::py::from_pyobject<core_datasource_ufdr_extraction_o> (value, core_datasource_ufdr_extraction_type);
 }

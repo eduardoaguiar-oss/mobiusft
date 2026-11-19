@@ -69,8 +69,10 @@ Mobius Forensic Toolkit 2.31
 	* libmobius_core: Remove deprecated class kff::hashset
 	* libmobius_core: Remove deprecated class database::connection_set
 	* libmobius_core: Use BEGIN IMMEDIATE when starting a database::transaction
-	* libmobius_core: Remove deprecated class collection
-	* libmobius_core: Remove deprecated class collection_impl_base
+	* libmobius_core: Remove deprecated collection class
+	* libmobius_core: Remove deprecated collection_impl_base class
+	* libmobius_core: Add new generic generator class
+	* libmobius_core: Add function kff::file::get_id
 	* libmobius_framework: Use SQLite WAL journal mode in config module
 	* libmobius_framework: Remove thread_guard from config module
 	* libmobius_framework: Use single DB connection shared by all threads in config module
@@ -171,6 +173,13 @@ Mobius Forensic Toolkit 2.31
 	* libmobius_python: Add new function create_type (PyType_Spec *)
 	* libmobius_python: Add new function get_type_name
 	* libmobius_python: Add argument type checking to from_pyobject<> functions
+	* libmobius_python: Add mobius.core.generator class
+	* libmobius_python: Add function core.kff.iter_files
+	* libmobius_python: Add function core.kff.iter_files_by_type
+	* libmobius_python: Add function kff.file.get_id
+	* libmobius_python: Check attribute deletion in get_arg
+	* libmobius_python: Align core.datasource.ufdr getter and function signatures with Python C API default conventions
+	* libmobius_python: Remove check_setter_value from core.datasource.ufdr.extraction class
 	* pymobius: Remove module item_browser.py
 	* pymobius: Set extension directory to "$HOME/.config/mobius/extensions/{app.version}"
 	* tools: Add new kff_status tool
