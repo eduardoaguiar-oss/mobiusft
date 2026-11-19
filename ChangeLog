@@ -163,6 +163,12 @@ Mobius Forensic Toolkit 2.31
 	* libmobius_python: Use from_pyobject instead of pymobius_core_pod_data_from_pyobject
 	* libmobius_python: Move mobius::core::pod::data wrapper to mobius::py namespace
 	* libmobius_python: Set invalid_type_error in mobius::py::get_arg on error
+	* libmobius_python: Rename new_core_database_transaction_type to get_core_database_transaction_type
+	* libmobius_python: Add template function from_pyobject<mobius::core::database::transaction>
+	* libmobius_python: Rename pymobius_core_database_transaction_to_pyobject to to_pyobject
+	* libmobius_python: Add new function create_type (PyType_Spec *)
+	* libmobius_python: Add new function get_type_name
+	* libmobius_python: Add argument type checking to from_pyobject<> functions
 	* pymobius: Remove module item_browser.py
 	* pymobius: Set extension directory to "$HOME/.config/mobius/extensions/{app.version}"
 	* tools: Add new kff_status tool
