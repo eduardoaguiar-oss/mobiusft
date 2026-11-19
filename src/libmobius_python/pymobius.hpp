@@ -39,7 +39,6 @@ namespace mobius::py
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Type functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyTypeObject *create_type (PyType_Spec *);
 std::string get_type_name (PyObject *);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -173,7 +172,14 @@ to_pyobject (T t)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Python -> C++ types conversion
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-template <typename T> T from_pyobject (PyObject *) = delete;
+template <typename T> struct pyobject_converter;
+
+template <typename T>
+T
+from_pyobject (PyObject *value)
+{
+    return pyobject_converter<T>::from (value);
+}
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create char from PyUnicode
@@ -213,13 +219,13 @@ from_pyobject<bool> (PyObject *value)
 {
     if (value == Py_None)
         return false;
-    
+
     else if (pybool_check (value))
         return value == Py_True;
-    
+
     else if (pylong_check (value))
         return bool (PyLong_AsLong (value));
-        
+
     else
         throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid argument type: " + get_type_name (value)));
 }
