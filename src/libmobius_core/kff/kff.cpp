@@ -461,4 +461,49 @@ new_file (std::int64_t file_id, std::uint16_t type, std::int64_t size)
     return file (file_id, type, size);
 }
 
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Fetch the next file from the statement
+// @return true if a file was fetched, false otherwise
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+file_range::_fetch ()
+{
+    if (!stmt_.fetch_row ())
+        return false;
+
+    current_ = file (
+        stmt_.get_column_int64 (0),
+        static_cast<std::uint16_t> (stmt_.get_column_int64 (1)),
+        stmt_.is_column_null (2) ? -1 : stmt_.get_column_int64 (2)
+    );
+
+    return true;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Iterate over all files
+// @return A file_range object for iterating over all files
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+file_range
+iter_files ()
+{
+    auto db = get_database ();
+    auto stmt = db.new_statement ("SELECT id, type, size FROM file ORDER BY id");
+    return file_range (stmt);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Iterate over all files
+// @param type The type of files to iterate over
+// @return A file_range object for iterating over all files
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+file_range
+iter_files_by_type (std::uint16_t type)
+{
+    auto db = get_database ();
+    auto stmt = db.new_statement ("SELECT id, type, size FROM file WHERE type = ? ORDER BY id");
+    stmt.bind (1, static_cast<std::int64_t> (type));
+    return file_range (stmt);
+}
+
 } // namespace mobius::core::kff
