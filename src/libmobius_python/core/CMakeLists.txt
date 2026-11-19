@@ -52,6 +52,7 @@ add_library(mobius_python_core STATIC
     func_mediator.cpp
     func_resource.cpp
     func_set_logfile_path.cpp
+    generator.cpp
     log.cpp
     resource.cpp
     richtext.cpp

@@ -32,6 +32,7 @@
 #include "encoder/module.hpp"
 #include "extension.hpp"
 #include "file_decoder/module.hpp"
+#include "generator.hpp"
 #include "io/module.hpp"
 #include "kff/module.hpp"
 #include "log.hpp"
@@ -109,6 +110,7 @@ new_core_module ()
     // Add types
     module.add_type ("application", new_core_application_type ());
     module.add_type ("extension", new_core_extension_type ());
+    module.add_type ("generator", mobius::py::get_core_generator_type ());
     module.add_type ("log", new_core_log_type ());
     module.add_type ("resource", new_core_resource_type ());
     module.add_type ("richtext", new_core_richtext_type ());
