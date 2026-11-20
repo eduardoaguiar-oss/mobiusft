@@ -359,6 +359,9 @@ rstrip (std::string_view str, std::string_view chars)
 std::vector<std::string_view>
 split (std::string_view str, std::string_view sep)
 {
+    if (sep.empty ())
+        return {str};
+
     std::vector<std::string_view> result;
     std::string_view::size_type start = 0;
     std::string_view::size_type end = str.find (sep);
@@ -384,19 +387,34 @@ split (std::string_view str, std::string_view sep)
 std::string_view
 word (std::string_view str, int n, std::string_view sep)
 {
-    std::string_view word;
+    if (sep.empty ())
+        return str;
 
-    // split string
-    auto d = split (str, sep);
+    int count = 0;
+    std::string_view::size_type start = 0;
+    auto pos = str.find (sep);
+
+    while (pos != std::string_view::npos)
+    {
+        if (count == n)
+            return str.substr (start, pos - start);
+
+        ++count;
+        start = pos + sep.size ();
+        pos = str.find (sep, start);
+    }
+
+    if (count == n)
+        return str.substr (start);
 
     if (n < 0)
-        n = d.size () + n;
+    {
+        n = count + n + 1;
+        if (n >= 0)
+            return word (str, n, sep);
+    }
 
-    // get n word
-    if (n >= 0 && n < static_cast<int> (d.size ()))
-        word = d[n];
-
-    return word;
+    return {};
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

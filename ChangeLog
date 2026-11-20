@@ -74,6 +74,7 @@ Mobius Forensic Toolkit 2.31
 	* libmobius_core: Add new generic generator class
 	* libmobius_core: Add function kff::file::get_id
 	* libmobius_core: Add function kff::file::get_hashes
+	* libmobius_core: Improve string_view::word function
 	* libmobius_framework: Use SQLite WAL journal mode in config module
 	* libmobius_framework: Remove thread_guard from config module
 	* libmobius_framework: Use single DB connection shared by all threads in config module
