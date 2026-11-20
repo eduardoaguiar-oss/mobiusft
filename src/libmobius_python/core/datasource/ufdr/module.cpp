@@ -67,7 +67,7 @@ new_core_datasource_ufdr_module ()
 
     // Add types
     module.add_type ("datasource", new_core_datasource_ufdr_datasource_type ());
-    module.add_type ("extraction", new_core_datasource_ufdr_extraction_type ());
+    module.add_type ("extraction", get_core_datasource_ufdr_extraction_type ());
 
     // Return module
     return module;

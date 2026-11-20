@@ -22,18 +22,11 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "extraction.hpp"
-#include <stdexcept>
 #include "core/pod/map.hpp"
 #include <pylist.hpp>
 #include <pymobius.hpp>
 #include <pycall.hpp>
-
-namespace
-{
-// @brief Global pointer to hold the heap-allocated type
-static PyTypeObject *core_datasource_ufdr_extraction_type = nullptr;
-
-} // namespace
+#include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>id</i> Attribute getter
@@ -393,22 +386,17 @@ static PyType_Spec core_datasource_ufdr_extraction_spec = {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create <i>mobius.core.datasource.ufdr.extraction</i> type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::py::pytypeobject
-new_core_datasource_ufdr_extraction_type ()
+PyTypeObject *
+get_core_datasource_ufdr_extraction_type ()
 {
-    // If type is already created, return it
-    if (core_datasource_ufdr_extraction_type)
-        return mobius::py::pytypeobject (core_datasource_ufdr_extraction_type);
+    // @brief Pointer to hold the heap-allocated type
+    static PyTypeObject *core_datasource_ufdr_extraction_type = nullptr;
 
-    // Allocate type from spec
-    core_datasource_ufdr_extraction_type =
-        reinterpret_cast<PyTypeObject *> (PyType_FromSpec (&core_datasource_ufdr_extraction_spec));
+    if (!core_datasource_ufdr_extraction_type)
+        core_datasource_ufdr_extraction_type =
+            reinterpret_cast<PyTypeObject *> (PyType_FromSpec (&core_datasource_ufdr_extraction_spec));
 
-    // Create type
-    mobius::py::pytypeobject type (core_datasource_ufdr_extraction_type);
-    type.create ();
-
-    return type;
+    return core_datasource_ufdr_extraction_type;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -419,10 +407,7 @@ new_core_datasource_ufdr_extraction_type ()
 bool
 pymobius_core_datasource_ufdr_extraction_check (PyObject *value)
 {
-    if (!core_datasource_ufdr_extraction_type)
-        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("extraction type is not initialized"));
-
-    return mobius::py::isinstance (value, core_datasource_ufdr_extraction_type);
+    return mobius::py::isinstance (value, get_core_datasource_ufdr_extraction_type ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -433,10 +418,10 @@ pymobius_core_datasource_ufdr_extraction_check (PyObject *value)
 PyObject *
 pymobius_core_datasource_ufdr_extraction_to_pyobject (const mobius::core::datasource::ufdr::extraction &obj)
 {
-    if (!core_datasource_ufdr_extraction_type)
-        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("extraction type is not initialized"));
-
-    return mobius::py::to_pyobject<core_datasource_ufdr_extraction_o> (obj, core_datasource_ufdr_extraction_type);
+    return mobius::py::to_pyobject<core_datasource_ufdr_extraction_o> (
+        obj,
+        get_core_datasource_ufdr_extraction_type ()
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -447,8 +432,8 @@ pymobius_core_datasource_ufdr_extraction_to_pyobject (const mobius::core::dataso
 mobius::core::datasource::ufdr::extraction
 pymobius_core_datasource_ufdr_extraction_from_pyobject (PyObject *value)
 {
-    if (!core_datasource_ufdr_extraction_type)
-        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("extraction type is not initialized"));
-
-    return mobius::py::from_pyobject<core_datasource_ufdr_extraction_o> (value, core_datasource_ufdr_extraction_type);
+    return mobius::py::from_pyobject<core_datasource_ufdr_extraction_o> (
+        value,
+        get_core_datasource_ufdr_extraction_type ()
+    );
 }

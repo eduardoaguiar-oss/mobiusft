@@ -33,7 +33,7 @@ typedef struct
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::py::pytypeobject new_core_datasource_ufdr_extraction_type ();
+PyTypeObject *get_core_datasource_ufdr_extraction_type ();
 bool pymobius_core_datasource_ufdr_extraction_check (PyObject *);
 PyObject *pymobius_core_datasource_ufdr_extraction_to_pyobject (
     const mobius::core::datasource::ufdr::extraction &
