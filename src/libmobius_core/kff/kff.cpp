@@ -19,6 +19,7 @@
 #include <mobius/core/database/database.hpp>
 #include <mobius/core/decoder/hexstring.hpp>
 #include <mobius/core/exception.inc>
+#include <mobius/core/io/file.hpp>
 #include <mobius/core/kff/file.hpp>
 #include <mobius/core/kff/kff.hpp>
 #include <mobius/core/log.hpp>
@@ -172,7 +173,7 @@ _create_db_schema (mobius::core::database::database &db)
 
     try
     {
-        db.execute ("BEGIN IMMEDIATE;");
+        auto transaction = db.new_transaction ();
 
         if (!schema_flag_.load (std::memory_order_acquire))
         {
@@ -180,19 +181,39 @@ _create_db_schema (mobius::core::database::database &db)
             _create_db_indexes (db);
         }
 
-        db.execute ("COMMIT;");
+        transaction.commit ();
     }
     catch (const std::exception &e)
     {
-        db.execute ("ROLLBACK;");
         log.error (__LINE__, std::format ("Failed to create KFF database schema: {}", e.what ()));
     }
     catch (...)
     {
-        db.execute ("ROLLBACK;");
         log.error (__LINE__, "Failed to create KFF database schema");
     }
 }
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Attach guard class
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+class attach_guard
+{
+  public:
+    explicit attach_guard (mobius::core::database::database &db, const std::string &db_name)
+        : db_ (db),
+          db_name_ (db_name)
+    {
+    }
+
+    ~attach_guard ()
+    {
+        db_.execute (std::format ("DETACH DATABASE {};", db_name_));
+    }
+
+  private:
+    mobius::core::database::database &db_;
+    const std::string db_name_;
+};
 
 } // namespace
 
@@ -210,7 +231,7 @@ class file_generator_impl : public mobius::core::generator_impl_base<file>
     // @brief Constructor
     // @param stmt Database statement to fetch files from
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    explicit file_generator_impl (const mobius::core::database::statement& stmt)
+    explicit file_generator_impl (const mobius::core::database::statement &stmt)
         : stmt_ (stmt)
     {
     }
@@ -288,6 +309,96 @@ new_transaction ()
     auto db = get_database ();
 
     return db.new_transaction ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Export collected data to a file
+// @param path The path to the output file
+// @param log Logging function or object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+export_collected_data (const std::string &path, std::function<void (const std::string &)> log)
+{
+    auto f_log = log ? log : [] (const std::string &) {};
+    f_log (std::format ("Starting exporting collected data to {}", path));
+
+    // Remove the output database file if it already exists
+    auto f = mobius::core::io::new_file_by_path (path);
+
+    if (f.exists ())
+        f.remove ();
+
+    // Attach the output database
+    f_log ("Attaching output database");
+
+    try
+    {
+        auto db = get_database ();
+        auto stmt = db.new_statement ("ATTACH DATABASE ? AS out_db");
+        stmt.bind (1, path);
+        stmt.execute ();
+
+        attach_guard guard (db, "out_db");
+
+        // Set cache and memory mapping settings for the main and out_db databases to optimize performance
+        db.execute ("PRAGMA main.cache_size = -1000000;");
+        db.execute ("PRAGMA main.mmap_size = 4294967296;");
+        db.execute ("PRAGMA out_db.synchronous = OFF;");
+        db.execute ("PRAGMA out_db.journal_mode = OFF;");
+        db.execute ("PRAGMA out_db.user_version = 1;");
+
+        // Begin a new transaction for exporting collected data
+        auto transaction = db.new_transaction ();
+
+        // Map old known sizes to all hashes of their file
+        db.execute (
+            "CREATE TABLE out_db.size_map ("
+            "type INTEGER NOT NULL, value BLOB NOT NULL, size INTEGER NOT NULL, "
+            "PRIMARY KEY (type, value)) WITHOUT ROWID;"
+        );
+
+        f_log ("Exporting known sizes");
+        db.execute (
+            "INSERT INTO out_db.size_map (type, value, size) "
+            "SELECT h.type, h.value, f.size "
+            "FROM hash h JOIN file f ON f.id = h.file_id "
+            "WHERE +f.size IS NOT NULL "
+            "ORDER BY h.type, h.value;"
+        );
+
+        // Map thumbnails to their corresponding hashes
+        db.execute (
+            "CREATE TABLE out_db.thumb_map ("
+            "type INTEGER NOT NULL, value BLOB NOT NULL, data BLOB NOT NULL, "
+            "PRIMARY KEY (type, value)) WITHOUT ROWID;"
+        );
+
+        f_log ("Exporting thumbnails");
+        db.execute (
+            "INSERT INTO out_db.thumb_map (type, value, data) "
+            "SELECT h.type, h.value, t.data "
+            "FROM thumbnail t JOIN hash h ON h.file_id = t.file_id "
+            "ORDER BY h.type, h.value;"
+        );
+
+        // Commit the transaction to save the exported data
+        f_log ("Committing export transaction");
+        transaction.commit ();
+
+        // Reset cache and memory mapping settings for the main database
+        db.execute ("PRAGMA main.cache_size = -65536;");
+        db.execute ("PRAGMA main.mmap_size = 0;");
+        f_log ("Export completed");
+    }
+    catch (const std::exception &e)
+    {
+        f_log (std::string ("Error exporting collected data: ") + e.what ());
+
+        if (f.exists ())
+            f.remove ();
+
+        throw;
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

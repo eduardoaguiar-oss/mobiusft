@@ -22,6 +22,7 @@
 #include <mobius/core/generator.hpp>
 #include <mobius/core/kff/file.hpp>
 #include <cstdint>
+#include <functional>
 #include <iterator>
 #include <ranges>
 #include <string>
@@ -50,10 +51,12 @@ constexpr std::uint16_t HASH_TYPE_SHA2_512 = 5;
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::database::database get_database ();
 mobius::core::database::transaction new_transaction ();
+file new_file (std::int64_t, std::uint16_t, std::int64_t = -1);
+void export_collected_data (const std::string&, std::function<void (const std::string &)> = {});
+
 std::int64_t get_next_file_id ();
 bool has_size (std::uint64_t);
 file lookup (std::uint16_t, const std::string &);
-file new_file (std::int64_t, std::uint16_t, std::int64_t = -1);
 std::uint16_t get_file_type (const std::string &);
 std::uint16_t get_hash_type (const std::string &);
 std::string get_file_type_string (std::uint16_t);
