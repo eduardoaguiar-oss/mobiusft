@@ -16,6 +16,7 @@ Mobius Forensic Toolkit 2.31
 	* report-generator: Remove framework.new_config_transaction calls
 	* sdi-window-manager: Remove framework.new_config_transaction calls
 	* tag-alert-kff: Implement new version on top of the new KFF implementation and API
+	* tag-alert-kff: Set alert, alert.kff, and alert.kff.<file_type> tags on alert detection
 	* libmobius_core: Improve database::database with full implementation class
 	* libmobius_core: Check for SQLite3 multithread support in database constructor
 	* libmobius_core: Add new is_serialized option in database constructor class

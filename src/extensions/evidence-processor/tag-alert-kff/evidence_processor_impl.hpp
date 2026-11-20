@@ -18,14 +18,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/kff/kff.hpp>
-#include <mobius/core/pod/data.hpp>
 #include <mobius/framework/evidence_processor/evidence_processor_impl_base.hpp>
 #include <mobius/framework/evidence_processor/mediator.hpp>
 #include <mobius/framework/evidence_processor/profile.hpp>
 #include <mobius/framework/model/item.hpp>
 #include <atomic>
-#include <vector>
+#include <string>
 
 namespace mobius::extension::evidence_processor::tag_alert_kff
 {
@@ -61,17 +59,6 @@ class evidence_processor_impl
 
     // @brief Evidences tagged
     std::atomic<std::uint64_t> evidences_tagged_ {0};
-
-    // @brief KFF database
-    mobius::core::kff::kff kff_;
-
-    // @brief KFF connection set (for multithreaded access)
-    mobius::core::database::connection_set kff_connection_set_;
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Helper functions
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    bool _is_kff_alert (mobius::framework::model::evidence) const;
 };
 
 } // namespace mobius::extension::evidence_processor::tag_alert_kff
