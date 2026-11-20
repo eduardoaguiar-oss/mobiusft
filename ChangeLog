@@ -73,6 +73,7 @@ Mobius Forensic Toolkit 2.31
 	* libmobius_core: Remove deprecated collection_impl_base class
 	* libmobius_core: Add new generic generator class
 	* libmobius_core: Add function kff::file::get_id
+	* libmobius_core: Add function kff::file::get_hashes
 	* libmobius_framework: Use SQLite WAL journal mode in config module
 	* libmobius_framework: Remove thread_guard from config module
 	* libmobius_framework: Use single DB connection shared by all threads in config module
@@ -183,6 +184,7 @@ Mobius Forensic Toolkit 2.31
 	* pymobius: Remove module item_browser.py
 	* pymobius: Set extension directory to "$HOME/.config/mobius/extensions/{app.version}"
 	* tools: Add new kff_status tool
+	* tools: Add new kff_lookup tool
 
 Mobius Forensic Toolkit 2.30
 	* app-chromium: Use db.new_statement_with_pattern in file_cookies::_load_cookies
