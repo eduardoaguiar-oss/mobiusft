@@ -96,6 +96,7 @@ main (int argc, char **argv)
         if (f)
         {
             std::cout << "File ID: " << f.get_id () << std::endl;
+            std::cout << "File type: " << mobius::core::kff::get_file_type_string (f.get_type ()) << std::endl;
             std::cout << "File size: " << f.get_size () << std::endl;
             std::cout << "Is alert: " << (f.is_alert () ? "Yes" : "No") << std::endl;
             std::cout << "Password: " << f.get_password () << std::endl;
