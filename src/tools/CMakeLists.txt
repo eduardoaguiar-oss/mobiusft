@@ -94,6 +94,13 @@ set_target_properties(tools_imagefile_info PROPERTIES OUTPUT_NAME "imagefile_inf
 target_link_libraries(tools_imagefile_info PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Tool: kff_lookup - Lookup in KFF
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+add_executable(tools_kff_lookup kff_lookup.cpp)
+set_target_properties(tools_kff_lookup PROPERTIES OUTPUT_NAME "kff_lookup")
+target_link_libraries(tools_kff_lookup PRIVATE Mobius::Core)
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tool: kff_status - Show KFF status
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_executable(tools_kff_status kff_status.cpp)
