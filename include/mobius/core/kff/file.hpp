@@ -21,6 +21,7 @@
 #include <mobius/core/bytearray.hpp>
 #include <mobius/core/pod/data.hpp>
 #include <cstdint>
+#include <map>
 #include <memory>
 #include <string>
 
@@ -58,6 +59,7 @@ class file
     void set_hash (std::uint16_t, const std::string &);
     void set_hash (std::uint16_t, const mobius::core::bytearray &);
     void remove_hash (std::uint16_t);
+    std::map<std::uint16_t, std::string> get_hashes () const;
 
     bool has_password () const;
     void set_password (const std::string&);

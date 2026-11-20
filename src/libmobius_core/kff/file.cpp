@@ -18,6 +18,7 @@
 #include <mobius/core/database/database.hpp>
 #include <mobius/core/decoder/hexstring.hpp>
 #include <mobius/core/exception.inc>
+#include <mobius/core/encoder/hexstring.hpp>
 #include <mobius/core/kff/file.hpp>
 #include <mobius/core/kff/kff.hpp>
 
@@ -125,6 +126,7 @@ class file::impl
     void set_hash (std::uint16_t, const std::string &);
     void set_hash (std::uint16_t, const mobius::core::bytearray &);
     void remove_hash (std::uint16_t);
+    std::map<std::uint16_t, std::string> get_hashes () const;
 
     bool has_attribute (std::uint16_t) const;
     void set_attribute (std::uint16_t, const mobius::core::pod::data &);
@@ -283,6 +285,29 @@ file::impl::remove_hash (std::uint16_t hash_type)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get all file hashes
+// @return A map of hash types to hash values
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::map<std::uint16_t, std::string>
+file::impl::get_hashes () const
+{
+    std::map<std::uint16_t, std::string> hashes;
+
+    auto db = get_database ();
+    auto stmt = db.new_statement ("SELECT type, value FROM hash WHERE file_id = ?");
+    stmt.bind (1, id_);
+
+    while (stmt.fetch_row ())
+    {
+        auto type = stmt.get_column_int (0);
+        auto value = stmt.get_column_bytearray (1);
+        hashes[type] = mobius::core::encoder::hexstring (value);
+    }
+
+    return hashes;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Check if the file has a specific attribute
 // @param attr The attribute identifier
 // @return True if the file has the attribute, false otherwise
@@ -310,7 +335,7 @@ file::impl::get_attribute (std::uint16_t attr) const
     mobius::core::pod::data value;
 
     auto db = get_database ();
-    auto stmt = db.new_statement ("SELECT data FROM attribute WHERE file_id = ? AND type = ?");
+    auto stmt = db.new_statement ("SELECT value FROM attribute WHERE file_id = ? AND type = ?");
     stmt.bind (1, id_);
     stmt.bind (2, attr);
 
@@ -330,7 +355,7 @@ file::impl::set_attribute (std::uint16_t attr, const mobius::core::pod::data &va
 {
     auto db = get_database ();
 
-    auto stmt = db.new_statement ("INSERT OR REPLACE INTO attribute (file_id, type, data) VALUES (?, ?, ?)");
+    auto stmt = db.new_statement ("INSERT OR REPLACE INTO attribute (file_id, type, value) VALUES (?, ?, ?)");
     stmt.bind (1, id_);
     stmt.bind (2, attr);
     stmt.bind (3, value);
@@ -565,6 +590,19 @@ file::remove_hash (std::uint16_t hash_type)
         throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid KFF file"));
 
     impl_->remove_hash (hash_type);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get all file hashes
+// @return A map of hash types to hash values
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::map<std::uint16_t, std::string>
+file::get_hashes () const
+{
+    if (!impl_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid KFF file"));
+
+    return impl_->get_hashes ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
