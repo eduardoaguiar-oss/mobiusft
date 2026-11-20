@@ -184,6 +184,7 @@ Mobius Forensic Toolkit 2.31
 	* libmobius_python: Check attribute deletion in get_arg
 	* libmobius_python: Align core.datasource.ufdr getter and function signatures with Python C API default conventions
 	* libmobius_python: Remove check_setter_value from core.datasource.ufdr.extraction class
+	* libmobius_python: Add function core.kff.export_collected_data
 	* pymobius: Remove module item_browser.py
 	* pymobius: Set extension directory to "$HOME/.config/mobius/extensions/{app.version}"
 	* tools: Add new kff_status tool

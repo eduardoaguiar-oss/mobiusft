@@ -24,11 +24,90 @@
 #include "file.hpp"
 #include "core/database/transaction.hpp"
 #include "core/generator.hpp"
+#include <pyfunction.hpp>
 #include <pycall.hpp>
 #include <stdexcept>
 
+namespace
+{
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Logging function wrapper for Python log functions
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+class log_function
+{
+  public:
+    log_function () = default;
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Constructor with optional Python log function
+    // @param f Python callable object for logging
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    log_function (PyObject *f)
+        : f_ (f)
+    {
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Call the Python log function with a message
+    // @param msg Message to log
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    void
+    operator() (const std::string &msg)
+    {
+        if (f_)
+        {
+            mobius::py::GIL_guard gil_guard;
+
+            f_ (mobius::py::to_pyobject (msg));
+        }
+    }
+
+  private:
+    mobius::py::function f_;
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get log function argument from Python args
+// @param args Python argument tuple
+// @param index Index of the argument
+// @return log_function object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static log_function
+_get_arg_log (PyObject *args, std::size_t index)
+{
+    if (index < mobius::py::get_arg_size (args))
+        return log_function (mobius::py::get_arg (args, index));
+
+    return log_function ();
+}
+
+} // namespace
+
 namespace mobius::py
 {
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Export collected data to a file
+// @param self Python self
+// @param path Path to the output file
+// @param log Logging function or object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_core_kff_export_collected_data (PyObject *, PyObject *args)
+{
+    try
+    {
+        auto arg_path = mobius::py::get_arg<std::string> (args, 0);
+        auto arg_log = _get_arg_log (args, 1);
+
+        mobius::py::GIL gil;
+        return mobius::py::call_function (mobius::core::kff::export_collected_data, arg_path, arg_log);
+    }
+    catch (const std::exception &e)
+    {
+        return nullptr;
+    }
+}
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get file type
 // @param self Python self
