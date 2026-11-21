@@ -109,6 +109,29 @@ func_core_kff_export_collected_data (PyObject *, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Import collected data from a file
+// @param self Python self
+// @param path Path to the input file
+// @param log Logging function or object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_core_kff_import_collected_data (PyObject *, PyObject *args)
+{
+    try
+    {
+        auto arg_path = mobius::py::get_arg<std::string> (args, 0);
+        auto arg_log = _get_arg_log (args, 1);
+
+        mobius::py::GIL gil;
+        return mobius::py::call_function (mobius::core::kff::import_collected_data, arg_path, arg_log);
+    }
+    catch (const std::exception &e)
+    {
+        return nullptr;
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get file type
 // @param self Python self
 // @param arg Python argument

@@ -32,6 +32,7 @@ namespace
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef module_methods[] = {
     {"export_collected_data", mobius::py::func_core_kff_export_collected_data, METH_VARARGS, "Export collected data to a file"},
+    {"import_collected_data", mobius::py::func_core_kff_import_collected_data, METH_VARARGS, "Import collected data from a file"},
     {"get_alert_count", mobius::py::func_core_kff_get_alert_count, METH_NOARGS, "Get alert count"},
     {"get_file_count", mobius::py::func_core_kff_get_file_count, METH_NOARGS, "Get file count"},
     {"get_file_type", mobius::py::func_core_kff_get_file_type, METH_O, "Get file type index"},
