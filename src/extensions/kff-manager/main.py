@@ -16,16 +16,14 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 import json
-import os
-import os.path
+from datetime import datetime
 
 import mobius
 import mobius.core.crypt
 import mobius.core.kff
 import mobius.core.io
 import pymobius
-from gi.repository import GObject
-from gi.repository import Gdk
+from gi.repository import GLib
 from gi.repository import Gtk
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -100,18 +98,10 @@ def import_led(f, hashset):
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# @brief Export hashset as .json file
+# @brief Export KFF full database as .db file
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-def export_json(f, hashset):
-    # generate data
-    d = {}
-    for htype, hvalue in hashset.hashes:
-        d.setdefault(htype, []).append(hvalue)
-
-    # write data
-    fp = mobius.core.io.text_writer(f.new_writer())
-    json.dump(d, fp)
-
+def export_kff(path, set_status):
+    mobius.core.kff.export_kff(path, set_status)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # @brief Export hashset as tab separated file
@@ -160,25 +150,23 @@ def calculate_hash(f, hash_type):
 
     return h.get_hex_digest()
 
-
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# @brief KFF view
+# @brief KFF view class
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 (HASHSET_ID, HASHSET_DESCRIPTION, HASHSET_IS_ALERT, HASHSET_SIZE, HASHSET_OBJ) = range(5)
 
-
 class KFFView(object):
 
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief initialize widget
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __init__(self):
         self.__mediator = pymobius.mediator.copy()
         self.__data = []
 
         self.name = f'{EXTENSION_NAME} v{EXTENSION_VERSION} (KFF Manager)'
-        icon_path = self.__mediator.call('extension.get-icon-path', EXTENSION_ID)
-        self.icon_data = open(icon_path, 'rb').read()
+        self.icon_path = pymobius.mediator.call('extension.get-icon-path', EXTENSION_ID)
+        self.icon_data = open(self.icon_path, 'rb').read()
 
         # build widget
         self.__widget = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
@@ -187,23 +175,22 @@ class KFFView(object):
 
         # toolbar
         toolbar = Gtk.Toolbar()
-        toolbar.set_style(Gtk.ToolbarStyle.ICONS)
         toolbar.show()
         self.__widget.add_child(toolbar, mobius.core.ui.box.fill_none)
 
         self.__import_hashlist_toolitem = Gtk.ToolButton.new()
         self.__import_hashlist_toolitem.set_icon_name('document-import')
-        self.__import_hashlist_toolitem.connect("clicked", self.__on_import_hash_list)
+        self.__import_hashlist_toolitem.connect("clicked", self.__on_import)
         self.__import_hashlist_toolitem.show()
-        self.__import_hashlist_toolitem.set_tooltip_text("Import hash list from file")
+        self.__import_hashlist_toolitem.set_tooltip_text("Import data into KFF")
         self.__import_hashlist_toolitem.set_sensitive(True)
         toolbar.insert(self.__import_hashlist_toolitem, -1)
 
         self.__export_hashlist_toolitem = Gtk.ToolButton.new()
         self.__export_hashlist_toolitem.set_icon_name('document-export')
-        self.__export_hashlist_toolitem.connect("clicked", self.__on_export_hash_list)
+        self.__export_hashlist_toolitem.connect("clicked", self.__on_export)
         self.__export_hashlist_toolitem.show()
-        self.__export_hashlist_toolitem.set_tooltip_text("Export hash list to file")
+        self.__export_hashlist_toolitem.set_tooltip_text("Export data from KFF")
         self.__export_hashlist_toolitem.set_sensitive(True)
         toolbar.insert(self.__export_hashlist_toolitem, -1)
 
@@ -214,6 +201,7 @@ class KFFView(object):
         self.__status_listview.set_report_app(f'{EXTENSION_NAME} v{EXTENSION_VERSION}')
         self.__status_listview.show()
         self.__status_listview.set_drag_and_drop(False)
+        self.__status_listview.set_control(self)
 
         self.__status_listview.add_column('name')
         self.__status_listview.add_column('count', 'Count', column_type='int')
@@ -242,6 +230,29 @@ class KFFView(object):
     def get_ui_widget(self):
         return self.__widget.get_ui_widget()
 
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Reload and populate listview
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def on_reload_data(self, tableview):
+        self.__populate()
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Populate listview
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __populate(self):
+        self.__status_listview.clear()
+        self.__status_listview.add_row(('Files', mobius.core.kff.get_file_count()))
+        self.__status_listview.add_row(('Alert files', mobius.core.kff.get_alert_count()))
+        self.__status_listview.add_row(('Hashes', mobius.core.kff.get_hash_count()))
+        self.__status_listview.add_row(('Thumbnails', mobius.core.kff.get_thumbnail_count()))
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Set current status
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __set_status(self, status):
+        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        GLib.idle_add(self.__status_label.set_text, f"{now}: {status}")
+
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief handle close button
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -255,19 +266,9 @@ class KFFView(object):
         self.__mediator.clear()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Populate listview
+    # @brief Handle import
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __populate(self):
-        self.__status_listview.clear()
-        self.__status_listview.add_row(('Files', mobius.core.kff.get_file_count()))
-        self.__status_listview.add_row(('Alert files', mobius.core.kff.get_alert_count()))
-        self.__status_listview.add_row(('Hashes', mobius.core.kff.get_hash_count()))
-        self.__status_listview.add_row(('Thumbnails', mobius.core.kff.get_thumbnail_count()))
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Handle import hash list
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __on_import_hash_list(self, widget, *args):
+    def __on_import(self, widget, *args):
 
         # get selected hashset
         selection = self.__listview.get_selection()
@@ -346,24 +347,12 @@ class KFFView(object):
         self.__status_label.set_text('')
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Handle export hash list
+    # @brief Handle export
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __on_export_hash_list(self, widget, *args):
-
-        # get selected hashset
-        selection = self.__listview.get_selection()
-        model, treeiter = selection.get_selected()
-
-        if not treeiter:
-            mobius.core.logf('WRN no row selected to clear')
-            return
-
-        hashset_id = model.get_value(treeiter, HASHSET_ID)
-        hashset = model.get_value(treeiter, HASHSET_OBJ)
+    def __on_export(self, widget, *args):
 
         # build dialog
-        fs = Gtk.FileChooserDialog(title=f'Exporting hash list to "{hashset_id}" hash set',
-                                   action=Gtk.FileChooserAction.SAVE)
+        fs = Gtk.FileChooserDialog(title=f'Exporting KFF data', action=Gtk.FileChooserAction.SAVE)
         fs.add_button(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL)
         fs.add_button(Gtk.STOCK_OK, Gtk.ResponseType.OK)
         fs.set_do_overwrite_confirmation(True)
@@ -375,30 +364,23 @@ class KFFView(object):
 
         # add export handlers
         filefilter = Gtk.FileFilter()
-        filefilter.handler = export_json
-        filefilter.extension = 'json'
-        filefilter.set_name('JSON file (.json)')
-        filefilter.add_pattern('*.json')
+        filefilter.handler = mobius.core.kff.export_kff
+        filefilter.extension = 'db'
+        filefilter.set_name('Full KFF database file (.db)')
+        filefilter.add_pattern('*.db')
         fs.add_filter(filefilter)
-        fs.set_current_name(hashset_id + '.json')
+        fs.set_current_name("kff.db")
 
         filefilter = Gtk.FileFilter()
-        filefilter.handler = export_tab
-        filefilter.extension = 'txt'
-        filefilter.set_name('Tab separated file (.txt)')
-        filefilter.add_pattern('*.txt')
-        fs.add_filter(filefilter)
-
-        filefilter = Gtk.FileFilter()
-        filefilter.handler = export_csv
-        filefilter.extension = 'csv'
-        filefilter.set_name('CSV file (.csv)')
-        filefilter.add_pattern('*.csv')
+        filefilter.handler = mobius.core.kff.export_collected_data
+        filefilter.extension = 'db'
+        filefilter.set_name('Collected data (.db)')
+        filefilter.add_pattern('*.db')
         fs.add_filter(filefilter)
 
         # run dialog
         rc = fs.run()
-        url = fs.get_uri()
+        path = fs.get_filename()
         folder = fs.get_current_folder()
 
         filefilter = fs.get_filter()
@@ -413,14 +395,19 @@ class KFFView(object):
         mobius.framework.set_config('general.save-folder', folder)
 
         # add extension to name
-        uri_root, uri_ext = os.path.splitext(url)
-
-        if uri_ext != '.' + fileext:
-            url = url + '.' + fileext
+        if not path.endswith('.' + fileext):
+            path = path + '.' + fileext
 
         # export
-        f = mobius.core.io.new_file_by_url(url)
-        handler(f, hashset)
+        self.__export_thread(handler, path)
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Run export in a separate thread
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __export_thread(self, handler, path):
+        import threading
+        thread = threading.Thread(target=handler, args=(path, self.__set_status))
+        thread.start()
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # @brief Start function

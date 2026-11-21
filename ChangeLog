@@ -12,6 +12,8 @@ Mobius Forensic Toolkit 2.31
 	* iped-frontend: Remove framework.new_config_transaction calls
 	* kff-manager: Remove framework.new_config_transaction calls
 	* kff-manager: Implement new version on top of the new KFF implementation and API
+	* kff-manager: Add option to export the full KFF database
+	* kff-manager: Add option to export collected data (sizes and thumbnails) from the KFF
 	* part-catalogue: Remove framework.new_config_transaction calls
 	* report-generator: Remove thread_guard usage
 	* report-generator: Remove framework.new_config_transaction calls
