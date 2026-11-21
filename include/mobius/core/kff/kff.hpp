@@ -53,6 +53,7 @@ mobius::core::database::database get_database ();
 mobius::core::database::transaction new_transaction ();
 file new_file (std::int64_t, std::uint16_t, std::int64_t = -1);
 void export_collected_data (const std::string&, std::function<void (const std::string &)> = {});
+void import_collected_data (const std::string&, std::function<void (const std::string &)> = {});
 
 std::int64_t get_next_file_id ();
 bool has_size (std::uint64_t);

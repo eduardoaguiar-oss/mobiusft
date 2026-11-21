@@ -17,6 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/application.hpp>
 #include <mobius/core/database/database.hpp>
+#include <mobius/core/database/db_execute_guard.hpp>
 #include <mobius/core/decoder/hexstring.hpp>
 #include <mobius/core/exception.inc>
 #include <mobius/core/io/file.hpp>
@@ -193,28 +194,6 @@ _create_db_schema (mobius::core::database::database &db)
     }
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Attach guard class
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class attach_guard
-{
-  public:
-    explicit attach_guard (mobius::core::database::database &db, const std::string &db_name)
-        : db_ (db),
-          db_name_ (db_name)
-    {
-    }
-
-    ~attach_guard ()
-    {
-        db_.execute (std::format ("DETACH DATABASE {};", db_name_));
-    }
-
-  private:
-    mobius::core::database::database &db_;
-    const std::string db_name_;
-};
-
 } // namespace
 
 namespace mobius::core::kff
@@ -320,7 +299,7 @@ void
 export_collected_data (const std::string &path, std::function<void (const std::string &)> log)
 {
     auto f_log = log ? log : [] (const std::string &) {};
-    f_log (std::format ("Starting exporting collected data to {}", path));
+    f_log (std::format ("Exporting collected data to {}", path));
 
     // Remove the output database file if it already exists
     auto f = mobius::core::io::new_file_by_path (path);
@@ -328,21 +307,18 @@ export_collected_data (const std::string &path, std::function<void (const std::s
     if (f.exists ())
         f.remove ();
 
-    // Attach the output database
-    f_log ("Attaching output database");
-
     try
     {
         auto db = get_database ();
-        auto stmt = db.new_statement ("ATTACH DATABASE ? AS out_db");
-        stmt.bind (1, path);
-        stmt.execute ();
+        mobius::core::database::db_execute_guard guard (db);
 
-        attach_guard guard (db, "out_db");
+        // Attach the output database
+        f_log ("Attaching output database");
+        guard.attach (path, "out_db");
 
         // Set cache and memory mapping settings for the main and out_db databases to optimize performance
-        db.execute ("PRAGMA main.cache_size = -1000000;");
-        db.execute ("PRAGMA main.mmap_size = 4294967296;");
+        guard.set_pragma ("main", "cache_size", "-1000000");
+        guard.set_pragma ("main", "mmap_size", "4294967296");
         db.execute ("PRAGMA out_db.synchronous = OFF;");
         db.execute ("PRAGMA out_db.journal_mode = OFF;");
         db.execute ("PRAGMA out_db.user_version = 1;");
@@ -385,9 +361,6 @@ export_collected_data (const std::string &path, std::function<void (const std::s
         f_log ("Committing export transaction");
         transaction.commit ();
 
-        // Reset cache and memory mapping settings for the main database
-        db.execute ("PRAGMA main.cache_size = -65536;");
-        db.execute ("PRAGMA main.mmap_size = 0;");
         f_log ("Export completed");
     }
     catch (const std::exception &e)
@@ -397,6 +370,99 @@ export_collected_data (const std::string &path, std::function<void (const std::s
         if (f.exists ())
             f.remove ();
 
+        throw;
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Import collected data from a specified source
+// @param path Path to the input database from which to import data
+// @param callback Optional callback function for progress reporting
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+import_collected_data (const std::string &path, std::function<void (const std::string &)> log)
+{
+    auto f_log = log ? log : [] (const std::string &) {};
+
+    try
+    {
+        f_log ("Importing collected data from " + path);
+
+        // Attach the input database
+        auto db = get_database ();
+        mobius::core::database::db_execute_guard guard (db);
+
+        f_log ("Attaching input database");
+        auto stmt = db.new_statement ("ATTACH DATABASE ? AS in_db");
+        stmt.bind (1, path);
+        stmt.execute ();
+
+        guard.attach (path, "in_db");
+
+        // Set cache and memory mapping settings for the main and out_db databases to optimize performance
+        guard.set_pragma ("main", "cache_size", "-1000000");
+        guard.set_pragma ("main", "mmap_size", "4294967296");
+        db.execute ("PRAGMA in_db.cache_size = -1000000;");
+        db.execute ("PRAGMA in_db.mmap_size = 4294967296;");
+
+        // Start a new transaction for the import process
+        auto transaction = db.new_transaction ();
+
+        // Set missing sizes from the size_map based on hash information
+        f_log ("Setting missing sizes from the size_map based on hash information");
+
+        db.execute (
+            "UPDATE file SET size = ("
+            "  SELECT m.size "
+            "  FROM hash h JOIN in_db.size_map m ON m.type = h.type AND m.value = h.value "
+            "  WHERE h.file_id = file.id "
+            "  LIMIT 1) "
+            "WHERE size IS NULL "
+            "AND EXISTS ("
+            "  SELECT 1 "
+            "  FROM hash h JOIN in_db.size_map m ON m.type = h.type AND m.value = h.value "
+            "  WHERE h.file_id = file.id);"
+        );
+
+        f_log (std::format ("Sizes set: {}", db.get_changes ()));
+
+        // Set thumbnails from the thumb_map based on hash information
+        f_log ("Setting thumbnails from the thumb_map based on hash information");
+
+        db.execute (
+            "INSERT INTO thumbnail (file_id, data) "
+            "SELECT h.file_id, m.data "
+            "FROM in_db.thumb_map m "
+            "JOIN hash h ON h.type = m.type AND h.value = m.value "
+            "ORDER BY CASE m.type "
+            "  WHEN 5 THEN 1 "
+            "  WHEN 4 THEN 2 "
+            "  WHEN 3 THEN 3 "
+            "  WHEN 2 THEN 4 "
+            "  WHEN 1 THEN 5 "
+            "END "
+            "ON CONFLICT (file_id) DO NOTHING;"
+        );
+
+        f_log (std::format ("Thumbnails set: {}", db.get_changes ()));
+
+        db.execute (
+            "INSERT INTO meta (key, value) VALUES "
+            "('thumbnail_count', (SELECT COUNT(*) FROM thumbnail)) "
+            "ON CONFLICT (key) DO UPDATE SET value = excluded.value;"
+        );
+
+        // Commit the transaction to save all changes
+        f_log ("Committing the transaction to save all changes");
+        transaction.commit ();
+
+        db.execute ("PRAGMA wal_checkpoint (TRUNCATE);");
+
+        f_log ("Import completed");
+    }
+    catch (const std::exception &e)
+    {
+        f_log (std::string ("Error importing collected data: ") + e.what ());
         throw;
     }
 }
