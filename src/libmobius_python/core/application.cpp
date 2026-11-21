@@ -21,8 +21,9 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "application.hpp"
-#include <pymobius.hpp>
 #include "core/pod/data.hpp"
+#include <pymobius.hpp>
+#include <pycall.hpp>
 
 namespace
 {
@@ -35,50 +36,50 @@ static PyTypeObject *core_application_type = nullptr;
 // @brief Application: name getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_name (core_application_o *self, void *)
+tp_getter_name (PyObject *self, void *)
 {
-    return mobius::py::to_pyobject (self->obj->get_name ());
+    auto py_self = reinterpret_cast<core_application_o *> (self);
+    return mobius::py::call_method (py_self->obj, &mobius::core::application::get_name);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Application: version getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_version (core_application_o *self, void *)
+tp_getter_version (PyObject *self, void *)
 {
-    return mobius::py::to_pyobject (self->obj->get_version ());
+    auto py_self = reinterpret_cast<core_application_o *> (self);
+    return mobius::py::call_method (py_self->obj, &mobius::core::application::get_version);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Application: title getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_title (core_application_o *self, void *)
+tp_getter_title (PyObject *self, void *)
 {
-    return mobius::py::to_pyobject (self->obj->get_title ());
+    auto py_self = reinterpret_cast<core_application_o *> (self);
+    return mobius::py::call_method (py_self->obj, &mobius::core::application::get_title);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Application: copyright getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_copyright (core_application_o *self, void *)
+tp_getter_copyright (PyObject *self, void *)
 {
-    return mobius::py::to_pyobject (self->obj->get_copyright ());
+    auto py_self = reinterpret_cast<core_application_o *> (self);
+    return mobius::py::call_method (py_self->obj, &mobius::core::application::get_copyright);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief application: getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {"name", (getter) tp_getter_name, (setter) 0,
-     "application name", nullptr},
-    {"version", (getter) tp_getter_version, (setter) 0,
-     "application version", nullptr},
-    {"title", (getter) tp_getter_title, (setter) 0,
-     "application title", nullptr},
-    {"copyright", (getter) tp_getter_copyright, (setter) 0,
-     "application copyright notice", nullptr},
+    {"name", tp_getter_name, nullptr, "application name", nullptr},
+    {"version", tp_getter_version, nullptr, "application version", nullptr},
+    {"title", tp_getter_title, nullptr, "application title", nullptr},
+    {"copyright", tp_getter_copyright, nullptr, "application copyright notice", nullptr},
     {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
 
@@ -106,9 +107,7 @@ tp_f_get_config_path (core_application_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::to_pyobject (
-            self->obj->get_config_path (arg_rpath)
-        );
+        ret = mobius::py::to_pyobject (self->obj->get_config_path (arg_rpath));
     }
     catch (const std::exception &e)
     {
@@ -142,9 +141,7 @@ tp_f_get_cache_path (core_application_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::to_pyobject (
-            self->obj->get_cache_path (arg_rpath)
-        );
+        ret = mobius::py::to_pyobject (self->obj->get_cache_path (arg_rpath));
     }
     catch (const std::exception &e)
     {
@@ -178,9 +175,7 @@ tp_f_get_data_path (core_application_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::to_pyobject (
-            self->obj->get_data_path (arg_rpath)
-        );
+        ret = mobius::py::to_pyobject (self->obj->get_data_path (arg_rpath));
     }
     catch (const std::exception &e)
     {
@@ -219,9 +214,7 @@ tp_f_get_extension_resource_path (core_application_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::to_pyobject (
-            self->obj->get_extension_resource_path (arg_extension_id, arg_rpath)
-        );
+        ret = mobius::py::to_pyobject (self->obj->get_extension_resource_path (arg_extension_id, arg_rpath));
     }
     catch (const std::exception &e)
     {
@@ -229,75 +222,77 @@ tp_f_get_extension_resource_path (core_application_o *self, PyObject *args)
     }
 
     return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>get_icon_path</i>
+// @param self Self object
+// @param arg Icon ID
+// @return icon path as a Python string
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_get_icon_path (PyObject *self, PyObject *arg)
+{
+    try
+    {
+        auto arg_icon_id = mobius::py::get_arg<std::string> (arg);
+        auto py_self = reinterpret_cast<core_application_o *> (self);
+        return mobius::py::call_method (py_self->obj, &mobius::core::application::get_icon_path, arg_icon_id);
+    }
+    catch (...)
+    {
+        return nullptr;
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief application: start
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_start (core_application_o *self, PyObject *)
+tp_f_start (PyObject *self, PyObject *)
 {
-    // execute C++ function
-    PyObject *ret = nullptr;
-
     try
     {
-        self->obj->start ();
-        ret = mobius::py::pynone ();
+        auto py_self = reinterpret_cast<core_application_o *> (self);
+        return mobius::py::call_method (py_self->obj, &mobius::core::application::start);
     }
-    catch (const std::exception &e)
+    catch (...)
     {
-        mobius::py::set_runtime_error (e.what ());
+        return nullptr;
     }
-
-    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief application: stop
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_stop (core_application_o *self, PyObject *)
+tp_f_stop (PyObject *self, PyObject *)
 {
-    // execute C++ function
-    PyObject *ret = nullptr;
-
     try
     {
-        self->obj->stop ();
-        ret = mobius::py::pynone ();
+        auto py_self = reinterpret_cast<core_application_o *> (self);
+        return mobius::py::call_method (py_self->obj, &mobius::core::application::stop);
     }
-    catch (const std::exception &e)
+    catch (...)
     {
-        mobius::py::set_runtime_error (e.what ());
+        return nullptr;
     }
-
-    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief application: methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {"get_config_path", (PyCFunction) tp_f_get_config_path,
-     METH_VARARGS, "get config path"},
-
-    {"get_cache_path", (PyCFunction) tp_f_get_cache_path, METH_VARARGS,
-     "get cache path"},
-
-    {"get_data_path", (PyCFunction) tp_f_get_data_path, METH_VARARGS,
-     "get data path"},
-
+    {"get_config_path", (PyCFunction) tp_f_get_config_path, METH_VARARGS, "get config path"},
+    {"get_cache_path", (PyCFunction) tp_f_get_cache_path, METH_VARARGS, "get cache path"},
+    {"get_data_path", (PyCFunction) tp_f_get_data_path, METH_VARARGS, "get data path"},
     {"get_extension_resource_path",
-     (PyCFunction) tp_f_get_extension_resource_path, METH_VARARGS,
+     (PyCFunction) tp_f_get_extension_resource_path,
+     METH_VARARGS,
      "get extension resource path"},
-
-    {"start", (PyCFunction) tp_f_start, METH_VARARGS,
-     "start application"},
-
-    {"stop", (PyCFunction) tp_f_stop, METH_VARARGS,
-     "stop application"},
-
+    {"get_icon_path", tp_f_get_icon_path, METH_O, "get icon path"},
+    {"start", tp_f_start, METH_NOARGS, "start application"},
+    {"stop", tp_f_stop, METH_NOARGS, "stop application"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };
 
@@ -311,8 +306,7 @@ static PyMethodDef tp_methods[] = {
 static PyObject *
 tp_new (PyTypeObject *type, PyObject *, PyObject *)
 {
-    core_application_o *ret =
-        reinterpret_cast<core_application_o *> (type->tp_alloc (type, 0));
+    core_application_o *ret = reinterpret_cast<core_application_o *> (type->tp_alloc (type, 0));
 
     if (ret)
     {
@@ -377,9 +371,7 @@ new_core_application_type ()
         return mobius::py::pytypeobject (core_application_type);
 
     // Allocate type from spec
-    core_application_type = reinterpret_cast<PyTypeObject *> (
-        PyType_FromSpec (&core_application_spec)
-    );
+    core_application_type = reinterpret_cast<PyTypeObject *> (PyType_FromSpec (&core_application_spec));
 
     // Create type
     mobius::py::pytypeobject type (core_application_type);
@@ -397,9 +389,7 @@ bool
 pymobius_core_application_check (PyObject *value)
 {
     if (!core_application_type)
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("application type is not initialized")
-        );
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("application type is not initialized"));
 
     return mobius::py::isinstance (value, core_application_type);
 }
@@ -413,13 +403,9 @@ PyObject *
 pymobius_core_application_to_pyobject (const mobius::core::application &obj)
 {
     if (!core_application_type)
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("application type is not initialized")
-        );
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("application type is not initialized"));
 
-    return mobius::py::to_pyobject<core_application_o> (
-        obj, core_application_type
-    );
+    return mobius::py::to_pyobject<core_application_o> (obj, core_application_type);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -431,11 +417,7 @@ mobius::core::application
 pymobius_core_application_from_pyobject (PyObject *value)
 {
     if (!core_application_type)
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("application type is not initialized")
-        );
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("application type is not initialized"));
 
-    return mobius::py::from_pyobject<core_application_o> (
-        value, core_application_type
-    );
+    return mobius::py::from_pyobject<core_application_o> (value, core_application_type);
 }
