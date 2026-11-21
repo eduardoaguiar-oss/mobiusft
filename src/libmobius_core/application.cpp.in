@@ -24,6 +24,7 @@
 #include <mobius/core/io/folder.hpp>
 #include <atomic>
 #include <cstdlib>
+#include <format>
 #include <mutex>
 #include <stdexcept>
 #include <sys/stat.h>
@@ -326,6 +327,16 @@ application::get_extension_resource_path (
   return _join_path (config_folder_ + '/' + extension_id + "/resource", path);
 }
 
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get icon path
+// @param icon_id
+// @return Absolute path to icon file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+application::get_icon_path (const std::string& icon_id) const
+{
+    return std::format ("{}/icons/general/{}.png", data_folder_, icon_id);
+}
 } // namespace mobius::core
 
 
