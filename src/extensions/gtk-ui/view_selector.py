@@ -136,7 +136,14 @@ class ViewSelectorWidget(object):
     def add(self, view_id, view, pos=-1):
 
         # render icon
-        icon = mobius.core.ui.new_icon_from_data(view.icon_data, mobius.core.ui.icon.size_dnd)
+        icon_path = getattr(view, 'icon_path', None)
+
+        if icon_path:
+            icon = mobius.core.ui.new_icon_by_path(icon_path, mobius.core.ui.icon.size_dnd)
+
+        else:
+            icon = mobius.core.ui.new_icon_from_data(view.icon_data, mobius.core.ui.icon.size_dnd)
+
         icon.set_visible(True)
 
         # add page to notebook
