@@ -40,6 +40,7 @@ add_library(mobius_core_database STATIC
     connection.cpp
     connection_pool.cpp
     database.cpp
+    db_execute_guard.cpp
     meta_table.cpp
     statement.cpp
     transaction.cpp
