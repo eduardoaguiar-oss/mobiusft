@@ -21,6 +21,7 @@
 #include <mobius/core/ui/icon.hpp>
 #include <mobius/core/exception.inc>
 #include <mobius/core/io/path.hpp>
+#include <mobius/core/io/file.hpp>
 #include <mobius/core/io/folder.hpp>
 #include <atomic>
 #include <cstdlib>
@@ -310,7 +311,7 @@ application::get_config_path (const std::string& path) const
 std::string
 application::get_cache_path (const std::string& path) const
 {
-  return _join_path (cache_folder_, path);
+    return cache_folder_ + '/' + path;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -320,11 +321,9 @@ application::get_cache_path (const std::string& path) const
 // @return absolute path to extension/resource folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-application::get_extension_resource_path (
-    const std::string& extension_id,
-    const std::string& path) const
+application::get_extension_resource_path (const std::string& extension_id, const std::string& path) const
 {
-  return _join_path (config_folder_ + '/' + extension_id + "/resource", path);
+    return config_folder_ + '/' + extension_id + "/resource/" + path;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -335,8 +334,13 @@ application::get_extension_resource_path (
 std::string
 application::get_icon_path (const std::string& icon_id) const
 {
-    return std::format ("{}/icons/general/{}.png", data_folder_, icon_id);
+    auto path = data_folder_ + "/icons/general/" + icon_id + ".png";
+    auto f = mobius::core::io::new_file_by_path (path);
+
+    if (!f.exists())
+        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid icon: " + icon_id));
+
+    return path;
 }
+
 } // namespace mobius::core
-
-
