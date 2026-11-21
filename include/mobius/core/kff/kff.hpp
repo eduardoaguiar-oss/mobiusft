@@ -67,8 +67,8 @@ mobius::core::generator<file> iter_files ();
 mobius::core::generator<file> iter_files_by_type (std::uint16_t);
 
 void export_collected_data (const std::string&, std::function<void (const std::string &)> = {});
+void export_kff (const std::string&, std::function<void (const std::string &)> = {});
 void import_collected_data (const std::string&, std::function<void (const std::string &)> = {});
-void export_kff (const std::string&);
 
 } // namespace mobius::core::kff
 

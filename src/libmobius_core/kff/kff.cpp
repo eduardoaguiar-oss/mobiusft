@@ -375,6 +375,40 @@ export_collected_data (const std::string &path, std::function<void (const std::s
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Export the current KFF database to a specified output file
+// @param path Path to the output file
+// @param log Logging function or object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+export_kff (const std::string &path, std::function<void (const std::string &)> log)
+{
+    auto f = mobius::core::io::new_file_by_path (path);
+
+    if (f.exists ())
+        f.remove ();
+
+    auto f_log = log ? log : [] (const std::string &) {};
+    f_log (std::format ("Exporting full KFF database to {}", path));
+
+    try
+    {
+        auto db = get_database ();
+        auto stmt = db.new_statement ("VACUUM INTO ?");
+        stmt.bind (1, path);
+        stmt.execute ();
+    }
+    catch (...)
+    {
+        if (f.exists ())
+            f.remove ();
+
+        throw;
+    }
+
+    f_log ("Export completed");
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Import collected data from a specified source
 // @param path Path to the input database from which to import data
 // @param callback Optional callback function for progress reporting
