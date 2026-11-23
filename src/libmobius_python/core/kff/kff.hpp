@@ -29,6 +29,7 @@ namespace mobius::py
 PyObject *func_core_kff_export_collected_data (PyObject *, PyObject *);
 PyObject *func_core_kff_export_kff (PyObject *, PyObject *);
 PyObject *func_core_kff_import_collected_data (PyObject *, PyObject *);
+PyObject *func_core_kff_import_file_sizes (PyObject *, PyObject *);
 PyObject *func_core_kff_get_alert_count (PyObject *, PyObject *);
 PyObject *func_core_kff_get_file_type (PyObject *, PyObject *);
 PyObject *func_core_kff_get_file_type_string (PyObject *, PyObject *);
