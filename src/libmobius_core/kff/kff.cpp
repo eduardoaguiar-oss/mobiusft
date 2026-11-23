@@ -809,4 +809,60 @@ import_file_sizes (const std::string &path, std::function<void (const std::strin
     transaction.commit ();
 }
 
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Import passwords
+// @param path The path to the password file
+// @param log Logging function
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+import_passwords (const std::string &path, std::function<void (const std::string &)> arg_log)
+{
+    auto log = arg_log ? arg_log : [] (const std::string &) {};
+    log (std::format ("Starting import of passwords from {}", path));
+
+    // Open file for reading
+    auto f = mobius::core::io::new_file_by_path (path);
+    auto fp = mobius::core::io::line_reader (f.new_reader ());
+
+    // Start a new transaction for the import process
+    auto db = mobius::core::kff::get_database ();
+    auto transaction = db.new_transaction ();
+
+    // process each line, setting passwords for KFF entries
+    log (std::format ("Processing file {}", f.get_name ()));
+    std::string line;
+    std::uint64_t count = 0;
+
+    while (fp.read (line))
+    {
+        if (!line.empty () && line[0] != '#')
+        {
+            auto line_view = mobius::core::string_view::rstrip (line);
+            auto data = mobius::core::string_view::split (line_view, "\t");
+
+            if (data.size () == 3)
+            {
+                auto hash_type = mobius::core::string_view::to_integer (data[0]);
+                auto hash_value = std::string (data[1]);
+                auto password = std::string (data[2]);
+
+                // lookup
+                auto kff_f = mobius::core::kff::lookup (hash_type, hash_value);
+
+                if (kff_f && !kff_f.has_password ())
+                {
+                    kff_f.set_password (password);
+                    ++count;
+                }
+            }
+        }
+    }
+
+    log (std::format ("Passwords set: {}", count));
+
+    // Commit the transaction to save all changes made during the import process
+    log ("Committing transaction");
+    transaction.commit ();
+}
+
 } // namespace mobius::core::kff

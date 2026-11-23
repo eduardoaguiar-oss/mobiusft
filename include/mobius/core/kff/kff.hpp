@@ -73,6 +73,7 @@ void export_collected_data (const std::string&, std::function<void (const std::s
 void export_kff (const std::string&, std::function<void (const std::string &)> = {});
 void import_collected_data (const std::string&, std::function<void (const std::string &)> = {});
 void import_file_sizes (const std::string&, std::function<void (const std::string &)> = {});
+void import_passwords (const std::string&, std::function<void (const std::string &)> = {});
 
 } // namespace mobius::core::kff
 
