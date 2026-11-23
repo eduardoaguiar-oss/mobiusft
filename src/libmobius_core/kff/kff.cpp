@@ -234,7 +234,7 @@ get_database ()
     {
         // Create database instance
         mobius::core::application app;
-        auto path = app.get_config_path ("kff.sqlite");
+        auto path = app.get_config_path ("kff.db");
 
         auto new_db = mobius::core::database::database (path, false);
         new_db.execute ("PRAGMA busy_timeout=60000");

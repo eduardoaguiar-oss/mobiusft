@@ -84,6 +84,8 @@ Mobius Forensic Toolkit 2.31
 	* libmobius_core: Add kff::import_collected_data function
 	* libmobius_core: Add application::get_icon_path method
 	* libmobius_core: Add kff::export_kff function
+	* libmobius_core: Add kff::import_file_sizes function
+	* libmobius_core: Add kff::import_passwords function
 	* libmobius_framework: Use SQLite WAL journal mode in config module
 	* libmobius_framework: Remove thread_guard from config module
 	* libmobius_framework: Use single DB connection shared by all threads in config module
@@ -193,8 +195,10 @@ Mobius Forensic Toolkit 2.31
 	* libmobius_python: Remove check_setter_value from core.datasource.ufdr.extraction class
 	* libmobius_python: Add core.kff.export_collected_data function
 	* libmobius_python: Add core.kff.import_collected_data function
-	* libmobius_python: Add application.get_icon_path method
+	* libmobius_python: Add core.application.get_icon_path method
 	* libmobius_python: Add core.kff.export_kff function
+	* libmobius_python: Add core.kff.import_file_sizes function
+	* libmobius_python: Add core.kff.import_passwords function
 	* pymobius: Remove module item_browser.py
 	* pymobius: Set extension directory to "$HOME/.config/mobius/extensions/{app.version}"
 	* tools: Add new kff_status tool
