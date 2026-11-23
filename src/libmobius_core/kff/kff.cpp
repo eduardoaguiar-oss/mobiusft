@@ -460,7 +460,7 @@ get_file (std::int64_t id)
     {
         auto id = stmt.get_column_int64 (0);
         auto type = stmt.get_column_int64 (1);
-        auto size = stmt.is_column_null(2) ? -1 : stmt.get_column_int64 (2);
+        auto size = stmt.is_column_null (2) ? -1 : stmt.get_column_int64 (2);
 
         f = file (id, type, size);
     }
@@ -748,18 +748,18 @@ import_collected_data (const std::string &path, std::function<void (const std::s
         f_log ("Setting missing file attributes");
 
         db.execute (
-                "INSERT INTO attribute (file_id, type, value) "
-                "SELECT h.file_id, a.attr_type, a.attr_value "
-                "FROM in_db.attribute_map a "
-                "JOIN hash h ON h.type = a.type AND h.value = a.value "
-                "ORDER BY CASE a.type "
-                "  WHEN 5 THEN 1 "
-                "  WHEN 4 THEN 2 "
-                "  WHEN 3 THEN 3 "
-                "  WHEN 2 THEN 4 "
-                "  WHEN 1 THEN 5 "
-                "END "
-                "ON CONFLICT (file_id, type) DO NOTHING;"
+            "INSERT INTO attribute (file_id, type, value) "
+            "SELECT h.file_id, a.attr_type, a.attr_value "
+            "FROM in_db.attribute_map a "
+            "JOIN hash h ON h.type = a.type AND h.value = a.value "
+            "ORDER BY CASE a.type "
+            "  WHEN 5 THEN 1 "
+            "  WHEN 4 THEN 2 "
+            "  WHEN 3 THEN 3 "
+            "  WHEN 2 THEN 4 "
+            "  WHEN 1 THEN 5 "
+            "END "
+            "ON CONFLICT (file_id, type) DO NOTHING;"
         );
 
         f_log (std::format ("File attributes set: {}", db.get_changes ()));
@@ -780,15 +780,128 @@ import_collected_data (const std::string &path, std::function<void (const std::s
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Import file sizes
+// @brief Import IPED hashes
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+import_iped_hashes (const std::string &path, std::function<void (const std::string &)> arg_log)
+{
+    auto log = arg_log ? arg_log : [] (const std::string &) {};
+    log (std::format ("Start importing IPED hashes from {}", path));
+
+    // Attach the IPED database
+    auto db = mobius::core::kff::get_database ();
+    mobius::core::database::db_execute_guard guard (db);
+
+    log ("Attaching IPED database");
+    guard.attach (path, "iped");
+
+    // Set cache and memory mapping settings for the main and IPED databases to optimize performance
+    guard.set_pragma ("main", "cache_size", "-1000000");
+    db.execute ("PRAGMA iped.cache_size = -1000000;");
+    db.execute ("PRAGMA iped.mmap_size  = 4294967296;");
+
+    auto transaction = db.new_transaction ();
+
+    // Drop existing indexes and clear relevant tables before importing new data
+    log ("Dropping indexes");
+    db.execute ("DROP INDEX IF EXISTS idx_file_size;");
+    db.execute ("DROP INDEX IF EXISTS idx_hash_file;");
+    db.execute ("DROP INDEX IF EXISTS idx_attribute_file;");
+
+    // Clear relevant tables before importing new data
+    log ("Clearing old tables");
+    db.execute ("DELETE FROM attribute;");
+    db.execute ("DELETE FROM file;");
+    db.execute ("DELETE FROM hash;");
+    db.execute ("DELETE FROM thumbnail;");
+
+    // Fill file table, setting file.type based on IPED status
+    log ("Importing file table");
+
+    db.execute (
+        std::format (
+            "INSERT INTO file (id, type, size) "
+            "SELECT hash_id, CASE value WHEN 'pedo' THEN {} ELSE {} END, NULL "
+            "  FROM iped.hashes_properties WHERE property_id = 12 "
+            " ORDER BY hash_id;",
+            FILE_TYPE_ALERT_CSAM,
+            FILE_TYPE_IGNORED
+        )
+    );
+
+    // Update file sizes based on IPED hashes properties
+    log ("Updating file sizes");
+    db.execute (
+        "UPDATE file SET size = CAST (p.value AS INTEGER) "
+        "  FROM iped.hashes_properties p "
+        " WHERE p.property_id = 23 AND p.hash_id = file.id;"
+    );
+
+    // Import hash table
+    log ("Importing hash table");
+    db.execute (
+        std::format (
+            "INSERT INTO hash (type, value, file_id) "
+            "SELECT type, value, file_id FROM ("
+            "  SELECT {} AS type, md5 AS value, hash_id AS file_id FROM iped.hashes UNION ALL "
+            "  SELECT {}, edonkey, hash_id FROM iped.hashes UNION ALL "
+            "  SELECT {}, sha1,    hash_id FROM iped.hashes UNION ALL "
+            "  SELECT {}, sha256,  hash_id FROM iped.hashes UNION ALL "
+            "  SELECT {}, sha512,  hash_id FROM iped.hashes"
+            ") "
+            "WHERE value IS NOT NULL AND length (value) > 0 "
+            "ORDER BY type, value "
+            "ON CONFLICT (type, value) DO NOTHING;",
+            HASH_TYPE_MD5,
+            HASH_TYPE_ED2K,
+            HASH_TYPE_SHA1,
+            HASH_TYPE_SHA2_256,
+            HASH_TYPE_SHA2_512
+        )
+    );
+
+    // Recreate database indexes after importing new data
+    log ("Recreating indexes");
+    db.execute ("CREATE INDEX IF NOT EXISTS idx_file_size ON file (size);");
+    db.execute ("CREATE INDEX IF NOT EXISTS idx_hash_file ON hash (file_id);");
+    db.execute ("CREATE INDEX IF NOT EXISTS idx_attribute_file ON attribute (file_id);");
+
+    // Update counters
+    log ("Updating counters");
+    db.execute (
+        std::format (
+            "INSERT INTO meta (key, value) VALUES "
+            "('file_count',      (SELECT COUNT(*) FROM file)), "
+            "('hash_count',      (SELECT COUNT(*) FROM hash)), "
+            "('alert_count',     (SELECT COUNT(*) FROM file WHERE type >= {})), "
+            "('thumbnail_count', (SELECT COUNT(*) FROM thumbnail)) "
+            "ON CONFLICT (key) DO UPDATE SET value = excluded.value;",
+            FILE_TYPE_ALERT_CSAM
+        )
+    );
+
+    // Analyze the database to update statistics for query optimization
+    log ("Analyzing database");
+    db.execute ("PRAGMA analysis_limit=1000;");
+    db.execute ("ANALYZE;");
+
+    // Commit the transaction after all import and update operations
+    log ("Committing transaction");
+    transaction.commit ();
+
+    db.execute ("PRAGMA wal_checkpoint (TRUNCATE);");
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Update file sizes
 // @param path The path to the size file
 // @param log Logging function
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-import_file_sizes (const std::string &path, std::function<void (const std::string &)> arg_log)
+update_file_sizes (const std::string &path, std::function<void (const std::string &)> arg_log)
 {
     auto log = arg_log ? arg_log : [] (const std::string &) {};
-    log (std::format ("Starting import of file sizes from {}", path));
+    log (std::format ("Updating file sizes from {}", path));
 
     // Open file for reading
     auto f = mobius::core::io::new_file_by_path (path);
@@ -836,15 +949,15 @@ import_file_sizes (const std::string &path, std::function<void (const std::strin
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Import passwords
+// @brief Update passwords
 // @param path The path to the password file
 // @param log Logging function
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-import_passwords (const std::string &path, std::function<void (const std::string &)> arg_log)
+update_passwords (const std::string &path, std::function<void (const std::string &)> arg_log)
 {
     auto log = arg_log ? arg_log : [] (const std::string &) {};
-    log (std::format ("Starting import of passwords from {}", path));
+    log (std::format ("Updating passwords from {}", path));
 
     // Open file for reading
     auto f = mobius::core::io::new_file_by_path (path);
@@ -886,7 +999,7 @@ import_passwords (const std::string &path, std::function<void (const std::string
 
     log (std::format ("Passwords set: {}", count));
 
-    // Commit the transaction to save all changes made during the import process
+    // Commit the transaction
     log ("Committing transaction");
     transaction.commit ();
 }
