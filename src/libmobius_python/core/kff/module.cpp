@@ -33,10 +33,8 @@ namespace
 static PyMethodDef module_methods[] = {
     {"export_collected_data", mobius::py::func_core_kff_export_collected_data, METH_VARARGS, "Export collected data to a file"},
     {"export_kff", mobius::py::func_core_kff_export_kff, METH_VARARGS, "Export full KFF database to a file"},
-    {"import_collected_data", mobius::py::func_core_kff_import_collected_data, METH_VARARGS, "Import collected data from a file"},
-    {"import_file_sizes", mobius::py::func_core_kff_import_file_sizes, METH_VARARGS, "Import file sizes from a file"},
-    {"import_passwords", mobius::py::func_core_kff_import_passwords, METH_VARARGS, "Import passwords from a file"},
     {"get_alert_count", mobius::py::func_core_kff_get_alert_count, METH_NOARGS, "Get alert count"},
+    {"get_file", mobius::py::func_core_kff_get_file, METH_O, "Get file by ID"},
     {"get_file_count", mobius::py::func_core_kff_get_file_count, METH_NOARGS, "Get file count"},
     {"get_file_type", mobius::py::func_core_kff_get_file_type, METH_O, "Get file type index"},
     {"get_file_type_string", mobius::py::func_core_kff_get_file_type_string, METH_O, "Get file type string"},
@@ -46,12 +44,15 @@ static PyMethodDef module_methods[] = {
     {"get_next_file_id", mobius::py::func_core_kff_get_next_file_id, METH_NOARGS, "Get next file ID"},
     {"get_thumbnail_count", mobius::py::func_core_kff_get_thumbnail_count, METH_NOARGS, "Get thumbnail count"},
     {"has_size", mobius::py::func_core_kff_has_size, METH_O, "Check if file has size"},
-    {"iter_files", mobius::py::func_kff_iter_files, METH_NOARGS, "Iterate over files"},
-    {"iter_files_by_type", mobius::py::func_kff_iter_files_by_type, METH_O, "Iterate over files by hash type"},
+    {"import_collected_data", mobius::py::func_core_kff_import_collected_data, METH_VARARGS, "Import collected data from a file"},
+    {"import_iped_hashes", mobius::py::func_core_kff_import_iped_hashes, METH_VARARGS, "Import IPED hashes from a file"},
+    {"iter_files", mobius::py::func_core_kff_iter_files, METH_NOARGS, "Iterate over files"},
+    {"iter_files_by_type", mobius::py::func_core_kff_iter_files_by_type, METH_O, "Iterate over files by hash type"},
     {"lookup", mobius::py::func_core_kff_lookup, METH_VARARGS, "Lookup file by hash type and value"},
-    {"get_file", mobius::py::func_core_kff_get_file, METH_O, "Get file by ID"},
     {"new_file", mobius::py::func_core_kff_new_file, METH_VARARGS, "Create new file"},
     {"new_transaction", mobius::py::func_core_kff_new_transaction, METH_NOARGS, "Create new transaction to KFF database"},
+    {"update_file_sizes", mobius::py::func_core_kff_update_file_sizes, METH_VARARGS, "Update file sizes from a file"},
+    {"update_passwords", mobius::py::func_core_kff_update_passwords, METH_VARARGS, "Update passwords from a file"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };
 
