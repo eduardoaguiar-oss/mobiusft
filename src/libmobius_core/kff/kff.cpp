@@ -443,6 +443,32 @@ lookup (std::uint16_t hash_type, const std::string &hash_value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get file by ID
+// @param id The ID of the file
+// @return The file object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+file
+get_file (std::int64_t id)
+{
+    mobius::core::kff::file f;
+
+    auto db = get_database ();
+    auto stmt = db.new_statement ("SELECT id, type, size FROM file WHERE id = ?");
+    stmt.bind (1, id);
+
+    if (stmt.fetch_row ())
+    {
+        auto id = stmt.get_column_int64 (0);
+        auto type = stmt.get_column_int64 (1);
+        auto size = stmt.is_column_null(2) ? -1 : stmt.get_column_int64 (2);
+
+        f = file (id, type, size);
+    }
+
+    return f;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Insert a new file into the database
 // @param db The database connection
 // @param file_id The ID of the new file

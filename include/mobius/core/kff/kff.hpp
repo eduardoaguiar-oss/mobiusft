@@ -55,6 +55,7 @@ constexpr std::uint16_t FILE_ATTRIBUTE_PASSWORD = 1;
 mobius::core::database::database get_database ();
 mobius::core::database::transaction new_transaction ();
 file new_file (std::int64_t, std::uint16_t, std::int64_t = -1);
+file get_file (std::int64_t);
 std::int64_t get_next_file_id ();
 bool has_size (std::uint64_t);
 file lookup (std::uint16_t, const std::string &);
