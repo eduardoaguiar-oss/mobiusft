@@ -754,16 +754,15 @@ import_collected_data (const std::string &path, std::function<void (const std::s
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Import file size
+// @brief Import file sizes
 // @param path The path to the size file
 // @param log Logging function
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-import_size (const std::string &path, std::function<void (const std::string &)> arg_log)
+import_file_sizes (const std::string &path, std::function<void (const std::string &)> arg_log)
 {
-    constexpr auto hash_type = HASH_TYPE_SHA2_256;
     auto log = arg_log ? arg_log : [] (const std::string &) {};
-    log (std::format ("Starting import of sizes from {}", path));
+    log (std::format ("Starting import of file sizes from {}", path));
 
     // Open file for reading
     auto f = mobius::core::io::new_file_by_path (path);
@@ -785,10 +784,11 @@ import_size (const std::string &path, std::function<void (const std::string &)> 
             auto line_view = mobius::core::string_view::rstrip (line);
             auto data = mobius::core::string_view::split (line_view, "\t");
 
-            if (data.size () == 2)
+            if (data.size () == 3)
             {
-                auto hash_value = std::string (data[0]);
-                auto size = mobius::core::string_view::to_integer (data[1]);
+                auto hash_type = mobius::core::string_view::to_integer (data[0]);
+                auto hash_value = std::string (data[1]);
+                auto size = mobius::core::string_view::to_integer (data[2]);
 
                 // lookup
                 auto kff_f = mobius::core::kff::lookup (hash_type, hash_value);
@@ -805,7 +805,7 @@ import_size (const std::string &path, std::function<void (const std::string &)> 
     log (std::format ("Sizes set: {}", count));
 
     // Commit the transaction to save all changes made during the import process
-    log ("Commiting transaction");
+    log ("Committing transaction");
     transaction.commit ();
 }
 
