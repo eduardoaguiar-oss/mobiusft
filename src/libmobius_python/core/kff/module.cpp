@@ -49,6 +49,7 @@ static PyMethodDef module_methods[] = {
     {"iter_files", mobius::py::func_kff_iter_files, METH_NOARGS, "Iterate over files"},
     {"iter_files_by_type", mobius::py::func_kff_iter_files_by_type, METH_O, "Iterate over files by hash type"},
     {"lookup", mobius::py::func_core_kff_lookup, METH_VARARGS, "Lookup file by hash type and value"},
+    {"get_file", mobius::py::func_core_kff_get_file, METH_O, "Get file by ID"},
     {"new_file", mobius::py::func_core_kff_new_file, METH_VARARGS, "Create new file"},
     {"new_transaction", mobius::py::func_core_kff_new_transaction, METH_NOARGS, "Create new transaction to KFF database"},
     {nullptr, nullptr, 0, nullptr} // sentinel

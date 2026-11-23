@@ -415,6 +415,26 @@ func_core_kff_lookup (PyObject *, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>get_file</i> function implementation
+// @param self Python self
+// @param arg Python argument
+// @return new file object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_core_kff_get_file (PyObject *, PyObject *arg)
+{
+    try
+    {
+        auto arg_file_id = mobius::py::get_arg<std::uint64_t> (arg);
+        return mobius::py::call_function (mobius::core::kff::get_file, arg_file_id);
+    }
+    catch (...)
+    {
+        return nullptr;
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>new_file</i> function implementation
 // @param self Python self
 // @param args Python arguments
