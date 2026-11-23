@@ -21,9 +21,11 @@
 #include <mobius/core/decoder/hexstring.hpp>
 #include <mobius/core/exception.inc>
 #include <mobius/core/io/file.hpp>
+#include <mobius/core/io/line_reader.hpp>
 #include <mobius/core/kff/file.hpp>
 #include <mobius/core/kff/kff.hpp>
 #include <mobius/core/log.hpp>
+#include <mobius/core/string_view.hpp>
 #include <atomic>
 #include <format>
 #include <stdexcept>
@@ -67,9 +69,17 @@ static std::vector<std::string> HASH_TYPES = {
 // @brief Create DB tables
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
-_create_db_tables (mobius::core::database::database &db)
+_create_db_schema (mobius::core::database::database &db)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
+
+    if (schema_flag_.load (std::memory_order_acquire))
+        return;
+
+    auto transaction = db.new_transaction ();
+
+    if (schema_flag_.load (std::memory_order_acquire))
+        return;
 
     // Table: meta
     db.execute (
@@ -151,47 +161,15 @@ _create_db_tables (mobius::core::database::database &db)
         "INSERT OR REPLACE INTO attribute_type (id, name) VALUES "
         "(1, 'password');"
     );
-}
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create DB indexes
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static void
-_create_db_indexes (mobius::core::database::database &db)
-{
+    // Create necessary indexes for the tables
     db.execute ("CREATE INDEX IF NOT EXISTS idx_file_size ON file (size);");
     db.execute ("CREATE INDEX IF NOT EXISTS idx_hash_file ON hash (file_id);");
     db.execute ("CREATE INDEX IF NOT EXISTS idx_attribute_file ON attribute (file_id);");
-}
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create DB schema and constants
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static void
-_create_db_schema (mobius::core::database::database &db)
-{
-    mobius::core::log log (__FILE__, __FUNCTION__);
-
-    try
-    {
-        auto transaction = db.new_transaction ();
-
-        if (!schema_flag_.load (std::memory_order_acquire))
-        {
-            _create_db_tables (db);
-            _create_db_indexes (db);
-        }
-
-        transaction.commit ();
-    }
-    catch (const std::exception &e)
-    {
-        log.error (__LINE__, std::format ("Failed to create KFF database schema: {}", e.what ()));
-    }
-    catch (...)
-    {
-        log.error (__LINE__, "Failed to create KFF database schema");
-    }
+    // Commit the transaction to persist schema changes
+    transaction.commit ();
+    schema_flag_.store (true, std::memory_order_release);
 }
 
 } // namespace
@@ -265,11 +243,7 @@ get_database ()
         new_db.execute ("PRAGMA foreign_keys=OFF;");
 
         // Create database schema if necessary
-        if (!schema_flag_.load (std::memory_order_acquire))
-        {
-            _create_db_schema (new_db);
-            schema_flag_.store (true, std::memory_order_release);
-        }
+        _create_db_schema (new_db);
 
         // Assign the newly created database instance to the thread-local variable
         db = new_db;
@@ -286,219 +260,7 @@ mobius::core::database::transaction
 new_transaction ()
 {
     auto db = get_database ();
-
     return db.new_transaction ();
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Export collected data to a file
-// @param path The path to the output file
-// @param log Logging function or object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-export_collected_data (const std::string &path, std::function<void (const std::string &)> log)
-{
-    auto f_log = log ? log : [] (const std::string &) {};
-    f_log (std::format ("Exporting collected data to {}", path));
-
-    // Remove the output database file if it already exists
-    auto f = mobius::core::io::new_file_by_path (path);
-
-    if (f.exists ())
-        f.remove ();
-
-    try
-    {
-        auto db = get_database ();
-        mobius::core::database::db_execute_guard guard (db);
-
-        // Attach the output database
-        f_log ("Attaching output database");
-        guard.attach (path, "out_db");
-
-        // Set cache and memory mapping settings for the main and out_db databases to optimize performance
-        guard.set_pragma ("main", "cache_size", "-1000000");
-        guard.set_pragma ("main", "mmap_size", "4294967296");
-        db.execute ("PRAGMA out_db.synchronous = OFF;");
-        db.execute ("PRAGMA out_db.journal_mode = OFF;");
-        db.execute ("PRAGMA out_db.user_version = 1;");
-
-        // Begin a new transaction for exporting collected data
-        auto transaction = db.new_transaction ();
-
-        // Map old known sizes to all hashes of their file
-        db.execute (
-            "CREATE TABLE out_db.size_map ("
-            "type INTEGER NOT NULL, value BLOB NOT NULL, size INTEGER NOT NULL, "
-            "PRIMARY KEY (type, value)) WITHOUT ROWID;"
-        );
-
-        f_log ("Exporting known sizes");
-        db.execute (
-            "INSERT INTO out_db.size_map (type, value, size) "
-            "SELECT h.type, h.value, f.size "
-            "FROM hash h JOIN file f ON f.id = h.file_id "
-            "WHERE +f.size IS NOT NULL "
-            "ORDER BY h.type, h.value;"
-        );
-
-        // Map thumbnails to their corresponding hashes
-        db.execute (
-            "CREATE TABLE out_db.thumb_map ("
-            "type INTEGER NOT NULL, value BLOB NOT NULL, data BLOB NOT NULL, "
-            "PRIMARY KEY (type, value)) WITHOUT ROWID;"
-        );
-
-        f_log ("Exporting thumbnails");
-        db.execute (
-            "INSERT INTO out_db.thumb_map (type, value, data) "
-            "SELECT h.type, h.value, t.data "
-            "FROM thumbnail t JOIN hash h ON h.file_id = t.file_id "
-            "ORDER BY h.type, h.value;"
-        );
-
-        // Commit the transaction to save the exported data
-        f_log ("Committing export transaction");
-        transaction.commit ();
-
-        f_log ("Export completed");
-    }
-    catch (const std::exception &e)
-    {
-        f_log (std::string ("Error exporting collected data: ") + e.what ());
-
-        if (f.exists ())
-            f.remove ();
-
-        throw;
-    }
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Export the current KFF database to a specified output file
-// @param path Path to the output file
-// @param log Logging function or object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-export_kff (const std::string &path, std::function<void (const std::string &)> log)
-{
-    auto f = mobius::core::io::new_file_by_path (path);
-
-    if (f.exists ())
-        f.remove ();
-
-    auto f_log = log ? log : [] (const std::string &) {};
-    f_log (std::format ("Exporting full KFF database to {}", path));
-
-    try
-    {
-        auto db = get_database ();
-        auto stmt = db.new_statement ("VACUUM INTO ?");
-        stmt.bind (1, path);
-        stmt.execute ();
-    }
-    catch (...)
-    {
-        if (f.exists ())
-            f.remove ();
-
-        throw;
-    }
-
-    f_log ("Export completed");
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Import collected data from a specified source
-// @param path Path to the input database from which to import data
-// @param callback Optional callback function for progress reporting
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-import_collected_data (const std::string &path, std::function<void (const std::string &)> log)
-{
-    auto f_log = log ? log : [] (const std::string &) {};
-
-    try
-    {
-        f_log ("Importing collected data from " + path);
-
-        // Attach the input database
-        auto db = get_database ();
-        mobius::core::database::db_execute_guard guard (db);
-
-        f_log ("Attaching input database");
-        auto stmt = db.new_statement ("ATTACH DATABASE ? AS in_db");
-        stmt.bind (1, path);
-        stmt.execute ();
-
-        guard.attach (path, "in_db");
-
-        // Set cache and memory mapping settings for the main and out_db databases to optimize performance
-        guard.set_pragma ("main", "cache_size", "-1000000");
-        guard.set_pragma ("main", "mmap_size", "4294967296");
-        db.execute ("PRAGMA in_db.cache_size = -1000000;");
-        db.execute ("PRAGMA in_db.mmap_size = 4294967296;");
-
-        // Start a new transaction for the import process
-        auto transaction = db.new_transaction ();
-
-        // Set missing sizes from the size_map based on hash information
-        f_log ("Setting missing sizes from the size_map based on hash information");
-
-        db.execute (
-            "UPDATE file SET size = ("
-            "  SELECT m.size "
-            "  FROM hash h JOIN in_db.size_map m ON m.type = h.type AND m.value = h.value "
-            "  WHERE h.file_id = file.id "
-            "  LIMIT 1) "
-            "WHERE size IS NULL "
-            "AND EXISTS ("
-            "  SELECT 1 "
-            "  FROM hash h JOIN in_db.size_map m ON m.type = h.type AND m.value = h.value "
-            "  WHERE h.file_id = file.id);"
-        );
-
-        f_log (std::format ("Sizes set: {}", db.get_changes ()));
-
-        // Set thumbnails from the thumb_map based on hash information
-        f_log ("Setting thumbnails from the thumb_map based on hash information");
-
-        db.execute (
-            "INSERT INTO thumbnail (file_id, data) "
-            "SELECT h.file_id, m.data "
-            "FROM in_db.thumb_map m "
-            "JOIN hash h ON h.type = m.type AND h.value = m.value "
-            "ORDER BY CASE m.type "
-            "  WHEN 5 THEN 1 "
-            "  WHEN 4 THEN 2 "
-            "  WHEN 3 THEN 3 "
-            "  WHEN 2 THEN 4 "
-            "  WHEN 1 THEN 5 "
-            "END "
-            "ON CONFLICT (file_id) DO NOTHING;"
-        );
-
-        f_log (std::format ("Thumbnails set: {}", db.get_changes ()));
-
-        db.execute (
-            "INSERT INTO meta (key, value) VALUES "
-            "('thumbnail_count', (SELECT COUNT(*) FROM thumbnail)) "
-            "ON CONFLICT (key) DO UPDATE SET value = excluded.value;"
-        );
-
-        // Commit the transaction to save all changes
-        f_log ("Committing the transaction to save all changes");
-        transaction.commit ();
-
-        db.execute ("PRAGMA wal_checkpoint (TRUNCATE);");
-
-        f_log ("Import completed");
-    }
-    catch (const std::exception &e)
-    {
-        f_log (std::string ("Error importing collected data: ") + e.what ());
-        throw;
-    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -743,6 +505,308 @@ iter_files_by_type (std::uint16_t type)
     stmt.bind (1, static_cast<std::int64_t> (type));
 
     return mobius::core::generator<file> (std::make_shared<file_generator_impl> (stmt));
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Export collected data to a file
+// @param path The path to the output file
+// @param log Logging function or object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+export_collected_data (const std::string &path, std::function<void (const std::string &)> log)
+{
+    auto f_log = log ? log : [] (const std::string &) {};
+    f_log (std::format ("Exporting collected data to {}", path));
+
+    // Remove the output database file if it already exists
+    auto f = mobius::core::io::new_file_by_path (path);
+
+    if (f.exists ())
+        f.remove ();
+
+    try
+    {
+        auto db = get_database ();
+        mobius::core::database::db_execute_guard guard (db);
+
+        // Attach the output database
+        f_log ("Attaching output database");
+        guard.attach (path, "out_db");
+
+        // Set cache and memory mapping settings for the main and out_db databases to optimize performance
+        guard.set_pragma ("main", "cache_size", "-1000000");
+        guard.set_pragma ("main", "mmap_size", "4294967296");
+        db.execute ("PRAGMA out_db.synchronous = OFF;");
+        db.execute ("PRAGMA out_db.journal_mode = OFF;");
+        db.execute ("PRAGMA out_db.user_version = 1;");
+
+        // Begin a new transaction for exporting collected data
+        auto transaction = db.new_transaction ();
+
+        // Map known sizes to all hashes of their file
+        db.execute (
+            "CREATE TABLE out_db.size_map ("
+            "type INTEGER NOT NULL, value BLOB NOT NULL, size INTEGER NOT NULL, "
+            "PRIMARY KEY (type, value)) WITHOUT ROWID;"
+        );
+
+        f_log ("Exporting known sizes");
+        db.execute (
+            "INSERT INTO out_db.size_map (type, value, size) "
+            "SELECT h.type, h.value, f.size "
+            "FROM hash h JOIN file f ON f.id = h.file_id "
+            "WHERE +f.size IS NOT NULL "
+            "ORDER BY h.type, h.value;"
+        );
+
+        // Map thumbnails to their corresponding hashes
+        db.execute (
+            "CREATE TABLE out_db.thumb_map ("
+            "type INTEGER NOT NULL, value BLOB NOT NULL, data BLOB NOT NULL, "
+            "PRIMARY KEY (type, value)) WITHOUT ROWID;"
+        );
+
+        f_log ("Exporting thumbnails");
+        db.execute (
+            "INSERT INTO out_db.thumb_map (type, value, data) "
+            "SELECT h.type, h.value, t.data "
+            "FROM thumbnail t JOIN hash h ON h.file_id = t.file_id "
+            "ORDER BY h.type, h.value;"
+        );
+
+        // Map file attributes to their corresponding hashes
+        db.execute (
+            "CREATE TABLE out_db.attribute_map ("
+            "type INTEGER NOT NULL, value BLOB NOT NULL, attr_type INTEGER NOT NULL, attr_value BLOB NOT NULL, "
+            "PRIMARY KEY (type, value)) WITHOUT ROWID;"
+        );
+
+        f_log ("Exporting file attributes");
+        db.execute (
+            "INSERT INTO out_db.attribute_map (type, value, attr_type, attr_value) "
+            "SELECT h.type, h.value, a.type AS attr_type, a.value AS attr_value "
+            "FROM attribute a JOIN hash h ON h.file_id = a.file_id "
+            "ORDER BY h.type, h.value;"
+        );
+
+        // Commit the transaction to save the exported data
+        f_log ("Committing export transaction");
+        transaction.commit ();
+
+        f_log ("Export completed");
+    }
+    catch (const std::exception &e)
+    {
+        f_log (std::string ("Error exporting collected data: ") + e.what ());
+
+        if (f.exists ())
+            f.remove ();
+
+        throw;
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Export the current KFF database to a specified output file
+// @param path Path to the output file
+// @param log Logging function or object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+export_kff (const std::string &path, std::function<void (const std::string &)> log)
+{
+    auto f = mobius::core::io::new_file_by_path (path);
+
+    if (f.exists ())
+        f.remove ();
+
+    auto f_log = log ? log : [] (const std::string &) {};
+    f_log (std::format ("Exporting full KFF database to {}", path));
+
+    try
+    {
+        auto db = get_database ();
+        auto stmt = db.new_statement ("VACUUM INTO ?");
+        stmt.bind (1, path);
+        stmt.execute ();
+    }
+    catch (...)
+    {
+        if (f.exists ())
+            f.remove ();
+
+        throw;
+    }
+
+    f_log ("Export completed");
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Import collected data from a specified source
+// @param path Path to the input database from which to import data
+// @param callback Optional callback function for progress reporting
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+import_collected_data (const std::string &path, std::function<void (const std::string &)> log)
+{
+    auto f_log = log ? log : [] (const std::string &) {};
+
+    try
+    {
+        f_log ("Importing collected data from " + path);
+
+        // Attach the input database
+        auto db = get_database ();
+        mobius::core::database::db_execute_guard guard (db);
+
+        f_log ("Attaching input database");
+        auto stmt = db.new_statement ("ATTACH DATABASE ? AS in_db");
+        stmt.bind (1, path);
+        stmt.execute ();
+
+        guard.attach (path, "in_db");
+
+        // Set cache and memory mapping settings for the main and out_db databases to optimize performance
+        guard.set_pragma ("main", "cache_size", "-1000000");
+        guard.set_pragma ("main", "mmap_size", "4294967296");
+        db.execute ("PRAGMA in_db.cache_size = -1000000;");
+        db.execute ("PRAGMA in_db.mmap_size = 4294967296;");
+
+        // Start a new transaction for the import process
+        auto transaction = db.new_transaction ();
+
+        // Set missing sizes from the size_map based on hash information
+        f_log ("Setting missing sizes");
+
+        db.execute (
+            "UPDATE file SET size = ("
+            "  SELECT m.size "
+            "  FROM hash h JOIN in_db.size_map m ON m.type = h.type AND m.value = h.value "
+            "  WHERE h.file_id = file.id "
+            "  LIMIT 1) "
+            "WHERE size IS NULL "
+            "AND EXISTS ("
+            "  SELECT 1 "
+            "  FROM hash h JOIN in_db.size_map m ON m.type = h.type AND m.value = h.value "
+            "  WHERE h.file_id = file.id);"
+        );
+
+        f_log (std::format ("Sizes set: {}", db.get_changes ()));
+
+        // Set thumbnails from the thumb_map based on hash information
+        f_log ("Setting missing thumbnails");
+
+        db.execute (
+            "INSERT INTO thumbnail (file_id, data) "
+            "SELECT h.file_id, m.data "
+            "FROM in_db.thumb_map m "
+            "JOIN hash h ON h.type = m.type AND h.value = m.value "
+            "ORDER BY CASE m.type "
+            "  WHEN 5 THEN 1 "
+            "  WHEN 4 THEN 2 "
+            "  WHEN 3 THEN 3 "
+            "  WHEN 2 THEN 4 "
+            "  WHEN 1 THEN 5 "
+            "END "
+            "ON CONFLICT (file_id) DO NOTHING;"
+        );
+
+        f_log (std::format ("Thumbnails set: {}", db.get_changes ()));
+
+        db.execute (
+            "INSERT INTO meta (key, value) VALUES "
+            "('thumbnail_count', (SELECT COUNT(*) FROM thumbnail)) "
+            "ON CONFLICT (key) DO UPDATE SET value = excluded.value;"
+        );
+
+        // Set attributes from the attribute_map based on hash information
+        f_log ("Setting missing file attributes");
+
+        db.execute (
+                "INSERT INTO attribute (file_id, type, value) "
+                "SELECT h.file_id, a.attr_type, a.attr_value "
+                "FROM in_db.attribute_map a "
+                "JOIN hash h ON h.type = a.type AND h.value = a.value "
+                "ORDER BY CASE a.type "
+                "  WHEN 5 THEN 1 "
+                "  WHEN 4 THEN 2 "
+                "  WHEN 3 THEN 3 "
+                "  WHEN 2 THEN 4 "
+                "  WHEN 1 THEN 5 "
+                "END "
+                "ON CONFLICT (file_id, type) DO NOTHING;"
+        );
+
+        f_log (std::format ("File attributes set: {}", db.get_changes ()));
+
+        // Commit the transaction to save all changes
+        f_log ("Committing the transaction to save all changes");
+        transaction.commit ();
+
+        db.execute ("PRAGMA wal_checkpoint (TRUNCATE);");
+
+        f_log ("Import completed");
+    }
+    catch (const std::exception &e)
+    {
+        f_log (std::string ("Error importing collected data: ") + e.what ());
+        throw;
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Import file size
+// @param path The path to the size file
+// @param log Logging function
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+import_size (const std::string &path, std::function<void (const std::string &)> arg_log)
+{
+    constexpr auto hash_type = HASH_TYPE_SHA2_256;
+    auto log = arg_log ? arg_log : [] (const std::string &) {};
+    log (std::format ("Starting import of sizes from {}", path));
+
+    // Open file for reading
+    auto f = mobius::core::io::new_file_by_path (path);
+    auto fp = mobius::core::io::line_reader (f.new_reader ());
+
+    // Start a new transaction for the import process
+    auto db = mobius::core::kff::get_database ();
+    auto transaction = db.new_transaction ();
+
+    // process each line, setting file size for KFF entries
+    log (std::format ("Processing file {}", f.get_name ()));
+    std::string line;
+    std::uint64_t count = 0;
+
+    while (fp.read (line))
+    {
+        if (!line.empty () && line[0] != '#')
+        {
+            auto line_view = mobius::core::string_view::rstrip (line);
+            auto data = mobius::core::string_view::split (line_view, "\t");
+
+            if (data.size () == 2)
+            {
+                auto hash_value = std::string (data[0]);
+                auto size = mobius::core::string_view::to_integer (data[1]);
+
+                // lookup
+                auto kff_f = mobius::core::kff::lookup (hash_type, hash_value);
+
+                if (kff_f && !kff_f.has_size ())
+                {
+                    kff_f.set_size (size);
+                    ++count;
+                }
+            }
+        }
+    }
+
+    log (std::format ("Sizes set: {}", count));
+
+    // Commit the transaction to save all changes made during the import process
+    log ("Commiting transaction");
+    transaction.commit ();
 }
 
 } // namespace mobius::core::kff
