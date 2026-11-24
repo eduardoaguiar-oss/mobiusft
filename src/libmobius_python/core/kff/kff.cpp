@@ -448,6 +448,32 @@ func_core_kff_new_transaction (PyObject *, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Populate the KFF database from a database file
+// @param self Python self
+// @param path Path to the input file
+// @param log Logging function or object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_core_kff_populate_from_database (PyObject *, PyObject *args)
+{
+    try
+    {
+        auto arg_path = mobius::py::get_arg<std::string> (args, 0);
+        auto arg_log = _get_arg_log (args, 1);
+
+        return mobius::py::call_function_releasing_gil (
+            mobius::core::kff::populate_from_database,
+            arg_path,
+            arg_log
+        );
+    }
+    catch (...)
+    {
+        return nullptr;
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Populate from IPED hashes from a file
 // @param self Python self
 // @param path Path to the input file

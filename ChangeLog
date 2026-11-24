@@ -86,6 +86,7 @@ Mobius Forensic Toolkit 2.31
 	* libmobius_core: Add kff::export_database function
 	* libmobius_core: Add kff::merge_file_sizes function
 	* libmobius_core: Add kff::merge_passwords function
+	* libmobius_core: Add kff::populate_from_iped_hashes function
 	* libmobius_core: Add kff::populate_from_database function
 	* libmobius_framework: Use SQLite WAL journal mode in config module
 	* libmobius_framework: Remove thread_guard from config module
@@ -197,11 +198,13 @@ Mobius Forensic Toolkit 2.31
 	* libmobius_python: Add core.kff.export_collected_data function
 	* libmobius_python: Add core.kff.import_collected_data function
 	* libmobius_python: Add core.application.get_icon_path method
-	* libmobius_python: Add core.kff.export_kff function
-	* libmobius_python: Add core.kff.update_file_sizes function
-	* libmobius_python: Add core.kff.update_passwords function
+	* libmobius_python: Add core.kff.export_database function
+	* libmobius_python: Add core.kff.merge_file_sizes function
+	* libmobius_python: Add core.kff.merge_passwords function
 	* libmobius_python: Add new call_method_releasing_gil function
 	* libmobius_python: Add new call_function_releasing_gil function
+	* libmobius_python: Add core.kff.populate_from_iped_hashes function
+	* libmobius_python: Add core.kff.populate_from_database function
 	* pymobius: Remove module item_browser.py
 	* pymobius: Set extension directory to "$HOME/.config/mobius/extensions/{app.version}"
 	* tools: Add new kff_status tool

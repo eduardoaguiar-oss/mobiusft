@@ -49,6 +49,7 @@ PyObject *func_core_kff_merge_file_sizes (PyObject *, PyObject *);
 PyObject *func_core_kff_merge_passwords (PyObject *, PyObject *);
 PyObject *func_core_kff_new_file (PyObject *, PyObject *);
 PyObject *func_core_kff_new_transaction (PyObject *, PyObject *);
+PyObject *func_core_kff_populate_from_database (PyObject *, PyObject *);
 PyObject *func_core_kff_populate_from_iped_hashes (PyObject *, PyObject *);
 
 } // namespace mobius::py

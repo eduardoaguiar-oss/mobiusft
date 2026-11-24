@@ -52,6 +52,7 @@ static PyMethodDef module_methods[] = {
     {"merge_passwords", mobius::py::func_core_kff_merge_passwords, METH_VARARGS, "Merge passwords from a file"},
     {"new_file", mobius::py::func_core_kff_new_file, METH_VARARGS, "Create new file"},
     {"new_transaction", mobius::py::func_core_kff_new_transaction, METH_NOARGS, "Create new transaction to KFF database"},
+    {"populate_from_database", mobius::py::func_core_kff_populate_from_database, METH_VARARGS, "Populate the KFF database from a database file"},
     {"populate_from_iped_hashes", mobius::py::func_core_kff_populate_from_iped_hashes, METH_VARARGS, "Import IPED hashes from a file"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };
