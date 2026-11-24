@@ -22,10 +22,11 @@
 
 #include <Python.h>
 #include <functional>
+#include "pygil.hpp"
 
 namespace mobius::py
 {
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Call C++ object member function with arguments, handling exceptions
 // and converting the result to a Python object
 //
@@ -70,6 +71,53 @@ call_method (obj_type *obj, func_type &&f, Args &&...args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Call C++ object member function with arguments, handling exceptions
+// and converting the result to a Python object
+//
+// @tparam obj_type Type of the C++ object
+// @tparam func_type Type of the C++ member function
+// @tparam Args Types of the arguments to pass to the C++ function
+// @param obj Pointer to the C++ object on which to call the member function
+// @param f Pointer to the C++ member function to call
+// @param args Arguments to pass to the C++ function
+// @return Python object representing the result of the C++ function, including void
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+template <typename obj_type, typename func_type, typename... Args>
+PyObject *
+call_method_releasing_gil (obj_type *obj, func_type &&f, Args &&...args)
+{
+    PyObject *ret = nullptr;
+
+    try
+    {
+        using result_type = std::invoke_result_t<func_type, obj_type *, Args...>;
+
+        if constexpr (std::is_void_v<result_type>)
+        {
+            {
+                mobius::py::GIL gil_release;
+                (obj->*f) (std::forward<Args> (args)...);
+            }
+            ret = pynone ();
+        }
+        else
+        {
+            ret = to_pyobject (mobius::py::GIL () (obj->*f) (std::forward<Args> (args)...));
+        }
+    }
+    catch (const std::exception &e)
+    {
+        set_runtime_error (e.what ());
+    }
+    catch (...)
+    {
+        set_runtime_error ("unknown C++ exception");
+    }
+
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Call C++ function and convert result to Python object
 // @tparam func_type Type of the C++ function
 // @tparam Args Types of the arguments to pass to the C++ function
@@ -95,6 +143,49 @@ call_function (func_type &&f, Args &&...args)
         else
         {
             ret = to_pyobject (f (std::forward<Args> (args)...));
+        }
+    }
+    catch (const std::exception &e)
+    {
+        set_runtime_error (e.what ());
+    }
+    catch (...)
+    {
+        set_runtime_error ("unknown C++ exception");
+    }
+
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Call C++ function and convert result to Python object
+// @tparam func_type Type of the C++ function
+// @tparam Args Types of the arguments to pass to the C++ function
+// @param f Pointer to the C++ function to call
+// @param args Arguments to pass to the C++ function
+// @return Python object representing the result of the C++ function, including void
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+template <typename func_type, typename... Args>
+PyObject *
+call_function_releasing_gil (func_type &&f, Args &&...args)
+{
+    PyObject *ret = nullptr;
+
+    try
+    {
+        using result_type = std::invoke_result_t<func_type, Args...>;
+
+        if constexpr (std::is_void_v<result_type>)
+        {
+            {
+                mobius::py::GIL gil;
+                f (std::forward<Args> (args)...);
+            }
+            ret = pynone ();
+        }
+        else
+        {
+            ret = to_pyobject (mobius::py::GIL () (f (std::forward<Args> (args)...)));
         }
     }
     catch (const std::exception &e)
