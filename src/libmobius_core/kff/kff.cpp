@@ -77,18 +77,8 @@ static std::vector<std::string> HASH_TYPES = {
 // @brief Create DB tables
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
-_create_db_schema (mobius::core::database::database &db)
+_create_db_tables (mobius::core::database::database &db)
 {
-    mobius::core::log log (__FILE__, __FUNCTION__);
-
-    if (is_schema_created_.load (std::memory_order_acquire))
-        return;
-
-    auto transaction = db.new_transaction ();
-
-    if (is_schema_created_.load (std::memory_order_acquire))
-        return;
-
     // Table: meta
     db.execute (
         "CREATE TABLE IF NOT EXISTS meta "
@@ -169,13 +159,38 @@ _create_db_schema (mobius::core::database::database &db)
         "INSERT OR REPLACE INTO attribute_type (id, name) VALUES "
         "(1, 'password');"
     );
+}
 
-    // Create necessary indexes for the tables
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create DB indexes
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+_create_db_indexes (mobius::core::database::database &db)
+{
     db.execute ("CREATE INDEX IF NOT EXISTS idx_file_size ON file (size);");
     db.execute ("CREATE INDEX IF NOT EXISTS idx_hash_file ON hash (file_id);");
     db.execute ("CREATE INDEX IF NOT EXISTS idx_attribute_file ON attribute (file_id);");
+}
 
-    // Commit the transaction to persist schema changes
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create DB schema (tables and indexes)
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+_create_db_schema (mobius::core::database::database &db)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    if (is_schema_created_.load (std::memory_order_acquire))
+        return;
+
+    auto transaction = db.new_transaction ();
+
+    if (is_schema_created_.load (std::memory_order_acquire))
+        return;
+
+    _create_db_tables (db);
+    _create_db_indexes (db);
+
     transaction.commit ();
     is_schema_created_.store (true, std::memory_order_release);
 }
@@ -273,16 +288,21 @@ static_assert (std::ranges::input_range<mobius::core::generator<file>>);
 mobius::core::database::database
 get_database ()
 {
+    // Thread-local database instance
     thread_local mobius::core::database::database db;
+    thread_local bool is_new = false;
 
-    if (!db)
+    // Initialize the new KFF availability check flag
+    std::call_once (check_new_kff_, _activate_new_kff);
+
+    // Determine if we want to use the new KFF database
+    bool want_new = is_new_kff_available_.load (std::memory_order_acquire);
+
+    if (!db || is_new != want_new)
     {
-        // Initialize the new KFF availability check flag
-        std::call_once (check_new_kff_, _activate_new_kff);
-
         // Create database instance
         mobius::core::application app;
-        auto path = app.get_config_path ("kff.db");
+        auto path = app.get_config_path (want_new ? "kff.db.new" : "kff.db");
 
         auto new_db = mobius::core::database::database (path, false);
         new_db.execute ("PRAGMA busy_timeout=60000");
@@ -295,6 +315,7 @@ get_database ()
 
         // Assign the newly created database instance to the thread-local variable
         db = new_db;
+        is_new = want_new;
     }
 
     return db;
@@ -913,7 +934,6 @@ merge_passwords (const std::string &path, std::function<void (const std::string 
     auto transaction = db.new_transaction ();
 
     // process each line, setting passwords for KFF entries
-    log (std::format ("Processing file {}", f.get_name ()));
     std::string line;
     std::uint64_t count = 0;
 
@@ -950,6 +970,41 @@ merge_passwords (const std::string &path, std::function<void (const std::string 
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Populate the KFF database from database file
+// @param path The path to the database file
+// @param arg_log A logging function to report progress and status
+// @details This function reads the specified database file and populates the KFF database with the contained hash information.
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+populate_from_database (const std::string &path, std::function<void (const std::string &)> arg_log)
+{
+    // Check if a new KFF is already available and prevent further population if so
+    if (is_new_kff_available_.load (std::memory_order_acquire))
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("New KFF is already available"));
+
+    // Check if database file exists
+    if (!std::filesystem::exists (path))
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("Database file does not exist"));
+
+    // Set up the logging function
+    auto log = arg_log ? arg_log : [] (const std::string &) {};
+    log ("Populating KFF from database file");
+    log (std::format ("File path: {}", path));
+
+    // Get temp and new database paths
+    auto app = mobius::core::application ();
+    auto tmp_db_path = app.get_config_path ("kff.db.tmp");
+    auto new_db_path = app.get_config_path ("kff.db.new");
+
+    // Copy the database file to the temporary location
+    std::filesystem::copy_file (path, tmp_db_path, std::filesystem::copy_options::overwrite_existing);
+    std::filesystem::rename (tmp_db_path, new_db_path);
+
+    is_new_kff_available_.store (true, std::memory_order_release);
+    log ("Released new KFF");
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Populate the KFF database with IPED hashes
 // @param path The path to the IPED database file
 // @param arg_log A logging function to report progress and status
@@ -962,112 +1017,150 @@ populate_from_iped_hashes (const std::string &path, std::function<void (const st
     if (is_new_kff_available_.load (std::memory_order_acquire))
         throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("New KFF is already available"));
 
+    // Check if IPED hashes.db exists
+    if (!std::filesystem::exists (path))
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("IPED hashes file does not exist"));
+
     // Set up the logging function
     auto log = arg_log ? arg_log : [] (const std::string &) {};
-    log (std::format ("Populating from IPED hashes: Start importing from {}", path));
+    log ("Populating KFF from IPED hashes file");
+    log (std::format ("File path: {}", path));
 
-    // Attach the IPED database
-    auto db = mobius::core::kff::get_database ();
-    mobius::core::database::db_execute_guard guard (db);
+    // Get temp and new database paths
+    auto app = mobius::core::application ();
+    auto tmp_db_path = app.get_config_path ("kff.db.tmp");
+    auto new_db_path = app.get_config_path ("kff.db.new");
 
-    log ("Attaching IPED database");
-    guard.attach (path, "iped");
+    // Remove any existing temporary database files to start fresh
+    std::error_code ec;
+    std::filesystem::remove (tmp_db_path, ec);
+    std::filesystem::remove (tmp_db_path + "-journal", ec);
+    std::filesystem::remove (tmp_db_path + "-wal", ec);
+    std::filesystem::remove (tmp_db_path + "-shm", ec);
 
-    // Set cache and memory mapping settings for the main and IPED databases to optimize performance
-    guard.set_pragma ("main", "cache_size", "-1000000");
-    db.execute ("PRAGMA iped.cache_size = -1000000;");
-    db.execute ("PRAGMA iped.mmap_size  = 4294967296;");
+    try
+    {
+        // Create new database
+        mobius::core::database::database db (tmp_db_path);
 
-    auto transaction = db.new_transaction ();
+        // Build settings: must be set outside a transaction
+        db.execute ("PRAGMA main.journal_mode = OFF;");
+        db.execute ("PRAGMA main.synchronous = OFF;");
+        db.execute ("PRAGMA main.locking_mode = EXCLUSIVE;");
+        db.execute ("PRAGMA main.cache_size = -2000000;");
+        db.execute ("PRAGMA temp_store = FILE;");
+        db.execute ("PRAGMA threads = 4;");
 
-    // Drop existing indexes and clear relevant tables before importing new data
-    log ("Dropping indexes");
-    db.execute ("DROP INDEX IF EXISTS idx_file_size;");
-    db.execute ("DROP INDEX IF EXISTS idx_hash_file;");
-    db.execute ("DROP INDEX IF EXISTS idx_attribute_file;");
+        _create_db_tables (db);
 
-    // Clear relevant tables before importing new data
-    log ("Clearing old tables");
-    db.execute ("DELETE FROM attribute;");
-    db.execute ("DELETE FROM file;");
-    db.execute ("DELETE FROM hash;");
-    db.execute ("DELETE FROM thumbnail;");
+        // Attach the IPED database
+        mobius::core::database::db_execute_guard guard (db);
 
-    // Fill file table, setting file.type based on IPED status
-    log ("Importing file table");
+        log ("Attaching IPED database");
+        guard.attach (path, "iped");
+        db.execute ("PRAGMA iped.cache_size = -1000000;");
+        db.execute ("PRAGMA iped.mmap_size = 4294967296;");
 
-    db.execute (
-        std::format (
-            "INSERT INTO file (id, type, size) "
-            "SELECT hash_id, CASE value WHEN 'pedo' THEN {} ELSE {} END, NULL "
-            "  FROM iped.hashes_properties WHERE property_id = 12 "
-            " ORDER BY hash_id;",
-            FILE_TYPE_ALERT_CSAM,
-            FILE_TYPE_IGNORED
-        )
-    );
+        // Create transaction
+        auto transaction = db.new_transaction ();
 
-    // Update file sizes based on IPED hashes properties
-    log ("Updating file sizes");
-    db.execute (
-        "UPDATE file SET size = CAST (p.value AS INTEGER) "
-        "  FROM iped.hashes_properties p "
-        " WHERE p.property_id = 23 AND p.hash_id = file.id;"
-    );
+        // Fill file table, setting file.type based on IPED status
+        log ("Importing file table");
 
-    // Import hash table
-    log ("Importing hash table");
-    db.execute (
-        std::format (
-            "INSERT INTO hash (type, value, file_id) "
-            "SELECT type, value, file_id FROM ("
-            "  SELECT {} AS type, md5 AS value, hash_id AS file_id FROM iped.hashes UNION ALL "
-            "  SELECT {}, edonkey, hash_id FROM iped.hashes UNION ALL "
-            "  SELECT {}, sha1,    hash_id FROM iped.hashes UNION ALL "
-            "  SELECT {}, sha256,  hash_id FROM iped.hashes UNION ALL "
-            "  SELECT {}, sha512,  hash_id FROM iped.hashes"
-            ") "
-            "WHERE value IS NOT NULL AND length (value) > 0 "
-            "ORDER BY type, value "
-            "ON CONFLICT (type, value) DO NOTHING;",
-            HASH_TYPE_MD5,
-            HASH_TYPE_ED2K,
-            HASH_TYPE_SHA1,
-            HASH_TYPE_SHA2_256,
-            HASH_TYPE_SHA2_512
-        )
-    );
+        db.execute (
+            std::format (
+                "INSERT INTO file (id, type, size) "
+                "SELECT hash_id, CASE value WHEN 'pedo' THEN {} ELSE {} END, NULL "
+                "  FROM iped.hashes_properties WHERE property_id = 12 "
+                " ORDER BY hash_id;",
+                FILE_TYPE_ALERT_CSAM,
+                FILE_TYPE_IGNORED
+            )
+        );
 
-    // Recreate database indexes after importing new data
-    log ("Recreating indexes");
-    db.execute ("CREATE INDEX IF NOT EXISTS idx_file_size ON file (size);");
-    db.execute ("CREATE INDEX IF NOT EXISTS idx_hash_file ON hash (file_id);");
-    db.execute ("CREATE INDEX IF NOT EXISTS idx_attribute_file ON attribute (file_id);");
+        auto file_count = db.get_changes ();
 
-    // Update counters
-    log ("Updating counters");
-    db.execute (
-        std::format (
-            "INSERT INTO meta (key, value) VALUES "
-            "('file_count',      (SELECT COUNT(*) FROM file)), "
-            "('hash_count',      (SELECT COUNT(*) FROM hash)), "
-            "('alert_count',     (SELECT COUNT(*) FROM file WHERE type >= {})), "
-            "('thumbnail_count', (SELECT COUNT(*) FROM thumbnail)) "
-            "ON CONFLICT (key) DO UPDATE SET value = excluded.value;",
-            FILE_TYPE_ALERT_CSAM
-        )
-    );
+        // Update file sizes based on IPED hashes properties
+        log ("Updating file sizes");
+        db.execute (
+            "UPDATE file SET size = CAST (p.value AS INTEGER) "
+            "  FROM iped.hashes_properties p "
+            " WHERE p.property_id = 23 AND p.hash_id = file.id;"
+        );
 
-    // Analyze the database to update statistics for query optimization
-    log ("Analyzing database");
-    db.execute ("PRAGMA analysis_limit=1000;");
-    db.execute ("ANALYZE;");
+        // Import hash table
+        log ("Importing hash table");
+        db.execute (
+            std::format (
+                "INSERT INTO hash (type, value, file_id) "
+                "SELECT type, value, file_id FROM ("
+                "  SELECT {} AS type, md5 AS value, hash_id AS file_id FROM iped.hashes UNION ALL "
+                "  SELECT {}, edonkey, hash_id FROM iped.hashes UNION ALL "
+                "  SELECT {}, sha1,    hash_id FROM iped.hashes UNION ALL "
+                "  SELECT {}, sha256,  hash_id FROM iped.hashes"
+                ") "
+                "WHERE value IS NOT NULL AND length (value) > 0 "
+                "ORDER BY type, value "
+                "ON CONFLICT (type, value) DO NOTHING;",
+                HASH_TYPE_MD5,
+                HASH_TYPE_ED2K,
+                HASH_TYPE_SHA1,
+                HASH_TYPE_SHA2_256
+            )
+        );
 
-    // Commit the transaction after all import and update operations
-    log ("Committing transaction");
-    transaction.commit ();
+        auto hash_count = db.get_changes ();
 
-    db.execute ("PRAGMA wal_checkpoint (TRUNCATE);");
+        // Create database indexes after importing new data
+        log ("Creating indexes");
+        _create_db_indexes (db);
+
+        // Analyze the database to update statistics for query optimization
+        log ("Analyzing database");
+        db.execute ("PRAGMA analysis_limit=1000;");
+        db.execute ("ANALYZE main;");
+
+        // Update counters
+        log ("Updating counters");
+        db.execute (
+            std::format (
+                "INSERT INTO meta (key, value) VALUES "
+                "('file_count', {}), "
+                "('hash_count', {}), "
+                "('alert_count', (SELECT COUNT(*) FROM file WHERE type >= {})), "
+                "('thumbnail_count', 0) "
+                "ON CONFLICT (key) DO UPDATE SET value = excluded.value;",
+                file_count,
+                hash_count,
+                FILE_TYPE_ALERT_CSAM
+            )
+        );
+
+        // Commit the transaction after all import and update operations
+        log ("Committing transaction");
+        transaction.commit ();
+    }
+    catch (const std::exception &e)
+    {
+        log (std::format ("Error occurred: {}", e.what ()));
+
+        std::filesystem::remove (tmp_db_path, ec);
+        std::filesystem::remove (tmp_db_path + "-journal", ec);
+        std::filesystem::remove (tmp_db_path + "-wal", ec);
+        std::filesystem::remove (tmp_db_path + "-shm", ec);
+
+        throw;
+    }
+
+    // Release the new KFF
+    std::filesystem::remove (new_db_path, ec);
+    std::filesystem::remove (new_db_path + "-journal", ec);
+    std::filesystem::remove (new_db_path + "-wal", ec);
+    std::filesystem::remove (new_db_path + "-shm", ec);
+    std::filesystem::rename (tmp_db_path, new_db_path);
+
+    is_new_kff_available_.store (true, std::memory_order_release);
+    log ("Released new KFF");
 }
 
 } // namespace mobius::core::kff
