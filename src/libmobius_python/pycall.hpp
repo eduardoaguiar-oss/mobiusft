@@ -72,7 +72,7 @@ call_method (obj_type *obj, func_type &&f, Args &&...args)
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Call C++ object member function with arguments, handling exceptions
-// and converting the result to a Python object
+// and converting the result to a Python object, releasing the GIL during the call
 //
 // @tparam obj_type Type of the C++ object
 // @tparam func_type Type of the C++ member function
@@ -84,7 +84,7 @@ call_method (obj_type *obj, func_type &&f, Args &&...args)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 template <typename obj_type, typename func_type, typename... Args>
 PyObject *
-call_method_releasing_gil (obj_type *obj, func_type &&f, Args &&...args)
+call_method_nogil (obj_type *obj, func_type &&f, Args &&...args)
 {
     PyObject *ret = nullptr;
 
@@ -158,7 +158,7 @@ call_function (func_type &&f, Args &&...args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Call C++ function and convert result to Python object
+// @brief Call C++ function and convert result to Python object, releasing the GIL during the call
 // @tparam func_type Type of the C++ function
 // @tparam Args Types of the arguments to pass to the C++ function
 // @param f Pointer to the C++ function to call
@@ -167,7 +167,7 @@ call_function (func_type &&f, Args &&...args)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 template <typename func_type, typename... Args>
 PyObject *
-call_function_releasing_gil (func_type &&f, Args &&...args)
+call_function_nogil (func_type &&f, Args &&...args)
 {
     PyObject *ret = nullptr;
 

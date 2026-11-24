@@ -902,11 +902,11 @@ merge_file_sizes (const std::string &path, std::function<void (const std::string
         }
     }
 
-    log (std::format ("Sizes set: {}", count));
-
     // Commit the transaction to save all changes made during the import process
     log ("Committing transaction");
     transaction.commit ();
+
+    log (std::format ("Sizes set: {}", count));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -962,11 +962,11 @@ merge_passwords (const std::string &path, std::function<void (const std::string 
         }
     }
 
-    log (std::format ("Passwords set: {}", count));
-
     // Commit the transaction
     log ("Committing transaction");
     transaction.commit ();
+
+    log (std::format ("Passwords set: {}", count));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

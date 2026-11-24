@@ -98,7 +98,7 @@ func_core_kff_export_collected_data (PyObject *, PyObject *args)
     {
         auto arg_path = mobius::py::get_arg<std::string> (args, 0);
         auto arg_log = _get_arg_log (args, 1);
-        return mobius::py::call_function_releasing_gil (mobius::core::kff::export_collected_data, arg_path, arg_log);
+        return mobius::py::call_function_nogil (mobius::core::kff::export_collected_data, arg_path, arg_log);
     }
     catch (const std::exception &e)
     {
@@ -119,7 +119,7 @@ func_core_kff_export_database (PyObject *, PyObject *args)
     {
         auto arg_path = mobius::py::get_arg<std::string> (args, 0);
         auto arg_log = _get_arg_log (args, 1);
-        return mobius::py::call_function_releasing_gil (mobius::core::kff::export_database, arg_path, arg_log);
+        return mobius::py::call_function_nogil (mobius::core::kff::export_database, arg_path, arg_log);
     }
     catch (const std::exception &e)
     {
@@ -367,7 +367,7 @@ func_core_kff_merge_collected_data (PyObject *, PyObject *args)
     {
         auto arg_path = mobius::py::get_arg<std::string> (args, 0);
         auto arg_log = _get_arg_log (args, 1);
-        return mobius::py::call_function_releasing_gil (mobius::core::kff::merge_collected_data, arg_path, arg_log);
+        return mobius::py::call_function_nogil (mobius::core::kff::merge_collected_data, arg_path, arg_log);
     }
     catch (...)
     {
@@ -387,7 +387,7 @@ func_core_kff_merge_file_sizes (PyObject *, PyObject *args)
     {
         auto arg_path = mobius::py::get_arg<std::string> (args, 0);
         auto arg_log = _get_arg_log (args, 1);
-        return mobius::py::call_function_releasing_gil (mobius::core::kff::merge_file_sizes, arg_path, arg_log);
+        return mobius::py::call_function_nogil (mobius::core::kff::merge_file_sizes, arg_path, arg_log);
     }
     catch (...)
     {
@@ -407,7 +407,7 @@ func_core_kff_merge_passwords (PyObject *, PyObject *args)
     {
         auto arg_path = mobius::py::get_arg<std::string> (args, 0);
         auto arg_log = _get_arg_log (args, 1);
-        return mobius::py::call_function_releasing_gil (mobius::core::kff::merge_passwords, arg_path, arg_log);
+        return mobius::py::call_function_nogil (mobius::core::kff::merge_passwords, arg_path, arg_log);
     }
     catch (...)
     {
@@ -461,7 +461,7 @@ func_core_kff_populate_from_database (PyObject *, PyObject *args)
         auto arg_path = mobius::py::get_arg<std::string> (args, 0);
         auto arg_log = _get_arg_log (args, 1);
 
-        return mobius::py::call_function_releasing_gil (
+        return mobius::py::call_function_nogil (
             mobius::core::kff::populate_from_database,
             arg_path,
             arg_log
@@ -487,7 +487,7 @@ func_core_kff_populate_from_iped_hashes (PyObject *, PyObject *args)
         auto arg_path = mobius::py::get_arg<std::string> (args, 0);
         auto arg_log = _get_arg_log (args, 1);
 
-        return mobius::py::call_function_releasing_gil (
+        return mobius::py::call_function_nogil (
             mobius::core::kff::populate_from_iped_hashes,
             arg_path,
             arg_log
