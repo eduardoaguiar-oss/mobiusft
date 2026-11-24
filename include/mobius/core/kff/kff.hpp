@@ -71,11 +71,12 @@ mobius::core::generator<file> iter_files ();
 mobius::core::generator<file> iter_files_by_type (std::uint16_t);
 
 void export_collected_data (const std::string&, std::function<void (const std::string &)> = {});
-void export_kff (const std::string&, std::function<void (const std::string &)> = {});
-void import_collected_data (const std::string&, std::function<void (const std::string &)> = {});
-void import_iped_hashes (const std::string&, std::function<void (const std::string &)> = {});
-void update_file_sizes (const std::string&, std::function<void (const std::string &)> = {});
-void update_passwords (const std::string&, std::function<void (const std::string &)> = {});
+void export_database (const std::string&, std::function<void (const std::string &)> = {});
+void import_database (const std::string&, std::function<void (const std::string &)> = {});
+void merge_collected_data (const std::string&, std::function<void (const std::string &)> = {});
+void merge_file_sizes (const std::string&, std::function<void (const std::string &)> = {});
+void merge_passwords (const std::string&, std::function<void (const std::string &)> = {});
+void populate_from_iped_hashes (const std::string&, std::function<void (const std::string &)> = {});
 
 } // namespace mobius::core::kff
 

@@ -42,7 +42,10 @@ namespace
 static constexpr int SCHEMA_VERSION = 1;
 
 // @brief Flag to ensure the DB schema is created only once
-static std::atomic<bool> schema_flag_ {false};
+static std::atomic<bool> is_schema_created_ {false};
+
+// @brief Flag for new KFF available
+static std::atomic<bool> is_new_kff_available_ {false};
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief File types
@@ -73,12 +76,12 @@ _create_db_schema (mobius::core::database::database &db)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
-    if (schema_flag_.load (std::memory_order_acquire))
+    if (is_schema_created_.load (std::memory_order_acquire))
         return;
 
     auto transaction = db.new_transaction ();
 
-    if (schema_flag_.load (std::memory_order_acquire))
+    if (is_schema_created_.load (std::memory_order_acquire))
         return;
 
     // Table: meta
@@ -169,7 +172,7 @@ _create_db_schema (mobius::core::database::database &db)
 
     // Commit the transaction to persist schema changes
     transaction.commit ();
-    schema_flag_.store (true, std::memory_order_release);
+    is_schema_created_.store (true, std::memory_order_release);
 }
 
 } // namespace
@@ -638,7 +641,7 @@ export_collected_data (const std::string &path, std::function<void (const std::s
 // @param log Logging function or object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-export_kff (const std::string &path, std::function<void (const std::string &)> log)
+export_database (const std::string &path, std::function<void (const std::string &)> log)
 {
     auto f = mobius::core::io::new_file_by_path (path);
 
@@ -667,18 +670,18 @@ export_kff (const std::string &path, std::function<void (const std::string &)> l
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Import collected data from a specified source
-// @param path Path to the input database from which to import data
+// @brief Merge collected data from a specified source into the current database
+// @param path Path to the input database from which to merge data
 // @param callback Optional callback function for progress reporting
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-import_collected_data (const std::string &path, std::function<void (const std::string &)> log)
+merge_collected_data (const std::string &path, std::function<void (const std::string &)> log)
 {
     auto f_log = log ? log : [] (const std::string &) {};
 
     try
     {
-        f_log ("Importing collected data from " + path);
+        f_log ("Merging collected data from " + path);
 
         // Attach the input database
         auto db = get_database ();
@@ -780,13 +783,143 @@ import_collected_data (const std::string &path, std::function<void (const std::s
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Import IPED hashes
+// @brief Merge file sizes
+// @param path The path to the size file
+// @param log Logging function
+//
+// @details The file should contain tab-separated values with the format:
+//          hash_type<TAB>hash_value<TAB>size
+// e.g:
+//          1<TAB>5f4dcc3b5aa765d61d8327deb882cf99<TAB>123456
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-import_iped_hashes (const std::string &path, std::function<void (const std::string &)> arg_log)
+merge_file_sizes (const std::string &path, std::function<void (const std::string &)> arg_log)
 {
     auto log = arg_log ? arg_log : [] (const std::string &) {};
-    log (std::format ("Start importing IPED hashes from {}", path));
+    log (std::format ("Merging file sizes from {}", path));
+
+    // Open file for reading
+    auto f = mobius::core::io::new_file_by_path (path);
+    auto fp = mobius::core::io::line_reader (f.new_reader ());
+
+    // Start a new transaction for the import process
+    auto db = mobius::core::kff::get_database ();
+    auto transaction = db.new_transaction ();
+
+    // process each line, setting file size for KFF entries
+    log (std::format ("Processing file {}", f.get_name ()));
+    std::string line;
+    std::uint64_t count = 0;
+
+    while (fp.read (line))
+    {
+        if (!line.empty () && line[0] != '#')
+        {
+            auto line_view = mobius::core::string_view::rstrip (line);
+            auto data = mobius::core::string_view::split (line_view, "\t");
+
+            if (data.size () == 3)
+            {
+                auto hash_type = mobius::core::string_view::to_integer (data[0]);
+                auto hash_value = std::string (data[1]);
+                auto size = mobius::core::string_view::to_integer (data[2]);
+
+                // lookup
+                auto kff_f = mobius::core::kff::lookup (hash_type, hash_value);
+
+                if (kff_f && !kff_f.has_size ())
+                {
+                    kff_f.set_size (size);
+                    ++count;
+                }
+            }
+        }
+    }
+
+    log (std::format ("Sizes set: {}", count));
+
+    // Commit the transaction to save all changes made during the import process
+    log ("Committing transaction");
+    transaction.commit ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Merge passwords from a file into the KFF database
+// @param path The path to the password file
+// @param log Logging function
+//
+// @details The file should contain tab-separated values with the format:
+//          hash_type<TAB>hash_value<TAB>password
+// e.g:
+//          1<TAB>5f4dcc3b5aa765d61d8327deb882cf99<TAB>password123
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+merge_passwords (const std::string &path, std::function<void (const std::string &)> arg_log)
+{
+    auto log = arg_log ? arg_log : [] (const std::string &) {};
+    log (std::format ("Merging passwords from {}", path));
+
+    // Open file for reading
+    auto f = mobius::core::io::new_file_by_path (path);
+    auto fp = mobius::core::io::line_reader (f.new_reader ());
+
+    // Start a new transaction for the import process
+    auto db = mobius::core::kff::get_database ();
+    auto transaction = db.new_transaction ();
+
+    // process each line, setting passwords for KFF entries
+    log (std::format ("Processing file {}", f.get_name ()));
+    std::string line;
+    std::uint64_t count = 0;
+
+    while (fp.read (line))
+    {
+        if (!line.empty () && line[0] != '#')
+        {
+            auto line_view = mobius::core::string_view::rstrip (line);
+            auto data = mobius::core::string_view::split (line_view, "\t");
+
+            if (data.size () == 3)
+            {
+                auto hash_type = mobius::core::string_view::to_integer (data[0]);
+                auto hash_value = std::string (data[1]);
+                auto password = std::string (data[2]);
+
+                // lookup
+                auto kff_f = mobius::core::kff::lookup (hash_type, hash_value);
+
+                if (kff_f && !kff_f.has_password ())
+                {
+                    kff_f.set_password (password);
+                    ++count;
+                }
+            }
+        }
+    }
+
+    log (std::format ("Passwords set: {}", count));
+
+    // Commit the transaction
+    log ("Committing transaction");
+    transaction.commit ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Populate the KFF database with IPED hashes
+// @param path The path to the IPED database file
+// @param arg_log A logging function to report progress and status
+// @details This function imports hash information from an IPED database into the KFF database.
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+populate_from_iped_hashes (const std::string &path, std::function<void (const std::string &)> arg_log)
+{
+    // Check if a new KFF is already available and prevent further population if so
+    if (is_new_kff_available_.load (std::memory_order_acquire))
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("New KFF is already available"));
+
+    // Set up the logging function
+    auto log = arg_log ? arg_log : [] (const std::string &) {};
+    log (std::format ("Populating from IPED hashes: Start importing from {}", path));
 
     // Attach the IPED database
     auto db = mobius::core::kff::get_database ();
@@ -890,118 +1023,6 @@ import_iped_hashes (const std::string &path, std::function<void (const std::stri
     transaction.commit ();
 
     db.execute ("PRAGMA wal_checkpoint (TRUNCATE);");
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Update file sizes
-// @param path The path to the size file
-// @param log Logging function
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-update_file_sizes (const std::string &path, std::function<void (const std::string &)> arg_log)
-{
-    auto log = arg_log ? arg_log : [] (const std::string &) {};
-    log (std::format ("Updating file sizes from {}", path));
-
-    // Open file for reading
-    auto f = mobius::core::io::new_file_by_path (path);
-    auto fp = mobius::core::io::line_reader (f.new_reader ());
-
-    // Start a new transaction for the import process
-    auto db = mobius::core::kff::get_database ();
-    auto transaction = db.new_transaction ();
-
-    // process each line, setting file size for KFF entries
-    log (std::format ("Processing file {}", f.get_name ()));
-    std::string line;
-    std::uint64_t count = 0;
-
-    while (fp.read (line))
-    {
-        if (!line.empty () && line[0] != '#')
-        {
-            auto line_view = mobius::core::string_view::rstrip (line);
-            auto data = mobius::core::string_view::split (line_view, "\t");
-
-            if (data.size () == 3)
-            {
-                auto hash_type = mobius::core::string_view::to_integer (data[0]);
-                auto hash_value = std::string (data[1]);
-                auto size = mobius::core::string_view::to_integer (data[2]);
-
-                // lookup
-                auto kff_f = mobius::core::kff::lookup (hash_type, hash_value);
-
-                if (kff_f && !kff_f.has_size ())
-                {
-                    kff_f.set_size (size);
-                    ++count;
-                }
-            }
-        }
-    }
-
-    log (std::format ("Sizes set: {}", count));
-
-    // Commit the transaction to save all changes made during the import process
-    log ("Committing transaction");
-    transaction.commit ();
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Update passwords
-// @param path The path to the password file
-// @param log Logging function
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-update_passwords (const std::string &path, std::function<void (const std::string &)> arg_log)
-{
-    auto log = arg_log ? arg_log : [] (const std::string &) {};
-    log (std::format ("Updating passwords from {}", path));
-
-    // Open file for reading
-    auto f = mobius::core::io::new_file_by_path (path);
-    auto fp = mobius::core::io::line_reader (f.new_reader ());
-
-    // Start a new transaction for the import process
-    auto db = mobius::core::kff::get_database ();
-    auto transaction = db.new_transaction ();
-
-    // process each line, setting passwords for KFF entries
-    log (std::format ("Processing file {}", f.get_name ()));
-    std::string line;
-    std::uint64_t count = 0;
-
-    while (fp.read (line))
-    {
-        if (!line.empty () && line[0] != '#')
-        {
-            auto line_view = mobius::core::string_view::rstrip (line);
-            auto data = mobius::core::string_view::split (line_view, "\t");
-
-            if (data.size () == 3)
-            {
-                auto hash_type = mobius::core::string_view::to_integer (data[0]);
-                auto hash_value = std::string (data[1]);
-                auto password = std::string (data[2]);
-
-                // lookup
-                auto kff_f = mobius::core::kff::lookup (hash_type, hash_value);
-
-                if (kff_f && !kff_f.has_password ())
-                {
-                    kff_f.set_password (password);
-                    ++count;
-                }
-            }
-        }
-    }
-
-    log (std::format ("Passwords set: {}", count));
-
-    // Commit the transaction
-    log ("Committing transaction");
-    transaction.commit ();
 }
 
 } // namespace mobius::core::kff
