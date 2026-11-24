@@ -27,7 +27,7 @@ namespace mobius::py
 // Functions prototypes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *func_core_kff_export_collected_data (PyObject *, PyObject *);
-PyObject *func_core_kff_export_kff (PyObject *, PyObject *);
+PyObject *func_core_kff_export_database (PyObject *, PyObject *);
 PyObject *func_core_kff_get_alert_count (PyObject *, PyObject *);
 PyObject *func_core_kff_get_file (PyObject *, PyObject *);
 PyObject *func_core_kff_get_file_type (PyObject *, PyObject *);
@@ -41,15 +41,15 @@ PyObject *func_core_kff_get_hash_count_by_type (PyObject *, PyObject *);
 PyObject *func_core_kff_get_next_file_id (PyObject *, PyObject *);
 PyObject *func_core_kff_get_thumbnail_count (PyObject *, PyObject *);
 PyObject *func_core_kff_has_size (PyObject *, PyObject *);
-PyObject *func_core_kff_import_collected_data (PyObject *, PyObject *);
-PyObject *func_core_kff_import_iped_hashes (PyObject *, PyObject *);
 PyObject *func_core_kff_iter_files (PyObject *, PyObject *);
 PyObject *func_core_kff_iter_files_by_type (PyObject *, PyObject *);
 PyObject *func_core_kff_lookup (PyObject *, PyObject *);
+PyObject *func_core_kff_merge_collected_data (PyObject *, PyObject *);
+PyObject *func_core_kff_merge_file_sizes (PyObject *, PyObject *);
+PyObject *func_core_kff_merge_passwords (PyObject *, PyObject *);
 PyObject *func_core_kff_new_file (PyObject *, PyObject *);
 PyObject *func_core_kff_new_transaction (PyObject *, PyObject *);
-PyObject *func_core_kff_update_file_sizes (PyObject *, PyObject *);
-PyObject *func_core_kff_update_passwords (PyObject *, PyObject *);
+PyObject *func_core_kff_populate_from_iped_hashes (PyObject *, PyObject *);
 
 } // namespace mobius::py
 

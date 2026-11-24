@@ -115,7 +115,7 @@ func_core_kff_export_collected_data (PyObject *, PyObject *args)
 // @param log Logging function or object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-func_core_kff_export_kff (PyObject *, PyObject *args)
+func_core_kff_export_database (PyObject *, PyObject *args)
 {
     try
     {
@@ -123,7 +123,7 @@ func_core_kff_export_kff (PyObject *, PyObject *args)
         auto arg_log = _get_arg_log (args, 1);
 
         mobius::py::GIL gil;
-        return mobius::py::call_function (mobius::core::kff::export_kff, arg_path, arg_log);
+        return mobius::py::call_function (mobius::core::kff::export_database, arg_path, arg_log);
     }
     catch (const std::exception &e)
     {
@@ -309,52 +309,6 @@ func_core_kff_get_file (PyObject *, PyObject *arg)
     }
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Import collected data from a file
-// @param self Python self
-// @param path Path to the input file
-// @param log Logging function or object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-func_core_kff_import_collected_data (PyObject *, PyObject *args)
-{
-    try
-    {
-        auto arg_path = mobius::py::get_arg<std::string> (args, 0);
-        auto arg_log = _get_arg_log (args, 1);
-
-        mobius::py::GIL gil;
-        return mobius::py::call_function (mobius::core::kff::import_collected_data, arg_path, arg_log);
-    }
-    catch (const std::exception &e)
-    {
-        return nullptr;
-    }
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Import IPED hashes from a file
-// @param self Python self
-// @param path Path to the input file
-// @param log Logging function or object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-func_core_kff_import_iped_hashes (PyObject *, PyObject *args)
-{
-    try
-    {
-        auto arg_path = mobius::py::get_arg<std::string> (args, 0);
-        auto arg_log = _get_arg_log (args, 1);
-
-        mobius::py::GIL gil;
-        return mobius::py::call_function (mobius::core::kff::import_iped_hashes, arg_path, arg_log);
-    }
-    catch (const std::exception &e)
-    {
-        return nullptr;
-    }
-}
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>iter_files</i> function implementation
 // @return Generator for iterating over files
@@ -411,6 +365,73 @@ func_core_kff_lookup (PyObject *, PyObject *args)
     }
 }
 
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Merge collected data from a file
+// @param self Python self
+// @param path Path to the input file
+// @param log Logging function or object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_core_kff_merge_collected_data (PyObject *, PyObject *args)
+{
+    try
+    {
+        auto arg_path = mobius::py::get_arg<std::string> (args, 0);
+        auto arg_log = _get_arg_log (args, 1);
+
+        mobius::py::GIL gil;
+        return mobius::py::call_function (mobius::core::kff::merge_collected_data, arg_path, arg_log);
+    }
+    catch (const std::exception &e)
+    {
+        return nullptr;
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Merge file sizes from a file
+// @param self Python self
+// @param args Python arguments containing the path and log
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_core_kff_merge_file_sizes (PyObject *, PyObject *args)
+{
+    try
+    {
+        auto arg_path = mobius::py::get_arg<std::string> (args, 0);
+        auto arg_log = _get_arg_log (args, 1);
+
+        mobius::py::GIL gil;
+        return mobius::py::call_function (mobius::core::kff::merge_file_sizes, arg_path, arg_log);
+    }
+    catch (const std::exception &e)
+    {
+        return nullptr;
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Merge passwords from a file
+// @param self Python self
+// @param args Python arguments containing the path and log
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_core_kff_merge_passwords (PyObject *, PyObject *args)
+{
+    try
+    {
+        auto arg_path = mobius::py::get_arg<std::string> (args, 0);
+        auto arg_log = _get_arg_log (args, 1);
+
+        mobius::py::GIL gil;
+        return mobius::py::call_function (mobius::core::kff::merge_passwords, arg_path, arg_log);
+    }
+    catch (const std::exception &e)
+    {
+        return nullptr;
+    }
+}
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>new_file</i> function implementation
 // @param self Python self
@@ -451,12 +472,13 @@ func_core_kff_new_transaction (PyObject *, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Update file sizes from a file
+// @brief Populate from IPED hashes from a file
 // @param self Python self
-// @param args Python arguments containing the path and log
+// @param path Path to the input file
+// @param log Logging function or object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-func_core_kff_update_file_sizes (PyObject *, PyObject *args)
+func_core_kff_populate_from_iped_hashes (PyObject *, PyObject *args)
 {
     try
     {
@@ -464,35 +486,12 @@ func_core_kff_update_file_sizes (PyObject *, PyObject *args)
         auto arg_log = _get_arg_log (args, 1);
 
         mobius::py::GIL gil;
-        return mobius::py::call_function (mobius::core::kff::update_file_sizes, arg_path, arg_log);
+        return mobius::py::call_function (mobius::core::kff::populate_from_iped_hashes, arg_path, arg_log);
     }
     catch (const std::exception &e)
     {
         return nullptr;
     }
 }
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief update passwords from a file
-// @param self Python self
-// @param args Python arguments containing the path and log
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-func_core_kff_update_passwords (PyObject *, PyObject *args)
-{
-    try
-    {
-        auto arg_path = mobius::py::get_arg<std::string> (args, 0);
-        auto arg_log = _get_arg_log (args, 1);
-
-        mobius::py::GIL gil;
-        return mobius::py::call_function (mobius::core::kff::update_passwords, arg_path, arg_log);
-    }
-    catch (const std::exception &e)
-    {
-        return nullptr;
-    }
-}
-
 
 } // namespace mobius::py
