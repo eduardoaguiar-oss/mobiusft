@@ -27,7 +27,9 @@
 #include <mobius/core/log.hpp>
 #include <mobius/core/string_view.hpp>
 #include <atomic>
+#include <filesystem>
 #include <format>
+#include <mutex>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -46,6 +48,9 @@ static std::atomic<bool> is_schema_created_ {false};
 
 // @brief Flag for new KFF available
 static std::atomic<bool> is_new_kff_available_ {false};
+
+// @brief Once flag for checking new KFF availability
+static std::once_flag check_new_kff_;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief File types
@@ -175,6 +180,43 @@ _create_db_schema (mobius::core::database::database &db)
     is_schema_created_.store (true, std::memory_order_release);
 }
 
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Activate a new KFF file if it exists
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static void
+_activate_new_kff ()
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    mobius::core::application app;
+    auto new_path = app.get_config_path ("kff.db.new");
+
+    if (!std::filesystem::exists (new_path))
+        return;
+
+    // Exclusive-access check on the current KFF
+    auto db_path = app.get_config_path ("kff.db");
+    mobius::core::database::database old_db (db_path, false);
+
+    // Leaving WAL requires that no other connection (any process) has the file open.
+    // On success SQLite also checkpoints and removes the -wal and -shm files.
+    auto stmt = old_db.new_statement ("PRAGMA journal_mode = DELETE");
+    auto mode = stmt.fetch_row () ? stmt.get_column_string (0) : std::string ();
+
+    if (mode != "delete")
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("KFF in use by another process; new KFF will be activated later")
+        );
+
+    // Remove any leftover WAL files BEFORE the rename
+    std::error_code ec;
+    std::filesystem::remove (db_path + "-wal", ec);
+    std::filesystem::remove (db_path + "-shm", ec);
+
+    // Rename the new KFF file to replace the old one atomically
+    std::filesystem::rename (new_path, db_path);
+}
+
 } // namespace
 
 namespace mobius::core::kff
@@ -235,6 +277,9 @@ get_database ()
 
     if (!db)
     {
+        // Initialize the new KFF availability check flag
+        std::call_once (check_new_kff_, _activate_new_kff);
+
         // Create database instance
         mobius::core::application app;
         auto path = app.get_config_path ("kff.db");
