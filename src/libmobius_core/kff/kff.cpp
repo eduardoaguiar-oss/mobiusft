@@ -230,6 +230,7 @@ _activate_new_kff ()
 
     // Rename the new KFF file to replace the old one atomically
     std::filesystem::rename (new_path, db_path);
+    is_new_kff_available_.store (false, std::memory_order_release);
 }
 
 } // namespace
